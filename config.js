@@ -94,6 +94,82 @@ const CONFIG = {
     },
   ],
 
+  /* ── Risk Calculator ──────────────────────────────────── */
+  riskCalculator: {
+    heading: "What's Your Cyber Risk Score?",
+    subheading: "5 quick questions. Instant assessment. No sign-up required.",
+    questions: [
+      {
+        id: "webapp",
+        question: "Do you have a customer-facing web or mobile application?",
+        options: [
+          { label: "Yes", score: 3 },
+          { label: "No", score: 0 },
+        ],
+      },
+      {
+        id: "data",
+        question: "Do you store sensitive customer data — PII, payments, or health records?",
+        options: [
+          { label: "Yes", score: 3 },
+          { label: "No", score: 0 },
+        ],
+      },
+      {
+        id: "audit",
+        question: "When was your last professional security audit?",
+        options: [
+          { label: "Never", score: 4 },
+          { label: "2+ years ago", score: 2 },
+          { label: "Within the last year", score: 0 },
+        ],
+      },
+      {
+        id: "payments",
+        question: "Do you process online payments or handle financial transactions?",
+        options: [
+          { label: "Yes", score: 3 },
+          { label: "No", score: 0 },
+        ],
+      },
+      {
+        id: "compliance",
+        question: "Are you subject to regulatory compliance — RBI, SEBI, IRDAI, or ISO 27001?",
+        options: [
+          { label: "Yes", score: 2 },
+          { label: "Not sure", score: 1 },
+          { label: "No", score: 0 },
+        ],
+      },
+    ],
+    results: [
+      {
+        min: 0, max: 4,
+        level: "Low Risk",
+        color: "green",
+        icon: "🟢",
+        message: "Your attack surface appears limited — but no business is fully immune. A basic VAPT can confirm your posture and satisfy investor or partner due diligence.",
+        cta: "Get a Baseline Audit",
+      },
+      {
+        min: 5, max: 9,
+        level: "Medium Risk",
+        color: "amber",
+        icon: "🟡",
+        message: "You have multiple attack surfaces that are actively targeted. A breach at this level averages ₹19.5 Cr in damages. A VAPT now costs a fraction of that.",
+        cta: "Reduce Your Risk Now",
+      },
+      {
+        min: 10, max: 99,
+        level: "High Risk",
+        color: "red",
+        icon: "🔴",
+        message: "Your business is a high-value target. Regulatory exposure, customer data, and financial transactions make you a priority for attackers. Immediate VAPT is strongly recommended.",
+        cta: "Book an Urgent Audit",
+      },
+    ],
+  },
+
   /* ── How It Works ─────────────────────────────────────── */
   process: [
     {
@@ -177,6 +253,38 @@ const CONFIG = {
       name: "Founder",
       company: "Healthtech Platform, Delhi",
       initials: "AM",
+    },
+  ],
+
+  /* ── FAQ ──────────────────────────────────────────────── */
+  faq: [
+    {
+      question: "What exactly is VAPT and why do I need it?",
+      answer: "VAPT stands for Vulnerability Assessment and Penetration Testing. A vulnerability assessment finds known weaknesses in your systems. Penetration testing goes further — a security professional actively tries to exploit those weaknesses like a real attacker would. Together, they give you a complete picture of your risk and how to fix it.",
+    },
+    {
+      question: "Will security testing disrupt our live systems or business operations?",
+      answer: "No. We agree on a testing scope and schedule before we begin. Most testing is done during low-traffic hours if needed. We use techniques that replicate real attacks without causing downtime — your customers won't notice anything.",
+    },
+    {
+      question: "How long does a VAPT engagement typically take?",
+      answer: "It depends on scope. A focused web application VAPT takes 3–5 business days. A full infrastructure + cloud + application engagement can take 1–2 weeks. We'll give you a clear timeline after the scoping call.",
+    },
+    {
+      question: "What does the final report look like?",
+      answer: "You get two versions: a technical report for your developers with exact vulnerability details, reproduction steps, and fix guidance — and an executive summary for your leadership team with risk ratings, business impact, and priority actions. No jargon, no filler.",
+    },
+    {
+      question: "Do you offer a re-test after we fix the vulnerabilities?",
+      answer: "Yes — every engagement includes one free re-test within 30 days. We verify that every critical and high-severity finding has been properly remediated before we close the engagement.",
+    },
+    {
+      question: "Is our data and business information kept confidential?",
+      answer: "Absolutely. We sign a mutual NDA before any work begins. All findings, system details, and client information are kept strictly confidential. We do not share client data with any third party.",
+    },
+    {
+      question: "Which compliance frameworks do your reports support?",
+      answer: "Our reports are structured to support RBI IT Framework, SEBI Cybersecurity Circular, IRDAI guidelines, ISO 27001, SOC 2, and India's DPDP Act 2023. If you have a specific auditor requirement, let us know during scoping.",
     },
   ],
 

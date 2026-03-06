@@ -729,6 +729,222 @@ footer {
   color: var(--muted);
 }
 
+/* ── Stat counter animation ──────────────────────────────── */
+.stat-value {
+  transition: color 0.3s ease;
+}
+
+/* ── Risk Calculator ─────────────────────────────────────── */
+#risk-calculator { background: var(--bg2); }
+
+.calc-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.calc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.calc-question {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: border-color var(--transition);
+}
+
+.calc-question.calc-unanswered {
+  border-color: var(--danger);
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-6px); }
+  75%       { transform: translateX(6px); }
+}
+
+.calc-q-number {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.calc-q-text {
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1rem;
+  line-height: 1.45;
+}
+
+.calc-options {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.calc-option {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  cursor: pointer;
+}
+
+.calc-option input[type="radio"] {
+  display: none;
+}
+
+.calc-option span {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--subtle);
+  background: var(--bg2);
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.calc-option input:checked + span {
+  background: rgba(59,130,246,0.12);
+  border-color: var(--accent);
+  color: var(--accent2);
+  font-weight: 600;
+}
+
+.calc-option:hover span {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.calc-submit { align-self: flex-start; margin-top: 0.5rem; }
+.calc-note   { font-size: 0.78rem; color: var(--muted); margin-top: -0.5rem; }
+
+/* Calculator Result */
+.calc-result-inner {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.calc-result-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+.calc-score-bar {
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 100px;
+  overflow: hidden;
+  margin: 0 auto 1.25rem;
+  max-width: 300px;
+}
+
+.calc-score-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.calc-result-level {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.calc-result-message {
+  font-size: 0.92rem;
+  color: var(--subtle);
+  max-width: 480px;
+  margin: 0 auto 1.75rem;
+  line-height: 1.7;
+}
+
+.calc-result-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── FAQ Accordion ────────────────────────────────────────── */
+#faq { background: var(--bg); }
+
+.faq-list {
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-item:last-child { border-bottom: none; }
+
+.faq-item.active { background: var(--bg2); }
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.faq-question:hover { color: var(--accent2); }
+.faq-item.active .faq-question { color: var(--accent2); }
+
+.faq-icon {
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform var(--transition);
+  line-height: 1;
+}
+
+.faq-item.active .faq-icon { color: var(--accent); }
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-answer.open { max-height: 400px; }
+
+.faq-answer-inner {
+  padding: 0 1.5rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--subtle);
+  line-height: 1.75;
+}
+
 /* ── Nav active link ─────────────────────────────────────── */
 .nav-links a.active { color: var(--accent2); }
 

@@ -19,7 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
       renderStats();
       renderProcess();
       renderServicesPreview();
+      renderRiskCalculator();
       renderTestimonials();
+      renderFAQ();
       renderWhyUs();
       renderHomeContactCTA();
       break;
@@ -27,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
       renderPageHeader("Services", "VAPT Services", "End-to-end security testing across your entire attack surface — from web apps to cloud infrastructure.");
       renderServices();
       renderProcess();
+      renderFAQ();
       renderWhyUs();
       renderPageCTA();
       break;
@@ -176,19 +179,76 @@ function renderHero() {
     </div>`;
 }
 
-/* ── Stats ────────────────────────────────────────────────── */
+/* ── Stats (with animated counters) ──────────────────────── */
 function renderStats() {
   const section = document.getElementById("stats");
   if (!section) return;
   const grid = el("div", "stats-grid");
+
   CONFIG.stats.forEach(s => {
+    const parsed = parseStatNumber(s.value);
+    const valueHtml = parsed
+      ? `<div class="stat-value" data-target="${parsed.number}" data-prefix="${parsed.prefix}" data-suffix="${parsed.suffix}" data-decimals="${parsed.decimals}" data-comma="${parsed.comma}">
+           ${parsed.prefix}0${parsed.suffix}
+         </div>`
+      : `<div class="stat-value">${s.value}</div>`;
+
     grid.appendChild(el("div", "stat-card", `
-      <div class="stat-value">${s.value}</div>
+      ${valueHtml}
       <div class="stat-label">${s.label}</div>
       <div class="stat-source">${s.source}</div>
     `));
   });
+
   section.querySelector(".container").appendChild(grid);
+  initStatCounters();
+}
+
+function parseStatNumber(str) {
+  const m = str.match(/^([^0-9]*)([0-9,]+\.?[0-9]*)(.*)$/);
+  if (!m) return null;
+  const raw = m[2].replace(/,/g, "");
+  const num = parseFloat(raw);
+  const decimals = raw.includes(".") ? raw.split(".")[1].length : 0;
+  return { prefix: m[1], number: num, suffix: m[3], decimals, comma: m[2].includes(",") };
+}
+
+function initStatCounters() {
+  const values = document.querySelectorAll(".stat-value[data-target]");
+  if (!values.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      animateCounter(entry.target);
+    });
+  }, { threshold: 0.5 });
+
+  values.forEach(v => observer.observe(v));
+}
+
+function animateCounter(el) {
+  const target   = parseFloat(el.dataset.target);
+  const prefix   = el.dataset.prefix;
+  const suffix   = el.dataset.suffix;
+  const decimals = parseInt(el.dataset.decimals) || 0;
+  const useComma = el.dataset.comma === "true";
+  const duration = 1800;
+  const start    = performance.now();
+
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function tick(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const current  = target * easeOut(progress);
+    let display = current.toFixed(decimals);
+    if (useComma) display = parseFloat(display).toLocaleString("en-IN");
+    el.textContent = prefix + display + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
 }
 
 /* ── Process ──────────────────────────────────────────────── */
@@ -556,6 +616,127 @@ function showSuccess() {
   const success = document.getElementById("form-success");
   if (form) form.style.display = "none";
   if (success) success.classList.add("visible");
+}
+
+/* ── Risk Calculator ──────────────────────────────────────── */
+function renderRiskCalculator() {
+  const section = document.getElementById("risk-calculator");
+  if (!section) return;
+  const rc = CONFIG.riskCalculator;
+
+  const questionsHtml = rc.questions.map((q, qi) => {
+    const opts = q.options.map((o, oi) => `
+      <label class="calc-option">
+        <input type="radio" name="q${qi}" value="${o.score}" />
+        <span>${o.label}</span>
+      </label>`).join("");
+    return `
+      <div class="calc-question">
+        <div class="calc-q-number">Q${qi + 1}</div>
+        <div class="calc-q-text">${q.question}</div>
+        <div class="calc-options">${opts}</div>
+      </div>`;
+  }).join("");
+
+  section.querySelector(".container").insertAdjacentHTML("beforeend", `
+    <div class="calc-wrapper">
+      <div class="calc-form" id="calc-form">
+        ${questionsHtml}
+        <button class="btn btn-primary calc-submit" onclick="calculateRisk()">
+          Calculate My Risk Score →
+        </button>
+        <p class="calc-note">Instant result. No email required.</p>
+      </div>
+      <div class="calc-result" id="calc-result" style="display:none;"></div>
+    </div>`);
+}
+
+function calculateRisk() {
+  const rc = CONFIG.riskCalculator;
+  let score = 0;
+  let answered = 0;
+
+  rc.questions.forEach((q, qi) => {
+    const selected = document.querySelector(`input[name="q${qi}"]:checked`);
+    if (selected) { score += parseInt(selected.value); answered++; }
+  });
+
+  if (answered < rc.questions.length) {
+    rc.questions.forEach((q, i) => {
+      const group = document.querySelectorAll(`input[name="q${i}"]`);
+      const parent = group[0]?.closest(".calc-question");
+      if (parent) parent.classList.toggle("calc-unanswered", !document.querySelector(`input[name="q${i}"]:checked`));
+    });
+    return;
+  }
+
+  const result = rc.results.find(r => score >= r.min && score <= r.max);
+  if (!result) return;
+
+  const colorMap = { green: "#22c55e", amber: "#f59e0b", red: "#ef4444" };
+  const color = colorMap[result.color] || "#3b82f6";
+
+  document.getElementById("calc-form").style.display = "none";
+  const resultEl = document.getElementById("calc-result");
+  resultEl.style.display = "block";
+  resultEl.innerHTML = `
+    <div class="calc-result-inner">
+      <div class="calc-result-icon">${result.icon}</div>
+      <div class="calc-score-bar">
+        <div class="calc-score-fill" style="width:${Math.min((score / 15) * 100, 100)}%; background:${color};"></div>
+      </div>
+      <div class="calc-result-level" style="color:${color};">${result.level}</div>
+      <p class="calc-result-message">${result.message}</p>
+      <div class="calc-result-actions">
+        <a href="contact.html" class="btn btn-primary">${result.cta} →</a>
+        <button class="btn btn-outline" onclick="resetCalculator()">Retake</button>
+      </div>
+    </div>`;
+}
+
+function resetCalculator() {
+  document.getElementById("calc-form").style.display = "block";
+  document.getElementById("calc-result").style.display = "none";
+  document.querySelectorAll(".calc-option input").forEach(i => i.checked = false);
+  document.querySelectorAll(".calc-question").forEach(q => q.classList.remove("calc-unanswered"));
+}
+
+/* ── FAQ Accordion ────────────────────────────────────────── */
+function renderFAQ() {
+  const section = document.getElementById("faq");
+  if (!section) return;
+  if (!CONFIG.faq || CONFIG.faq.length === 0) { section.style.display = "none"; return; }
+
+  const items = CONFIG.faq.map((f, i) => `
+    <div class="faq-item" id="faq-${i}">
+      <button class="faq-question" onclick="toggleFAQ(${i})">
+        <span>${f.question}</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer" id="faq-answer-${i}">
+        <div class="faq-answer-inner">${f.answer}</div>
+      </div>
+    </div>`).join("");
+
+  section.querySelector(".container").insertAdjacentHTML("beforeend",
+    `<div class="faq-list">${items}</div>`);
+}
+
+function toggleFAQ(index) {
+  const answer = document.getElementById(`faq-answer-${index}`);
+  const icon   = document.querySelector(`#faq-${index} .faq-icon`);
+  const isOpen = answer.classList.contains("open");
+
+  // Close all
+  document.querySelectorAll(".faq-answer").forEach(a => a.classList.remove("open"));
+  document.querySelectorAll(".faq-icon").forEach(i => i.textContent = "+");
+  document.querySelectorAll(".faq-item").forEach(i => i.classList.remove("active"));
+
+  if (!isOpen) {
+    answer.classList.add("open");
+    icon.textContent = "−";
+    document.getElementById(`faq-${index}`).classList.add("active");
+  }
 }
 
 /* ── Footer ───────────────────────────────────────────────── */
