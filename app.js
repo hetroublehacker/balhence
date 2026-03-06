@@ -6,6 +6,7 @@
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadAnalytics();
   applyCompanyMeta();
   renderNav();
   renderFooter();
@@ -16,13 +17,16 @@ document.addEventListener("DOMContentLoaded", () => {
     case "home":
       renderHero();
       renderStats();
+      renderProcess();
       renderServicesPreview();
+      renderTestimonials();
       renderWhyUs();
       renderHomeContactCTA();
       break;
     case "services":
       renderPageHeader("Services", "VAPT Services", "End-to-end security testing across your entire attack surface — from web apps to cloud infrastructure.");
       renderServices();
+      renderProcess();
       renderWhyUs();
       renderPageCTA();
       break;
@@ -62,6 +66,21 @@ function sectionLabel(text) {
 
 function getCurrentPage() {
   return document.body.dataset.page;
+}
+
+/* ── Google Analytics ─────────────────────────────────────── */
+function loadAnalytics() {
+  const id = CONFIG.analytics && CONFIG.analytics.googleAnalyticsId;
+  if (!id) return;
+  const s1 = document.createElement("script");
+  s1.async = true;
+  s1.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+  document.head.appendChild(s1);
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag("js", new Date());
+  gtag("config", id);
 }
 
 /* ── Meta / Title ─────────────────────────────────────────── */
@@ -134,7 +153,7 @@ function renderHero() {
     <div class="hero-glow"></div>
     <div class="container">
       <div class="hero-badge">
-        <span class="dot"></span> Now accepting new clients — limited spots this month
+        <span class="dot"></span> ${h.urgency}
       </div>
       <h1 class="hero-heading">
         ${h.heading}<span class="hero-heading-accent">${h.subheading}</span>
@@ -170,6 +189,45 @@ function renderStats() {
     `));
   });
   section.querySelector(".container").appendChild(grid);
+}
+
+/* ── Process ──────────────────────────────────────────────── */
+function renderProcess() {
+  const section = document.getElementById("process");
+  if (!section) return;
+  const steps = CONFIG.process;
+  const cards = steps.map((s, i) => `
+    <div class="process-card">
+      <div class="process-step">${s.step}</div>
+      <div class="process-connector ${i === steps.length - 1 ? "hidden" : ""}"></div>
+      <div class="process-title">${s.title}</div>
+      <div class="process-desc">${s.description}</div>
+    </div>`).join("");
+  section.querySelector(".container").insertAdjacentHTML("beforeend",
+    `<div class="process-grid">${cards}</div>`);
+}
+
+/* ── Testimonials ─────────────────────────────────────────── */
+function renderTestimonials() {
+  const section = document.getElementById("testimonials");
+  if (!section) return;
+  if (!CONFIG.testimonials || CONFIG.testimonials.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+  const cards = CONFIG.testimonials.map(t => `
+    <div class="testimonial-card">
+      <div class="testimonial-quote">"${t.quote}"</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">${t.initials}</div>
+        <div>
+          <div class="testimonial-name">${t.name}</div>
+          <div class="testimonial-company">${t.company}</div>
+        </div>
+      </div>
+    </div>`).join("");
+  section.querySelector(".container").insertAdjacentHTML("beforeend",
+    `<div class="testimonials-grid">${cards}</div>`);
 }
 
 /* ── Services (full) ──────────────────────────────────────── */
@@ -221,11 +279,26 @@ function renderAbout() {
       <div class="highlight-label">${h.label}</div>
     </div>`).join("");
 
+  const brand = a.brandStory;
+  const brandHtml = brand ? `
+    <div class="brand-story">
+      <div class="brand-story-word">
+        <span class="brand-name">Bal<em>hence</em></span>
+        <span class="brand-equals">≡</span>
+        <span class="brand-meaning">
+          <span class="brand-hindi">${brand.meaningScript}</span>
+          <span class="brand-meaning-text">${brand.meaning}</span>
+        </span>
+      </div>
+      <p class="brand-story-desc">${brand.explanation}</p>
+    </div>` : "";
+
   section.querySelector(".container").innerHTML = `
     <div class="about-grid">
       <div class="about-text">
         ${sectionLabel("Our Story")}
         <h2 class="section-heading">${a.heading}</h2>
+        ${brandHtml}
         ${paragraphs}
       </div>
       <div class="about-highlights">${highlights}</div>
@@ -430,6 +503,9 @@ function renderContactForm() {
           <div class="form-group">
             <label for="message">Tell us about your setup / concerns</label>
             <textarea id="message" name="message" placeholder="e.g. We run a fintech app on AWS and need a compliance audit before our next funding round..."></textarea>
+          </div>
+          <div class="trust-indicators">
+            ${(cf.trustIndicators || []).map(t => `<span class="trust-indicator">✓ ${t}</span>`).join("")}
           </div>
           <button type="submit" class="btn btn-primary form-submit">Request Free Audit →</button>
           <p class="form-note">🔒 Your details are kept strictly confidential. No spam, ever.</p>

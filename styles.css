@@ -781,10 +781,192 @@ footer {
   padding: 2.25rem;
 }
 
+/* ── Process ─────────────────────────────────────────────── */
+#process { background: var(--bg); }
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.process-card {
+  padding: 2rem;
+  position: relative;
+  border: 1px solid var(--border);
+  border-right: none;
+  background: var(--bg2);
+}
+
+.process-card:last-child {
+  border-right: 1px solid var(--border);
+}
+
+.process-step {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: rgba(59,130,246,0.15);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.process-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.process-desc {
+  font-size: 0.87rem;
+  color: var(--subtle);
+  line-height: 1.65;
+}
+
+/* ── Testimonials ─────────────────────────────────────────── */
+#testimonials { background: var(--bg2); }
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.25rem;
+}
+
+.testimonial-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.testimonial-quote {
+  font-size: 0.92rem;
+  color: var(--subtle);
+  line-height: 1.7;
+  flex: 1;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(59,130,246,0.15);
+  border: 1px solid rgba(59,130,246,0.25);
+  color: var(--accent2);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.testimonial-name    { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+.testimonial-company { font-size: 0.78rem; color: var(--muted); }
+
+/* ── Brand Story ──────────────────────────────────────────── */
+.brand-story {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.brand-story-word {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.brand-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+}
+
+.brand-name em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.brand-equals {
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.brand-meaning {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-hindi {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Noto Sans Devanagari', 'Mangal', sans-serif;
+}
+
+.brand-meaning-text {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.brand-story-desc {
+  font-size: 0.87rem;
+  color: var(--subtle);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Trust Indicators (form) ─────────────────────────────── */
+.trust-indicators {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.trust-indicator {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--subtle);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.7rem;
+  border-radius: 100px;
+}
+
 /* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 900px) {
   .about-grid    { grid-template-columns: 1fr; gap: 2.5rem; }
   .contact-grid  { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+@media (max-width: 900px) {
+  .process-grid { grid-template-columns: 1fr; }
+  .process-card { border-right: 1px solid var(--border); border-bottom: none; }
+  .process-card:last-child { border-bottom: 1px solid var(--border); }
 }
 
 @media (max-width: 700px) {

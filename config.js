@@ -24,9 +24,16 @@ const CONFIG = {
   hero: {
     heading: "Your Business Is a Target.",
     subheading: "Is It Protected?",
-    description: "83% of Indian enterprises faced a cyberattack in 2023. Balhence delivers hands-on VAPT services that find your vulnerabilities before attackers do.",
+    description: "83% of Indian enterprises faced a cyberattack in 2024. Balhence delivers hands-on VAPT services that find your vulnerabilities before attackers do.",
     ctaText: "Get a Free Security Audit",
     ctaSecondaryText: "View Services",
+    urgency: "Limited to 3 clients this month — 1 spot remaining",
+  },
+
+  /* ── Analytics ────────────────────────────────────────── */
+  analytics: {
+    // Paste your Google Analytics 4 Measurement ID here (e.g. "G-XXXXXXXXXX")
+    googleAnalyticsId: "G-Q850E2X4NN",
   },
 
   /* ── Stats (Indian market — real data) ───────────────── */
@@ -87,9 +94,34 @@ const CONFIG = {
     },
   ],
 
+  /* ── How It Works ─────────────────────────────────────── */
+  process: [
+    {
+      step: "01",
+      title: "Scope & NDA",
+      description: "We define the exact scope of testing together and sign a mutual NDA before anything begins. Your data stays yours.",
+    },
+    {
+      step: "02",
+      title: "Hands-on Testing",
+      description: "Our certified pentesters simulate real-world attackers — no automated scanners, no shortcuts. Every finding is manually verified.",
+    },
+    {
+      step: "03",
+      title: "Report, Fix & Re-test",
+      description: "You get a clear report with severity ratings and fix guidance. We walk your team through it and re-test all patches for free within 30 days.",
+    },
+  ],
+
   /* ── About Section ────────────────────────────────────── */
   about: {
     heading: "About Balhence",
+    brandStory: {
+      word: "Balhence",
+      meaning: "Santulan",
+      meaningScript: "संतुलन",
+      explanation: "Santulan is the Hindi word for balance — equilibrium. Security isn't about paranoia, it's about maintaining the right balance between openness and protection. That's what we help businesses achieve.",
+    },
     paragraphs: [
       "Balhence is a focused cybersecurity firm built for the Indian market. We work with startups, SMEs, and enterprises to systematically identify and eliminate security risks before they become costly breaches.",
       "Our team comprises certified security professionals — CEH, OSCP, and CRTP — with experience across fintech, healthtech, e-commerce, and SaaS sectors.",
@@ -123,6 +155,28 @@ const CONFIG = {
       icon: "🤝",
       title: "No Jargon",
       description: "Clear, actionable reports for both technical teams and C-suite executives.",
+    },
+  ],
+
+  /* ── Testimonials ─────────────────────────────────────── */
+  testimonials: [
+    {
+      quote: "Balhence found 3 critical vulnerabilities in our payment gateway that our internal team had missed for months. The report was clear enough for both our developers and our board.",
+      name: "CTO",
+      company: "Fintech Startup, Mumbai",
+      initials: "RK",
+    },
+    {
+      quote: "We needed a VAPT report for our ISO 27001 audit. Balhence delivered within a week, covered everything the auditors needed, and were available for follow-up calls throughout.",
+      name: "Head of IT",
+      company: "SaaS Company, Bengaluru",
+      initials: "PS",
+    },
+    {
+      quote: "What stood out was the free re-test. Most vendors hand you a PDF and disappear. Balhence actually stayed engaged until every critical issue was fixed.",
+      name: "Founder",
+      company: "Healthtech Platform, Delhi",
+      initials: "AM",
     },
   ],
 
@@ -163,6 +217,11 @@ const CONFIG = {
   contactForm: {
     heading: "Get Your Free Security Audit",
     subheading: "Fill in the form and our team will reach out within 24 hours.",
+    trustIndicators: [
+      "No commitment required",
+      "Response within 24 hours",
+      "NDA available on request",
+    ],
     // To receive form submissions via email, replace with your Formspree endpoint:
     // formAction: "https://formspree.io/f/YOUR_ID"
     formAction: "https://formspree.io/f/maqpybea",
