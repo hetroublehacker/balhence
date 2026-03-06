@@ -5,6 +5,9 @@
    which sections to render.
    ============================================================ */
 
+// 🕵️ Recon noted. Since you're in the console... /ctf.html
+console.log("%c🕵️ Found the console? You already think like a pentester.\n%c→ balhence.com/ctf.html", "color:#00ff88; font-size:14px; font-weight:bold;", "color:#00d4ff; font-size:12px;");
+
 document.addEventListener("DOMContentLoaded", () => {
   loadAnalytics();
   applyCompanyMeta();

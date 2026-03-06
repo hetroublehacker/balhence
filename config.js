@@ -13,7 +13,7 @@ const CONFIG = {
     name: "Balhence",
     tagline: "Secure What Matters.",
     subtagline: "Enterprise-grade Vulnerability Assessment & Penetration Testing for Indian businesses.",
-    email: "contact@balhence.in",
+    email: "contact@balhence.com",
     phone: "+91 98765 43210",
     location: "India",
     linkedIn: "#",

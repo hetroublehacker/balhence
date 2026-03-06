@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# 👀 Curious? Try: /ctf.html
+Disallow: /ctf.html
