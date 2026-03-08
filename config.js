@@ -25,7 +25,7 @@ const CONFIG = {
     heading: "Your Business Is a Target.",
     subheading: "Is It Protected?",
     description: "83% of Indian enterprises faced a cyberattack in 2024. Balhence delivers hands-on VAPT services that find your vulnerabilities before attackers do.",
-    ctaText: "Get a Free Security Audit",
+    ctaText: "Get a Security Audit",
     ctaSecondaryText: "View Services",
     urgency: "Limited to 3 clients this month — 1 spot remaining",
   },
