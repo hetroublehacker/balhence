@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  BALHENCE — SITE CONFIGURATION
+ *  BALHENCE -SITE CONFIGURATION
  *  Edit this file to update any content on the website.
  *  No HTML or CSS knowledge needed.
  * ============================================================
@@ -27,7 +27,7 @@ const CONFIG = {
     description: "83% of Indian enterprises faced a cyberattack in 2024. Balhence delivers hands-on VAPT services that find your vulnerabilities before attackers do.",
     ctaText: "Get a Security Audit",
     ctaSecondaryText: "View Services",
-    urgency: "Limited to 3 clients this month — 1 spot remaining",
+    urgency: "Limited to 3 clients this month -1 spot remaining",
   },
 
   /* ── Analytics ────────────────────────────────────────── */
@@ -36,7 +36,7 @@ const CONFIG = {
     googleAnalyticsId: "G-Q850E2X4NN",
   },
 
-  /* ── Stats (Indian market — real data) ───────────────── */
+  /* ── Stats (Indian market -real data) ───────────────── */
   stats: [
     {
       value: "₹19.5 Cr",
@@ -70,17 +70,17 @@ const CONFIG = {
     {
       icon: "📱",
       title: "Mobile Application VAPT",
-      description: "Android & iOS security testing — reverse engineering, API abuse, insecure data storage, and more.",
+      description: "Android & iOS security testing -reverse engineering, API abuse, insecure data storage, and more.",
     },
     {
       icon: "🌐",
       title: "Network Penetration Testing",
-      description: "Internal and external network assessments — misconfigs, open ports, lateral movement paths.",
+      description: "Internal and external network assessments -misconfigs, open ports, lateral movement paths.",
     },
     {
       icon: "☁️",
       title: "Cloud Security Assessment",
-      description: "AWS, Azure, GCP — IAM misconfiguration, exposed storage, privilege escalation scenarios.",
+      description: "AWS, Azure, GCP -IAM misconfiguration, exposed storage, privilege escalation scenarios.",
     },
     {
       icon: "🏢",
@@ -109,7 +109,7 @@ const CONFIG = {
       },
       {
         id: "data",
-        question: "Do you store sensitive customer data — PII, payments, or health records?",
+        question: "Do you store sensitive customer data -PII, payments, or health records?",
         options: [
           { label: "Yes", score: 3 },
           { label: "No", score: 0 },
@@ -134,7 +134,7 @@ const CONFIG = {
       },
       {
         id: "compliance",
-        question: "Are you subject to regulatory compliance — RBI, SEBI, IRDAI, or ISO 27001?",
+        question: "Are you subject to regulatory compliance -RBI, SEBI, IRDAI, or ISO 27001?",
         options: [
           { label: "Yes", score: 2 },
           { label: "Not sure", score: 1 },
@@ -148,7 +148,7 @@ const CONFIG = {
         level: "Low Risk",
         color: "green",
         icon: "🟢",
-        message: "Your attack surface appears limited — but no business is fully immune. A basic VAPT can confirm your posture and satisfy investor or partner due diligence.",
+        message: "Your attack surface appears limited -but no business is fully immune. A basic VAPT can confirm your posture and satisfy investor or partner due diligence.",
         cta: "Get a Baseline Audit",
       },
       {
@@ -180,7 +180,7 @@ const CONFIG = {
     {
       step: "02",
       title: "Hands-on Testing",
-      description: "Our certified pentesters simulate real-world attackers — no automated scanners, no shortcuts. Every finding is manually verified.",
+      description: "Our certified pentesters simulate real-world attackers -no automated scanners, no shortcuts. Every finding is manually verified.",
     },
     {
       step: "03",
@@ -196,11 +196,11 @@ const CONFIG = {
       word: "Balhence",
       meaning: "Santulan",
       meaningScript: "संतुलन",
-      explanation: "Santulan is the Hindi word for balance — equilibrium. Security isn't about paranoia, it's about maintaining the right balance between openness and protection. That's what we help businesses achieve.",
+      explanation: "Santulan is the Hindi word for balance -equilibrium. Security isn't about paranoia, it's about maintaining the right balance between openness and protection. That's what we help businesses achieve.",
     },
     paragraphs: [
       "Balhence is a focused cybersecurity firm built for the Indian market. We work with startups, SMEs, and enterprises to systematically identify and eliminate security risks before they become costly breaches.",
-      "Our team comprises certified security professionals — CEH, OSCP, and CRTP — with experience across fintech, healthtech, e-commerce, and SaaS sectors.",
+      "Our team comprises certified security professionals -CEH, OSCP, and CRTP -with experience across fintech, healthtech, e-commerce, and SaaS sectors.",
       "We don't just deliver PDF reports. We walk your team through every finding, help prioritise fixes, and offer a free re-test to confirm remediation.",
     ],
     highlights: [
@@ -215,7 +215,7 @@ const CONFIG = {
     {
       icon: "⚡",
       title: "Fast Turnaround",
-      description: "Initial findings within 48 hours. Full report in 5–7 business days.",
+      description: "Initial findings within 48 hours. Full report in 5-7 business days.",
     },
     {
       icon: "🇮🇳",
@@ -260,23 +260,23 @@ const CONFIG = {
   faq: [
     {
       question: "What exactly is VAPT and why do I need it?",
-      answer: "VAPT stands for Vulnerability Assessment and Penetration Testing. A vulnerability assessment finds known weaknesses in your systems. Penetration testing goes further — a security professional actively tries to exploit those weaknesses like a real attacker would. Together, they give you a complete picture of your risk and how to fix it.",
+      answer: "VAPT stands for Vulnerability Assessment and Penetration Testing. A vulnerability assessment finds known weaknesses in your systems. Penetration testing goes further -a security professional actively tries to exploit those weaknesses like a real attacker would. Together, they give you a complete picture of your risk and how to fix it.",
     },
     {
       question: "Will security testing disrupt our live systems or business operations?",
-      answer: "No. We agree on a testing scope and schedule before we begin. Most testing is done during low-traffic hours if needed. We use techniques that replicate real attacks without causing downtime — your customers won't notice anything.",
+      answer: "No. We agree on a testing scope and schedule before we begin. Most testing is done during low-traffic hours if needed. We use techniques that replicate real attacks without causing downtime -your customers won't notice anything.",
     },
     {
       question: "How long does a VAPT engagement typically take?",
-      answer: "It depends on scope. A focused web application VAPT takes 3–5 business days. A full infrastructure + cloud + application engagement can take 1–2 weeks. We'll give you a clear timeline after the scoping call.",
+      answer: "It depends on scope. A focused web application VAPT takes 3-5 business days. A full infrastructure + cloud + application engagement can take 1-2 weeks. We'll give you a clear timeline after the scoping call.",
     },
     {
       question: "What does the final report look like?",
-      answer: "You get two versions: a technical report for your developers with exact vulnerability details, reproduction steps, and fix guidance — and an executive summary for your leadership team with risk ratings, business impact, and priority actions. No jargon, no filler.",
+      answer: "You get two versions: a technical report for your developers with exact vulnerability details, reproduction steps, and fix guidance -and an executive summary for your leadership team with risk ratings, business impact, and priority actions. No jargon, no filler.",
     },
     {
       question: "Do you offer a re-test after we fix the vulnerabilities?",
-      answer: "Yes — every engagement includes one free re-test within 30 days. We verify that every critical and high-severity finding has been properly remediated before we close the engagement.",
+      answer: "Yes -every engagement includes one free re-test within 30 days. We verify that every critical and high-severity finding has been properly remediated before we close the engagement.",
     },
     {
       question: "Is our data and business information kept confidential?",
@@ -335,10 +335,10 @@ const CONFIG = {
     formAction: "https://formspree.io/f/maqpybea",
     fields: {
       companySizeOptions: [
-        "1–10 employees",
-        "11–50 employees",
-        "51–200 employees",
-        "201–500 employees",
+        "1-10 employees",
+        "11-50 employees",
+        "51-200 employees",
+        "201-500 employees",
         "500+ employees",
       ],
       serviceOptions: [
@@ -348,9 +348,65 @@ const CONFIG = {
         "Cloud Security Assessment",
         "Infrastructure Security Review",
         "Compliance-Driven Testing",
-        "Not sure — need guidance",
+        "Not sure -need guidance",
       ],
     },
+  },
+
+  /* ── Industries ──────────────────────────────────────── */
+  industries: [
+    {
+      name: "Fintech",
+      pain: "RBI mandates annual VAPT for all regulated entities. Payment gateway flaws cost ₹19.5 Cr per breach on average.",
+      stat: "73% of Indian fintech apps have at least one critical vulnerability",
+      cta: "Secure Your Fintech App",
+    },
+    {
+      name: "Healthtech",
+      pain: "Patient data under DPDP Act 2023 carries heavy penalties. Health records sell for 10x more than credit cards on the dark web.",
+      stat: "Healthcare saw a 45% spike in cyberattacks in India in 2024",
+      cta: "Protect Patient Data",
+    },
+    {
+      name: "E-commerce",
+      pain: "Cart hijacking, payment skimming, and account takeovers erode customer trust and revenue overnight.",
+      stat: "Indian e-commerce lost ₹2,500 Cr to online fraud in 2023",
+      cta: "Secure Your Store",
+    },
+    {
+      name: "SaaS",
+      pain: "Multi-tenant architectures mean one vulnerability can expose every customer. SOC 2 and ISO 27001 require proof.",
+      stat: "68% of SaaS breaches originate from misconfigured APIs",
+      cta: "Harden Your Platform",
+    },
+  ],
+
+  /* ── Regional Urgency (recent Indian breaches) ─────── */
+  breaches: [
+    { company: "Star Health Insurance", year: "2024", impact: "31M+ customer records leaked via Telegram bots", source: "Reuters" },
+    { company: "Indian Council of Medical Research", year: "2023", impact: "815M citizens' Aadhaar and passport data exposed", source: "Resecurity" },
+    { company: "Air India", year: "2023", impact: "4.5M passengers' payment and passport data breached", source: "SITA" },
+    { company: "Boat Lifestyle", year: "2024", impact: "7.5M customers' personal data sold on dark web", source: "Forbes India" },
+  ],
+
+  /* ── Sample Report ─────────────────────────────────── */
+  sampleReport: {
+    heading: "See What You'll Get",
+    description: "Download a redacted sample VAPT report to see the level of detail, severity ratings, and fix guidance we deliver to every client.",
+    cta: "Download Sample Report",
+    // Direct download link. To email-gate instead: set to "" and leads go to Formspree.
+    directDownload: "sample-vapt-report.pdf",
+  },
+
+  /* ── Callback Request ──────────────────────────────── */
+  callback: {
+    heading: "Prefer a Call?",
+    subheading: "Leave your number and preferred time. We'll call you back - no forms, no waiting.",
+    timeSlots: [
+      "Morning (9 AM - 12 PM)",
+      "Afternoon (12 PM - 4 PM)",
+      "Evening (4 PM - 7 PM)",
+    ],
   },
 
   /* ── Footer ───────────────────────────────────────────── */

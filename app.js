@@ -1,11 +1,11 @@
 /* ============================================================
-   BALHENCE — app.js
+   BALHENCE - app.js
    Apple-inspired minimalist render engine.
    All content from config.js, scroll-reveal animations.
    ============================================================ */
 
 // Easter egg
-console.log("%c\u{1F575}\uFE0F Found the console? You already think like a pentester.\n%c\u2192 balhence.com/ctf.html", "color:#0071e3; font-size:14px; font-weight:bold;", "color:#34c759; font-size:12px;");
+console.log("%c[*] Found the console? You already think like a pentester.\n%c-> balhence.com/ctf.html", "color:#0071e3; font-size:14px; font-weight:bold;", "color:#34c759; font-size:12px;");
 
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
@@ -21,10 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
     case "home":
       renderHero();
       renderStats();
+      renderBreachesTicker();
+      renderIndustries();
       renderProcess();
       renderServicesPreview();
       renderRiskCalculator();
       renderTestimonials();
+      renderSampleReport();
       renderFAQ();
       renderWhyUs();
       renderHomeContactCTA();
@@ -50,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
       break;
     case "contact":
       renderContactForm();
+      renderCallback();
       break;
   }
 
@@ -112,11 +116,11 @@ function loadAnalytics() {
 function applyCompanyMeta() {
   const page = getCurrentPage();
   const titles = {
-    home:     `${CONFIG.company.name} \u2014 VAPT as a Service`,
-    services: `Services \u2014 ${CONFIG.company.name}`,
-    about:    `About \u2014 ${CONFIG.company.name}`,
-    blog:     `Blog \u2014 ${CONFIG.company.name}`,
-    contact:  `Contact \u2014 ${CONFIG.company.name}`,
+    home:     `${CONFIG.company.name}  - VAPT as a Service`,
+    services: `Services  - ${CONFIG.company.name}`,
+    about:    `About  - ${CONFIG.company.name}`,
+    blog:     `Blog  - ${CONFIG.company.name}`,
+    contact:  `Contact  - ${CONFIG.company.name}`,
   };
   document.title = titles[page] || CONFIG.company.name;
 }
@@ -180,6 +184,7 @@ function initScrollReveal() {
     ".calc-question", ".calc-submit",
     ".blog-card", ".blog-coming-soon",
     ".achievement-card", ".team-card",
+    ".industry-card", ".breach-ticker", ".sample-report-inner", ".callback-inner",
   ];
 
   const elements = document.querySelectorAll(selectors.join(", "));
@@ -233,8 +238,8 @@ function renderHero() {
       </h1>
       <p class="hero-description">${h.description}</p>
       <div class="hero-actions">
-        <a href="contact.html" class="btn btn-primary">${h.ctaText} \u2192</a>
-        <a href="services.html" class="btn btn-outline">${h.ctaSecondaryText} \u2192</a>
+        <a href="contact.html" class="btn btn-primary">${h.ctaText} &rarr;</a>
+        <a href="services.html" class="btn btn-outline">${h.ctaSecondaryText} &rarr;</a>
       </div>
       <div class="hero-trust">
         <span class="hero-trust-text">Trusted certifications:</span>
@@ -340,7 +345,7 @@ function renderTestimonials() {
   }
   const cards = CONFIG.testimonials.map(t => `
     <div class="testimonial-card">
-      <div class="testimonial-quote">\u201C${t.quote}\u201D</div>
+      <div class="testimonial-quote">"${t.quote}"</div>
       <div class="testimonial-author">
         <div class="testimonial-avatar">${t.initials}</div>
         <div>
@@ -381,7 +386,7 @@ function renderServicesPreview() {
   const container = section.querySelector(".container");
   container.appendChild(grid);
   container.insertAdjacentHTML("beforeend",
-    `<div class="preview-more"><a href="services.html" class="btn btn-outline">View All Services \u2192</a></div>`);
+    `<div class="preview-more"><a href="services.html" class="btn btn-outline">View All Services &rarr;</a></div>`);
 }
 
 /* ── About ────────────────────────────────────────────────── */
@@ -401,7 +406,7 @@ function renderAbout() {
     <div class="brand-story">
       <div class="brand-story-word">
         <span class="brand-name">Bal<em>hence</em></span>
-        <span class="brand-equals">\u2261</span>
+        <span class="brand-equals">=</span>
         <span class="brand-meaning">
           <span class="brand-hindi">${brand.meaningScript}</span>
           <span class="brand-meaning-text">${brand.meaning}</span>
@@ -448,10 +453,10 @@ function renderAchievements() {
   const grid = el("div", "achievements-grid");
   CONFIG.achievements.forEach(a => {
     grid.appendChild(el("div", "achievement-card", `
-      <div class="achievement-icon">\u{1F3C6}</div>
+      <div class="achievement-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
       <div>
         <div class="achievement-title">${a.title}</div>
-        <div class="achievement-meta">${a.issuer} \u00B7 ${a.year}</div>
+        <div class="achievement-meta">${a.issuer} | ${a.year}</div>
       </div>
     `));
   });
@@ -476,7 +481,7 @@ function renderTeam() {
       <div class="team-role">${m.role}</div>
       ${m.certifications ? `<div class="team-certs">${m.certifications}</div>` : ""}
       <div class="team-bio">${m.bio}</div>
-      ${m.linkedIn ? `<a class="team-linkedin" href="${m.linkedIn}" target="_blank">LinkedIn \u2192</a>` : ""}
+      ${m.linkedIn ? `<a class="team-linkedin" href="${m.linkedIn}" target="_blank">LinkedIn &rarr;</a>` : ""}
     `));
   });
   section.querySelector(".container").appendChild(grid);
@@ -490,7 +495,7 @@ function renderBlog() {
   if (!CONFIG.blogs || CONFIG.blogs.length === 0) {
     container.insertAdjacentHTML("beforeend", `
       <div class="blog-coming-soon">
-        <div class="cs-icon">\u270D\uFE0F</div>
+        <div class="cs-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
         <h3>Insights Coming Soon</h3>
         <p>We're working on practical cybersecurity articles tailored for Indian businesses.</p>
       </div>`);
@@ -504,7 +509,7 @@ function renderBlog() {
       <div class="blog-summary">${b.summary}</div>
       <div class="blog-footer">
         <span>${b.date}</span>
-        <a class="blog-read-more" href="${b.link}">Read \u2192</a>
+        <a class="blog-read-more" href="${b.link}">Read &rarr;</a>
       </div>
     `));
   });
@@ -520,9 +525,9 @@ function renderHomeContactCTA() {
       <div class="cta-banner">
         <div class="cta-banner-text">
           <h2>Ready to find out what attackers can see?</h2>
-          <p>Get an initial security consultation \u2014 no strings attached.</p>
+          <p>Get an initial security consultation  - no strings attached.</p>
         </div>
-        <a href="contact.html" class="btn btn-primary">Request Audit \u2192</a>
+        <a href="contact.html" class="btn btn-primary">Request Audit &rarr;</a>
       </div>
     </div>`;
 }
@@ -537,7 +542,7 @@ function renderPageCTA() {
           <h2>Ready to secure your business?</h2>
           <p>Request an audit and we'll get back within 24 hours.</p>
         </div>
-        <a href="contact.html" class="btn btn-primary">Get Audit \u2192</a>
+        <a href="contact.html" class="btn btn-primary">Get Audit &rarr;</a>
       </div>
     </div>`;
 }
@@ -567,7 +572,7 @@ function renderRiskCalculator() {
       <div class="calc-form" id="calc-form">
         ${questionsHtml}
         <button class="btn btn-primary calc-submit" onclick="calculateRisk()">
-          Calculate My Risk Score \u2192
+          Calculate My Risk Score &rarr;
         </button>
         <p class="calc-note">Instant result. No email required.</p>
       </div>
@@ -612,7 +617,7 @@ function calculateRisk() {
       <div class="calc-result-level" style="color:${color};">${result.level}</div>
       <p class="calc-result-message">${result.message}</p>
       <div class="calc-result-actions">
-        <a href="contact.html" class="btn btn-primary">${result.cta} \u2192</a>
+        <a href="contact.html" class="btn btn-primary">${result.cta} &rarr;</a>
         <button class="btn btn-outline" onclick="resetCalculator()">Retake</button>
       </div>
     </div>`;
@@ -679,15 +684,15 @@ function renderContactForm() {
         <p>${cf.subheading}</p>
         <div class="contact-details">
           <div class="contact-item">
-            <div class="contact-item-icon">\u{1F4E7}</div>
+            <div class="contact-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
             <a href="mailto:${c.email}">${c.email}</a>
           </div>
           <div class="contact-item">
-            <div class="contact-item-icon">\u{1F4DE}</div>
+            <div class="contact-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
             <a href="tel:${c.phone}">${c.phone}</a>
           </div>
           <div class="contact-item">
-            <div class="contact-item-icon">\u{1F4CD}</div>
+            <div class="contact-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
             <span>${c.location}</span>
           </div>
         </div>
@@ -735,13 +740,13 @@ function renderContactForm() {
             <textarea id="message" name="message" placeholder="e.g. We run a fintech app on AWS and need a compliance audit before our next funding round..."></textarea>
           </div>
           <div class="trust-indicators">
-            ${(cf.trustIndicators || []).map(t => `<span class="trust-indicator">\u2713 ${t}</span>`).join("")}
+            ${(cf.trustIndicators || []).map(t => `<span class="trust-indicator"><svg style="display:inline-block;vertical-align:-1px;margin-right:2px;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ${t}</span>`).join("")}
           </div>
-          <button type="submit" class="btn btn-primary form-submit">Request Audit \u2192</button>
-          <p class="form-note">\u{1F512} Your details are kept strictly confidential. No spam, ever.</p>
+          <button type="submit" class="btn btn-primary form-submit">Request Audit &rarr;</button>
+          <p class="form-note"><svg style="display:inline-block;vertical-align:-2px;margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Your details are kept strictly confidential. No spam, ever.</p>
         </form>
         <div class="form-success" id="form-success">
-          <div class="form-success-icon">\u2705</div>
+          <div class="form-success-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
           <h3>Request Received!</h3>
           <p>We'll reach out within 24 hours to schedule your security consultation.</p>
         </div>
@@ -775,7 +780,7 @@ function initForm() {
       const body = encodeURIComponent(
         `Company: ${data.get("company")}\nName: ${data.get("name")}\nPhone: ${data.get("phone")}\nSize: ${data.get("company_size")}\nService: ${data.get("service")}\n\n${data.get("message")}`
       );
-      window.location.href = `mailto:${CONFIG.company.email}?subject=VAPT Enquiry \u2014 ${data.get("company")}&body=${body}`;
+      window.location.href = `mailto:${CONFIG.company.email}?subject=VAPT Enquiry  - ${data.get("company")}&body=${body}`;
       showSuccess();
     }
   });
@@ -786,6 +791,188 @@ function showSuccess() {
   const success = document.getElementById("form-success");
   if (form) form.style.display = "none";
   if (success) success.classList.add("visible");
+}
+
+/* ── Breaches Ticker (Regional Urgency) ──────────────────── */
+function renderBreachesTicker() {
+  const section = document.getElementById("breaches-ticker");
+  if (!section) return;
+  if (!CONFIG.breaches || CONFIG.breaches.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+
+  const items = CONFIG.breaches.map(b => `
+    <div class="breach-item">
+      <span class="breach-company">${b.company}</span>
+      <span class="breach-year">${b.year}</span>
+      <span class="breach-impact">${b.impact}</span>
+      <span class="breach-source">${b.source}</span>
+    </div>`).join('<span class="breach-divider">|</span>');
+
+  section.querySelector(".container").innerHTML = `
+    <div class="breach-ticker">
+      <div class="breach-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Recent Indian Breaches
+      </div>
+      <div class="breach-scroll-wrapper">
+        <div class="breach-scroll">${items}${items}</div>
+      </div>
+    </div>`;
+}
+
+/* ── Industries ──────────────────────────────────────────── */
+function renderIndustries() {
+  const section = document.getElementById("industries");
+  if (!section) return;
+  if (!CONFIG.industries || CONFIG.industries.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+
+  const cards = CONFIG.industries.map(ind => `
+    <div class="industry-card">
+      <div class="industry-name">${ind.name}</div>
+      <div class="industry-pain">${ind.pain}</div>
+      <div class="industry-stat">${ind.stat}</div>
+      <a href="contact.html" class="btn btn-outline industry-cta">${ind.cta} &rarr;</a>
+    </div>`).join("");
+
+  section.querySelector(".container").insertAdjacentHTML("beforeend",
+    `<div class="industries-grid">${cards}</div>`);
+}
+
+/* ── Sample Report ───────────────────────────────────────── */
+function renderSampleReport() {
+  const section = document.getElementById("sample-report");
+  if (!section) return;
+  const sr = CONFIG.sampleReport;
+  if (!sr) { section.style.display = "none"; return; }
+
+  const formAction = CONFIG.contactForm.formAction;
+
+  section.querySelector(".container").innerHTML = `
+    <div class="sample-report-inner">
+      <div class="sample-report-text">
+        <span class="section-label">Sample Deliverable</span>
+        <h2 class="section-heading" style="text-align:left;">${sr.heading}</h2>
+        <p>${sr.description}</p>
+      </div>
+      <div class="sample-report-form" id="sample-report-form-wrapper">
+        <div class="sample-report-preview">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>Sample_VAPT_Report.pdf</span>
+        </div>
+        ${sr.directDownload ? `
+          <a href="${sr.directDownload}" class="btn btn-primary sample-dl-btn" download>${sr.cta} &rarr;</a>
+        ` : `
+          <form id="sample-report-form" ${formAction ? `action="${formAction}" method="POST"` : ""}>
+            <input type="hidden" name="_subject" value="Sample Report Download Request" />
+            <input type="hidden" name="request_type" value="sample_report" />
+            <div class="form-group">
+              <input type="email" name="email" placeholder="Your work email" required />
+            </div>
+            <button type="submit" class="btn btn-primary sample-dl-btn">${sr.cta} &rarr;</button>
+            <p class="form-note" style="text-align:left;">We'll email you the sample report within minutes.</p>
+          </form>
+          <div class="sample-report-success" id="sample-report-success">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Check your inbox! The sample report is on its way.</span>
+          </div>
+        `}
+      </div>
+    </div>`;
+
+  // Init sample report form
+  const form = document.getElementById("sample-report-form");
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (formAction) {
+        try {
+          const res = await fetch(formAction, {
+            method: "POST",
+            headers: { Accept: "application/json" },
+            body: new FormData(form),
+          });
+          if (res.ok) {
+            form.style.display = "none";
+            document.getElementById("sample-report-success").style.display = "flex";
+          } else {
+            alert("Something went wrong. Please try again.");
+          }
+        } catch {
+          alert("Network error. Please try again.");
+        }
+      }
+    });
+  }
+}
+
+/* ── Callback Request ────────────────────────────────────── */
+function renderCallback() {
+  const section = document.getElementById("callback");
+  if (!section) return;
+  const cb = CONFIG.callback;
+  if (!cb) { section.style.display = "none"; return; }
+
+  const formAction = CONFIG.contactForm.formAction;
+  const timeOptions = cb.timeSlots.map(t =>
+    `<option value="${t}">${t}</option>`).join("");
+
+  section.querySelector(".container").innerHTML = `
+    <div class="callback-inner">
+      <div class="callback-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <h3>${cb.heading}</h3>
+      <p>${cb.subheading}</p>
+      <form id="callback-form" class="callback-form" ${formAction ? `action="${formAction}" method="POST"` : ""}>
+        <input type="hidden" name="_subject" value="Callback Request" />
+        <input type="hidden" name="request_type" value="callback" />
+        <div class="callback-fields">
+          <div class="form-group">
+            <input type="tel" name="phone" placeholder="+91 98765 43210" required />
+          </div>
+          <div class="form-group">
+            <select name="preferred_time" required>
+              <option value="">Preferred time</option>
+              ${timeOptions}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Call Me Back &rarr;</button>
+        </div>
+      </form>
+      <div class="callback-success" id="callback-success">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>Got it! We'll call you at your preferred time.</span>
+      </div>
+    </div>`;
+
+  const form = document.getElementById("callback-form");
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (formAction) {
+        try {
+          const res = await fetch(formAction, {
+            method: "POST",
+            headers: { Accept: "application/json" },
+            body: new FormData(form),
+          });
+          if (res.ok) {
+            form.style.display = "none";
+            document.getElementById("callback-success").style.display = "flex";
+          } else {
+            alert("Something went wrong. Please try again.");
+          }
+        } catch {
+          alert("Network error. Please try again.");
+        }
+      }
+    });
+  }
 }
 
 /* ── Footer ───────────────────────────────────────────────── */
@@ -813,8 +1000,8 @@ function renderFooter() {
         <div class="footer-links">${linkHtml}</div>
       </div>
       <div class="footer-bottom">
-        <span>\u00A9 ${year} ${c.name}. All rights reserved.</span>
-        <span>VAPT as a Service \u00B7 India</span>
+        <span>&copy; ${year} ${c.name}. All rights reserved.</span>
+        <span>VAPT as a Service | India</span>
       </div>
     </div>`;
 }
