@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sample VAPT Report - Balhence" />
+  <title>Sample Report - Balhence</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .viewer-wrapper {
+      padding-top: 4.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .viewer-header {
+      text-align: center;
+      padding: var(--space-lg) 0 var(--space-md);
+    }
+    .viewer-header h1 {
+      font-size: var(--text-2xl);
+      margin-bottom: var(--space-xs);
+    }
+    .viewer-header p {
+      font-size: var(--text-base);
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin: 0 auto var(--space-md);
+    }
+    .viewer-actions {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .viewer-frame {
+      flex: 1;
+      padding: 0 var(--space-md) var(--space-md);
+      min-height: 80vh;
+    }
+    .viewer-frame iframe {
+      width: 100%;
+      height: 80vh;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: var(--radius);
+      background: var(--bg-alt);
+    }
+    [data-theme="dark"] .viewer-frame iframe {
+      border-color: rgba(255,255,255,0.06);
+    }
+    .viewer-fallback {
+      display: none;
+      text-align: center;
+      padding: var(--space-xl);
+      background: var(--bg-alt);
+      border-radius: var(--radius);
+      margin: 0 var(--space-md);
+    }
+    @media (max-width: 734px) {
+      .viewer-frame iframe { height: 60vh; }
+    }
+  </style>
+</head>
+<body data-page="report-viewer">
+
+  <nav></nav>
+
+  <div class="viewer-wrapper">
+    <div class="container">
+      <div class="viewer-header">
+        <span class="section-label">Sample Deliverable</span>
+        <h1>Sample VAPT Report</h1>
+        <p>This is a redacted sample showing the level of detail, severity ratings, and remediation guidance we deliver to every client.</p>
+        <div class="viewer-actions">
+          <a href="sample-vapt-report.pdf" download class="btn btn-outline">Download PDF &rarr;</a>
+          <a href="contact.html" class="btn btn-primary">Get Your Report &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div class="viewer-frame">
+      <iframe id="pdf-frame" src="sample-vapt-report.pdf" title="Sample VAPT Report"></iframe>
+    </div>
+    <div class="viewer-fallback" id="pdf-fallback">
+      <p>Your browser doesn't support inline PDF viewing.</p>
+      <a href="sample-vapt-report.pdf" class="btn btn-primary" download>Download PDF &rarr;</a>
+    </div>
+  </div>
+
+  <footer></footer>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Fallback for mobile browsers that can't render PDFs inline
+    if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      document.getElementById("pdf-frame").parentElement.style.display = "none";
+      document.getElementById("pdf-fallback").style.display = "block";
+    }
+  </script>
+</body>
+</html>

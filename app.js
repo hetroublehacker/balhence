@@ -865,7 +865,7 @@ function renderSampleReport() {
           <span>Sample_VAPT_Report.pdf</span>
         </div>
         ${sr.directDownload ? `
-          <a href="${sr.directDownload}" class="btn btn-primary sample-dl-btn" download>${sr.cta} &rarr;</a>
+          <a href="report-viewer.html" class="btn btn-primary sample-dl-btn">${sr.cta} &rarr;</a>
         ` : `
           <form id="sample-report-form" ${formAction ? `action="${formAction}" method="POST"` : ""}>
             <input type="hidden" name="_subject" value="Sample Report Download Request" />
