@@ -1,105 +1,212 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Sample VAPT Report - Balhence" />
-  <title>Sample Report - Balhence</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    .viewer-wrapper {
-      padding-top: 4.5rem;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .viewer-header {
-      text-align: center;
-      padding: var(--space-lg) 0 var(--space-md);
-    }
-    .viewer-header h1 {
-      font-size: var(--text-2xl);
-      margin-bottom: var(--space-xs);
-    }
-    .viewer-header p {
-      font-size: var(--text-base);
-      color: var(--text-secondary);
-      max-width: 500px;
-      margin: 0 auto var(--space-md);
-    }
-    .viewer-actions {
-      display: flex;
-      gap: var(--space-sm);
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .viewer-frame {
-      flex: 1;
-      padding: 0 var(--space-md) var(--space-md);
-      min-height: 80vh;
-    }
-    .viewer-frame iframe {
-      width: 100%;
-      height: 80vh;
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: var(--radius);
-      background: var(--bg-alt);
-    }
-    [data-theme="dark"] .viewer-frame iframe {
-      border-color: rgba(255,255,255,0.06);
-    }
-    .viewer-fallback {
-      display: none;
-      text-align: center;
-      padding: var(--space-xl);
-      background: var(--bg-alt);
-      border-radius: var(--radius);
-      margin: 0 var(--space-md);
-    }
-    @media (max-width: 734px) {
-      .viewer-frame iframe { height: 60vh; }
-    }
-  </style>
-</head>
-<body data-page="report-viewer">
-
-  <nav></nav>
-
-  <div class="viewer-wrapper">
-    <div class="container">
-      <div class="viewer-header">
-        <span class="section-label">Sample Deliverable</span>
-        <h1>Sample VAPT Report</h1>
-        <p>This is a redacted sample showing the level of detail, severity ratings, and remediation guidance we deliver to every client.</p>
-        <div class="viewer-actions">
-          <a href="sample-vapt-report.pdf" download class="btn btn-outline">Download PDF &rarr;</a>
-          <a href="contact.html" class="btn btn-primary">Get Your Report &rarr;</a>
-        </div>
-      </div>
-    </div>
-    <div class="viewer-frame">
-      <iframe id="pdf-frame" src="sample-vapt-report.pdf" title="Sample VAPT Report"></iframe>
-    </div>
-    <div class="viewer-fallback" id="pdf-fallback">
-      <p>Your browser doesn't support inline PDF viewing.</p>
-      <a href="sample-vapt-report.pdf" class="btn btn-primary" download>Download PDF &rarr;</a>
-    </div>
-  </div>
-
-  <footer></footer>
-
-  <script src="config.js"></script>
-  <script src="app.js"></script>
-  <script>
-    // Fallback for mobile browsers that can't render PDFs inline
-    if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
-      document.getElementById("pdf-frame").parentElement.style.display = "none";
-      document.getElementById("pdf-fallback").style.display = "block";
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sample Web &amp; API Penetration Test Report | Balhence</title>
+  <meta name="description" content="Explore a synthetic Balhence pentest deliverable from executive risk through technical evidence, remediation, and re-test closure.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/report-viewer.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="Sample Web & API Penetration Test Report | Balhence">
+  <meta property="og:description" content="Inspect how scope, evidence, business impact, remediation, and re-test status are communicated.">
+  <meta property="og:url" content="https://balhence.com/report-viewer.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Balhence sample web and API penetration test report">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sample Web & API Penetration Test Report | Balhence">
+  <meta name="twitter:description" content="A synthetic pentest deliverable you can inspect before buying.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image:alt" content="Balhence sample web and API penetration test report">
+  <link rel="icon" href="/favicon.svg?v=20260821f" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20260821f">
+  <link rel="stylesheet" href="/report-explorer.css?v=20260821f">
+  <link rel="stylesheet" href="/motion.css?v=20260821f">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://balhence.com/report-viewer.html#webpage",
+          "url": "https://balhence.com/report-viewer.html",
+          "name": "Sample Web and API Penetration Test Report",
+          "description": "A synthetic Balhence penetration test deliverable showing executive context, technical evidence, remediation, and re-test closure.",
+          "isPartOf": { "@id": "https://balhence.com/#website" },
+          "about": { "@id": "https://balhence.com/#web-api-pentest" }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Sample report", "item": "https://balhence.com/report-viewer.html" }
+          ]
+        }
+      ]
     }
   </script>
+</head>
+<body data-page="report">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header>
+    <nav class="container nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
+      <div class="nav-menu" id="primary-menu" data-menu>
+        <ul class="nav-links">
+          <li><a href="/services.html" data-nav="services">Services</a></li>
+          <li><a href="/about.html" data-nav="about">Approach</a></li>
+          <li><a href="/blog.html" data-nav="insights">Insights</a></li>
+          <li><a href="/contact.html" data-nav="contact">Contact</a></li>
+        </ul>
+        <a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="report_nav_scope">Build your scope</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="report-hero">
+      <div class="container report-hero-grid">
+        <div data-reveal>
+          <nav class="breadcrumb breadcrumb-dark" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">Sample report</span></nav>
+          <span class="eyebrow">Synthetic deliverable · inspect every layer</span>
+          <h1>Interactive sample web and API penetration test report.</h1>
+          <p>Evaluate the executive decision, technical proof, remediation path, and re-test record before choosing a provider. Every system, account, identifier, and finding below is fictional and exists only to demonstrate the reporting standard.</p>
+          <div class="button-row">
+            <a class="btn btn-primary" href="#report-console">Explore the report <span aria-hidden="true">↓</span></a>
+            <a class="btn btn-secondary" href="/sample-vapt-report.pdf" download data-track="report_download">Download full PDF</a>
+          </div>
+          <ul class="report-assurances" aria-label="Sample report assurances">
+            <li>Synthetic evidence</li>
+            <li>Controlled accounts</li>
+            <li>No client claims</li>
+          </ul>
+        </div>
+        <div class="report-orbit" aria-hidden="true" data-reveal>
+          <div class="orbit-ring orbit-ring-one"></div>
+          <div class="orbit-ring orbit-ring-two"></div>
+          <div class="orbit-core"><span>REPORT</span><strong>4 views</strong><small>one evidence trail</small></div>
+          <span class="orbit-node orbit-node-one">scope</span>
+          <span class="orbit-node orbit-node-two">proof</span>
+          <span class="orbit-node orbit-node-three">fix</span>
+          <span class="orbit-node orbit-node-four">verify</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-paper report-experience" aria-labelledby="explorer-title">
+      <div class="container">
+        <div class="section-heading report-section-heading" data-reveal>
+          <span class="eyebrow">Interactive evidence trail</span>
+          <h2 id="explorer-title">Change perspective. Keep the evidence intact.</h2>
+          <p>Leadership needs decisions. Engineering needs exact reproduction. Both should trace back to the same verified observation.</p>
+        </div>
+
+        <div class="report-console" id="report-console" data-report-console data-reveal>
+          <div class="report-tabs" role="tablist" aria-label="Sample report perspectives">
+            <button type="button" role="tab" id="tab-executive" aria-controls="panel-executive" aria-selected="true" data-report-tab="executive"><span>01</span> Executive</button>
+            <button type="button" role="tab" id="tab-finding" aria-controls="panel-finding" aria-selected="false" tabindex="-1" data-report-tab="finding"><span>02</span> Finding</button>
+            <button type="button" role="tab" id="tab-remediation" aria-controls="panel-remediation" aria-selected="false" tabindex="-1" data-report-tab="remediation"><span>03</span> Remediation</button>
+            <button type="button" role="tab" id="tab-retest" aria-controls="panel-retest" aria-selected="false" tabindex="-1" data-report-tab="retest"><span>04</span> Re-test</button>
+          </div>
+
+          <section class="report-panel is-active" id="panel-executive" role="tabpanel" aria-labelledby="tab-executive" data-report-panel="executive">
+            <div class="panel-heading"><div><span class="console-kicker">Decision view</span><h3>Cross-tenant access breaks the product’s trust boundary.</h3></div><span class="severity">HIGH</span></div>
+            <div class="executive-grid">
+              <div class="executive-narrative">
+                <p>A standard user in one controlled tenant can retrieve an invoice belonging to another controlled tenant by changing an object identifier. The server confirms authentication but does not enforce object ownership.</p>
+                <div class="impact-chain" aria-label="Illustrative impact chain">
+                  <div><span>01</span><strong>Valid user session</strong><small>Common prerequisite</small></div>
+                  <i aria-hidden="true">→</i>
+                  <div><span>02</span><strong>Change invoice ID</strong><small>No privileged access</small></div>
+                  <i aria-hidden="true">→</i>
+                  <div><span>03</span><strong>Cross-tenant data</strong><small>Confidentiality impact</small></div>
+                </div>
+              </div>
+              <aside class="decision-card"><span>Recommended decision</span><strong>Block release for the affected authorization path.</strong><p>Apply server-side tenant ownership checks, test equivalent object routes, then verify with both controlled accounts.</p></aside>
+            </div>
+            <dl class="report-facts"><div><dt>Affected surface</dt><dd><code>GET /api/v1/invoices/{id}</code></dd></div><div><dt>Required access</dt><dd>Standard authenticated user</dd></div><div><dt>Evidence boundary</dt><dd>Two synthetic test tenants</dd></div><div><dt>Priority</dt><dd>Before affected release</dd></div></dl>
+          </section>
+
+          <section class="report-panel" id="panel-finding" role="tabpanel" aria-labelledby="tab-finding" data-report-panel="finding">
+            <div class="panel-heading"><div><span class="console-kicker">Engineer view</span><h3>AUTHZ-01 · Cross-tenant invoice access</h3></div><span class="severity">HIGH</span></div>
+            <div class="evidence-grid">
+              <div>
+                <div class="code-heading"><span>Controlled request</span><button class="console-action" type="button" data-copy-evidence>Copy request</button></div>
+                <pre class="request-code" data-evidence-text><code>GET /api/v1/invoices/inv_test_b HTTP/1.1
+Host: app.example.test
+Authorization: Bearer &lt;tenant_a_test_session&gt;
+Accept: application/json</code></pre>
+              </div>
+              <div>
+                <div class="code-heading"><span>Observed response</span><span class="response-code">200 OK</span></div>
+                <pre class="request-code response"><code>{
+  "id": "inv_test_b",
+  "tenant_id": "ten_test_b",
+  "status": "paid",
+  "total": 42000
+}</code></pre>
+              </div>
+            </div>
+            <p class="copy-status" role="status" aria-live="polite" data-copy-status></p>
+            <div class="finding-steps"><h4>Reproduction path</h4><ol><li>Authenticate as <code>user.a@tenant-a.example.test</code>.</li><li>Request the controlled Tenant A invoice and record the normal request shape.</li><li>Replace only the invoice identifier with <code>inv_test_b</code>, owned by controlled Tenant B.</li><li>Observe that the API returns the Tenant B object instead of denying access.</li></ol></div>
+          </section>
+
+          <section class="report-panel" id="panel-remediation" role="tabpanel" aria-labelledby="tab-remediation" data-report-panel="remediation">
+            <div class="panel-heading"><div><span class="console-kicker">Fix path</span><h3>Authorize the object, not merely the route.</h3></div><span class="status-pill">Root cause first</span></div>
+            <div class="remediation-grid">
+              <article><span class="remediation-label unsafe">Insufficient control</span><pre class="request-code"><code>invoice = invoices.find(params.id)
+return invoice</code></pre><p>The lookup trusts a client-controlled identifier after confirming only that the caller is logged in.</p></article>
+              <article><span class="remediation-label safe">Required control</span><pre class="request-code"><code>invoice = currentTenant.invoices.find(params.id)
+authorize(user, "read", invoice)
+return invoice</code></pre><p>Resolve the object inside the authorized tenant boundary and enforce permission at the data-access layer.</p></article>
+            </div>
+            <div class="fix-checklist"><h4>Remediation acceptance criteria</h4><ul><li>Cross-tenant identifiers return a consistent denial or not-found response.</li><li>Equivalent invoice export, update, attachment, and bulk routes enforce the same boundary.</li><li>Authorization tests cover standard, manager, and tenant-admin roles.</li><li>Logs capture denied cross-boundary access without storing sensitive response data.</li></ul></div>
+          </section>
+
+          <section class="report-panel" id="panel-retest" role="tabpanel" aria-labelledby="tab-retest" data-report-panel="retest">
+            <div class="panel-heading"><div><span class="console-kicker">Closure view</span><h3>Verification records what changed and what was not re-tested.</h3></div><span class="status-pill status-fixed">FIXED</span></div>
+            <div class="retest-timeline">
+              <div><span>Original</span><strong>200 OK</strong><p>Tenant A session retrieved controlled Tenant B invoice.</p></div>
+              <i aria-hidden="true">→</i>
+              <div><span>Remediation</span><strong>Ownership enforcement</strong><p>Object lookup constrained to the authenticated tenant.</p></div>
+              <i aria-hidden="true">→</i>
+              <div><span>Verification</span><strong>404 Not Found</strong><p>Original request and adjacent controlled variants denied.</p></div>
+            </div>
+            <table class="retest-table">
+              <caption>Illustrative re-test record</caption>
+              <thead><tr><th>Test</th><th>Expected</th><th>Observed</th><th>Status</th></tr></thead>
+              <tbody><tr><td>Original cross-tenant read</td><td>Denied</td><td>404</td><td><span class="table-status fixed">Fixed</span></td></tr><tr><td>Same-tenant read</td><td>Allowed</td><td>200</td><td><span class="table-status pass">Pass</span></td></tr><tr><td>Cross-tenant export</td><td>Denied</td><td>404</td><td><span class="table-status fixed">Fixed</span></td></tr><tr><td>Unrelated billing routes</td><td>Out of re-test scope</td><td>Not tested</td><td><span class="table-status limited">Limited</span></td></tr></tbody>
+            </table>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tint" aria-labelledby="pdf-title">
+      <div class="container">
+        <div class="pdf-heading"><div><span class="eyebrow">Complete illustrative deliverable</span><h2 id="pdf-title">Review the full 11-page PDF.</h2><p>The PDF includes engagement metadata, controlled reproduction accounts, methodology, finding summaries, detailed evidence, risk context, and bounded re-test terms.</p></div><a class="btn btn-dark" href="/sample-vapt-report.pdf" download data-track="report_pdf_download">Download PDF</a></div>
+        <object class="pdf-frame" data="/sample-vapt-report.pdf" type="application/pdf" aria-label="Synthetic Balhence penetration test report">
+          <div class="lead-form-shell"><h3>Open the sample report</h3><p>Your browser cannot display the PDF inline.</p><a class="btn btn-dark" href="/sample-vapt-report.pdf" download>Download the PDF</a></div>
+        </object>
+      </div>
+    </section>
+
+    <section class="section section-dark"><div class="container"><div class="cta-panel cta-panel-outline" data-reveal><div><span class="eyebrow">Turn your product into a testable scope</span><h2>Build the brief before the sales call.</h2><p>Map surfaces, roles, tenant boundaries, authentication, integrations, timing, and evidence needs in the guided scope planner.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/scope-builder.html" data-track="report_scope_builder">Build your scope <span aria-hidden="true">→</span></a><a class="btn btn-quiet" href="/contact.html">Talk through it</a></div></div></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Manual web and API penetration testing with evidence engineers can act on.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blog.html">Insights</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>© <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260821f"></script>
+  <script src="/app.js?v=20260821f"></script>
+  <script src="/report-explorer.js?v=20260821f"></script>
+  <script src="/motion.js?v=20260821f"></script>
 </body>
 </html>

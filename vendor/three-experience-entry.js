@@ -1,0 +1,20 @@
+/* Build entry for the homepage-only Three.js subset. This file is not loaded. */
+export {
+  BufferGeometry,
+  EllipseCurve,
+  Float32BufferAttribute,
+  Group,
+  Line,
+  LineBasicMaterial,
+  LineLoop,
+  Mesh,
+  MeshBasicMaterial,
+  PerspectiveCamera,
+  Points,
+  PointsMaterial,
+  Scene,
+  SphereGeometry,
+  SRGBColorSpace,
+  Vector3,
+  WebGLRenderer,
+} from "three";

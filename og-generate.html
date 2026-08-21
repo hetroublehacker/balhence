@@ -1,127 +1,19 @@
-<!DOCTYPE html>
-<html>
-<!--
-  OG IMAGE GENERATOR
-  Open this file in Chrome → right-click the canvas → "Save image as" → save as og-image.png
-  Then upload og-image.png to your website root.
--->
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Generate OG Image</title>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Balhence social image source</title>
   <style>
-    body { margin: 0; background: #1e1e1e; display: flex; flex-direction: column; align-items: center; padding: 2rem; font-family: sans-serif; color: #fff; }
-    canvas { border: 1px solid #333; }
-    button { margin-top: 1.5rem; padding: 0.75rem 2rem; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
-    p { margin-top: 1rem; color: #888; font-size: 0.85rem; }
+    *{box-sizing:border-box}html,body{margin:0;background:#080d1f;font-family:Inter,Arial,sans-serif}.card{position:relative;width:1200px;height:630px;padding:64px 72px;overflow:hidden;color:#f6f8ff;background:radial-gradient(circle at 86% 9%,rgba(155,140,255,.28),transparent 31%),radial-gradient(circle at 12% 92%,rgba(94,234,212,.13),transparent 31%),#080d1f}.card:before{position:absolute;inset:0;background-image:linear-gradient(rgba(232,239,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(232,239,255,.05) 1px,transparent 1px);background-size:60px 60px;content:"";mask-image:linear-gradient(to right,#000,transparent 90%)}.top,.content,.bottom{position:relative;z-index:1}.top{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:14px;font-size:24px;font-weight:800;letter-spacing:-.04em}.mark{display:grid;width:44px;height:44px;place-items:center;color:#080d1f;background:#9b8cff;border-radius:11px;font:900 22px/1 ui-monospace,monospace;letter-spacing:-2px}.tag{padding:9px 13px;color:#b9c4d8;border:1px solid rgba(180,156,255,.32);border-radius:999px;font:700 12px ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}.content{max-width:900px;margin-top:92px}.eyebrow{margin-bottom:18px;color:#76e4d6;font:800 14px ui-monospace,monospace;letter-spacing:.11em;text-transform:uppercase}.headline{margin:0;color:#f6f8ff;font-size:72px;line-height:1.02;letter-spacing:-.06em}.headline [data-og-accent]{color:#b49cff}.sub{max-width:800px;margin:26px 0 0;color:#b2bed2;font-size:23px;line-height:1.5}.bottom{position:absolute;right:72px;bottom:54px;left:72px;display:flex;align-items:center;justify-content:space-between;padding-top:22px;color:#94a2ba;border-top:1px solid rgba(255,255,255,.14);font:700 13px ui-monospace,monospace;letter-spacing:.06em}.checks{display:flex;gap:24px}.checks span:before{margin-right:8px;color:#76e4d6;content:"✓"}.domain{color:#f6f8ff}
   </style>
 </head>
 <body>
-  <h2>OG Image Generator</h2>
-  <canvas id="c" width="1200" height="630"></canvas>
-  <button onclick="download()">Download og-image.png</button>
-  <p>Save this file as <strong>og-image.png</strong> and upload it to your website root.</p>
-
-  <script>
-    const canvas = document.getElementById("c");
-    const ctx = canvas.getContext("2d");
-
-    // Background
-    ctx.fillStyle = "#0a0d14";
-    ctx.fillRect(0, 0, 1200, 630);
-
-    // Grid lines (subtle)
-    ctx.strokeStyle = "rgba(255,255,255,0.04)";
-    ctx.lineWidth = 1;
-    for (let x = 0; x < 1200; x += 60) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 630); ctx.stroke(); }
-    for (let y = 0; y < 630; y += 60)  { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1200, y); ctx.stroke(); }
-
-    // Glow
-    const glow = ctx.createRadialGradient(1050, 100, 0, 1050, 100, 500);
-    glow.addColorStop(0, "rgba(59,130,246,0.18)");
-    glow.addColorStop(1, "transparent");
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, 1200, 630);
-
-    // Badge
-    ctx.fillStyle = "rgba(59,130,246,0.12)";
-    roundRect(ctx, 80, 100, 340, 36, 18);
-    ctx.fill();
-    ctx.strokeStyle = "rgba(59,130,246,0.3)";
-    ctx.lineWidth = 1;
-    roundRect(ctx, 80, 100, 340, 36, 18);
-    ctx.stroke();
-
-    ctx.fillStyle = "#60a5fa";
-    ctx.font = "600 14px sans-serif";
-    ctx.fillText("VAPT as a Service · India", 110, 123);
-
-    // Logo — Bal + hence
-    ctx.font = "800 64px Georgia, serif";
-    ctx.fillStyle = "#f1f5f9";
-    ctx.fillText("Bal", 80, 240);
-    const balW = ctx.measureText("Bal").width;
-
-    ctx.font = "italic 800 64px Georgia, serif";
-    ctx.fillStyle = "#3b82f6";
-    ctx.fillText("hence", 80 + balW, 240);
-
-    // Tagline
-    ctx.font = "400 26px sans-serif";
-    ctx.fillStyle = "#94a3b8";
-    ctx.fillText("Secure. Hence, unstoppable.", 80, 300);
-
-    // Divider
-    ctx.strokeStyle = "rgba(255,255,255,0.07)";
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(80, 340); ctx.lineTo(600, 340); ctx.stroke();
-
-    // Stats row
-    const stats = [
-      { val: "₹19.5 Cr", label: "Avg. breach cost" },
-      { val: "3,291", label: "Weekly attacks/org" },
-      { val: "83%", label: "Enterprises hit" },
-    ];
-
-    stats.forEach((s, i) => {
-      const x = 80 + i * 200;
-      ctx.font = "700 28px sans-serif";
-      ctx.fillStyle = "#60a5fa";
-      ctx.fillText(s.val, x, 400);
-      ctx.font = "400 14px sans-serif";
-      ctx.fillStyle = "#64748b";
-      ctx.fillText(s.label, x, 422);
-    });
-
-    // Domain
-    ctx.font = "600 18px sans-serif";
-    ctx.fillStyle = "#3b82f6";
-    ctx.fillText("balhence.com", 80, 560);
-
-    // Hindi
-    ctx.font = "400 15px sans-serif";
-    ctx.fillStyle = "#475569";
-    ctx.fillText("संतुलन — Balance", 80, 585);
-
-    function roundRect(ctx, x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
-    }
-
-    function download() {
-      const a = document.createElement("a");
-      a.download = "og-image.png";
-      a.href = canvas.toDataURL("image/png");
-      a.click();
-    }
-  </script>
+  <div class="card" id="og-card">
+    <div class="top"><div class="brand"><span class="mark">B/</span><span>Balhence</span></div><span class="tag" data-og-tag>Web &amp; API penetration testing</span></div>
+    <div class="content"><div class="eyebrow" data-og-eyebrow>Web application + API pentesting</div><h1 class="headline"><span data-og-headline>Find the exploit path</span> <span data-og-accent>before the incident.</span></h1><p class="sub" data-og-subtitle>Verified findings. Developer-ready fixes. One bounded re-test included.</p></div>
+    <div class="bottom"><div class="checks"><span>Written authorization</span><span>Manual validation</span><span>Clear closure</span></div><span class="domain">balhence.com</span></div>
+  </div>
+  <script src="/og-generate.js?v=20260821f"></script>
 </body>
 </html>

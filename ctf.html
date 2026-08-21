@@ -2,32 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-EafrrenINVREyZ6Q16i89tLZSWdpE2vdTEKKnW3awVU='; style-src 'sha256-7aWtIAqUQhbNubwCb2rqseB2r6UC/gwyUKOK4o/ka2o='; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'" />
+  <meta name="referrer" content="no-referrer" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CTF — Balhence Security Challenge</title>
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="description" content="An optional, introductory Balhence security challenge using synthetic examples." />
+  <meta name="theme-color" content="#070b18" />
+  <title>CTF | Balhence Security Challenge</title>
   <!-- 🔍 You found the source. Smart.
-       STAGE 1 CLUE — dev-note: test-token = p3nt3st
+       STAGE 1 CLUE: dev-note: test-token = p3nt3st
        Good luck. -->
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.svg?v=20260821f" type="image/svg+xml" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:  #00ff88;
-      --cyan:   #00d4ff;
+      --green:  #a99af8;
+      --cyan:   #5eead4;
       --red:    #ff4444;
       --amber:  #ffb800;
-      --dim:    #1a2a1a;
-      --muted:  #4a7a5a;
-      --bg:     #060a06;
-      --input-bg: #0d1a0d;
+      --dim:    #192847;
+      --muted:  #7891b8;
+      --bg:     #070b18;
+      --input-bg: #10182f;
     }
 
     html, body {
       height: 100%;
       background: var(--bg);
       color: var(--green);
-      font-family: 'Fira Code', 'Courier New', monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
       font-size: 14px;
       line-height: 1.7;
       overflow-x: hidden;
@@ -95,6 +99,7 @@
       color: var(--green);
       margin-bottom: 1.5rem;
       white-space: pre;
+      overflow-x: auto;
       opacity: 0;
       transition: opacity 0.5s;
     }
@@ -216,10 +221,10 @@
     .completion-card.visible { display: block; }
 
     .completion-top {
-      background: rgba(0, 255, 136, 0.05);
+      background: rgba(155, 140, 255, 0.05);
       padding: 2rem;
       text-align: center;
-      border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+      border-bottom: 1px solid rgba(155, 140, 255, 0.2);
     }
 
     .completion-score {
@@ -239,7 +244,7 @@
 
     .completion-bottom {
       padding: 2rem;
-      background: #080d08;
+      background: #0a1022;
     }
 
     .completion-headline {
@@ -256,86 +261,52 @@
       margin-bottom: 1.75rem;
     }
 
-    /* Lead form */
-    .lead-form {
+    .completion-actions {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: 0.75rem;
     }
 
-    .lead-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-
-    .lead-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .lead-group label {
-      font-size: 0.7rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .lead-group input {
-      background: var(--input-bg);
-      border: 1px solid rgba(0,255,136,0.2);
+    .completion-link {
+      display: inline-flex;
+      min-height: 44px;
+      padding: 0.72rem 1rem;
+      align-items: center;
+      justify-content: center;
       color: #fff;
-      font-family: inherit;
-      font-size: 0.88rem;
-      padding: 0.6rem 0.85rem;
+      background: #7457e8;
+      border: 1px solid transparent;
       border-radius: 4px;
-      outline: none;
-      transition: border-color 0.2s;
-      width: 100%;
-    }
-
-    .lead-group input:focus {
-      border-color: var(--green);
-    }
-
-    .lead-group input::placeholder { color: #2a4a2a; }
-
-    .lead-submit {
-      background: var(--green);
-      color: #000;
-      border: none;
-      font-family: inherit;
-      font-size: 0.95rem;
       font-weight: 700;
-      padding: 0.85rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.02em;
-      margin-top: 0.25rem;
+      text-decoration: none;
     }
 
-    .lead-submit:hover {
-      background: #00cc6a;
-      transform: translateY(-1px);
-    }
-
-    .lead-note {
-      font-size: 0.72rem;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .lead-success {
-      display: none;
-      text-align: center;
-      padding: 1.5rem;
+    .completion-link.secondary {
       color: var(--green);
+      background: transparent;
     }
 
-    .lead-success.visible { display: block; }
-    .lead-success-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .completion-link:hover {
+      color: #fff;
+      background: #6748cb;
+    }
+
+    .completion-link.secondary:hover {
+      color: #b49cff;
+      background: transparent;
+      border-color: #7457e8;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     /* Back link */
     .back-link {
@@ -374,7 +345,8 @@
 
     /* Mobile */
     @media (max-width: 540px) {
-      .lead-row { grid-template-columns: 1fr; }
+      .completion-actions,
+      .completion-link { width: 100%; }
       .ascii-logo { font-size: 0.55rem; }
       body { font-size: 13px; }
     }
@@ -382,18 +354,19 @@
 </head>
 <body>
 
-<div class="terminal">
+<main class="terminal">
+  <h1 class="sr-only">Balhence CTF security challenge</h1>
 
   <div class="term-header">
-    <span class="term-title">balhence.com — ctf challenge</span>
-    <div class="term-dots">
+    <span class="term-title">balhence.com | ctf challenge</span>
+    <div class="term-dots" aria-hidden="true">
       <div class="term-dot dot-red"></div>
       <div class="term-dot dot-amber"></div>
       <div class="term-dot dot-green"></div>
     </div>
   </div>
 
-  <pre class="ascii-logo" id="logo">
+  <pre class="ascii-logo" id="logo" aria-hidden="true">
  ██████╗  █████╗ ██╗     ██╗  ██╗███████╗███╗   ██╗ ██████╗███████╗
  ██╔══██╗██╔══██╗██║     ██║  ██║██╔════╝████╗  ██║██╔════╝██╔════╝
  ██████╔╝███████║██║     ███████║█████╗  ██╔██╗ ██║██║     █████╗
@@ -405,7 +378,7 @@
 
   <div id="output"></div>
 
-  <div class="stage-bar" id="stage-bar" style="display:none;">
+  <div class="stage-bar" id="stage-bar" hidden>
     <div class="stage-pip" id="pip-1"></div>
     <div class="stage-pip" id="pip-2"></div>
     <div class="stage-pip" id="pip-3"></div>
@@ -414,11 +387,12 @@
 
   <div class="input-area" id="input-area">
     <span class="prompt">root@balhence:~$</span>
-    <input type="text" class="term-input" id="term-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="enter your answer..." />
-    <button class="term-submit" onclick="submitAnswer()">ENTER</button>
+    <label class="sr-only" for="term-input">Challenge answer</label>
+    <input type="text" class="term-input" id="term-input" maxlength="128" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="enter your answer..." />
+    <button class="term-submit" type="button">ENTER</button>
   </div>
 
-  <button class="hint-btn" id="hint-btn" style="display:none;" onclick="showHint()">[ need a hint? ]</button>
+  <button class="hint-btn" id="hint-btn" type="button" hidden>[ need a hint? ]</button>
 
   <div class="completion-card" id="completion-card">
     <div class="completion-top">
@@ -426,64 +400,31 @@
       <div class="completion-score-label">Stages Cleared · Security Awareness: High</div>
     </div>
     <div class="completion-bottom">
-      <div class="completion-headline">You cracked our test.<br>Now let's see what we can crack in yours.</div>
-      <p class="completion-sub">3 challenges. No hints used (probably). You think like an attacker — which means you know how much is at stake.</p>
-      <div id="lead-form-wrap">
-        <form class="lead-form" id="lead-form">
-          <div class="lead-row">
-            <div class="lead-group">
-              <label>Your Name *</label>
-              <input type="text" name="name" placeholder="Arjun Mehta" required />
-            </div>
-            <div class="lead-group">
-              <label>Company *</label>
-              <input type="text" name="company" placeholder="Acme Pvt. Ltd." required />
-            </div>
-          </div>
-          <div class="lead-row">
-            <div class="lead-group">
-              <label>Work Email *</label>
-              <input type="email" name="email" placeholder="you@company.com" required />
-            </div>
-            <div class="lead-group">
-              <label>Phone</label>
-              <input type="tel" name="phone" placeholder="+91 98765 43210" />
-            </div>
-          </div>
-          <input type="hidden" name="_subject" value="CTF Completion — Let us test your systems" />
-          <input type="hidden" name="source" value="CTF Challenge" />
-          <button type="submit" class="lead-submit">Let us test your systems →</button>
-          <p class="lead-note">🔒 No spam. We'll reach out within 24 hours.</p>
-        </form>
-        <div class="lead-success" id="lead-success">
-          <div class="lead-success-icon">✅</div>
-          <div style="color:#fff; font-weight:700; margin-bottom:0.4rem;">Challenge accepted.</div>
-          <div style="color:#4a7a5a; font-size:0.82rem;">We'll be in touch within 24 hours.<br>The real pentest starts soon.</div>
-        </div>
+      <div class="completion-headline">You completed the lab.<br>Real assessments start with scope and authorization.</div>
+      <p class="completion-sub">These three introductory puzzles use synthetic examples. A Balhence engagement maps your actual assets, roles, tenant boundaries, safety rules, and evidence needs before any testing begins.</p>
+      <div class="completion-actions">
+        <a class="completion-link" href="/contact.html?service=web-api&amp;utm_source=ctf&amp;utm_medium=owned&amp;utm_campaign=challenge">Request scope &amp; quote →</a>
+        <a class="completion-link secondary" href="/report-viewer.html">View sample report</a>
       </div>
     </div>
   </div>
 
   <a href="index.html" class="back-link">← back to balhence.com</a>
 
-</div>
+</main>
 
 <script>
-  /* ── Config ─────────────────────────────────────────────── */
-  // Update this to your Formspree endpoint
-  const FORMSPREE = "https://formspree.io/f/maqpybea";
-
   const STAGES = [
     {
       id: 1,
-      label: "STAGE 1/3 — RECON",
+      label: "STAGE 1/3: RECON",
       lines: [
         { text: "> INITIALIZING BALHENCE CTF v1.0...", type: "sys", delay: 0 },
         { text: "> Loading modules: [recon] [crypto] [osint]", type: "sys", delay: 500 },
         { text: "> All systems online.", type: "sys", delay: 1000 },
         { text: ">", type: "dim", delay: 1400 },
         { text: "> ─────────────────────────────────────────", type: "dim", delay: 1600 },
-        { text: "> STAGE 1/3 — RECON", type: "info", delay: 1800 },
+        { text: "> STAGE 1/3: RECON", type: "info", delay: 1800 },
         { text: "> ─────────────────────────────────────────", type: "dim", delay: 2000 },
         { text: ">", type: "dim", delay: 2200 },
         { text: "> Every pentest starts the same way.", type: "sys", delay: 2400 },
@@ -499,20 +440,20 @@
     },
     {
       id: 2,
-      label: "STAGE 2/3 — CRYPTOGRAPHY",
+      label: "STAGE 2/3: CRYPTOGRAPHY",
       lines: [
         { text: "> [OK] Stage 1 cleared.", type: "sys", delay: 0 },
         { text: ">", type: "dim", delay: 300 },
         { text: "> ─────────────────────────────────────────", type: "dim", delay: 500 },
-        { text: "> STAGE 2/3 — CRYPTOGRAPHY", type: "info", delay: 700 },
+        { text: "> STAGE 2/3: CRYPTOGRAPHY", type: "info", delay: 700 },
         { text: "> ─────────────────────────────────────────", type: "dim", delay: 900 },
         { text: ">", type: "dim", delay: 1100 },
-        { text: "> We found this in a client's exposed config.json:", type: "sys", delay: 1300 },
+        { text: "> Synthetic lab config:", type: "sys", delay: 1300 },
         { text: ">", type: "dim", delay: 1700 },
         { text: ">   api_key: c2VjdXJpdHk=", type: "warn", delay: 1900 },
         { text: ">", type: "dim", delay: 2200 },
-        { text: "> We see this mistake every week.", type: "sys", delay: 2400 },
-        { text: "> Developers think encoding = encryption.", type: "sys", delay: 2900 },
+        { text: "> This is a training example, not client evidence.", type: "sys", delay: 2400 },
+        { text: "> Encoding is not encryption.", type: "sys", delay: 2900 },
         { text: "> It doesn't.", type: "err", delay: 3300 },
         { text: ">", type: "dim", delay: 3600 },
         { text: "> Decode the value. Enter what it really says.", type: "sys", delay: 3800 },
@@ -524,27 +465,27 @@
     },
     {
       id: 3,
-      label: "STAGE 3/3 — OSINT",
+      label: "STAGE 3/3: OSINT",
       lines: [
         { text: "> [OK] Stage 2 cleared.", type: "sys", delay: 0 },
         { text: ">", type: "dim", delay: 300 },
         { text: "> ─────────────────────────────────────────", type: "dim", delay: 500 },
-        { text: "> STAGE 3/3 — OSINT", type: "info", delay: 700 },
+        { text: "> STAGE 3/3: OSINT", type: "info", delay: 700 },
         { text: "> ─────────────────────────────────────────", type: "dim", delay: 900 },
         { text: ">", type: "dim", delay: 1100 },
         { text: "> Final stage. Open-source intelligence.", type: "sys", delay: 1300 },
         { text: ">", type: "dim", delay: 1700 },
-        { text: "> A good pentester knows their target inside out.", type: "sys", delay: 1900 },
-        { text: "> Our company name carries a meaning.", type: "sys", delay: 2400 },
-        { text: "> It's the foundation of everything we do.", type: "sys", delay: 2900 },
+        { text: "> A good pentester knows the boundary before testing.", type: "sys", delay: 1900 },
+        { text: "> Our About page names the control that comes first.", type: "sys", delay: 2400 },
+        { text: "> It is the foundation of every safe engagement.", type: "sys", delay: 2900 },
         { text: ">", type: "dim", delay: 3300 },
-        { text: "> What does Balhence mean in Hindi?", type: "warn", delay: 3500 },
+        { text: "> What must exist before any testing begins?", type: "warn", delay: 3500 },
         { text: ">", type: "dim", delay: 3800 },
         { text: "> Hint: balhence.com/about.html", type: "dim", delay: 4000 },
         { text: ">", type: "dim", delay: 4300 },
       ],
-      answer: "santulan",
-      hint: "Visit the About page on the main site. The answer is there.",
+      answer: "authorization",
+      hint: "Visit the About page. Look for the control that comes before tooling.",
       wrong: "> [FAIL] Incorrect. The answer is on our About page.",
     },
   ];
@@ -567,7 +508,9 @@
   ];
 
   /* ── State ──────────────────────────────────────────────── */
-  let currentStage = parseInt(localStorage.getItem("balhence_ctf_stage") || "0");
+  let storedStage = 0;
+  try { storedStage = Number.parseInt(localStorage.getItem("balhence_ctf_stage") || "0", 10); } catch (error) { storedStage = 0; }
+  let currentStage = Number.isInteger(storedStage) && storedStage >= 0 && storedStage <= STAGES.length ? storedStage : 0;
   let hintUsed = false;
   let typingQueue = [];
   let isTyping = false;
@@ -580,7 +523,7 @@
     }, 100);
 
     if (currentStage >= 3) {
-      // Already completed — skip to end
+      // Already completed; skip to end
       showCompletionCard();
     } else {
       setTimeout(() => startStage(currentStage), 600);
@@ -624,14 +567,14 @@
 
     // Update progress bar
     const bar = document.getElementById("stage-bar");
-    bar.style.display = "flex";
+    bar.hidden = false;
     updatePips(index);
 
     printLines(stage.lines, () => {
       // Show input
       const area = document.getElementById("input-area");
       area.classList.add("visible");
-      document.getElementById("hint-btn").style.display = "inline-block";
+      document.getElementById("hint-btn").hidden = false;
       document.getElementById("term-input").focus();
     });
   }
@@ -650,10 +593,10 @@
       appendLine(`> [OK] Correct. "${val}" accepted.`, "sys");
       appendLine(">", "dim");
       document.getElementById("input-area").classList.remove("visible");
-      document.getElementById("hint-btn").style.display = "none";
+      document.getElementById("hint-btn").hidden = true;
       hintUsed = false;
       currentStage++;
-      localStorage.setItem("balhence_ctf_stage", currentStage);
+      try { localStorage.setItem("balhence_ctf_stage", String(currentStage)); } catch (error) { /* Progress still works for this page view. */ }
       updatePips(currentStage - 1, true);
 
       setTimeout(() => {
@@ -677,9 +620,9 @@
   }
 
   function runCompletion() {
-    document.getElementById("stage-bar").style.display = "none";
+    document.getElementById("stage-bar").hidden = true;
     document.getElementById("input-area").classList.remove("visible");
-    document.getElementById("hint-btn").style.display = "none";
+    document.getElementById("hint-btn").hidden = true;
 
     printLines(COMPLETE_LINES, () => {
       setTimeout(showCompletionCard, 400);
@@ -690,7 +633,6 @@
     const card = document.getElementById("completion-card");
     card.classList.add("visible");
     card.scrollIntoView({ behavior: "smooth" });
-    initLeadForm();
   }
 
   /* ── Progress Pips ──────────────────────────────────────── */
@@ -709,36 +651,9 @@
       label.textContent = "COMPLETE";
   }
 
-  /* ── Lead Form ──────────────────────────────────────────── */
-  function initLeadForm() {
-    const form = document.getElementById("lead-form");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = form.querySelector(".lead-submit");
-      btn.textContent = "Sending...";
-      btn.disabled = true;
-      try {
-        const res = await fetch(FORMSPREE, {
-          method: "POST",
-          headers: { Accept: "application/json" },
-          body: new FormData(form),
-        });
-        if (res.ok) {
-          form.style.display = "none";
-          document.getElementById("lead-success").classList.add("visible");
-          localStorage.removeItem("balhence_ctf_stage");
-        } else {
-          btn.textContent = "Failed — try again";
-          btn.disabled = false;
-        }
-      } catch {
-        btn.textContent = "Network error — try again";
-        btn.disabled = false;
-      }
-    });
-  }
-
   /* ── Keyboard enter ─────────────────────────────────────── */
+  document.querySelector(".term-submit").addEventListener("click", submitAnswer);
+  document.getElementById("hint-btn").addEventListener("click", showHint);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && document.getElementById("input-area").classList.contains("visible")) {
       submitAnswer();

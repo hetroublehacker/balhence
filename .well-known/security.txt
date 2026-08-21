@@ -1,0 +1,4 @@
+Contact: mailto:contact@balhence.com
+Canonical: https://balhence.com/.well-known/security.txt
+Preferred-Languages: en
+Expires: 2027-08-20T23:59:59Z

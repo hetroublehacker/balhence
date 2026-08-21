@@ -1,0 +1,31 @@
+{
+  "name": "Balhence",
+  "short_name": "Balhence",
+  "description": "Manual web application and API penetration testing.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080d1f",
+  "theme_color": "#080d1f",
+  "icons": [
+    {
+      "src": "/favicon.svg?v=20260821f",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Build a pentest scope",
+      "short_name": "Scope planner",
+      "description": "Create a private draft pentest scope brief in your browser.",
+      "url": "/scope-builder.html"
+    },
+    {
+      "name": "Explore a sample report",
+      "short_name": "Sample report",
+      "description": "Inspect a synthetic pentest evidence trail and report structure.",
+      "url": "/report-viewer.html"
+    }
+  ]
+}

@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI-Native Penetration Testing, Human-Validated VAPT | Balhence</title>
+  <meta name="description" content="See how AI-native penetration testing can expand VAPT research while human testers retain control of scope, live actions, evidence, impact, and client data.">
+  <meta name="author" content="Balhence">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/ai-native-penetration-testing-human-validated.html">
+  <meta name="theme-color" content="#080d1f">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="AI-Native Penetration Testing: Human-Validated VAPT">
+  <meta property="og:description" content="A practical model for using AI to expand penetration-testing research without surrendering human control, evidence standards, or client-data boundaries.">
+  <meta property="og:url" content="https://balhence.com/insights/ai-native-penetration-testing-human-validated.html">
+  <meta property="og:image" content="https://balhence.com/og-ai-native-pentesting.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Balhence guide to AI-native penetration testing with human validation">
+  <meta property="article:published_time" content="2026-08-21">
+  <meta property="article:modified_time" content="2026-08-21">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI-Native Penetration Testing: Human-Validated VAPT">
+  <meta name="twitter:description" content="Where AI helps a pentest, where human judgment remains mandatory, and how client data should be controlled.">
+  <meta name="twitter:image" content="https://balhence.com/og-ai-native-pentesting.png">
+  <meta name="twitter:image:alt" content="Balhence guide to AI-native penetration testing with human validation">
+
+  <link rel="icon" href="../favicon.svg?v=20260821f" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="stylesheet" href="../styles.css?v=20260821f">
+  <link rel="stylesheet" href="/motion.css?v=20260821f">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://balhence.com/#organization",
+        "name": "Balhence",
+        "url": "https://balhence.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://balhence.com/logo.svg",
+          "width": 512,
+          "height": 512
+        }
+      },
+      {
+        "@type": "Article",
+        "@id": "https://balhence.com/insights/ai-native-penetration-testing-human-validated.html#article",
+        "url": "https://balhence.com/insights/ai-native-penetration-testing-human-validated.html",
+        "mainEntityOfPage": "https://balhence.com/insights/ai-native-penetration-testing-human-validated.html",
+        "headline": "AI-Native Penetration Testing: Where AI Helps and Human Validation Begins",
+        "description": "A practical explanation of AI-assisted web and API penetration testing, its evidence base, its limits, and the human and client-data controls a responsible engagement requires.",
+        "image": "https://balhence.com/og-ai-native-pentesting.png",
+        "datePublished": "2026-08-21",
+        "dateModified": "2026-08-21",
+        "inLanguage": "en",
+        "author": { "@id": "https://balhence.com/#organization" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "articleSection": "Penetration testing methodology",
+        "about": [
+          "AI-native penetration testing",
+          "AI-assisted VAPT",
+          "Human-validated security testing",
+          "Web application penetration testing",
+          "API penetration testing"
+        ],
+        "citation": [
+          "https://www.bugcrowd.com/press-release/bugcrowd-report-unveils-the-era-of-human-augmented-intelligence-as-ai-adoption-climbs-to-82/",
+          "https://www.hackerone.com/report/hacker-powered-security",
+          "https://www.hackerone.com/press-release/hackerone-report-finds-210-spike-ai-vulnerability-reports-amid-rise-ai-autonomy",
+          "https://www.hackerone.com/blog/agentic-penetration-testing-as-a-service",
+          "https://www.darpa.mil/news/2025/aixcc-results"
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/ai-native-penetration-testing-human-validated.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://balhence.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Insights",
+            "item": "https://balhence.com/blog.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "AI-native penetration testing",
+            "item": "https://balhence.com/insights/ai-native-penetration-testing-human-validated.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-header" data-site-header>
+    <nav class="container nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="../" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
+      <div class="nav-menu" id="primary-menu" data-menu>
+        <ul class="nav-links">
+          <li><a href="../services.html" data-nav="services">Services</a></li>
+          <li><a href="../about.html" data-nav="about">Approach</a></li>
+          <li><a href="../blog.html" data-nav="insights" aria-current="page">Insights</a></li>
+          <li><a href="../contact.html" data-nav="contact">Contact</a></li>
+        </ul>
+        <a class="btn btn-primary" href="../scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <article>
+      <header class="article-hero">
+        <div class="container-narrow">
+          <nav class="article-byline" aria-label="Breadcrumb">
+            <a href="../">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="../blog.html">Insights</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">AI-native pentesting</span>
+          </nav>
+          <span class="eyebrow">Methodology · AI-native, human-accountable</span>
+          <h1>AI-native penetration testing: where AI helps and human validation begins</h1>
+          <p class="article-deck">AI can widen a tester's search, connect fragmented context, and improve evidence quality. It does not replace authorization, business judgment, safe exploitation, or a human being who can defend every reported finding.</p>
+          <div class="article-byline">
+            <span>By Balhence</span>
+            <time datetime="2026-08-21">Updated 21 August 2026</time>
+            <span>12 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <div class="container article-layout">
+          <nav class="article-toc" aria-label="On this page">
+            <strong>On this page</strong>
+            <a href="#definition">What AI-native means</a>
+            <a href="#evidence">What the evidence shows</a>
+            <a href="#workflow">Where AI helps</a>
+            <a href="#human-gates">Human control points</a>
+            <a href="#data-controls">Client data controls</a>
+            <a href="#buyer-checklist">Buyer checklist</a>
+            <a href="#measurement">Honest measurement</a>
+          </nav>
+
+          <div class="article-content">
+            <p>AI-native penetration testing should not mean handing a target to a model and accepting whatever comes back. A pentest is an authorized security process that requires safe actions, proven exploitability, business context, reproducible evidence, and accountable human judgment.</p>
+
+            <p>AI is still changing how skilled researchers work. It can process supplied context, suggest overlooked attack hypotheses, compare repetitive artifacts, and challenge whether a finding is complete. Used carefully, that support leaves more attention for roles, tenant isolation, state changes, business logic, integrations, and exploit chains.</p>
+
+            <div class="article-callout">
+              <p><strong>The Balhence position:</strong> AI expands the search. A human authorizes the action, proves the exploit path, decides the impact, and owns the report. Model output is a lead, never evidence by itself.</p>
+            </div>
+
+            <h2 id="definition">1. What AI-native means in a penetration test</h2>
+
+            <p>AI-native describes a workflow designed around both AI's utility and its limitations. It is different from adding a chatbot to an existing method, and from claiming that an autonomous agent can conduct an entire client engagement.</p>
+
+            <p>In a responsible VAPT workflow, AI can cross-reference an OpenAPI document with an asset list, convert a role matrix into candidate authorization checks, group observations, propose alternative abuse paths, or review a finding for missing prerequisites. Every output remains provisional until a tester checks it against the authorized system and primary evidence.</p>
+
+            <p>The boundary is authority. A model does not decide scope, whether production is safe to test, when an action risks customer data, or how far a proof should go. It does not turn an interesting response into a confirmed vulnerability, set final severity, or sign off the report.</p>
+
+            <div class="article-checklist">
+              <h3>Three rules define the operating model</h3>
+              <ul>
+                <li><strong>AI assists analysis:</strong> it can structure context, create candidate hypotheses, and check work for gaps inside an approved data boundary.</li>
+                <li><strong>The tester controls execution:</strong> every live request, payload, rate, account, and proof step remains subject to the agreed rules of engagement.</li>
+                <li><strong>Evidence decides the finding:</strong> only manually reproduced behavior with inspectable evidence, realistic impact, and a defensible remediation path enters the report.</li>
+              </ul>
+            </div>
+
+            <h2 id="evidence">2. What current penetration-testing evidence actually shows</h2>
+
+            <p>Industry numbers can show adoption and technical progress, but they need boundaries. These are external survey and benchmark results, not Balhence performance figures. They do not predict finding counts or engagement time.</p>
+
+            <h3>AI use among hackers has risen sharply</h3>
+
+            <p>Bugcrowd's <a href="https://www.bugcrowd.com/press-release/bugcrowd-report-unveils-the-era-of-human-augmented-intelligence-as-ai-adoption-climbs-to-82/" rel="external noopener">2026 Inside the Mind of a Hacker announcement</a> says its report draws from surveys and interviews with more than 2,000 participants worldwide. It reports that 82% of hackers use AI in their workflows, up from 64% in 2023. Bugcrowd identifies automation, learning, and data analysis as common uses.</p>
+
+            <p>That result demonstrates adoption within Bugcrowd's research community. It is not a controlled comparison of AI-assisted and non-assisted pentests, and it does not establish better coverage, accuracy, or client outcomes. It also describes hackers in a crowdsourced security context, which should not be treated as identical to a commissioned VAPT engagement with a fixed scope and rules of engagement.</p>
+
+            <h3>Researchers report both adoption and clear limits</h3>
+
+            <p>HackerOne's <a href="https://www.hackerone.com/report/hacker-powered-security" rel="external noopener">2025 Hacker-Powered Security Report</a> says 70% of surveyed researchers use AI tools in their workflow. Its published <a href="https://www.hackerone.com/blog/agentic-penetration-testing-as-a-service" rel="external noopener">survey methodology</a> states that the researcher survey included 1,825 active HackerOne researchers and was fielded between July and August 2025. HackerOne says the report was also supplemented with platform data from 1 July 2024 through 30 June 2025, covering all active customer programs.</p>
+
+            <p>The same report provides an important counterweight to adoption: 58% of surveyed security researchers said AI misses business logic or chained exploits, and only 12% believed it could replace them. These are self-reported views from active researchers, not a laboratory measurement, but they align with a practical weakness in model-only testing. An HTTP response can resemble a known flaw while the decisive risk depends on ownership, sequence, commercial rules, or an action in another role.</p>
+
+            <p>HackerOne's <a href="https://www.hackerone.com/press-release/hackerone-report-finds-210-spike-ai-vulnerability-reports-amid-rise-ai-autonomy" rel="external noopener">2025 report announcement</a> also says autonomous agents submitted more than 560 valid reports. That is evidence that autonomous systems can produce accepted results on its platform. It is not a count of autonomous client pentests, it does not reveal the total submission denominator in that statement, and it should not be read as a replacement rate for human researchers.</p>
+
+            <h3>Controlled systems can find and patch real code vulnerabilities</h3>
+
+            <p>DARPA's <a href="https://www.darpa.mil/news/2025/aixcc-results" rel="external noopener">2025 AI Cyber Challenge results</a> show a different capability. Across a controlled final competition involving more than 54 million lines of code, competitor cyber reasoning systems found 54 of 63 synthetic vulnerabilities and patched 43. They also found 18 real, non-synthetic vulnerabilities in the open-source codebases and produced 11 patches for those real findings.</p>
+
+            <p>AIxCC was a controlled code-security challenge using systems built by multiple finalist teams. It was not a live web or API pentest, a comparison against human testers, or evidence about client authorization, production safety, business logic, or reporting. It demonstrates automated discovery and patching under competition conditions.</p>
+
+            <div class="article-callout">
+              <p><strong>What the numbers support:</strong> AI adoption is high among security researchers, autonomous systems can produce valid security reports, and controlled systems can find and patch vulnerabilities at scale. The same evidence does not support claims of complete coverage, guaranteed speed, or autonomous replacement of a skilled tester.</p>
+            </div>
+
+            <h2 id="workflow">3. Where AI can improve a web and API pentest</h2>
+
+            <h3>Scope and coverage cross-reference</h3>
+
+            <p>Web and API scopes often arrive as incomplete host lists, diagrams, API specifications, collections, role notes, release tickets, and buyer requirements. Within agreed data rules, AI can compare those inputs and flag mismatches, such as an administrative route missing from the asset list or an API operation with no matching test role.</p>
+
+            <p>The output is a question list, not an automatic scope expansion. The client and tester still decide what is owned, authorized, reachable, excluded, and important. The <a href="how-to-scope-web-api-pentest.html">web and API pentest scoping guide</a> explains how to make that boundary inspectable.</p>
+
+            <h3>Threat modeling and hypothesis expansion</h3>
+
+            <p>A tester can use AI to generate additional abuse hypotheses from a human-built model of roles, resources, state transitions, and integrations. For example, it can suggest alternate ownership states for an object-level authorization check, edge cases around invitations and recovery, or places where an API and browser workflow may enforce different rules.</p>
+
+            <p>This helps breadth when an application contains many combinations. The tester still ranks hypotheses, removes implausible ideas, designs the minimum-impact test, and checks the rules. Generated payloads and code are reviewed before execution, never trusted merely because a model proposed them.</p>
+
+            <h3>Artifact organization and pattern comparison</h3>
+
+            <p>Authorized testing produces endpoint inventories, role comparisons, response differences, identifiers, headers, and state notes. AI can structure sanitized artifacts, group observations, and flag inconsistent behavior for manual review across API versions, content types, or roles.</p>
+
+            <p>A pattern is not proof. Differences can result from caching, test data, feature flags, asynchronous processing, or environment drift. A tester must isolate the variable, verify ownership and authorization, and preserve the supporting raw evidence.</p>
+
+            <h3>Finding and report quality control</h3>
+
+            <p>AI can check whether a draft finding contains the affected scope, identity, prerequisites, exact reproduction, evidence, observed impact, severity rationale, and targeted remediation. It can identify ambiguous language or a step that assumes hidden tester knowledge. This is editorial and structural support, not technical validation.</p>
+
+            <p>The final record remains grounded in the tester's captured evidence. The <a href="what-good-pentest-report-includes.html">guide to a useful pentest report</a> shows what engineering and assurance readers should be able to inspect. The <a href="../report-viewer.html">sample report</a> demonstrates how that evidence can be presented without exposing client material.</p>
+
+            <h2 id="human-gates">4. The decisions that remain human</h2>
+
+            <p>Human involvement should not be a vague promise added after autonomous testing. It should appear as explicit gates in the engagement workflow.</p>
+
+            <ol>
+              <li><strong>Authorization gate:</strong> the tester confirms assets, identities, techniques, rates, exclusions, data rules, stop conditions, and third-party boundaries before testing.</li>
+              <li><strong>Execution gate:</strong> a human reviews live actions and generated test material, then controls the account, timing, volume, and target.</li>
+              <li><strong>Exploitability gate:</strong> a candidate issue is manually reproduced with controlled accounts or synthetic data and the minimum proof needed.</li>
+              <li><strong>Impact gate:</strong> the tester connects technical behavior to the actual product, tenant, workflow, and business consequence instead of relying on a generic vulnerability label.</li>
+              <li><strong>Severity gate:</strong> scoring reflects observed prerequisites, privileges, blast radius, data class, and compensating controls. A model may challenge consistency, but it does not make the final decision.</li>
+              <li><strong>Reporting gate:</strong> the tester verifies every statement, removes unsupported conclusions, checks redaction, and owns the final deliverable.</li>
+              <li><strong>Closure gate:</strong> agreed fixes are re-tested against the original evidence and recorded as fixed, partial, not fixed, or unable to verify.</li>
+            </ol>
+
+            <p>These gates preserve accountability when the model is confidently wrong, when context is missing, or when the technically possible proof would create unacceptable client risk. They also make AI use reviewable by procurement, engineering, and security leadership.</p>
+
+            <h2 id="data-controls">5. Client data controls for AI-assisted VAPT</h2>
+
+            <p>AI assistance creates a data-processing question before a productivity question. Scope documents, code, traffic, credentials, customer records, evidence, and reports can contain sensitive material. The engagement must define what may be processed, by which service, for which purpose, and under which retention terms.</p>
+
+            <p>Balhence records permitted AI use in the scope or rules of engagement. No client material is sent to an external AI provider unless the use, provider, and relevant data class are permitted. Credentials, active session tokens, private keys, and authentication recovery material are not entered into model prompts. Sensitive artifacts are minimized or redacted, and raw evidence stays in the agreed evidence channel unless a separate approval says otherwise.</p>
+
+            <div class="article-checklist">
+              <h3>Controls to settle before testing</h3>
+              <ul>
+                <li><strong>Permitted purposes:</strong> identify whether AI may assist scope review, hypothesis generation, artifact analysis, report quality control, or none of those tasks.</li>
+                <li><strong>Approved data classes:</strong> distinguish public documentation, synthetic examples, sanitized traffic, source code, architecture, and confidential security evidence.</li>
+                <li><strong>Provider terms:</strong> document the approved service, access controls, retention, training treatment, processing location, and deletion requirements where applicable.</li>
+                <li><strong>Data minimization:</strong> remove secrets, unrelated records, personal data, and unnecessary response bodies before an approved analytical task.</li>
+                <li><strong>Execution separation:</strong> do not give a model unrestricted credentials or autonomous authority to issue production requests.</li>
+                <li><strong>Evidence integrity:</strong> preserve original requests, responses, logs, screenshots, and tester notes independently of model-generated summaries.</li>
+                <li><strong>Retention and closure:</strong> delete or retain derived AI artifacts under the same documented engagement rules that govern other sensitive work product.</li>
+              </ul>
+            </div>
+
+            <p>If a client's policy prohibits third-party model processing for specified material, that restriction belongs in the written engagement boundary. AI-native should describe an adaptable method, not a demand that confidential data be exposed to a particular vendor.</p>
+
+            <h2 id="buyer-checklist">6. How to evaluate an AI-native pentest provider</h2>
+
+            <p>Buyers should ask for operational detail instead of accepting the label. A credible provider can explain the exact tasks AI assists, where the human gates sit, how model output is tested, and what client information may be processed.</p>
+
+            <ul>
+              <li>Which parts of scoping, testing, evidence handling, and reporting use AI?</li>
+              <li>Can an agent send live requests, or must a tester approve and control them?</li>
+              <li>Which AI providers and service tiers may process engagement material?</li>
+              <li>Are prompts or outputs retained or used for provider training?</li>
+              <li>Which client data classes are prohibited from model processing?</li>
+              <li>How is every reported finding manually reproduced and tied to raw evidence?</li>
+              <li>Who decides business impact, severity, safe proof limits, and re-test status?</li>
+              <li>Can the provider show a useful sample report and written rules of engagement?</li>
+            </ul>
+
+            <p>Be cautious with promises such as 100x faster, zero false positives, complete coverage, autonomous business-logic testing, or guaranteed finding counts. The studies above do not support those claims. Strong AI-native positioning is specific about assistance and equally specific about limits.</p>
+
+            <h2 id="measurement">7. Measure usefulness without inventing transformation claims</h2>
+
+            <p>A service should not turn industry adoption figures into its own performance claims. Honest internal measurement asks whether AI improves the quality and traceability of the engagement: Did documentation cross-reference expose a real scope gap? Did a generated hypothesis become a manually verified finding? Did quality control catch missing evidence? Did the final report remain accurate after human review?</p>
+
+            <p>Raw prompt counts, generated test cases, and model-written words are activity measures. They do not demonstrate risk reduction. Balhence does not publish a speed, coverage, or finding-rate improvement percentage without comparable first-party engagement data that can support it. The defensible outcome remains an authorized scope, reproducible evidence, a practical remediation path, and a verified closure record.</p>
+
+            <div class="article-callout">
+              <p><strong>In one sentence:</strong> AI-native VAPT uses models to widen and organize the candidate work, while an accountable tester retains control of authorization, execution, evidence, impact, reporting, and client data.</p>
+            </div>
+
+            <h2 id="sources">Primary sources and methodology</h2>
+
+            <ul>
+              <li><a href="https://www.bugcrowd.com/press-release/bugcrowd-report-unveils-the-era-of-human-augmented-intelligence-as-ai-adoption-climbs-to-82/" rel="external noopener">Bugcrowd, Inside the Mind of a Hacker 2026 announcement</a></li>
+              <li><a href="https://www.hackerone.com/report/hacker-powered-security" rel="external noopener">HackerOne, Hacker-Powered Security Report 2025</a></li>
+              <li><a href="https://www.hackerone.com/press-release/hackerone-report-finds-210-spike-ai-vulnerability-reports-amid-rise-ai-autonomy" rel="external noopener">HackerOne, 2025 report announcement and autonomous-report figure</a></li>
+              <li><a href="https://www.hackerone.com/blog/agentic-penetration-testing-as-a-service" rel="external noopener">HackerOne, published 2025 report survey methodology</a></li>
+              <li><a href="https://www.darpa.mil/news/2025/aixcc-results" rel="external noopener">DARPA, 2025 AI Cyber Challenge final results</a></li>
+            </ul>
+
+            <section class="article-cta" aria-labelledby="ai-native-cta-title">
+              <h2 id="ai-native-cta-title">Put the AI boundary in the pentest scope</h2>
+              <p>Define the applications, APIs, roles, evidence needs, permitted AI tasks, client-data restrictions, and human approval points before testing starts. Build a private draft or request a scoped conversation.</p>
+              <a class="btn btn-primary" href="../scope-builder.html" data-track="article_ai_native_builder">Build your draft scope <span aria-hidden="true">→</span></a>
+              <a class="btn btn-secondary" href="../contact.html" data-track="article_ai_native_contact">Discuss the engagement</a>
+            </section>
+
+            <h2 id="related-guides">Continue preparing</h2>
+            <ul>
+              <li><a href="how-to-scope-web-api-pentest.html">How to scope a web and API pentest</a></li>
+              <li><a href="saas-vapt-readiness-checklist.html">SaaS pentest readiness checklist</a></li>
+              <li><a href="what-good-pentest-report-includes.html">What a good pentest report should include</a></li>
+              <li><a href="../web-application-penetration-testing.html">Web application penetration testing coverage</a></li>
+              <li><a href="../api-penetration-testing.html">API penetration testing coverage</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Manual web and API penetration testing with evidence engineers can act on.</p></div>
+        <div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="../services.html">Services</a></li><li><a href="../about.html">Approach</a></li><li><a href="../blog.html">Insights</a></li><li><a href="../contact.html">Contact</a></li></ul></div>
+        <div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="../scope-builder.html">Scope planner</a></li><li><a href="../report-viewer.html">Sample report</a></li><li><a href="how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="../privacy.html">Privacy</a></li></ul></div>
+        <div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>© <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div>
+    </div>
+  </footer>
+
+  <script src="../config.js?v=20260821f"></script>
+  <script src="../app.js?v=20260821f"></script>
+  <script src="/motion.js?v=20260821f"></script>
+</body>
+</html>

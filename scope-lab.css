@@ -1,0 +1,357 @@
+.scope-lab {
+  position: relative;
+  overflow: clip;
+  background: var(--paper);
+}
+
+.scope-lab::before {
+  position: absolute;
+  top: 15%;
+  right: -160px;
+  width: 420px;
+  height: 420px;
+  background: rgba(94, 234, 212, 0.09);
+  border-radius: 50%;
+  filter: blur(1px);
+  content: "";
+  pointer-events: none;
+}
+
+.scope-lab-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.55fr);
+  gap: 50px;
+  align-items: end;
+  margin-bottom: 44px;
+}
+
+.scope-lab-heading h2 {
+  max-width: 820px;
+  margin-bottom: 0;
+}
+
+.scope-lab-heading p {
+  margin-bottom: 5px;
+}
+
+.scope-lab-shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.58fr) minmax(0, 1.42fr);
+  overflow: hidden;
+  background: var(--night);
+  border: 1px solid rgba(232, 239, 255, 0.15);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.scope-lab-options {
+  display: grid;
+  align-content: start;
+  padding: 22px;
+  background: #0d1427;
+  border-right: 1px solid var(--line-dark);
+}
+
+.scope-lab-options > span {
+  display: block;
+  margin: 4px 8px 18px;
+  color: #71839e;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.scope-lab-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  min-height: 72px;
+  gap: 13px;
+  align-items: center;
+  padding: 14px 12px;
+  color: #96a7bd;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.scope-lab-option + .scope-lab-option {
+  margin-top: 5px;
+}
+
+.scope-lab-option:hover {
+  color: #eef4ff;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.scope-lab-option[aria-pressed="true"] {
+  color: #f3f6ff;
+  background: rgba(94, 234, 212, 0.08);
+  border-color: rgba(94, 234, 212, 0.24);
+}
+
+.scope-lab-option > span:first-child {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  color: #72839e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.62rem;
+}
+
+.scope-lab-option[aria-pressed="true"] > span:first-child {
+  color: var(--night);
+  background: var(--lime);
+  border-color: var(--lime);
+}
+
+.scope-lab-option strong,
+.scope-lab-option small {
+  display: block;
+}
+
+.scope-lab-option strong {
+  font-size: 0.9rem;
+}
+
+.scope-lab-option small {
+  margin-top: 2px;
+  color: #a0aec3;
+  font-size: 0.7rem;
+}
+
+.scope-lab-stage {
+  position: relative;
+  min-width: 0;
+  padding: clamp(34px, 6vw, 74px);
+  color: #eef4ff;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(155, 140, 255, 0.11), transparent 29%),
+    var(--night);
+}
+
+.scope-lab-stage::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 52%;
+  height: 46%;
+  opacity: 0.4;
+  background-image:
+    linear-gradient(rgba(94, 234, 212, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.09) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(135deg, transparent, black);
+  content: "";
+  pointer-events: none;
+}
+
+.scope-lab-stage > * {
+  position: relative;
+  z-index: 1;
+}
+
+.scope-lab-meta {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  color: #798da8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scope-lab-meta span:last-child {
+  color: var(--lime);
+}
+
+.scope-lab-stage h3 {
+  max-width: 760px;
+  margin-bottom: 16px;
+  color: #f4f7ff;
+  font-size: clamp(1.9rem, 4vw, 3.6rem);
+}
+
+.scope-lab-stage > p {
+  max-width: 720px;
+  color: #9facc3;
+}
+
+.scope-emphasis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 32px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scope-emphasis li {
+  min-width: 0;
+  padding: 14px;
+  color: #c6d3e5;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--line-dark);
+  border-radius: 11px;
+  font-size: 0.77rem;
+}
+
+.scope-emphasis li::before {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin-bottom: 12px;
+  background: var(--mint);
+  content: "";
+}
+
+.scope-path {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 38px 0 34px;
+  counter-reset: scope-path;
+}
+
+.scope-path span {
+  position: relative;
+  min-width: 0;
+  padding-top: 23px;
+  color: #8292ad;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+}
+
+.scope-path span::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 9px;
+  height: 9px;
+  background: var(--lime);
+  border: 3px solid var(--night);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(155, 140, 255, 0.58);
+  content: "";
+}
+
+.scope-path span:not(:last-child)::after {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  left: 9px;
+  height: 1px;
+  background: rgba(155, 140, 255, 0.52);
+  transform-origin: left;
+  content: "";
+}
+
+.js .scope-lab-stage.is-changing .scope-path span:not(:last-child)::after {
+  animation: scope-path-trace 320ms var(--ease) both;
+}
+
+@keyframes scope-path-trace {
+  from { opacity: 0; transform: scaleX(0); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+
+.scope-lab-status {
+  min-height: 1px;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .scope-lab-heading,
+  .scope-lab-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .scope-lab-heading {
+    gap: 18px;
+  }
+
+  .scope-lab-options {
+    grid-template-columns: repeat(2, 1fr);
+    border-right: 0;
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .scope-lab-options > span {
+    grid-column: 1 / -1;
+  }
+
+  .scope-lab-option + .scope-lab-option {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .scope-lab-options {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .scope-lab-options > span {
+    grid-column: auto;
+    margin-top: 8px;
+  }
+
+  .scope-lab-option {
+    min-height: 62px;
+  }
+
+  .scope-emphasis {
+    grid-template-columns: 1fr;
+  }
+
+  .scope-path {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .scope-path span {
+    min-height: 54px;
+    padding: 0 0 18px 27px;
+  }
+
+  .scope-path span::before {
+    top: 3px;
+  }
+
+  .scope-path span:not(:last-child)::after {
+    top: 12px;
+    bottom: -3px;
+    left: 4px;
+    width: 1px;
+    height: auto;
+    background: rgba(155, 140, 255, 0.52);
+    transform-origin: top;
+  }
+
+  .js .scope-lab-stage.is-changing .scope-path span:not(:last-child)::after {
+    animation-name: scope-path-trace-vertical;
+  }
+
+  @keyframes scope-path-trace-vertical {
+    from { opacity: 0; transform: scaleY(0); }
+    to { opacity: 1; transform: scaleY(1); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .scope-lab-stage.is-changing .scope-path span:not(:last-child)::after {
+    animation: none;
+  }
+}

@@ -1,36 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Balhence Security Blog — Practical cybersecurity insights for Indian businesses." />
-  <meta property="og:title" content="Blog — Balhence" />
-  <meta property="og:description" content="Practical cybersecurity content for Indian businesses — no fluff, just signal." />
-  <meta property="og:image" content="https://balhence.com/og-image.png" />
-  <meta property="og:url" content="https://balhence.com/blog.html" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://balhence.com/og-image.png" />
-  <title>Blog — Balhence</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Penetration Testing Guides for SaaS Teams | Balhence</title>
+  <meta name="description" content="Practical guides to scoping, buying, preparing for, and using a web and API penetration test for SaaS and fintech products.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/blog.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="Penetration Testing Guides for SaaS Teams | Balhence">
+  <meta property="og:description" content="Useful before you buy a pentest and while your engineers fix it.">
+  <meta property="og:url" content="https://balhence.com/blog.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Balhence penetration testing guides for SaaS teams">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Penetration Testing Guides for SaaS Teams | Balhence">
+  <meta name="twitter:description" content="Practical guides for scoping, preparing for, and evaluating web and API penetration tests.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image:alt" content="Balhence penetration testing guides for SaaS teams">
+  <link rel="icon" href="/favicon.svg?v=20260821f" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20260821f">
+  <link rel="stylesheet" href="/motion.css?v=20260821f">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Balhence penetration testing guides",
+    "url": "https://balhence.com/blog.html",
+    "description": "Practical penetration testing guidance for SaaS and fintech product teams.",
+    "isPartOf": { "@id": "https://balhence.com/#website" },
+    "about": { "@id": "https://balhence.com/#organization" },
+    "hasPart": [
+      { "@type": "Article", "headline": "AI in penetration testing: where it helps and where humans stay accountable", "url": "https://balhence.com/insights/ai-native-penetration-testing-human-validated.html" },
+      { "@type": "Article", "headline": "How to scope a web and API pentest without buying the wrong test", "url": "https://balhence.com/insights/how-to-scope-web-api-pentest.html" },
+      { "@type": "Article", "headline": "What a good penetration test report should include", "url": "https://balhence.com/insights/what-good-pentest-report-includes.html" },
+      { "@type": "Article", "headline": "The SaaS pentest readiness checklist", "url": "https://balhence.com/insights/saas-vapt-readiness-checklist.html" },
+      { "@type": "Article", "headline": "Web and API penetration testing cost: scope and pricing guide", "url": "https://balhence.com/insights/web-api-pentest-cost-scope-guide.html" }
+    ]
+  }
+  </script>
 </head>
-<body data-page="blog">
+<body data-page="insights">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blog.html" data-nav="insights">Insights</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
 
-  <nav></nav>
+  <main id="main-content">
+    <section class="page-hero"><div class="container" data-reveal><span class="eyebrow">Balhence insights</span><h1>Web and API penetration testing guides for SaaS teams.</h1><p>Use these field guides to scope a test, prepare access, evaluate reports, compare evidence, and plan remediation without relying on fear-driven claims.</p></div></section>
 
-  <section id="page-header"></section>
+    <section class="section" aria-labelledby="guides-title">
+      <div class="container">
+        <div class="section-heading" data-reveal><span class="eyebrow">Start with the buying questions</span><h2 id="guides-title">Scope it well. Prepare once. Use the output.</h2><p>These guides address the points where pentest value is most often won or lost.</p></div>
+        <div class="insight-grid insight-grid-four">
+          <a class="insight-card insight-card-featured" href="/insights/ai-native-penetration-testing-human-validated.html" data-reveal><div class="insight-meta"><span>Method</span><span>12 min read</span></div><h2>AI in penetration testing: where it helps and where humans stay accountable</h2><p>See exactly where approved AI assistance can widen VAPT coverage, where a human tester must take control, how client data stays bounded, and what current offensive-security research actually shows.</p><span class="text-link">Review the AI-native VAPT model</span></a>
+          <a class="insight-card" href="/insights/how-to-scope-web-api-pentest.html" data-reveal><div class="insight-meta"><span>Scoping</span><span>8 min read</span></div><h2>How to scope a web &amp; API pentest without buying the wrong test</h2><p>Turn apps, APIs, roles, integrations, environments, and deadlines into a testable boundary and a defensible quote.</p><span class="text-link">Read the guide</span></a>
+          <a class="insight-card" href="/insights/what-good-pentest-report-includes.html" data-reveal><div class="insight-meta"><span>Procurement</span><span>7 min read</span></div><h2>What a good penetration test report should include</h2><p>A buyer’s checklist for scope, evidence, impact, remediation, executive context, and re-test closure.</p><span class="text-link">Read the guide</span></a>
+          <a class="insight-card" href="/insights/saas-vapt-readiness-checklist.html" data-reveal><div class="insight-meta"><span>Readiness</span><span>9 min read</span></div><h2>The SaaS pentest readiness checklist</h2><p>Prepare test accounts, architecture, contacts, safe data, monitoring, and rules before the assessment window opens.</p><span class="text-link">Use the checklist</span></a>
+          <a class="insight-card" href="/insights/web-api-pentest-cost-scope-guide.html" data-reveal><div class="insight-meta"><span>Buying</span><span>11 min read</span></div><h2>Web and API pentest cost: scope and pricing guide</h2><p>Understand the effort behind a quote, compare proposals on equal scope, and expose exclusions before testing starts.</p><span class="text-link">Compare the scope drivers</span></a>
+        </div>
+      </div>
+    </section>
 
-  <section id="blog">
-    <div class="container"></div>
-  </section>
+    <section class="section section-dark" aria-labelledby="editorial-title"><div class="container split-layout"><div class="split-sticky" data-reveal><span class="eyebrow">Editorial standard</span><h2 id="editorial-title">No fear statistics. No compliance theatre.</h2></div><div class="prose-large" data-reveal><p class="text-light">Balhence insights are written to help a buyer make a concrete decision: what to test, what to ask a vendor, what to prepare, what the evidence should contain, and what a clean re-test really means.</p><p class="text-muted-light">Technical references are separated from business judgment. Every external statistic includes its source, date, survey or benchmark context, and a limitation. A pentest is never presented as a guarantee that a system is secure.</p></div></div></section>
 
-  <footer></footer>
+    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Have a live buying question?</span><h2>Bring the customer request, audit note, release plan, or asset list.</h2><p>Turn it into a private Draft Scope Brief first, or ask directly when a pentest may not be the right next step.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/scope-builder.html" data-track="insights_bottom_builder">Build your scope <span aria-hidden="true">→</span></a><a class="btn btn-quiet" href="mailto:contact@balhence.com">Ask by email</a></div></div></div></section>
+  </main>
 
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Manual web and API penetration testing with evidence engineers can act on.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blog.html">Insights</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>© <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260821f"></script><script src="/app.js?v=20260821f"></script><script src="/motion.js?v=20260821f"></script>
 </body>
 </html>

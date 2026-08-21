@@ -1,0 +1,232 @@
+/*
+ * Balhence motion layer
+ *
+ * Loaded after styles.css and progressively enabled by motion.js. The system is
+ * decorative: content, controls, and navigation remain complete without it.
+ *
+ * Optional hooks:
+ *   data-motion-stagger       stagger the element's direct children
+ *   data-motion-reveal        reveal an individual element once
+ *   data-motion-card          opt an element into pointer-aware border light
+ *   data-motion-depth         opt an element into restrained pointer depth
+ *   data-motion="none"        disable automatic motion within a subtree
+ */
+
+.motion-progress {
+  position: fixed;
+  z-index: 1200;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  box-shadow: 0 0 16px rgba(155, 140, 255, 0.34);
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.motion-capable .site-header {
+  transition:
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 300ms var(--ease);
+}
+
+.motion-capable .site-header.is-scrolled {
+  box-shadow: 0 12px 40px rgba(8, 13, 31, 0.12);
+}
+
+.motion-capable .brand-mark {
+  transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
+}
+
+.motion-capable .brand:hover .brand-mark,
+.motion-capable .brand:focus-visible .brand-mark {
+  box-shadow: 0 8px 24px rgba(155, 140, 255, 0.2);
+  transform: rotate(-4deg) scale(1.045);
+}
+
+/* The spotlight stays inside the already-clipped hero; it cannot cover controls. */
+.motion-capable .hero::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(
+      520px circle at var(--motion-hero-x, 82%) var(--motion-hero-y, 18%),
+      rgba(155, 140, 255, 0.11),
+      rgba(94, 234, 212, 0.045) 32%,
+      transparent 68%
+    );
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 420ms ease;
+}
+
+.motion-capable .hero.is-motion-hovered::after {
+  opacity: 1;
+}
+
+.motion-capable .hero::before {
+  transform: translate3d(0, var(--motion-hero-shift, 0), 0) scale(1.015);
+  transform-origin: center top;
+  will-change: transform;
+}
+
+.motion-capable .hero-grid {
+  z-index: 1;
+}
+
+/* Existing reveal hooks get a calmer, spatially coherent stagger. */
+.motion-capable [data-reveal].motion-stagger-item {
+  transition: none;
+}
+
+.motion-capable [data-reveal].motion-stagger-item.is-visible,
+.motion-capable [data-motion-reveal].is-motion-visible {
+  animation: motion-item-in 760ms var(--ease) var(--motion-delay, 0ms) backwards;
+}
+
+.motion-capable [data-motion-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+
+.motion-capable [data-motion-reveal].is-motion-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes motion-item-in {
+  from {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translate3d(0, 22px, 0) scale(0.992);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Pointer-aware effects are limited to devices that can actually hover. */
+@media (hover: hover) and (pointer: fine) {
+  .motion-capable .motion-card {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  .motion-capable .motion-card::after {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    padding: 1px;
+    background: radial-gradient(
+      190px circle at var(--motion-card-x, 50%) var(--motion-card-y, 50%),
+      rgba(155, 140, 255, 0.82),
+      rgba(94, 234, 212, 0.28) 38%,
+      transparent 72%
+    );
+    border-radius: inherit;
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  .motion-capable .motion-card.is-motion-active::after,
+  .motion-capable .motion-card:focus-within::after {
+    opacity: 1;
+  }
+
+  .motion-capable .motion-depth .finding-inner,
+  .motion-capable .finding-window.motion-depth .finding-inner {
+    transform:
+      perspective(1100px)
+      rotateX(var(--motion-depth-x, 0deg))
+      rotateY(var(--motion-depth-y, 0deg))
+      translate3d(var(--motion-depth-shift-x, 0), var(--motion-depth-shift-y, 0), 0);
+    transform-style: preserve-3d;
+    transition: transform 320ms var(--ease);
+  }
+
+  .motion-capable .report-stack.motion-depth .report-page.front {
+    transform:
+      perspective(1200px)
+      rotateX(var(--motion-depth-x, 0deg))
+      rotateY(var(--motion-depth-y, 0deg))
+      translate3d(var(--motion-depth-shift-x, 0), var(--motion-depth-shift-y, 0), 0);
+    transform-origin: center center;
+    transition: transform 320ms var(--ease), box-shadow 320ms ease;
+  }
+
+  .motion-capable .motion-depth.is-motion-active .finding-inner,
+  .motion-capable .report-stack.motion-depth.is-motion-active .report-page.front {
+    transition-duration: 90ms;
+    will-change: transform;
+  }
+
+  .motion-capable .report-stack.motion-depth.is-motion-active .report-page.front {
+    box-shadow: 0 32px 90px rgba(8, 13, 31, 0.2);
+  }
+
+}
+
+.motion-paused [data-reveal],
+.motion-paused [data-motion-reveal] {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce), (update: slow) {
+  .motion-progress,
+  .motion-capable .hero::after,
+  .motion-capable .motion-card::after {
+    display: none !important;
+  }
+
+  .motion-capable .brand:hover .brand-mark,
+  .motion-capable .brand:focus-visible .brand-mark,
+  .motion-capable .hero::before,
+  .motion-capable .motion-depth .finding-inner,
+  .motion-capable .report-stack.motion-depth .report-page.front {
+    transform: none !important;
+  }
+
+  .motion-capable [data-reveal].motion-stagger-item,
+  .motion-capable [data-reveal].motion-stagger-item.is-visible,
+  .motion-capable [data-motion-reveal],
+  .motion-capable [data-motion-reveal].is-motion-visible {
+    animation: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+@media print {
+  .motion-progress {
+    display: none !important;
+  }
+
+  .motion-capable [data-motion-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

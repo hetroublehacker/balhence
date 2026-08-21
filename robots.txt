@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# 👀 Curious? Try: /ctf.html
-Disallow: /ctf.html
+Sitemap: https://balhence.com/sitemap.xml

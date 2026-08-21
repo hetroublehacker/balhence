@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Web &amp; API Pentest Scope Template and Planner | Balhence</title>
+  <meta name="description" content="Build a private web and API pentest scope brief. Map applications, roles, tenants, workflows, safety controls, timing, and report needs before requesting a quote.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/scope-builder.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="Web & API Pentest Scope Template and Planner | Balhence">
+  <meta property="og:description" content="Turn a release, audit, or customer request into a bounded draft pentest scope, with no credentials or secrets required.">
+  <meta property="og:url" content="https://balhence.com/scope-builder.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Balhence web and API penetration test scope planner">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Web & API Pentest Scope Template and Planner | Balhence">
+  <meta name="twitter:description" content="Map targets, trust boundaries, workflows, readiness gaps, and a recommended engagement path.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image:alt" content="Balhence web and API penetration test scope planner">
+  <link rel="icon" href="/favicon.svg?v=20260821f" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20260821f">
+  <link rel="stylesheet" href="/scope-builder.css?v=20260821f">
+  <link rel="stylesheet" href="/motion.css?v=20260821f">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://balhence.com/scope-builder.html#webpage",
+        "url": "https://balhence.com/scope-builder.html",
+        "name": "Web and API Pentest Scope Template and Planner",
+        "description": "A free browser-based planner for creating a bounded draft web and API penetration testing scope.",
+        "isPartOf": { "@id": "https://balhence.com/#website" },
+        "about": { "@id": "https://balhence.com/#web-api-pentest" },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://balhence.com/scope-builder.html#app",
+        "name": "Balhence Pentest Scope Planner",
+        "url": "https://balhence.com/scope-builder.html",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires a modern web browser; the planning worksheet remains readable without JavaScript.",
+        "isAccessibleForFree": true,
+        "description": "Creates a draft pentest scope brief from business outcomes, target surfaces, trust boundaries, workflows, environment, readiness, timing, and evidence needs.",
+        "featureList": [
+          "Six-step scope planning workflow",
+          "Recommended engagement path and test-window guidance",
+          "Readiness gap checklist",
+          "Copy details, download a formatted PDF, and use a print fallback",
+          "Local browser resume"
+        ],
+        "provider": { "@id": "https://balhence.com/#organization" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Pentest Scope Planner", "item": "https://balhence.com/scope-builder.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-page="scope" data-analytics="off">
+  <a class="skip-link" href="#main-content">Skip to scope planner</a>
+
+  <header class="site-header" data-site-header>
+    <nav class="container nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
+      <div class="nav-menu" id="primary-menu" data-menu>
+        <ul class="nav-links">
+          <li><a href="/services.html" data-nav="services">Services</a></li>
+          <li><a href="/about.html" data-nav="about">Approach</a></li>
+          <li><a href="/blog.html" data-nav="insights">Insights</a></li>
+          <li><a href="/contact.html" data-nav="contact">Contact</a></li>
+        </ul>
+        <a class="btn btn-primary" href="#scope-builder" data-nav="scope" data-track="nav_build_scope">Build your scope</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="sb-hero" aria-labelledby="scope-title">
+      <div class="container sb-hero-grid">
+        <div class="sb-hero-copy" data-reveal>
+          <span class="eyebrow">Free planning tool · no sign-up</span>
+          <h1 id="scope-title">Build a web and API pentest scope brief in minutes.</h1>
+          <p>Use this private scope template to map applications, APIs, roles, tenants, workflows, environments, safety controls, timing, and report needs before you request a quote.</p>
+          <div class="button-row">
+            <a class="btn btn-primary" href="#scope-builder" data-track="scope_hero_start">Build the brief <span aria-hidden="true">↓</span></a>
+            <a class="btn btn-quiet" href="/insights/how-to-scope-web-api-pentest.html" data-track="scope_hero_guide">Read the scoping guide</a>
+          </div>
+          <ul class="sb-hero-notes" aria-label="Planner safeguards">
+            <li>About 5 minutes</li>
+            <li>Saved only in this browser</li>
+            <li>No secrets requested</li>
+          </ul>
+        </div>
+
+        <div class="sb-hero-map" aria-label="Example pentest scope path from business trigger through product surfaces to usable evidence" data-reveal>
+          <div class="sb-map-head"><span>Scope topology</span><span class="sb-map-live"><i aria-hidden="true"></i> Planning</span></div>
+          <div class="sb-map-canvas">
+            <div class="sb-map-node sb-map-trigger"><small>TRIGGER</small><strong>Enterprise deal</strong><span>Evidence due</span></div>
+            <div class="sb-map-line sb-map-line-a" aria-hidden="true"></div>
+            <div class="sb-map-node sb-map-product"><small>SURFACES</small><strong>Web + API</strong><span>2 trust boundaries</span></div>
+            <div class="sb-map-line sb-map-line-b" aria-hidden="true"></div>
+            <div class="sb-map-node sb-map-evidence"><small>OUTCOME</small><strong>Verified evidence</strong><span>Report + re-test</span></div>
+            <div class="sb-map-orbit sb-map-orbit-a" aria-hidden="true">AUTH</div>
+            <div class="sb-map-orbit sb-map-orbit-b" aria-hidden="true">TENANT</div>
+            <div class="sb-map-orbit sb-map-orbit-c" aria-hidden="true">LOGIC</div>
+          </div>
+          <p>Good scope connects what the business needs to the exact boundaries an attacker will test.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sb-context" aria-label="What this planner produces">
+      <div class="container sb-context-grid">
+        <div><strong>01</strong><span>Bounded surfaces</span></div>
+        <div><strong>02</strong><span>Trust model</span></div>
+        <div><strong>03</strong><span>Safety prerequisites</span></div>
+        <div><strong>04</strong><span>Draft scope brief</span></div>
+      </div>
+    </section>
+
+    <section class="sb-builder-section" id="scope-builder" aria-labelledby="builder-title">
+      <div class="container">
+        <div class="sb-builder-intro">
+          <div>
+            <span class="eyebrow">Scope before price</span>
+            <h2 id="builder-title">Build a defensible first draft.</h2>
+            <p>Only counts and planning choices are collected. You can validate target names and access details later under an NDA.</p>
+          </div>
+          <div class="sb-safety-note" role="note">
+            <span aria-hidden="true">!</span>
+            <p><strong>Do not enter credentials or secrets.</strong> Never put passwords, API keys, session tokens, customer data, private hostnames, or exploit details into a scoping tool.</p>
+          </div>
+        </div>
+
+        <noscript>
+          <div class="sb-noscript">
+            <strong>JavaScript is off.</strong> The complete planning worksheet is shown below so you can review every input. To calculate, save, copy, or download a brief, enable JavaScript. You can still <a href="/contact.html?service=web-api&amp;utm_source=scope-builder&amp;utm_medium=website&amp;utm_campaign=scope-planner">request a manual scope review</a> without sending these answers in the URL.
+          </div>
+        </noscript>
+
+        <div class="sb-builder-grid">
+          <div class="sb-form-shell">
+            <div class="sb-progress" aria-label="Scope planner progress">
+              <div class="sb-progress-top">
+                <p><span data-step-count>Step 1 of 6</span><strong data-step-name>Business outcome</strong></p>
+                <span class="sb-save-status" data-save-status role="status">Answers stay on this device</span>
+              </div>
+              <div class="sb-progress-track" role="progressbar" aria-label="Planner completion" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1" data-progress>
+                <span class="sb-progress-fill sb-progress-fill-1" data-progress-fill></span>
+              </div>
+              <ol class="sb-step-list">
+                <li><button type="button" data-step-jump="0" aria-current="step"><span>01</span>Outcome</button></li>
+                <li><button type="button" data-step-jump="1" disabled><span>02</span>Surfaces</button></li>
+                <li><button type="button" data-step-jump="2" disabled><span>03</span>Trust</button></li>
+                <li><button type="button" data-step-jump="3" disabled><span>04</span>Workflows</button></li>
+                <li><button type="button" data-step-jump="4" disabled><span>05</span>Readiness</button></li>
+                <li><button type="button" data-step-jump="5" disabled><span>06</span>Evidence</button></li>
+              </ol>
+            </div>
+
+            <div class="sb-form-error" role="alert" tabindex="-1" data-form-error hidden></div>
+
+            <form id="scope-planner-form">
+              <fieldset class="sb-step" data-step="0">
+                <legend><span>01 / Business outcome</span>Why does the test need to happen now?</legend>
+                <p class="sb-step-lead">The buying trigger determines which evidence matters and how hard the deadline really is.</p>
+
+                <div class="sb-question" data-question="business_trigger">
+                  <h3 id="trigger-label">Primary trigger</h3>
+                  <p id="trigger-help">Choose the event that would make the engagement valuable even if no severe finding appears.</p>
+                  <div class="sb-choice-grid sb-choice-grid-two" role="radiogroup" aria-labelledby="trigger-label" aria-describedby="trigger-help">
+                    <label class="sb-choice">
+                      <input type="radio" name="business_trigger" value="enterprise" required>
+                      <span class="sb-choice-content"><b>Enterprise deal</b><small>A buyer needs current independent evidence.</small></span>
+                    </label>
+                    <label class="sb-choice">
+                      <input type="radio" name="business_trigger" value="release">
+                      <span class="sb-choice-content"><b>Critical release</b><small>A sensitive feature or architecture change is shipping.</small></span>
+                    </label>
+                    <label class="sb-choice">
+                      <input type="radio" name="business_trigger" value="audit">
+                      <span class="sb-choice-content"><b>Audit evidence</b><small>An auditor or control owner needs a current assessment.</small></span>
+                    </label>
+                    <label class="sb-choice">
+                      <input type="radio" name="business_trigger" value="assurance">
+                      <span class="sb-choice-content"><b>Independent assurance</b><small>The team wants an attacker’s view of material risk.</small></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="sb-input-row">
+                  <label class="sb-select-field">
+                    <span>Who will use the evidence?</span>
+                    <select name="evidence_audience" required>
+                      <option value="">Select an audience</option>
+                      <option value="customer">Customer or procurement team</option>
+                      <option value="engineering">Engineering and product leaders</option>
+                      <option value="audit">Auditor or compliance team</option>
+                      <option value="board">Leadership or board</option>
+                      <option value="mixed">Several of these groups</option>
+                    </select>
+                  </label>
+                  <label class="sb-select-field">
+                    <span>Evidence deadline</span>
+                    <select name="evidence_deadline" required>
+                      <option value="">Select a deadline</option>
+                      <option value="under_2">Under 2 weeks</option>
+                      <option value="2_4">2–4 weeks</option>
+                      <option value="5_8">5–8 weeks</option>
+                      <option value="flexible">Flexible / planning ahead</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="sb-step-actions">
+                  <span></span>
+                  <button class="btn btn-dark" type="button" data-next>Map target surfaces <span aria-hidden="true">→</span></button>
+                </div>
+              </fieldset>
+
+              <fieldset class="sb-step" data-step="1">
+                <legend><span>02 / Target surfaces</span>What can an attacker reach?</legend>
+                <p class="sb-step-lead">Select deployable surfaces, then bound the number of distinct applications and API groups.</p>
+
+                <div class="sb-question" data-required-group="surfaces">
+                  <h3 id="surface-label">In-scope surfaces</h3>
+                  <p id="surface-help">Choose every surface that needs active testing in this engagement.</p>
+                  <div class="sb-choice-grid sb-choice-grid-three" aria-labelledby="surface-label" aria-describedby="surface-help">
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="surfaces" value="web"><span class="sb-choice-content"><b>Web application</b><small>Customer-facing browser UI</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="surfaces" value="rest"><span class="sb-choice-content"><b>REST API</b><small>JSON or form-based endpoints</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="surfaces" value="graphql"><span class="sb-choice-content"><b>GraphQL API</b><small>Queries, mutations, subscriptions</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="surfaces" value="admin"><span class="sb-choice-content"><b>Admin / back office</b><small>Privileged operational interface</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="surfaces" value="mobile"><span class="sb-choice-content"><b>Mobile-backed API</b><small>API used by an iOS or Android app</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="surfaces" value="external"><span class="sb-choice-content"><b>External exposure</b><small>Related internet-facing assets</small></span></label>
+                  </div>
+                  <p class="sb-field-error" data-group-error="surfaces" hidden>Select at least one in-scope surface.</p>
+                </div>
+
+                <div class="sb-input-row sb-input-row-three">
+                  <label class="sb-select-field"><span>Distinct web applications</span><select name="web_app_count" required><option value="">Select</option><option value="0">None</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4plus">4+</option></select></label>
+                  <label class="sb-select-field"><span>Distinct API groups</span><select name="api_group_count" required><option value="">Select</option><option value="0">None</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4plus">4+</option></select></label>
+                  <label class="sb-select-field"><span>Exposure</span><select name="exposure" required><option value="">Select</option><option value="public">Public internet</option><option value="partner">Partner / customer network</option><option value="internal">Internal only</option><option value="mixed">Mixed exposure</option></select></label>
+                </div>
+
+                <div class="sb-step-actions">
+                  <button class="btn btn-secondary" type="button" data-back><span aria-hidden="true">←</span> Back</button>
+                  <button class="btn btn-dark" type="button" data-next>Map the trust model <span aria-hidden="true">→</span></button>
+                </div>
+              </fieldset>
+
+              <fieldset class="sb-step" data-step="2">
+                <legend><span>03 / Trust model</span>Which boundaries must hold?</legend>
+                <p class="sb-step-lead">Authorization and tenant isolation usually create more meaningful work than endpoint count alone.</p>
+
+                <div class="sb-input-row">
+                  <label class="sb-select-field"><span>Distinct user roles</span><select name="role_count" required><option value="">Select</option><option value="1_2">1–2 roles</option><option value="3_4">3–4 roles</option><option value="5_7">5–7 roles</option><option value="8plus">8+ roles</option></select></label>
+                  <label class="sb-select-field"><span>Third-party integrations</span><select name="integration_count" required><option value="">Select</option><option value="0">None</option><option value="1_2">1–2</option><option value="3_5">3–5</option><option value="6plus">6+</option><option value="unknown">Not inventoried yet</option></select></label>
+                </div>
+
+                <div class="sb-question">
+                  <h3 id="tenant-label">Tenant model</h3>
+                  <div class="sb-choice-grid sb-choice-grid-two" role="radiogroup" aria-labelledby="tenant-label">
+                    <label class="sb-choice"><input type="radio" name="tenant_model" value="single" required><span class="sb-choice-content"><b>Single tenant</b><small>Each deployment or account is isolated.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="tenant_model" value="multi"><span class="sb-choice-content"><b>Multi-tenant</b><small>Several customers share application infrastructure.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="tenant_model" value="hybrid"><span class="sb-choice-content"><b>Hybrid</b><small>Shared and dedicated boundaries coexist.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="tenant_model" value="unknown"><span class="sb-choice-content"><b>Not confirmed</b><small>Architecture discovery is still needed.</small></span></label>
+                  </div>
+                </div>
+
+                <div class="sb-question" data-required-group="auth_methods">
+                  <h3 id="auth-label">Authentication paths</h3>
+                  <p id="auth-help">Choose every identity path that should be examined.</p>
+                  <div class="sb-pill-grid" aria-labelledby="auth-label" aria-describedby="auth-help">
+                    <label><input type="checkbox" name="auth_methods" value="password"><span>Password / magic link</span></label>
+                    <label><input type="checkbox" name="auth_methods" value="sso"><span>SSO / SAML</span></label>
+                    <label><input type="checkbox" name="auth_methods" value="oidc"><span>OAuth / OIDC</span></label>
+                    <label><input type="checkbox" name="auth_methods" value="mfa"><span>MFA</span></label>
+                    <label><input type="checkbox" name="auth_methods" value="service"><span>API keys / service auth</span></label>
+                    <label><input type="checkbox" name="auth_methods" value="invite"><span>Invites / recovery</span></label>
+                  </div>
+                  <p class="sb-field-error" data-group-error="auth_methods" hidden>Select at least one authentication path.</p>
+                </div>
+
+                <div class="sb-step-actions">
+                  <button class="btn btn-secondary" type="button" data-back><span aria-hidden="true">←</span> Back</button>
+                  <button class="btn btn-dark" type="button" data-next>Prioritise workflows <span aria-hidden="true">→</span></button>
+                </div>
+              </fieldset>
+
+              <fieldset class="sb-step" data-step="3">
+                <legend><span>04 / Critical workflows</span>Where would abuse hurt most?</legend>
+                <p class="sb-step-lead">The best tests follow value and privilege through the product, not just a generic vulnerability checklist.</p>
+
+                <div class="sb-question" data-required-group="workflows">
+                  <h3 id="workflow-label">Priority abuse paths</h3>
+                  <p id="workflow-help">Choose the workflows that deserve manual business-logic testing.</p>
+                  <div class="sb-choice-grid sb-choice-grid-two" aria-labelledby="workflow-label" aria-describedby="workflow-help">
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="workflows" value="payments"><span class="sb-choice-content"><b>Payments &amp; billing</b><small>Amounts, plans, credits, refunds</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="workflows" value="data"><span class="sb-choice-content"><b>Sensitive data</b><small>Search, view, export, deletion</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="workflows" value="admin"><span class="sb-choice-content"><b>Privilege lifecycle</b><small>Invites, roles, approvals, admin</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="workflows" value="files"><span class="sb-choice-content"><b>Files &amp; documents</b><small>Upload, sharing, processing</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="workflows" value="integrations"><span class="sb-choice-content"><b>Integrations</b><small>Webhooks, callbacks, connectors</small></span></label>
+                    <label class="sb-choice sb-choice-compact"><input type="checkbox" name="workflows" value="identity"><span class="sb-choice-content"><b>Identity changes</b><small>Recovery, email, MFA, sessions</small></span></label>
+                  </div>
+                  <p class="sb-field-error" data-group-error="workflows" hidden>Select at least one priority workflow.</p>
+                </div>
+
+                <div class="sb-question">
+                  <h3 id="depth-label">Business-logic depth</h3>
+                  <div class="sb-choice-grid sb-choice-grid-three" role="radiogroup" aria-labelledby="depth-label">
+                    <label class="sb-choice"><input type="radio" name="logic_depth" value="baseline" required><span class="sb-choice-content"><b>Baseline</b><small>Common abuse paths around one workflow.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="logic_depth" value="priority"><span class="sb-choice-content"><b>Priority-led</b><small>Deep testing of two or three workflows.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="logic_depth" value="extensive"><span class="sb-choice-content"><b>Extensive</b><small>Connected abuse paths across the product.</small></span></label>
+                  </div>
+                </div>
+
+                <div class="sb-step-actions">
+                  <button class="btn btn-secondary" type="button" data-back><span aria-hidden="true">←</span> Back</button>
+                  <button class="btn btn-dark" type="button" data-next>Check readiness <span aria-hidden="true">→</span></button>
+                </div>
+              </fieldset>
+
+              <fieldset class="sb-step" data-step="4">
+                <legend><span>05 / Environment &amp; readiness</span>Can testing start safely?</legend>
+                <p class="sb-step-lead">A shorter test window is only credible when access, test data, contacts, and stop conditions are ready.</p>
+
+                <div class="sb-question">
+                  <h3 id="environment-label">Test environment</h3>
+                  <div class="sb-choice-grid sb-choice-grid-three" role="radiogroup" aria-labelledby="environment-label">
+                    <label class="sb-choice"><input type="radio" name="environment" value="staging" required><span class="sb-choice-content"><b>Representative staging</b><small>Preferred when it matches production controls.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="environment" value="production"><span class="sb-choice-content"><b>Production</b><small>Needs stricter windows and safeguards.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="environment" value="both"><span class="sb-choice-content"><b>Staging + production</b><small>Validation across two environments.</small></span></label>
+                  </div>
+                </div>
+
+                <div class="sb-question">
+                  <h3 id="window-label">Safety window</h3>
+                  <div class="sb-choice-grid sb-choice-grid-three" role="radiogroup" aria-labelledby="window-label">
+                    <label class="sb-choice"><input type="radio" name="safety_window" value="agreed" required><span class="sb-choice-content"><b>Defined window</b><small>Dates, rate limits, and contacts agreed.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="safety_window" value="business"><span class="sb-choice-content"><b>Business hours</b><small>A technical owner will be available.</small></span></label>
+                    <label class="sb-choice"><input type="radio" name="safety_window" value="unknown"><span class="sb-choice-content"><b>Not agreed yet</b><small>Rules of engagement still need work.</small></span></label>
+                  </div>
+                </div>
+
+                <div class="sb-question">
+                  <h3 id="readiness-label">Inputs already available</h3>
+                  <p id="readiness-help">Missing items become explicit readiness gaps in your brief.</p>
+                  <div class="sb-readiness-list" aria-labelledby="readiness-label" aria-describedby="readiness-help">
+                    <label><input type="checkbox" name="readiness" value="authorization"><span><b>Written authorization owner</b><small>Someone can sign the scope and rules of engagement.</small></span></label>
+                    <label><input type="checkbox" name="readiness" value="accounts"><span><b>Controlled accounts for each role</b><small>Including a second tenant where isolation is in scope.</small></span></label>
+                    <label><input type="checkbox" name="readiness" value="docs"><span><b>Architecture and API documentation</b><small>Current diagrams, collections, or schema references.</small></span></label>
+                    <label><input type="checkbox" name="readiness" value="data"><span><b>Safe seeded test data</b><small>No need to touch real customer records.</small></span></label>
+                    <label><input type="checkbox" name="readiness" value="contact"><span><b>Technical and escalation contacts</b><small>Fast response for urgent findings or stop events.</small></span></label>
+                    <label><input type="checkbox" name="readiness" value="controls"><span><b>Rate limits and allowlisting path</b><small>Relevant edge controls are understood before testing.</small></span></label>
+                  </div>
+                </div>
+
+                <div class="sb-step-actions">
+                  <button class="btn btn-secondary" type="button" data-back><span aria-hidden="true">←</span> Back</button>
+                  <button class="btn btn-dark" type="button" data-next>Choose evidence <span aria-hidden="true">→</span></button>
+                </div>
+              </fieldset>
+
+              <fieldset class="sb-step" data-step="5">
+                <legend><span>06 / Evidence &amp; timing</span>What does “done” need to look like?</legend>
+                <p class="sb-step-lead">Select the outputs required to make a decision, fix the findings, and show closure.</p>
+
+                <div class="sb-question" data-required-group="deliverables">
+                  <h3 id="deliverable-label">Required outputs</h3>
+                  <div class="sb-readiness-list sb-deliverable-list" aria-labelledby="deliverable-label">
+                    <label><input type="checkbox" name="deliverables" value="report" checked><span><b>Executive + technical report</b><small>Business impact, evidence, reproduction, and remediation.</small></span></label>
+                    <label><input type="checkbox" name="deliverables" value="alerts" checked><span><b>Critical alerts during testing</b><small>Escalation before the final report where needed.</small></span></label>
+                    <label><input type="checkbox" name="deliverables" value="walkthrough" checked><span><b>Engineering walkthrough</b><small>Priorities, exploit paths, and fix discussion.</small></span></label>
+                    <label><input type="checkbox" name="deliverables" value="retest" checked><span><b>One bounded re-test</b><small>Verification of agreed fixes in the original scope.</small></span></label>
+                    <label><input type="checkbox" name="deliverables" value="letter"><span><b>Customer-facing closure letter</b><small>Concise status evidence after the re-test.</small></span></label>
+                    <label><input type="checkbox" name="deliverables" value="mapping"><span><b>Control or requirement mapping</b><small>Trace findings to an agreed control set.</small></span></label>
+                  </div>
+                  <p class="sb-field-error" data-group-error="deliverables" hidden>Select at least one required output.</p>
+                </div>
+
+                <div class="sb-input-row">
+                  <label class="sb-select-field"><span>Preferred test start</span><select name="test_start" required><option value="">Select</option><option value="asap">As soon as readiness allows</option><option value="2_4">Within 2–4 weeks</option><option value="5_8">Within 5–8 weeks</option><option value="quarter">This quarter</option><option value="exploring">Exploring options</option></select></label>
+                  <label class="sb-select-field"><span>Remediation window</span><select name="retest_window" required><option value="">Select</option><option value="2">Within 2 weeks</option><option value="4">Within 4 weeks</option><option value="6">Within 6 weeks</option><option value="unknown">Not confirmed</option></select></label>
+                </div>
+
+                <div class="sb-final-note">
+                  <span aria-hidden="true">✓</span>
+                  <p><strong>The result is a planning brief, not a quote.</strong> Balhence will validate the asset inventory, access assumptions, safety rules, calendar, and exclusions before issuing a statement of work.</p>
+                </div>
+
+                <div class="sb-step-actions sb-final-actions">
+                  <button class="btn btn-secondary" type="button" data-back><span aria-hidden="true">←</span> Back</button>
+                  <button class="btn btn-primary" type="button" data-build-brief>Build draft scope brief <span aria-hidden="true">→</span></button>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+
+          <aside class="sb-summary" aria-labelledby="summary-title">
+            <div class="sb-summary-head">
+              <div><span class="sb-summary-kicker">Live planning result</span><h2 id="summary-title" data-package>Awaiting core inputs</h2></div>
+              <span class="sb-result-status" data-result-status>Draft</span>
+            </div>
+            <p class="sb-summary-intro" data-result-intro>Select a business trigger, surface, and trust model to produce a bounded recommendation.</p>
+
+            <div class="sb-live-topology" role="img" aria-label="Scope topology awaiting selections" data-topology>
+              <div class="sb-topology-row">
+                <span class="sb-topology-node is-active" data-topology-node="user"><i aria-hidden="true"></i>Users</span>
+                <span class="sb-topology-arrow" aria-hidden="true">→</span>
+                <span class="sb-topology-node" data-topology-node="web"><i aria-hidden="true"></i>Web</span>
+                <span class="sb-topology-arrow" aria-hidden="true">→</span>
+                <span class="sb-topology-node" data-topology-node="api"><i aria-hidden="true"></i>API</span>
+              </div>
+              <div class="sb-topology-branches">
+                <span class="sb-topology-node" data-topology-node="identity"><i aria-hidden="true"></i>Identity</span>
+                <span class="sb-topology-node" data-topology-node="tenant"><i aria-hidden="true"></i>Tenants</span>
+                <span class="sb-topology-node" data-topology-node="integration"><i aria-hidden="true"></i>Integrations</span>
+              </div>
+              <div class="sb-topology-caption">Highlighted nodes represent selected trust boundaries.</div>
+            </div>
+
+            <dl class="sb-summary-facts">
+              <div><dt>Primary outcome</dt><dd data-summary="outcome">Not selected</dd></div>
+              <div><dt>Bounded surfaces</dt><dd data-summary="surfaces">Not selected</dd></div>
+              <div><dt>Trust model</dt><dd data-summary="trust">Not selected</dd></div>
+              <div><dt>Indicative window</dt><dd data-summary="window">Calculated after core inputs</dd></div>
+              <div><dt>Commercial route</dt><dd data-summary="price">Fixed quote after scope review</dd></div>
+            </dl>
+
+            <div class="sb-rule-box">
+              <span>Recommendation rule</span>
+              <p data-rule>Recommendations use explicit scope boundaries rather than a security risk score.</p>
+              <ul class="sb-factor-list" data-factor-list><li>Complete the planner to see the factors affecting effort.</li></ul>
+            </div>
+
+            <div class="sb-gap-box">
+              <div class="sb-gap-heading"><h3>Readiness gaps</h3><span data-gap-count>6 open</span></div>
+              <ul data-gap-list>
+                <li>Written authorization owner</li>
+                <li>Controlled role and tenant accounts</li>
+                <li>Architecture and API documentation</li>
+                <li>Safe seeded test data</li>
+                <li>Technical and escalation contacts</li>
+                <li>Rate-limit and allowlisting path</li>
+              </ul>
+            </div>
+
+            <details class="sb-boundaries">
+              <summary>Planning assumptions &amp; exclusions</summary>
+              <div>
+                <h3>Assumptions</h3>
+                <ul data-assumption-list><li>Written authorization and rules of engagement are agreed before testing.</li><li>Controlled accounts and safe test data are supplied.</li><li>Critical findings use an agreed escalation path.</li></ul>
+                <h3>Always excluded unless explicitly agreed</h3>
+                <ul><li>Denial of service or destructive testing</li><li>Social engineering and physical security</li><li>Access to real customer data beyond minimum safe proof</li><li>Assets and environments outside the signed scope</li></ul>
+              </div>
+            </details>
+
+            <p class="sb-live-message" role="status" aria-live="polite" data-live-message>Planning result will update as you answer.</p>
+
+            <div class="sb-summary-actions">
+              <button class="sb-tool-button sb-pdf-button" type="button" data-download disabled><span aria-hidden="true">PDF</span><b data-download-label>Download PDF</b></button>
+              <button class="sb-tool-button" type="button" data-copy disabled><span aria-hidden="true">⧉</span>Copy details</button>
+              <button class="sb-tool-button sb-reset-button" type="button" data-reset><span aria-hidden="true">↺</span>Reset</button>
+              <button class="sb-tool-button sb-print-fallback" type="button" data-print hidden disabled><span aria-hidden="true">⌑</span>Print fallback</button>
+            </div>
+
+            <a class="btn btn-primary sb-contact-cta is-disabled" href="/contact.html?service=web-api&amp;utm_source=scope-builder&amp;utm_medium=website&amp;utm_campaign=scope-planner" aria-disabled="true" data-contact-cta data-track="scope_result_contact">Continue to a scope review <span aria-hidden="true">→</span></a>
+            <p class="sb-privacy-line">Your answers stay in this browser. The generated brief is transferred to the contact step through session storage, not the URL, and is not submitted until you choose to send it.</p>
+          </aside>
+
+          <section class="sb-print-brief" aria-label="Printable draft scope brief">
+            <div data-print-brief></div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark sb-method" aria-labelledby="method-title">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">What the planner does and does not do</span>
+          <h2 id="method-title">A useful boundary, before a commercial promise.</h2>
+          <p>Scope is a model of attack paths, access, depth, evidence, and safety. The final statement of work still requires a human review.</p>
+        </div>
+        <div class="sb-method-grid">
+          <article><span>01 / BOUNDS</span><h3>Counts what changes effort</h3><p>Applications, APIs, roles, tenants, authentication paths, integrations, workflows, and environments.</p></article>
+          <article><span>02 / SAFETY</span><h3>Surfaces missing prerequisites</h3><p>Authorization, controlled accounts, safe data, contacts, documentation, windows, rate limits, and stop conditions.</p></article>
+          <article><span>03 / HONESTY</span><h3>Returns a band, not a quote</h3><p>The output is deliberately indicative. Asset validation and rules of engagement can still change timing or commercial terms.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Manual web and API penetration testing with evidence engineers can act on.</p></div>
+        <div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blog.html">Insights</a></li><li><a href="/contact.html">Contact</a></li></ul></div>
+        <div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html" aria-current="page">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+        <div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>© <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div>
+    </div>
+  </footer>
+
+  <script src="/config.js?v=20260821f"></script>
+  <script src="/app.js?v=20260821f"></script>
+  <script src="/vendor/jspdf-4.2.1.umd.min.js" integrity="sha384-qovJwSBbRDPP5cEjCp8S0UP66wrvnjaa60XMOGzTNanrThcrGfXfnZkvgY8N1KT3"></script>
+  <script src="/scope-pdf.js?v=20260821f"></script>
+  <script src="/scope-builder.js?v=20260821f"></script>
+  <script src="/motion.js?v=20260821f"></script>
+</body>
+</html>
