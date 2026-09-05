@@ -1,24 +1,21 @@
-name: Deploy allowlisted static site
+name: Validate and deploy public site
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'production' }}
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -26,14 +23,50 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+      - name: Check static pages and publication boundaries
+        run: python3 verify_site.py
+      - name: Run build and preview regression checks
+        run: python3 -m unittest discover -s tests -v
+      - name: Check published JavaScript syntax
+        run: |
+          python3 - <<'PY'
+          import subprocess
+          from pathlib import Path
+          from build_public import PUBLIC_FILES
+          for filename in PUBLIC_FILES:
+              if filename.endswith('.js'):
+                  print(f'Checking {filename}', flush=True)
+                  subprocess.run(
+                      ['node', '--check', '--input-type=module'],
+                      input=Path(filename).read_text(encoding='utf-8'),
+                      text=True,
+                      check=True,
+                  )
+          PY
       - name: Build allowlisted public artifact
         run: python3 build_public.py --output _site
-      - name: Configure Pages
-        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - name: Verify the release artifact and HTTP behavior
+        run: python3 verify_site.py --root _site --artifact --preview
       - name: Upload public artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5

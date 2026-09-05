@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>When two browsers inherited one cart | Balhence</title>
+  <meta name="description" content="An anonymized case study of navigation state overriding anonymous session authority, with proposed secure design and five local cart isolation checks.">
+  <meta name="author" content="Balhence">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/session-authority-boundary.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="When two browsers inherited one cart">
+  <meta property="og:description" content="Two independent anonymous browsers shared cart state after navigation context became session authority. A case study in trust boundaries and session design.">
+  <meta property="og:url" content="https://balhence.com/insights/session-authority-boundary.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Balhence application security case study">
+  <meta property="article:published_time" content="2026-09-05">
+  <meta property="article:modified_time" content="2026-09-05">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="When two browsers inherited one cart">
+  <meta name="twitter:description" content="An anonymized session authority failure, illustrative secure design, and five local regression checks.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image:alt" content="Balhence application security case study">
+  <link rel="icon" href="../favicon.svg?v=20260905c" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="stylesheet" href="../styles.css?v=20260905c">
+  <link rel="stylesheet" href="/motion.css?v=20260905c">
+  <link rel="stylesheet" href="/case-studies.css?v=20260905d">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://balhence.com/#organization",
+        "name": "Balhence",
+        "url": "https://balhence.com/",
+        "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.svg", "width": 512, "height": 512 }
+      },
+      {
+        "@type": "Article",
+        "@id": "https://balhence.com/insights/session-authority-boundary.html#article",
+        "headline": "When two browsers inherited one cart",
+        "description": "An anonymized case study of anonymous session authority, with illustrative engineering examples and local regression invariants.",
+        "url": "https://balhence.com/insights/session-authority-boundary.html",
+        "mainEntityOfPage": "https://balhence.com/insights/session-authority-boundary.html",
+        "datePublished": "2026-09-05",
+        "dateModified": "2026-09-05",
+        "inLanguage": "en",
+        "author": { "@id": "https://balhence.com/#organization" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "image": "https://balhence.com/og-image.png",
+        "articleSection": "Anonymized case study"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/session-authority-boundary.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://balhence.com/blogs.html" },
+          { "@type": "ListItem", "position": 3, "name": "When two browsers inherited one cart", "item": "https://balhence.com/insights/session-authority-boundary.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights" class="case-study">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header>
+    <nav class="container nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="../" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
+      <div class="nav-menu" id="primary-menu" data-menu>
+        <ul class="nav-links">
+          <li><a href="../services.html" data-nav="services">Services</a></li>
+          <li><a href="../about.html" data-nav="about">Approach</a></li>
+          <li><a href="/blogs.html" data-nav="insights" aria-current="page">Blog</a></li>
+          <li><a href="/contact.html" data-nav="contact">Contact</a></li>
+        </ul>
+        <a class="btn btn-primary" href="../scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    </nav>
+  </header>
+  <main id="main-content">
+    <article>
+      <header class="article-hero">
+        <div class="container">
+          <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Anonymized field report</span></nav>
+          <h1>When two browsers inherited one cart</h1>
+          <p class="article-deck">Two separate anonymous browsers ended up editing the same cart. The clue was navigation state that took precedence over an existing server-issued session.</p>
+          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>6 min read</span><span>Illustrative engineering examples</span></div>
+        </div>
+      </header>
+      <div class="article-body">
+        <div class="container article-layout">
+          <nav class="article-toc" aria-label="On this page">
+            <strong>On this page</strong>
+            <a href="#evidence">One browser's edit appeared in the other</a>
+            <a href="#http-notebook">The HTTP notebook</a><a href="#authority">The input that chose the session</a>
+            <a href="#design">Give navigation a narrower job</a>
+            <a href="#transitions">Keep the boundary through sign-in</a>
+            <a href="#regression">Five checks before calling it fixed</a>
+            <a href="#closure">What a retest still needs to show</a>
+          </nav>
+          <div class="article-content">
+            <aside class="article-callout" aria-label="Redaction and evidence limits">
+              <p><strong>Redaction and limits:</strong> Adapted from private research notes. Organizations, products, identifiers, routes, and data have been removed or replaced. The examples are synthetic; pseudocode describes proposed design, not the original implementation. Source observations have not been independently revalidated, and proposed fixes are not confirmed deployed.</p>
+            </aside>
+            <dl class="case-facts">
+              <div><dt>Boundary</dt><dd>Browser to anonymous session</dd></div>
+              <div><dt>Observed effect</dt><dd>Shared cart state</dd></div>
+              <div><dt>Engineering focus</dt><dd>Session authority precedence</dd></div>
+            </dl>
+
+            <h2 id="evidence">One browser's edit appeared in the other</h2>
+            <p>A cart edit made in one browser appeared in the other. The source notes describe two controlled anonymous browser contexts that began distinct and ended up sharing cart state. The visible crossover was the clue that their separation had failed.</p>
+            <p>The starting point matters: neither browser needed a signed-in account for its state to deserve isolation. A shopping application can remember an unsigned-in browser's choices across pages. The server still has to decide which session owns that cart.</p>
+            <p>In the reported observation, client-provided navigation state took precedence over an existing server-issued session. Both contexts then shared cart state, with independent edits appearing in the other context. The persistence of those changes established that the effect reached shared state beyond a single page render.</p>
+            <p>That is where the evidence stops. It did not establish predictable session identifiers, authenticated account takeover, or access to an unknown user's session. No checkout, payment, order, or customer identity disclosure was demonstrated. The reported boundary failure concerned anonymous carts in the two controlled contexts.</p>
+
+            <section id="http-notebook" aria-labelledby="http-notebook-title">
+              <h2 id="http-notebook-title">The HTTP notebook</h2>
+              <p>A cart read is ordinary traffic. What mattered in the notes was whose state appeared in independent browser contexts. This sketch shows the shape of a harmless cart snapshot, with the session and cart identity removed.</p>
+              <figure class="http-notebook">
+                <figcaption class="http-notebook-caption"><span class="http-notebook-label">Observation sketch / HTTP/1.1</span><span class="http-notebook-badge">SYNTHETIC + REDACTED</span></figcaption>
+                <div class="http-exchange">
+                  <div class="http-message"><h3>Read-only request</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic redacted HTTP request"><code>GET /redacted/cart HTTP/1.1
+Host: research.example
+Cookie: session=[REDACTED]
+Accept: application/json
+
+</code></pre></div>
+                  <div class="http-message"><h3>Illustrative cart snapshot</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic illustrative HTTP response"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: private, no-store
+Content-Length: 72
+
+{"cart":"[REDACTED]","items":[{"marker":"synthetic-item","quantity":1}]}</code></pre></div>
+                </div>
+                <p class="http-notebook-note">Reconstructed for this article, not an original wire capture. The host uses the reserved .example namespace; paths, headers, and data are invented or redacted. Display only: no requests are sent.</p>
+              </figure>
+              <p>Seeing one cart response would not establish session fixation. The reported evidence was the loss of separation between two controlled contexts; the session-changing navigation and its parameters are not reproduced here.</p>
+            </section>
+
+            <h2 id="authority">The input that chose the session</h2>
+            <p>The useful detail was which input won. A server-issued session already existed, yet client-selected navigation context displaced it. Navigation context describes where a browser is going or which workflow it is continuing. Session identity decides which server-side state it may use. Here, a value carrying the first kind of information acquired the second kind of authority.</p>
+            <p>That precedence rule explains why stronger randomness would not address the reported behavior. The finding did not depend on guessing a credential. It depended on the server letting client-selected context choose a session despite an already established one.</p>
+            <p>The resulting cart changes support a session isolation failure. They do not reveal the original code, middleware order, or storage model. An implementation review would need to locate where identity is selected and where navigation data influences that decision. The observed result identifies the boundary to investigate without claiming an unseen architecture.</p>
+
+            <h2 id="design">Give navigation a narrower job</h2>
+            <p>The proposed rule is direct: a validated server-issued session cookie establishes the current anonymous session. Unrelated navigation data cannot replace it. When no valid cookie is present, the server creates fresh session state; it does not adopt a client-selected session identity.</p>
+            <p>Some legitimate workflows need continuity across navigation. That requirement should use a separate, purpose-bound workflow token. Its authority should be limited to one intended operation, with an expiry and single-use consumption. It must not serve as a general session credential or silently grant access to all state associated with another browser.</p>
+            <p>The application also needs an explicit rule for who may redeem that token. A cart continuation may need to be bound to the current session or to an independently verified recipient. A signature confirms issuance and integrity; it does not by itself establish that the current browser is entitled to the operation.</p>
+            <p>This illustrative engineering example shows those boundaries. It is not the assessed application's implementation.</p>
+            <pre class="case-code" tabindex="0" aria-label="Illustrative defensive pseudocode"><code>session = validate_server_issued_cookie(request)
+if session is absent:
+    session = create_fresh_anonymous_session()
+
+if intended_workflow_is_requested:
+    grant = validate_purpose_and_expiry(workflow_token)
+    require grant.permits(current_context, intended_action)
+    atomically:
+        consume_once(grant)
+        apply_permitted_workflow(session, grant)
+
+persist_cookie_for(session)</code></pre>
+            <p>The workflow operation acts within an authorized context instead of replacing the browser's identity. Consumption and application should succeed together, so a failure neither leaves a reusable grant after a successful change nor consumes the grant without the promised result.</p>
+
+            <h2 id="transitions">Keep the boundary through sign-in</h2>
+            <p>Cookie protections remain useful. HttpOnly limits script access to the cookie, and Secure restricts its transmission to secure connections. Neither prevents the server from accepting unrelated client context as session authority. The authority decision has to be corrected in server logic.</p>
+            <p>Cookie scope and handling should also be deliberate: avoid competing cookie variants, reject invalid session references, and issue a fresh session when validation fails. Logging should record session transitions and their reasons without recording reusable credentials. These measures support diagnosis while limiting credential exposure.</p>
+            <p>When trust changes, such as an anonymous browser becoming authenticated, rotate the session identifier and invalidate its predecessor. Any cart migration must follow a separate, explicit policy. Carrying selected cart contents forward should not carry forward the old session's authority or merge another browser's state by accident.</p>
+            <p>That transition guidance is preventive design advice. The recorded observation stopped at anonymous carts, so it cannot establish how the application handled sign-in or whether an authenticated boundary would have failed.</p>
+
+            <h2 id="regression">Five checks before calling it fixed</h2>
+            <p>Use synthetic sessions and an isolated application test harness for these checks. Assert the effective server-side session and cart contents as well as the cookie response.</p>
+            <div class="scope-table-wrap" role="region" aria-labelledby="session-tests-caption" tabindex="0">
+              <table class="scope-table">
+                <caption id="session-tests-caption">Local regression checks for the proposed session policy</caption>
+                <thead><tr><th scope="col">Fixture</th><th scope="col">Local action</th><th scope="col">Required assertions</th></tr></thead>
+                <tbody>
+                  <tr><td>Valid anonymous cookie with unrelated navigation context</td><td>Resolve the request through the corrected session middleware.</td><td>The existing session remains authoritative; unrelated state does not replace the cookie.</td></tr>
+                  <tr><td>Two independent anonymous sessions with distinct carts</td><td>Edit one cart through its normal application service.</td><td>Only its cart changes; the other session and cart remain distinct.</td></tr>
+                  <tr><td>Browser context without a valid session cookie</td><td>Initialize a cart with synthetic navigation context present.</td><td>A fresh server-issued session is created; no existing session is adopted.</td></tr>
+                  <tr><td>Anonymous fixture undergoing an approved trust transition</td><td>Complete the local transition and resolve both session references.</td><td>A new identifier is issued; the old identifier no longer authorizes access.</td></tr>
+                  <tr><td>Current session with a valid, intended workflow grant</td><td>Complete the permitted cart operation in the local harness.</td><td>The intended result occurs once; replay is rejected and session authority remains correct.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="closure">What a retest still needs to show</h2>
+            <p>A corrected build would need to preserve session isolation across ordinary navigation, intended continuation flows, and trust transitions. Checking only a cookie attribute would miss the observed cause. Closure would require evidence that client context can no longer override the server's authority decision; no such retest is claimed here.</p>
+            <p>This case illustrates a useful design question for anonymous workflows: which input gets to decide whose state is being used? Making that answer explicit gives engineers a boundary they can review and preserve as features evolve.</p>
+            <div class="article-callout"><p><strong>Related case:</strong> <a href="/insights/draft-write-authorization.html">The draft you could change but could not read</a> examines authority at the point of mutation. For engagement preparation and reporting, browse the <a href="/blog.html">Guides</a>.</p></div>
+            <section class="article-cta" aria-labelledby="article-cta-title">
+              <h2 id="article-cta-title">Review how your application carries state</h2>
+              <p>Discuss anonymous sessions, account transitions, and shared workflows with our team.</p>
+              <a class="btn btn-primary" href="/contact.html" data-track="article_session_boundary_contact">Discuss your application <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
+            </section>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div>
+        <div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="../services.html">Services</a></li><li><a href="../about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div>
+        <div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Guides</a></li><li><a href="../scope-builder.html">Scope planner</a></li><li><a href="../report-viewer.html">Sample report</a></li><li><a href="../privacy.html">Privacy</a></li></ul></div>
+        <div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div>
+    </div>
+  </footer>
+  <script src="../config.js?v=20260905c"></script>
+  <script src="../app.js?v=20260905c"></script>
+  <script src="/motion.js?v=20260905c"></script>
+</body>
+</html>

@@ -49,8 +49,8 @@
     }),
     evidence_deadline: Object.freeze({
       under_2: "Under 2 weeks",
-      "2_4": "2–4 weeks",
-      "5_8": "5–8 weeks",
+      "2_4": "2-4 weeks",
+      "5_8": "5-8 weeks",
       flexible: "Flexible / planning ahead",
     }),
     surfaces: Object.freeze({
@@ -69,8 +69,8 @@
       internal: "Internal only",
       mixed: "Mixed exposure",
     }),
-    role_count: Object.freeze({ "1_2": "1–2 roles", "3_4": "3–4 roles", "5_7": "5–7 roles", "8plus": "8+ roles" }),
-    integration_count: Object.freeze({ 0: "None", "1_2": "1–2", "3_5": "3–5", "6plus": "6+", unknown: "Not inventoried" }),
+    role_count: Object.freeze({ "1_2": "1-2 roles", "3_4": "3-4 roles", "5_7": "5-7 roles", "8plus": "8+ roles" }),
+    integration_count: Object.freeze({ 0: "None", "1_2": "1-2", "3_5": "3-5", "6plus": "6+", unknown: "Not inventoried" }),
     tenant_model: Object.freeze({ single: "Single tenant", multi: "Multi-tenant", hybrid: "Hybrid tenancy", unknown: "Not confirmed" }),
     auth_methods: Object.freeze({
       password: "Password / magic link",
@@ -109,8 +109,8 @@
     }),
     test_start: Object.freeze({
       asap: "As soon as readiness allows",
-      "2_4": "Within 2–4 weeks",
-      "5_8": "Within 5–8 weeks",
+      "2_4": "Within 2-4 weeks",
+      "5_8": "Within 5-8 weeks",
       quarter: "This quarter",
       exploring: "Exploring options",
     }),
@@ -151,6 +151,7 @@
     let currentBriefModel = null;
     let currentResult = null;
     let saveTimer = 0;
+    let savePending = false;
     let screenDocumentTitle = document.title;
     let printTitleActive = false;
 
@@ -180,6 +181,7 @@
     }
     const triggerPrefill = applyTriggerPrefill(form);
     if (triggerPrefill) {
+      try { sessionStorage.removeItem(SESSION_KEY); } catch (error) { /* Storage may be unavailable. */ }
       if (saveStatus) saveStatus.textContent = `Started from ${label("business_trigger", triggerPrefill)} trigger`;
       if (liveMessage) liveMessage.textContent = "Business trigger carried in from the previous page. Nothing else was placed in the URL.";
     }
@@ -241,9 +243,11 @@
       finalized = true;
       setFinalActions(true);
       printButton.hidden = true;
-      persistSessionBrief(currentBrief, currentResult);
+      const transferReady = persistSessionBrief(currentBrief, currentResult);
       saveStateNow();
-      announce("Draft scope brief ready. You can download the formatted PDF, copy the details, or continue to a review.");
+      announce(transferReady
+        ? "Draft scope brief ready. Download the PDF, copy the details, or continue to a review."
+        : "Draft scope brief ready. Browser storage is unavailable, so download the PDF or copy the details before requesting a review.", transferReady ? "status" : "error");
       if (summary) {
         summary.classList.remove("is-updated");
         window.requestAnimationFrame(() => summary.classList.add("is-updated"));
@@ -301,6 +305,9 @@
     resetButton.addEventListener("click", () => {
       const confirmed = window.confirm("Reset every scope-planner answer saved in this browser?");
       if (!confirmed) return;
+      window.clearTimeout(saveTimer);
+      saveTimer = 0;
+      savePending = false;
       form.reset();
       clearAllErrors();
       removeStoredBriefs();
@@ -325,11 +332,22 @@
         buildButton.focus();
         return;
       }
-      persistSessionBrief(currentBrief, currentResult);
+      if (!persistSessionBrief(currentBrief, currentResult)) {
+        event.preventDefault();
+        announce("Your browser could not transfer the brief. Download the PDF or copy the details, then use Contact to request a review.", "error");
+        downloadButton.focus();
+        return;
+      }
       contactCta.href = CONTACT_URL;
     });
 
-    window.addEventListener("beforeunload", saveStateNow);
+    const flushPendingSave = () => {
+      if (savePending) saveStateNow();
+    };
+    window.addEventListener("pagehide", flushPendingSave);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") flushPendingSave();
+    });
     window.addEventListener("beforeprint", setPrintDocumentTitle);
     window.addEventListener("afterprint", restoreScreenDocumentTitle);
     if (triggerPrefill) saveStateSoon();
@@ -507,13 +525,13 @@
     }
 
     function invalidateBrief() {
+      try { sessionStorage.removeItem(SESSION_KEY); } catch (error) { /* Storage can be unavailable. */ }
       if (!finalized) return;
       finalized = false;
       currentBrief = "";
       currentBriefModel = null;
       if (printBrief) printBrief.textContent = "";
       setFinalActions(false);
-      try { sessionStorage.removeItem(SESSION_KEY); } catch (error) { /* Storage can be unavailable. */ }
       announce("Answers changed. Build the brief again before continuing.");
     }
 
@@ -556,14 +574,14 @@
 
     function saveStateSoon() {
       window.clearTimeout(saveTimer);
-      if (saveStatus) saveStatus.textContent = "Saving locally…";
-      saveTimer = window.setTimeout(() => {
-        saveStateNow();
-        if (saveStatus) saveStatus.textContent = `Saved locally · ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
-      }, 220);
+      savePending = true;
+      if (saveStatus) saveStatus.textContent = "Saving locally...";
+      saveTimer = window.setTimeout(saveStateNow, 220);
     }
 
     function saveStateNow() {
+      window.clearTimeout(saveTimer);
+      saveTimer = 0;
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
           version: SCHEMA_VERSION,
@@ -572,8 +590,12 @@
           furthestStep,
           data: readForm(form),
         }));
+        savePending = false;
+        if (saveStatus) saveStatus.textContent = `Saved in this browser at ${new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
+        return true;
       } catch (error) {
         if (saveStatus) saveStatus.textContent = "Local save unavailable";
+        return false;
       }
     }
   }
@@ -677,11 +699,11 @@
     if (!hasCore) {
       return {
         key: "pending",
-        name: "Awaiting core inputs",
-        intro: "Select a business trigger, bounded surface counts, and trust model to produce a recommendation.",
-        window: "Calculated after core inputs",
-        price: "Fixed quote after technical scope review",
-        rule: "Recommendations use explicit scope boundaries rather than a security risk score.",
+        name: "Start with a few answers",
+        intro: "Tell us why you need a test, what it should cover, and who uses your app.",
+        window: "Available after your first answers",
+        price: "Fixed quote after we review the scope",
+        rule: "The suggestion is based on what you need tested. It does not assess your app's security.",
         factors: factors.length ? factors : ["Complete the planner to see the factors affecting effort."],
       };
     }
@@ -701,10 +723,10 @@
       return {
         key: "discovery",
         name: "Discovery Required",
-        intro: "The current boundary is too broad or uncertain for a defensible fixed pentest scope.",
-        window: "1–2 discovery days; test window confirmed next",
+        intro: "We need a few more details before we can suggest a fixed test scope.",
+        window: "1-2 discovery days; test window confirmed next",
         price: "Discovery first; fixed quote follows",
-        rule: "Discovery comes first when the inventory, tenant model, integration boundary, or environment mix could materially change coverage.",
+        rule: "We first need to review the systems, tenants, integrations, or environments that could change the amount of testing needed.",
         factors,
       };
     }
@@ -723,8 +745,8 @@
       return {
         key: "focused",
         name: "Focused Release Check",
-        intro: "A bounded release path can be tested without expanding into a full product assessment.",
-        window: "Typically 3–5 testing days",
+        intro: "A focused check looks suitable for the release or workflow you selected.",
+        window: "Typically 3-5 testing days",
         price: "Fixed quote after technical scope review",
         rule: "Focused applies only to one tightly bounded path: no more than two surfaces, two deployable units, four roles, two integrations, and two priority workflows.",
         factors,
@@ -734,8 +756,8 @@
     return {
       key: "sprint",
       name: "Web & API Sprint",
-      intro: "The scope has enough connected surfaces or trust boundaries to justify a product-level sprint.",
-      window: "Typically 5–10 testing days",
+      intro: "Your apps, APIs, and user roles need to be tested together.",
+      window: "Typically 5-10 testing days",
       price: "Fixed quote after technical scope review",
       rule: "A sprint fits bounded products with multiple connected attack surfaces, roles, tenants, integrations, or business-logic paths, but no unresolved enterprise-scale inventory.",
       factors,
@@ -797,7 +819,7 @@
 
   function trustSummary(data) {
     if (!data.tenant_model && !data.role_count) return "Not selected";
-    return [label("tenant_model", data.tenant_model, "Tenancy pending"), label("role_count", data.role_count, "Roles pending")].join(" · ");
+    return [label("tenant_model", data.tenant_model, "Tenancy pending"), label("role_count", data.role_count, "Roles pending")].join("  |  ");
   }
 
   function updateTopology(data) {
@@ -825,7 +847,7 @@
     return {
       schemaVersion: SCHEMA_VERSION,
       generatedAtISO: generatedAt.toISOString(),
-      generatedDisplay: generatedAt.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }),
+      generatedDisplay: generatedAt.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }),
       status: "Non-binding planning input. Not a quote, authorization, or statement of work.",
       businessOutcome: {
         trigger: label("business_trigger", data.business_trigger),
@@ -1059,8 +1081,9 @@
         indicativeWindow: result.window,
         brief,
       }));
+      return true;
     } catch (error) {
-      /* The downloadable brief still works when session storage is unavailable. */
+      return false;
     }
   }
 

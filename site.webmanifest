@@ -1,14 +1,14 @@
 {
   "name": "Balhence",
   "short_name": "Balhence",
-  "description": "Manual web application and API penetration testing.",
+  "description": "AI-native cybersecurity, security research, and engineering across your technology.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#080d1f",
   "theme_color": "#080d1f",
   "icons": [
     {
-      "src": "/favicon.svg?v=20260821f",
+      "src": "/favicon.svg?v=20260905b",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
@@ -16,9 +16,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Build a pentest scope",
+      "name": "Plan a security project",
       "short_name": "Scope planner",
-      "description": "Create a private draft pentest scope brief in your browser.",
+      "description": "Choose a security discipline or create a private web and API test brief.",
       "url": "/scope-builder.html"
     },
     {

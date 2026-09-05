@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bug Bounty &amp; Pentest Field Notes | Balhence</title>
+  <meta name="description" content="Bug bounty and pentest stories from private research notes. Five anonymized cases, synthetic HTTP examples, and the engineering lessons behind each finding.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/blogs.html">
+  <meta name="theme-color" content="#0c0c12">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="Bug Bounty &amp; Pentest Field Notes | Balhence">
+  <meta property="og:description" content="The story behind the finding. Five anonymized research notes with synthetic HTTP examples and practical engineering lessons.">
+  <meta property="og:url" content="https://balhence.com/blogs.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Balhence practical security research and engineering lessons">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Bug Bounty &amp; Pentest Field Notes | Balhence">
+  <meta name="twitter:description" content="The story behind the finding. Five anonymized research notes with synthetic HTTP examples and practical engineering lessons.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image:alt" content="Balhence practical security research and engineering lessons">
+  <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/motion.css?v=20260905c">
+  <link rel="stylesheet" href="/case-studies.css?v=20260905d">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": "https://balhence.com/blogs.html#collection",
+    "name": "Balhence bug bounty and pentest field notes",
+    "url": "https://balhence.com/blogs.html",
+    "description": "Five anonymized bug bounty and pentest stories generalized from private research notes, with synthetic HTTP examples, engineering lessons, and 25 regression checks. Observations have not been independently revalidated; proposed fixes are not claimed to be deployed.",
+    "datePublished": "2026-09-05",
+    "dateModified": "2026-09-05",
+    "inLanguage": "en",
+    "isPartOf": { "@id": "https://balhence.com/#website" },
+    "about": { "@id": "https://balhence.com/#organization" },
+    "hasPart": [
+      { "@type": "Article", "headline": "The draft you could change but could not read", "url": "https://balhence.com/insights/draft-write-authorization.html", "articleSection": "Authorization", "datePublished": "2026-09-05" },
+      { "@type": "Article", "headline": "When two browsers inherited one cart", "url": "https://balhence.com/insights/session-authority-boundary.html", "articleSection": "Sessions", "datePublished": "2026-09-05" },
+      { "@type": "Article", "headline": "When the cache forgot who a response belonged to", "url": "https://balhence.com/insights/private-response-cache-boundary.html", "articleSection": "Caching", "datePublished": "2026-09-05" },
+      { "@type": "Article", "headline": "When a validation helper became a data query", "url": "https://balhence.com/insights/server-owned-validation-rules.html", "articleSection": "Validation", "datePublished": "2026-09-05" },
+      { "@type": "Article", "headline": "Submitted is not the same as verified", "url": "https://balhence.com/insights/evidence-gated-workflows.html", "articleSection": "Workflows", "datePublished": "2026-09-05" }
+    ]
+  }
+  </script>
+</head>
+<body class="case-hub" data-page="insights">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights" aria-current="page">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+
+  <main id="main-content">
+    <section class="page-hero case-hub-hero" aria-labelledby="case-hub-title">
+      <div class="container" data-reveal>
+        <nav class="case-library-nav" aria-label="Reading collections"><a href="/blogs.html" aria-current="page">Field notes</a><a href="/blog.html">Practical guides <span aria-hidden="true">/</span></a></nav>
+        <span class="eyebrow">Balhence / research journal</span>
+        <h1 id="case-hub-title">Bug bounty notes.<br><span>The story behind <br>the finding.</span></h1>
+        <p>A draft that would not open. A cart that looked familiar. A response in the wrong place. Bug bounty and pentest stories, from the first odd detail to the boundary it revealed.</p>
+        <div class="case-hub-summary"><span><strong>01 - 05</strong> published notes</span><span><strong>HTTP</strong> synthetic examples</span><span>Updated <time datetime="2026-09-05">05 Sep 2026</time></span></div>
+      </div>
+    </section>
+
+    <section class="section case-library" aria-labelledby="case-library-title">
+      <div class="container">
+        <aside class="case-editorial case-editorial-hub" aria-labelledby="case-editorial-title">
+          <strong id="case-editorial-title">A note on the notes</strong>
+          <p>Adapted from private research notes. Identities, routes, and data have been removed or replaced. HTTP examples are synthetic illustrations, not original captures. Observations have not been independently revalidated; proposed fixes are not claimed to be deployed.</p>
+        </aside>
+
+        <div class="case-library-heading"><div><span class="eyebrow">The notebook / 5 entries</span><h2 id="case-library-title">Follow the finding.</h2></div><p>The observation, the HTTP context,<br>and five regression checks for each case.</p></div>
+
+        <div class="case-controls" data-case-controls hidden>
+          <div class="case-search-row"><label class="case-search-label" for="case-search">Search the notebook<input id="case-search" data-case-search type="search" placeholder="Search topic or observation" autocomplete="off" aria-controls="case-grid"></label><button class="case-reset" type="button" data-case-reset>Reset filters</button></div>
+          <div class="case-filter-list" role="group" aria-label="Filter by topic">
+            <button type="button" data-case-filter="all" aria-pressed="true" aria-controls="case-grid">All topics</button>
+            <button type="button" data-case-filter="authorization" aria-pressed="false" aria-controls="case-grid">Authorization</button>
+            <button type="button" data-case-filter="sessions" aria-pressed="false" aria-controls="case-grid">Sessions</button>
+            <button type="button" data-case-filter="caching" aria-pressed="false" aria-controls="case-grid">Caching</button>
+            <button type="button" data-case-filter="validation" aria-pressed="false" aria-controls="case-grid">Validation</button>
+            <button type="button" data-case-filter="workflows" aria-pressed="false" aria-controls="case-grid">Workflows</button>
+          </div>
+          <p class="case-result-count" data-case-count role="status" aria-live="polite" aria-atomic="true">Showing 5 case studies</p>
+        </div>
+
+        <div class="case-grid" id="case-grid">
+          <article class="case-card case-card-featured" data-case-card data-topic="authorization">
+            <a class="case-card-link" href="/insights/draft-write-authorization.html" aria-labelledby="draft-title">
+              <div class="case-feature-copy"><div class="case-card-meta"><span class="case-topic"><span class="case-file">01 /</span> Authorization</span><span>Featured note</span></div><h3 id="draft-title">The draft you could change but could not read</h3><p>The read route said no. A separate write route accepted a change. The detail that turned a blocked draft into a question about object ownership, queued work, and where permission actually gets checked.</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>6 min read</span></div></div>
+              <div class="case-boundary-note" aria-hidden="true"><span class="case-note-label">Notebook 001 / the contradiction</span><div><span>Read policy</span><strong>Access denied</strong></div><div><span>Write policy</span><strong>Change accepted</strong></div><p>Same draft.<br>Two different decisions.</p><span class="case-note-rule"></span></div>
+            </a>
+          </article>
+
+          <article class="case-card" data-case-card data-topic="sessions">
+            <a class="case-card-link" href="/insights/session-authority-boundary.html" aria-labelledby="sessions-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">02 /</span> Sessions</span><span>6 min read</span></div><h3 id="sessions-title">When two browsers inherited one cart</h3><p>A fresh browser should have meant a fresh cart. Familiar contents raised a different question: when had a client value become authority the server was willing to trust?</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>5 regression checks</span></div></a>
+          </article>
+
+          <article class="case-card" data-case-card data-topic="caching">
+            <a class="case-card-link" href="/insights/private-response-cache-boundary.html" aria-labelledby="caching-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">03 /</span> Caching</span><span>6 min read</span></div><h3 id="caching-title">When the cache forgot who a response belonged to</h3><p>The origin knew a response was private. A shared delivery layer reused it anyway. Following that response meant looking beyond the application to the decisions made at the edge.</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>5 regression checks</span></div></a>
+          </article>
+
+          <article class="case-card" data-case-card data-topic="validation">
+            <a class="case-card-link" href="/insights/server-owned-validation-rules.html" aria-labelledby="validation-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">04 /</span> Validation</span><span>6 min read</span></div><h3 id="validation-title">When a validation helper became a data query</h3><p>A small form check knew more than it needed to. The investigation followed the point where a supplied value stopped being data and began choosing application policy.</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>5 regression checks</span></div></a>
+          </article>
+
+          <article class="case-card" data-case-card data-topic="workflows">
+            <a class="case-card-link" href="/insights/evidence-gated-workflows.html" aria-labelledby="workflows-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">05 /</span> Workflows</span><span>6 min read</span></div><h3 id="workflows-title">Submitted is not the same as verified</h3><p>The submission succeeded. The required evidence was another matter. A workflow story about what a success response establishes, and what the server still needs to prove.</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>5 regression checks</span></div></a>
+          </article>
+        </div>
+
+        <div class="case-empty" data-case-empty hidden><h3>No case studies match these filters.</h3><p>Try a broader search or reset the filters above to see all five stories.</p></div>
+        <div class="case-guides-link"><p>Planning an assessment or reviewing a report?</p><a class="text-link" href="/blog.html">Explore our practical guides</a></div>
+      </div>
+    </section>
+
+    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Apply the lessons</span><h2>Which boundaries<br>does your product rely on?</h2><p>Explore our security testing services or talk through the roles, data, and workflows that matter to your team.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/services.html" data-track="case_studies_services">Explore services <i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></a><a class="btn btn-quiet" href="/contact.html" data-track="case_studies_contact">Talk to us</a></div></div></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Guides</a></li><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260905c"></script><script src="/motion.js?v=20260905c"></script><script src="/case-studies.js?v=20260905c"></script>
+</body>
+</html>

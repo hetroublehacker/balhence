@@ -13,6 +13,13 @@
     const handoff = document.querySelector("[data-scope-brief-handoff]");
     if (!form || !shell || !handoff) return;
 
+    // An explicit service choice must not inherit an unrelated web/API brief.
+    // Leave it saved so returning to the planner handoff still works.
+    const requestedService = new URLSearchParams(window.location.search).get("service");
+    const serviceControl = form.elements.namedItem("service");
+    const knownService = serviceControl && Array.from(serviceControl.options).some((option) => option.value === requestedService);
+    if (requestedService && requestedService !== "web-api" && knownService) return;
+
     const stored = readTransferredBrief();
     if (!stored.found) return;
 
@@ -52,7 +59,7 @@
     if (submit) {
       const arrow = document.createElement("span");
       arrow.setAttribute("aria-hidden", "true");
-      arrow.textContent = "→";
+      arrow.className = "ui-icon ui-icon-arrow";
       submit.replaceChildren(document.createTextNode("Send brief for scope review "), arrow);
     }
 
@@ -84,7 +91,7 @@
     let payload;
     try { payload = JSON.parse(raw); } catch (error) {
       removeInvalidTransfer();
-      return { found: true, reason: "The transferred scope brief could not be read. Continue with the form or rebuild the brief." };
+      return { found: true, reason: "We couldn't open your saved brief. You can fill in this form or return to the planner and create it again." };
     }
 
     const expiresAt = Date.parse(payload && payload.expiresAt);
@@ -99,12 +106,12 @@
 
     if (!valid) {
       removeInvalidTransfer();
-      return { found: true, reason: "The transferred scope brief was incomplete. Continue with the form or rebuild the brief." };
+      return { found: true, reason: "Your saved brief is missing some details. You can fill in this form or create a new brief in the planner." };
     }
 
     if (expiresAt <= Date.now()) {
       removeInvalidTransfer();
-      return { found: true, reason: "The transferred scope brief expired after two hours. Continue with the form or rebuild it to attach a current version." };
+      return { found: true, reason: "Your brief expired after two hours. You can create it again in the planner or fill in this form." };
     }
 
     return { found: true, value: payload };

@@ -1,85 +1,90 @@
-# Balhence website
+# Balhence
 
-Fast, static-first marketing site with a browser-based pentest scope planner, an interactive synthetic report explorer, a capability-gated 3D process story, consent-gated analytics, and a Formspree enquiry handoff. It has no framework, package install, build step, database, or server-side runtime.
+A minimal, animated website for AI-native cybersecurity, research, and security engineering. Static HTML, CSS, and JavaScript; no application framework or runtime package installation.
 
-## Run locally
-
-From this directory:
+## Preview
 
 ```bash
 python3 serve.py --port 8000
 ```
 
-Open **http://127.0.0.1:8000/**.
+Open http://127.0.0.1:8000/. The preview serves only public assets, blocks internal folders and symlinks, and sends real 404 responses. It uses plain HTTP.
 
-The preview server speaks plain HTTP. Do not open `https://127.0.0.1:8000/`. Log lines beginning with binary bytes such as `\x16\x03\x01` and “Bad request version” mean a browser or proxy sent a TLS/HTTPS handshake to the HTTP-only server.
+This directory is the main website. The existing nested `website/`, `website-tools/`, and `website-backups/` copies are preserved and excluded from publishing. The working collateral toolkit is the sibling `../website-tools/`.
 
-Use `serve.py` instead of raw `python3 -m http.server`. The raw server can expose `.git`, internal documents, build tools, dotfiles, symlinks, and directory listings when it is bound to a public interface. The repository-locked preview serves the exact public-file allowlist from `build_public.py`, sends the custom 404 with a real 404 status, adds defensive headers, and disables caching so an older stylesheet cannot mask a current fix.
+## Experience
 
-For a trusted LAN only:
+- Minimal homepage with staged typography, an animated SVG trust boundary, three interactive evidence states, tool previews, scroll reveals, and a sticky engagement story.
+- Twelve security capability areas, with cross-disciplinary and specialist enquiries routed to a tailored scope review. AI-native positioning retains human ownership, agreed data use, and explicit project boundaries.
+- A dedicated Blog at `/blogs.html` with five anonymized research case studies, local search/topic filters, and 25 illustrative defensive regression cases. Existing preparation and procurement guides remain at `/blog.html`.
+- Animation pauses while the demo is offscreen or the tab is hidden. Visitors can pause it, and reduced-motion preferences are honored. Keyboard and touch controls work independently of animation.
+- Security project routing plus a six-step web/API scope planner with local draft resume, PDF export, and a reviewed handoff to the contact form. The estimator does not price or estimate specialist work.
+- Interactive synthetic report with executive, technical, remediation, and re-test views.
+- Accessible mobile navigation, editable analytics preferences, and enquiry timeout/retry handling.
+
+The homepage uses CSS and the Web Animations API; it does not fetch animation libraries, fonts, analytics, or other third-party resources on initial load. Supporting pages retain the existing progressive motion layer.
+
+## Main files
+
+| Files | Purpose |
+| --- | --- |
+| `index.html`, `home.css`, `home.js` | Homepage and animation |
+| `styles.css`, `app.js`, `config.js` | Shared design, navigation, forms, preferences |
+| `scope-builder.*`, `scope-pdf.js` | Local planning and PDF export |
+| `report-viewer.html`, `report-explorer.*` | Sample report explorer |
+| `contact.html`, `contact-brief.*` | Enquiries and scope handoff |
+| `services.html`, service pages, `insights/` | Service coverage and buyer guides |
+| `blogs.html`, `case-studies.*`, case-study articles in `insights/` | Redacted stories, progressive filtering, and defensive test ideas |
+| `build_public.py`, `serve.py`, `verify_site.py` | Publication boundary and validation |
+| `../website-tools/toolkit.py` | Local PDF and editable client-kit generation |
+
+## Data and configuration
+
+Public company information, the Formspree endpoint, and analytics ID live in `config.js`. Never place secrets in the browser bundle.
+
+Planner answers are stored under `balhence_scope_builder_v1`. A completed brief uses `balhence_scope_brief_v1` in session storage, expires after two hours, and is submitted only with the contact form. Failed storage or handoff is reported with copy/PDF recovery; resetting the planner clears saved drafts.
+
+Explicit service links preselect the matching enquiry category. Selecting a different service skips a saved web/API brief without deleting it, so the brief cannot silently override a specialist enquiry.
+
+Analytics stays off until acceptance and never loads on the planner, contact, or privacy pages. Visitors can change the choice through the footer. Homepage animation preference is stored as `balhence_motion_paused`.
+
+Form submissions require Formspree connectivity. Live form delivery has not been exercised during this upgrade; automated tests intercept submissions.
+
+## Verify and build
 
 ```bash
-python3 serve.py --port 8000 --bind 0.0.0.0
+python3 verify_site.py --preview
+python3 -m unittest discover -s tests -v
+python3 build_public.py --output _site
+python3 verify_site.py --root _site --artifact --preview
+python3 serve.py --directory _site --port 8000
 ```
 
-Then open `http://<this-machine-ip>:8000/`. Binding to `0.0.0.0` exposes the server on every interface; do not use the development server as an internet-facing production server. Use the host's HTTPS/CDN configuration for production.
+The builder requires a new output path and refuses overwrites. It publishes an exact allowlist; source files, tests, collateral, backups, and repository metadata stay outside the artifact.
 
-## Product flow
+Keep first-party text ASCII-only, including text written as HTML entities. Use CSS or SVG for decorative icons and plain punctuation for copy. The verifier checks this before publishing; vendor libraries, licenses, and binary assets are excluded.
 
-1. The homepage Scope Lab sends a categorical buying trigger to `scope-builder.html`.
-2. The six-step planner creates a deterministic Draft Scope Brief locally and exports it as a branded, selectable-text PDF. It is planning guidance, not a scan, risk score, quote, or authorization.
-3. Draft answers stay in this browser under `balhence_scope_builder_v1`.
-4. “Continue to a scope review” passes the generated brief through `sessionStorage` as `balhence_scope_brief_v1`; it expires after two hours.
-5. The contact page shows the brief for review and submits it only after the visitor completes and sends the form.
-6. `report-viewer.html` demonstrates the evidence model with synthetic data and retains the downloadable PDF.
+Case studies are generalized adaptations, not public vulnerability disclosures. Do not copy source reports, target identities, exact routes, payloads, credentials, personal data, or private evidence into the repository or public artifact. Synthetic implementation sketches and regression cases describe proposed defensive controls; they do not establish that a source issue has been fixed or independently reproduced. Source reports stay outside this project and outside the publication allowlist.
 
-Never add credentials, tokens, customer records, production vulnerability evidence, or confidential architecture to either public form.
+The bug-bounty-style HTTP notebooks are display-only reconstructions, not original captures. Use only reserved example hosts, invented `/redacted/` read-only paths, and explicit `[REDACTED]` credential placeholders. Label whether a response illustrates an observation, a baseline, or a proposed control. Tests check header redaction, HTTP framing, JSON bodies, and contained mobile scrolling.
 
-## Important files
+Optional browser regression suites require Playwright with Chromium installed:
 
-- `index.html`, `scope-lab.js`, `scope-lab.css`: homepage and interactive entry point
-- `services.html`, `web-application-penetration-testing.html`, `api-penetration-testing.html`: service hub and focused commercial coverage pages
-- `blog.html`, `insights/`: buyer guides for scope, cost, readiness, report quality, and human-validated AI use in VAPT
-- `scope-builder.html`, `scope-builder.js`, `scope-builder.css`: local scope-planning application
-- `scope-pdf.js`, `vendor/jspdf-4.2.1.umd.min.js`: client-side PDF layout and pinned PDF engine
-- `report-viewer.html`, `report-explorer.js`, `report-explorer.css`: synthetic evidence explorer
-- `contact.html`, `contact-brief.js`, `contact-brief.css`: manual and planner-assisted enquiry flows
-- `motion.js`, `motion.css`: progressive motion with reduced-motion and pointer safeguards
-- `experience.js`, `experience.css`: lazy homepage Three.js scene and GSAP scroll-linked report/process stories
-- `app.js`, `config.js`: navigation, forms, attribution, and consent-gated analytics
-- `sitemap.xml`, `robots.txt`, `.well-known/security.txt`, `.nojekyll`, `site.webmanifest`: discovery and platform metadata
-- `../website-tools/first-client-8-week-roadmap.md`: private first-client acquisition operating plan, kept outside the public repository
+```bash
+node tests/interaction-regression.cjs
+node tests/experience-regression.cjs
+node tests/capability-regression.cjs
+node tests/blog-regression.cjs
+```
 
-## Configuration
+They exercise local previews and block external traffic. GitHub Actions validates static pages, JavaScript syntax, build safeguards, and the release artifact before deployment; pull requests validate without deployment.
 
-`config.js` contains the public form endpoint, analytics property ID, and public company contact details. These values are intentionally client-readable. Do not put secrets in this file or anywhere in the browser bundle.
+## Publishing
 
-The form's direct HTML action is a progressive fallback. Form submission needs network access to Formspree; all other primary content and planning interactions work from a local static server.
+Set GitHub Pages source to **GitHub Actions** before pushing. Publish the generated artifact, never the repository root. No push or deployment was performed for this upgrade.
 
-The planner uses the locally vendored jsPDF 4.2.1 browser build under the MIT license. The homepage experience uses locally vendored Three.js 0.185.1 and GSAP 3.15.0 with ScrollTrigger. Version, integrity, source, license, and update notes are recorded in `vendor/README.md`. The advanced animation files are requested only on eligible desktops that approach the story; static content remains complete when they are not loaded.
+Use HTTPS and appropriate response headers in production. The preview demonstrates defensive headers; the production host must provide them. Confirm the configured origin, form delivery, and externally shared business claims before publishing.
 
-## Backups
+GitHub Pages alone cannot configure the full response-header policy. Use a suitable host or reverse proxy for a response-header CSP, `frame-ancestors 'none'`, and `X-Frame-Options: DENY` on HTML. Allow same-origin framing for `sample-vapt-report.pdf`, which the report viewer embeds. Add HSTS only after HTTPS is stable, plus `X-Content-Type-Options: nosniff`, a restrictive `Permissions-Policy`, and an appropriate `Referrer-Policy`.
 
-Backups live outside the repository so they cannot be deployed accidentally:
-
-- `/home/trouble/tools/website-backups/original-site-before-redesign`: exact archive of Git commit `d5178aae1392e92c3565225a553cf9911b9a276d`, before any redesign work
-- `/home/trouble/tools/website-backups/2026-08-21-pre-motion-ui`: completed static-first redesign immediately before the richer motion/application layer
-
-The original archive was verified file-for-file against the Git commit at capture time.
-
-## Before deployment
-
-- Before pushing this worktree, change **Pages > Build and deployment > Source** from branch publishing to **GitHub Actions**. A branch-root push can expose internal roadmaps and build tools before the allowlisted workflow runs.
-- Build the public artifact with `python3 build_public.py --output _site`. The command refuses an existing output and copies only the exact runtime allowlist.
-- The checked-in Pages workflow deploys `_site`; never publish the branch root, which also contains internal roadmaps and build tools.
-- Serve every page over HTTPS in production, but test local development over the exact `http://` URL.
-- Use a production host or reverse proxy that can set HTTP response headers. GitHub Pages cannot configure the full policy by itself. Mirror the page CSP as a response header; use `frame-ancestors 'none'` and `X-Frame-Options: DENY` for HTML, while allowing same-origin framing for `sample-vapt-report.pdf` because the report viewer embeds it. Add HSTS after HTTPS is stable, `X-Content-Type-Options: nosniff`, a restrictive `Permissions-Policy`, and an appropriate `Referrer-Policy`.
-- Confirm repository metadata, dotfiles, directory listings, source maps, backup folders, and unreviewed collateral are not present in the published artifact.
-- Verify `https://balhence.com/` is the real canonical origin before publishing.
-- Confirm the Formspree endpoint receives a controlled test enquiry.
-- Confirm analytics remains absent before consent and loads only after acceptance.
-- Check the homepage, planner, report explorer, contact handoff, privacy page, and 404 page at mobile and desktop widths.
-- Validate `sitemap.xml`, `site.webmanifest`, canonical links, structured data, and internal links.
-- Confirm `/.well-known/security.txt` and `/sitemap.xml` return HTTP 200 after deployment, then submit the sitemap in Google Search Console and Bing Webmaster Tools.
-- Publish and monitor a DMARC record for the sending domain, then move to an enforcement policy only after legitimate forwarding and outbound mail are verified. Review CAA and DNSSEC with the DNS provider as defense in depth.
-- Do not publish an identity, credential, client, testimonial, certification, metric, or availability claim unless it is current, permissioned, and independently verifiable.
+The original tracked website is recoverable from `/home/dollar/tools/balhence-upgrade-backup-TlLnHb/original-website.tar`. The pre-existing nested worktree, including its modified PDF, was left intact. The migrated sample PDF uses that worktree's committed version.

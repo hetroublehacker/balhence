@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Submitted Is Not the Same as Verified | Balhence Blog</title>
+  <meta name="description" content="An anonymized case about evidence-free workflow completion, server-owned state transitions, atomic submission, and five defensive regression tests.">
+  <meta name="author" content="Balhence">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/evidence-gated-workflows.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="Submitted is not the same as verified">
+  <meta property="og:description" content="When a workflow records completion without the evidence it requires, a status flag stops being a reliable contract.">
+  <meta property="og:url" content="https://balhence.com/insights/evidence-gated-workflows.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Balhence AI-native security, research, and engineering">
+  <meta property="article:published_time" content="2026-09-05">
+  <meta property="article:modified_time" content="2026-09-05">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Submitted is not the same as verified">
+  <meta name="twitter:description" content="A practical case study in evidence-gated state transitions and defensive regression testing.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/motion.css?v=20260905c">
+  <link rel="stylesheet" href="/case-studies.css?v=20260905d">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://balhence.com/insights/evidence-gated-workflows.html#article",
+        "headline": "Submitted is not the same as verified",
+        "description": "An anonymized workflow-integrity case with illustrative remediation and five defensive regression tests.",
+        "url": "https://balhence.com/insights/evidence-gated-workflows.html",
+        "mainEntityOfPage": "https://balhence.com/insights/evidence-gated-workflows.html",
+        "datePublished": "2026-09-05",
+        "dateModified": "2026-09-05",
+        "inLanguage": "en",
+        "author": { "@type": "Organization", "name": "Balhence", "url": "https://balhence.com/" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "image": "https://balhence.com/og-image.png",
+        "articleSection": "Anonymized case studies / Workflows",
+        "isPartOf": { "@id": "https://balhence.com/blogs.html" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://balhence.com/blogs.html" },
+          { "@type": "ListItem", "position": 3, "name": "Evidence-gated workflows", "item": "https://balhence.com/insights/evidence-gated-workflows.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights" class="case-study">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header>
+    <nav class="container nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
+      <div class="nav-menu" id="primary-menu" data-menu>
+        <ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul>
+        <a class="btn btn-primary" href="/scope-builder.html" data-nav="scope">Build your scope</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    </nav>
+  </header>
+  <main id="main-content">
+    <article>
+      <header class="article-hero">
+        <div class="container">
+          <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Workflows</span></nav>
+          <p class="case-kicker">Anonymized field report / 05</p>
+          <h1>Submitted is not the same as verified</h1>
+          <p class="article-deck">The completion screen looked convincing. The evidence record told a different story. This finding turned on one question: what did the server mean when it said the case was submitted?</p>
+          <div class="article-byline"><span>By Balhence</span><span>Written <time datetime="2026-09-05">5 September 2026</time></span><span>6 min read</span></div>
+        </div>
+      </header>
+      <div class="article-body"><div class="container article-layout">
+        <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#observation">The screen said done</a><a href="#http-notebook">The HTTP notebook</a><a href="#boundary">What the next system would believe</a><a href="#design">Make the evidence decide</a><a href="#implementation">The proposed submission gate</a><a href="#regression">Five checks before closure</a><a href="#operations">Look behind the status flag</a><a href="#lesson">The finding in one sentence</a></nav>
+        <div class="article-content">
+          <aside class="article-callout case-editorial" aria-label="Redaction and evidence limits"><p><strong>A learning case, not a live reproduction guide.</strong> Adapted from private research notes. Organizations, products, routes, identifiers, timings, and data have been removed or replaced. The observations have not been independently revalidated for this article. Code and test fixtures are synthetic; remediation is proposed, not claimed to be deployed or re-tested.</p></aside>
+          <dl class="case-facts"><div><dt>Boundary</dt><dd>Evidence before state</dd></div><div><dt>Observed</dt><dd>Incomplete case recorded as submitted</dd></div><div><dt>Not established</dt><dd>A positive decision or downstream access</dd></div></dl>
+
+          <h2 id="observation">The screen said done. The record disagreed.</h2>
+          <p>The interesting part was what wasn't there. A research-owned case had reached its ordinary completion screen, yet required supporting artifacts were missing. If this had only been a display error, the finding would have stopped at the interface.</p>
+          <p>It did not. The source notes also recorded a submitted state in authoritative server responses. The UI and the status flag agreed with each other; the evidence behind them did not. That comparison made the difference between a misleading progress bar and a broken submission rule.</p>
+          <p>The normal workflow was supposed to collect information and supporting material before moving the case forward. Recording progress without checking that material allowed the case to promise more than its stored data could support.</p>
+          <p>There was an equally important limit: submitted did not mean approved. The observation did not establish a favorable review decision, downstream access, or an effect on another person's account. The reportable result was the invalid submission state itself, not an assumed chain beyond it.</p>
+
+          <section id="http-notebook" aria-labelledby="http-notebook-title">
+              <h2 id="http-notebook-title">The HTTP notebook</h2>
+              <p>A read-only status check is where the inconsistency becomes easy to explain. This compact reconstruction puts the conflicting facts next to one another. The JSON names are invented editorial labels, not fields from the original system.</p>
+              <figure class="http-notebook">
+                <figcaption class="http-notebook-caption"><span class="http-notebook-label">Observation sketch / HTTP/1.1</span><span class="http-notebook-badge">SYNTHETIC + REDACTED</span></figcaption>
+                <div class="http-exchange">
+                  <div class="http-message"><h3>Read-only request</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic redacted HTTP request"><code>GET /redacted/review-status HTTP/1.1
+Host: research.example
+Cookie: session=[REDACTED]
+Accept: application/json
+
+</code></pre></div>
+                  <div class="http-message"><h3>Illustrative status summary</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic illustrative HTTP response"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: private, no-store
+Content-Length: 91
+
+{"submission":"recorded","required_evidence":"missing","review_decision":"not_established"}</code></pre></div>
+                </div>
+                <p class="http-notebook-note">Reconstructed for this article, not an original wire capture. The host uses the reserved .example namespace; paths, headers, and data are invented or redacted. Display only: no requests are sent.</p>
+              </figure>
+              <p>The response summarizes the documented inconsistency; it is not a verbatim capture. Requests that advanced the workflow are omitted. Nothing here establishes a positive review decision.</p>
+            </section>
+
+            <h2 id="boundary">What the next system would believe</h2>
+          <p>A submission flag is rarely consumed in isolation. A review queue, notification worker, or partner integration may interpret it as a promise that required capture has finished. If each consumer has to rediscover whether the evidence exists, the status is not a reliable contract.</p>
+          <p>The missing invariant is simple: every required artifact must exist, belong to this case, be finalized, and satisfy the configured capture prerequisites before submission can be recorded. A successful upload request is not enough if its background processing is still pending. An artifact identifier is not enough if it belongs to a different case.</p>
+          <p>There is a second boundary too. <em>Ready for review</em> and <em>review passed</em> are different facts. Completing capture must not manufacture a favorable decision. The decision should have its own authority, inputs, and audit trail.</p>
+
+          <h2 id="design">Make the evidence decide</h2>
+          <p>A safer design lets the client request an action while the server decides whether its prerequisites hold. Requirements come from a server-owned workflow version. Evidence comes from the authoritative artifact store. Neither is taken from a client's statement that a step is complete.</p>
+          <p>For the final transition, evaluate the prerequisites against one consistent snapshot. Store that evidence revision with the submission record. If evidence can be removed, replaced, or invalidated later, define how that affects an existing submission instead of leaving the state silently inconsistent.</p>
+          <p>The state change and its notification should also agree. A transaction with an outbox can commit the submission and an event record together; a worker publishes the event afterward. Consumers still need idempotency because event delivery can repeat. Publishing first and hoping the database update succeeds creates a different version of the same broken promise.</p>
+
+          <h2 id="implementation">The proposed submission gate</h2>
+          <p>This framework-neutral pseudocode describes the proposed control, not the affected implementation. All names are invented. The lock, evidence reads, update, and outbox insertion need equivalent consistency guarantees in the real storage design.</p>
+          <pre class="case-code" tabindex="0" aria-label="Illustrative defensive pseudocode"><code>function submit_for_review(actor, case_id, expected_revision):
+    transaction:
+        case = load_case_for_update(case_id)
+        require permitted(actor, "submit", case)
+        require case.revision == expected_revision
+        require case.state == "collecting"
+        policy = load_server_owned_policy(case.policy_version)
+        evidence = load_finalized_evidence(case.id)
+        require every_requirement_satisfied(policy, evidence)
+        require every_item_belongs_to(case.id, evidence)
+        save_submission(case, evidence.revision)
+        outbox.record_once(case.id, "ready_for_review")
+    return submission_receipt(case.id)
+
+# A review decision is made by a separate authorized process.
+# This operation does not set a positive decision.</code></pre>
+          <p>A production implementation also needs a defined retry contract. An already-completed request should return its existing receipt or a documented conflict, without adding a second submission. A stale request must not silently apply itself to a newer evidence set.</p>
+
+          <h2 id="regression">Five checks before closure</h2>
+          <p>Run these against local service fixtures and a test database, with event delivery captured by a stub. They specify how the repaired design should behave; they are not requests to send to a third-party service. For every rejected operation, compare the case, evidence links, and event outbox before and after.</p>
+          <div class="scope-table-wrap" role="region" tabindex="0" aria-labelledby="case-tests-caption"><table class="scope-table"><caption id="case-tests-caption">Evidence-gate regression cases using synthetic fixtures</caption><thead><tr><th>Case</th><th>Fixture and action</th><th>Required assertion</th></tr></thead><tbody>
+            <tr><td>W01 / Missing evidence</td><td>Create a local case with one required artifact absent. Call the submission service as its authorized owner.</td><td>Validation fails. State, submission records, and outbound events remain unchanged.</td></tr>
+            <tr><td>W02 / Invalid attachment</td><td>Supply a fixture with a foreign-owned or still-processing artifact in the evidence set.</td><td>Neither variant satisfies the requirement. No submission receipt is created.</td></tr>
+            <tr><td>W03 / Valid capture</td><td>Finalize all required local artifacts and submit their current revision.</td><td>Exactly one submission records that revision. The review decision remains unset.</td></tr>
+            <tr><td>W04 / Duplicate delivery</td><td>Repeat the completed service operation in the test harness.</td><td>The documented retry result is returned. No duplicate submission or logical notification appears.</td></tr>
+            <tr><td>W05 / Stale revision</td><td>Use a deterministic fixture that changes evidence between preparation and commit.</td><td>The stale transition conflicts or reevaluates safely. It cannot certify an obsolete evidence snapshot.</td></tr>
+          </tbody></table></div>
+
+          <h2 id="operations">Look behind the status flag</h2>
+          <p>Repairing the gate does not explain records created before the repair. An authorized internal consistency check can flag submitted cases without their required evidence revision. Those cases need review; a missing artifact alone does not prove malicious activity, since retention, processing failures, and migrations can also create discrepancies.</p>
+          <p>Keep operational signals small and useful: case references, policy versions, rejection reasons, and event identifiers. Do not put supporting files or personal data into routine logs. Track failed prerequisite checks separately from ordinary retries so legitimate network recovery does not look like an integrity incident.</p>
+
+          <h2 id="lesson">The finding in one sentence</h2>
+          <p>The durable lesson is not to make the progress bar stricter. It is to make the state transition true. Submission should mean the server verified its capture prerequisites. Approval should mean an authorized decision process completed its work. Each downstream consumer should know exactly which promise it is relying on.</p>
+          <div class="article-callout"><p><strong>Related case:</strong> <a href="/insights/draft-write-authorization.html">The draft you could change but could not read</a> looks at a different integrity boundary: ensuring that asynchronous writes preserve the authorization checked at the start.</p></div>
+          <section class="article-cta" aria-labelledby="case-cta-title"><h2 id="case-cta-title">What does your workflow promise?</h2><p>We can help your team review the state, evidence, and authorization rules behind a critical process.</p><a class="btn btn-primary" href="/contact.html?service=custom">Talk through your workflow</a><p><a href="/blogs.html">All case studies</a> | <a href="/blog.html">Practical guides</a></p></section>
+        </div>
+      </div></div>
+    </article>
+  </main>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Practical guides</a></li><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Say hello</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script>
+  <script src="/app.js?v=20260905c"></script>
+  <script src="/motion.js?v=20260905c"></script>
+</body>
+</html>

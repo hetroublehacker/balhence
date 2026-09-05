@@ -686,7 +686,18 @@
   background: var(--lime);
   border-color: var(--lime-strong);
   box-shadow: inset 0 0 0 4px var(--lime);
-  content: "✓";
+  content: "";
+}
+
+.sb-choice input:checked + .sb-choice-content::after {
+  position: absolute;
+  top: 23px;
+  left: 21px;
+  width: 11px;
+  height: 11px;
+  content: "";
+  background: var(--night);
+  clip-path: polygon(7% 43%, 35% 70%, 86% 12%, 97% 23%, 36% 93%, 0 55%);
 }
 
 .sb-choice input:focus-visible + .sb-choice-content,
@@ -866,7 +877,18 @@
 .sb-readiness-list input:checked + span::before {
   background: var(--lime);
   border-color: var(--lime-strong);
-  content: "✓";
+  content: "";
+}
+
+.sb-readiness-list input:checked + span::after {
+  position: absolute;
+  top: 20px;
+  left: 19px;
+  width: 10px;
+  height: 10px;
+  content: "";
+  background: var(--night);
+  clip-path: polygon(7% 43%, 35% 70%, 86% 12%, 97% 23%, 36% 93%, 0 55%);
 }
 
 .sb-field-error {

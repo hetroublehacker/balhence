@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The draft you could change but could not read | Balhence</title>
+  <meta name="description" content="An anonymized case study of inconsistent draft authorization, with proposed write-policy design and five local regression checks for a corrected application.">
+  <meta name="author" content="Balhence">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/draft-write-authorization.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="The draft you could change but could not read">
+  <meta property="og:description" content="How a protected read and an unauthorized write exposed an inconsistent draft policy, and what a durable engineering fix should preserve.">
+  <meta property="og:url" content="https://balhence.com/insights/draft-write-authorization.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Balhence application security case study">
+  <meta property="article:published_time" content="2026-09-05">
+  <meta property="article:modified_time" content="2026-09-05">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The draft you could change but could not read">
+  <meta name="twitter:description" content="An anonymized authorization failure, proposed secure design, and local regression invariants.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image:alt" content="Balhence application security case study">
+  <link rel="icon" href="../favicon.svg?v=20260905c" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="stylesheet" href="../styles.css?v=20260905c">
+  <link rel="stylesheet" href="/motion.css?v=20260905c">
+  <link rel="stylesheet" href="/case-studies.css?v=20260905d">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://balhence.com/#organization",
+        "name": "Balhence",
+        "url": "https://balhence.com/",
+        "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.svg", "width": 512, "height": 512 }
+      },
+      {
+        "@type": "Article",
+        "@id": "https://balhence.com/insights/draft-write-authorization.html#article",
+        "headline": "The draft you could change but could not read",
+        "description": "An anonymized draft authorization case study with illustrative engineering examples and local regression invariants.",
+        "url": "https://balhence.com/insights/draft-write-authorization.html",
+        "mainEntityOfPage": "https://balhence.com/insights/draft-write-authorization.html",
+        "datePublished": "2026-09-05",
+        "dateModified": "2026-09-05",
+        "inLanguage": "en",
+        "author": { "@id": "https://balhence.com/#organization" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "image": "https://balhence.com/og-image.png",
+        "articleSection": "Anonymized case study"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/draft-write-authorization.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://balhence.com/blogs.html" },
+          { "@type": "ListItem", "position": 3, "name": "The draft you could change but could not read", "item": "https://balhence.com/insights/draft-write-authorization.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights" class="case-study">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header>
+    <nav class="container nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="../" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
+      <div class="nav-menu" id="primary-menu" data-menu>
+        <ul class="nav-links">
+          <li><a href="../services.html" data-nav="services">Services</a></li>
+          <li><a href="../about.html" data-nav="about">Approach</a></li>
+          <li><a href="/blogs.html" data-nav="insights" aria-current="page">Blog</a></li>
+          <li><a href="/contact.html" data-nav="contact">Contact</a></li>
+        </ul>
+        <a class="btn btn-primary" href="../scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    </nav>
+  </header>
+  <main id="main-content">
+    <article>
+      <header class="article-hero">
+        <div class="container">
+          <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Anonymized field report</span></nav>
+          <h1>The draft you could change but could not read</h1>
+          <p class="article-deck">The read was denied. The write persisted. An owner's view of the changed draft gave a permission mismatch a concrete consequence.</p>
+          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>6 min read</span><span>Illustrative engineering examples</span></div>
+        </div>
+      </header>
+      <div class="article-body">
+        <div class="container article-layout">
+          <nav class="article-toc" aria-label="On this page">
+            <strong>On this page</strong>
+            <a href="#evidence">A denied read, a changed draft</a>
+            <a href="#http-notebook">The HTTP notebook</a><a href="#meaning">What the owner's check established</a>
+            <a href="#policy">Put the check where the draft changes</a>
+            <a href="#workers">Follow the change into background work</a>
+            <a href="#regression">Five checks before calling it fixed</a>
+            <a href="#closure">What a retest still needs to show</a>
+          </nav>
+          <div class="article-content">
+            <aside class="article-callout" aria-label="Redaction and evidence limits">
+              <p><strong>Redaction and limits:</strong> Adapted from private research notes. Organizations, products, identifiers, routes, and data have been removed or replaced. The examples are synthetic; pseudocode describes proposed design, not the original implementation. Source observations have not been independently revalidated, and proposed fixes are not confirmed deployed.</p>
+            </aside>
+            <dl class="case-facts">
+              <div><dt>Boundary</dt><dd>Account to draft</dd></div>
+              <div><dt>Observed effect</dt><dd>Unauthorized draft changes</dd></div>
+              <div><dt>Engineering focus</dt><dd>Object and action authorization</dd></div>
+            </dl>
+
+            <h2 id="evidence">A denied read, a changed draft</h2>
+            <p>The account could not read the draft, but it could change its contents. That contradiction is the starting point of the source report: a read restriction held while a separate write path crossed the same ownership boundary.</p>
+            <p>The baseline involved two controlled accounts. One owned the draft; the other had no permission to read it. The denied read matched that relationship. Unfinished work still belonged to its owner, regardless of whether the draft had reached a consequential step in the workflow.</p>
+            <p>The decisive observation came from the owner's side. After the separate write, the owner independently saw the changed contents. That check established that the change had been stored. A second operation affecting ordering showed another inconsistency in how draft changes were authorized.</p>
+            <p>The report therefore supported a specific finding: the tested non-owner could alter another controlled account's draft. The draft identifier was already known. The observations did not demonstrate discovery of unknown identifiers, and no completed, sent, or signed downstream event was established.</p>
+
+            <section id="http-notebook" aria-labelledby="http-notebook-title">
+              <h2 id="http-notebook-title">The HTTP notebook</h2>
+              <p>The denied read was the useful baseline. It showed that the unrelated account should not have access to the draft. The later state change described above is the finding; this notebook illustrates the read control, not the separate mutation.</p>
+              <figure class="http-notebook">
+                <figcaption class="http-notebook-caption"><span class="http-notebook-label">Baseline control / HTTP/1.1</span><span class="http-notebook-badge">SYNTHETIC + REDACTED</span></figcaption>
+                <div class="http-exchange">
+                  <div class="http-message"><h3>Read-only request</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic redacted HTTP request"><code>GET /redacted/draft HTTP/1.1
+Host: research.example
+Cookie: session=[REDACTED]
+Accept: application/json
+
+</code></pre></div>
+                  <div class="http-message"><h3>Illustrative denied read</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic illustrative HTTP response"><code>HTTP/1.1 403 Forbidden
+Content-Type: application/json
+Cache-Control: private, no-store
+Content-Length: 25
+
+{"error":"access_denied"}</code></pre></div>
+                </div>
+                <p class="http-notebook-note">Reconstructed for this article, not an original wire capture. The host uses the reserved .example namespace; paths, headers, and data are invented or redacted. Display only: no requests are sent.</p>
+              </figure>
+              <p>A response code alone would not prove the write-side failure. The owner's independent view of changed state supplied that part of the evidence.</p>
+            </section>
+
+            <h2 id="meaning">What the owner's check established</h2>
+            <p>The owner's observation gave the finding its weight. A success response alone would have left open whether anything changed; the stored edit answered that question. The denied read answered a different question, about a different action. Reading, editing, rearranging, and progressing a draft each need a permission decision connecting the acting account to the specific object and requested action.</p>
+            <p>Authentication answers who is making the request. A valid anti-CSRF check supports the request's connection to the current browser session. Neither answers whether that account may change this draft. A request can satisfy both controls while crossing an ownership boundary.</p>
+            <p>The two successful mutation types suggest inconsistent authorization coverage. They do not identify a particular missing function or prove the structure of the underlying code. The design diagnosis is that the effective write policy did not enforce the same ownership boundary as the read policy.</p>
+            <p>The demonstrated consequence was loss of draft integrity. Later workflow effects would depend on product rules, review requirements, and further permissions. Those possibilities can inform engineering review without being reported as events that occurred.</p>
+
+            <h2 id="policy">Put the check where the draft changes</h2>
+            <p>A proposed fix is a centralized, deny-by-default decision for every write action. The server should derive the principal from its authenticated context, resolve the draft within the appropriate account or tenant boundary, and evaluate explicit permission for the requested action. An object reference identifies what to evaluate; it grants no authority by itself.</p>
+            <p>Ownership is not always the whole rule. Some applications legitimately support shared editors. The policy should express that relationship deliberately and distinguish it from a viewer role. A fix that rejects every non-owner can break valid collaboration while leaving less obvious write paths unexamined.</p>
+            <p>The following illustrative engineering example describes a policy boundary. It is not source code from the assessed application.</p>
+            <pre class="case-code" tabindex="0" aria-label="Illustrative defensive pseudocode"><code>within transaction:
+    actor = authenticated_server_context()
+    draft = load_and_lock_scoped_draft(actor, reference)
+    require policy.allows(actor, EDIT, draft)
+    require every_child_belongs_to(draft, proposed_change)
+    require transition_is_valid(draft, proposed_change)
+    apply_change(draft, proposed_change)
+    record_audit_event(actor, draft, EDIT)</code></pre>
+            <p>Authorization, child validation, and state checks belong before persistence. A rejected operation should leave contents, ordering, version, and pending work unchanged. The audit record may record a denial, but denial must not partly apply the requested edit.</p>
+
+            <h2 id="workers">Follow the change into background work</h2>
+            <p>A draft often contains child objects such as sections or attachments. Checking the parent alone is insufficient when a mutation also references children. Every referenced child must belong to the authorized parent and satisfy any additional policy; valid objects from different owners cannot be combined merely because each exists.</p>
+            <p>If processing continues in a background worker, the authorization boundary must survive that handoff. Queue access or a worker's service identity should not silently substitute for the initiating account's authority. A server-created work item should bind the verified principal, resource, and permitted action, with fresh policy evaluation when the worker applies its result.</p>
+            <p>Changed ownership, removed sharing, and invalid draft state can invalidate work that was acceptable when queued. The worker should reject an attachment or update when that binding no longer holds. These are proposed design considerations, not evidence that a particular queue or worker caused the observed finding.</p>
+
+            <h2 id="regression">Five checks before calling it fixed</h2>
+            <p>These local tests use synthetic fixtures in a corrected application. They assert policy and stored state, so a changed response message alone cannot satisfy them.</p>
+            <div class="scope-table-wrap" role="region" aria-labelledby="draft-tests-caption" tabindex="0">
+              <table class="scope-table">
+                <caption id="draft-tests-caption">Local regression checks for the proposed draft policy</caption>
+                <thead><tr><th scope="col">Fixture</th><th scope="col">Local action</th><th scope="col">Required assertions</th></tr></thead>
+                <tbody>
+                  <tr><td>Unrelated account and owned draft</td><td>Exercise the edit policy with the unrelated principal.</td><td>Denied; contents, ordering, version, and queued work remain unchanged.</td></tr>
+                  <tr><td>Draft with an explicitly shared editor</td><td>Save a permitted change through the application service.</td><td>Allowed; only the intended draft changes and the editor is attributed.</td></tr>
+                  <tr><td>Authorized parent with a foreign child fixture</td><td>Validate a change that includes the mismatched child.</td><td>The complete change is rejected; neither object is modified.</td></tr>
+                  <tr><td>Queued work whose editor permission was removed</td><td>Run the local worker after revoking the grant.</td><td>Fresh policy denies application; the principal and resource binding is retained.</td></tr>
+                  <tr><td>Shared viewer with read-only access</td><td>Read the fixture and evaluate each draft mutation action.</td><td>Reading remains allowed; every mutation is denied without state changes.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="closure">What a retest still needs to show</h2>
+            <p>Closure would need evidence from a corrected build that all relevant write paths apply the policy, including ordering, child changes, and any deferred processing. Positive collaboration checks matter alongside denials. This article proposes that verification; it does not claim that a fix has been retested.</p>
+            <p>The transferable lesson is to review authority at the point where state changes. A protected screen and a protected read are useful controls, but the stored draft depends on every mutation making its own complete authorization decision.</p>
+            <div class="article-callout"><p><strong>Related case:</strong> <a href="/insights/session-authority-boundary.html">When two browsers inherited one cart</a> examines how navigation state became session authority. For planning and reporting advice, browse the <a href="/blog.html">Guides</a>.</p></div>
+            <section class="article-cta" aria-labelledby="article-cta-title">
+              <h2 id="article-cta-title">Review the boundaries in your workflow</h2>
+              <p>Discuss account roles, shared resources, and background processing with our team.</p>
+              <a class="btn btn-primary" href="/contact.html" data-track="article_draft_authorization_contact">Discuss your application <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
+            </section>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div>
+        <div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="../services.html">Services</a></li><li><a href="../about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div>
+        <div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Guides</a></li><li><a href="../scope-builder.html">Scope planner</a></li><li><a href="../report-viewer.html">Sample report</a></li><li><a href="../privacy.html">Privacy</a></li></ul></div>
+        <div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div>
+    </div>
+  </footer>
+  <script src="../config.js?v=20260905c"></script>
+  <script src="../app.js?v=20260905c"></script>
+  <script src="/motion.js?v=20260905c"></script>
+</body>
+</html>

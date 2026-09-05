@@ -6,8 +6,9 @@ from __future__ import annotations
 import argparse
 import os
 import shutil
+import stat
 import tempfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 
 SOURCE_ROOT = Path(__file__).resolve().parent
@@ -20,6 +21,9 @@ PUBLIC_FILES = (
     "api-penetration-testing.html",
     "app.js",
     "blog.html",
+    "blogs.html",
+    "case-studies.css",
+    "case-studies.js",
     "config.js",
     "contact-brief.css",
     "contact-brief.js",
@@ -28,10 +32,17 @@ PUBLIC_FILES = (
     "experience.css",
     "experience.js",
     "favicon.svg",
+    "home.css",
+    "home.js",
     "index.html",
     "insights/ai-native-penetration-testing-human-validated.html",
+    "insights/draft-write-authorization.html",
+    "insights/evidence-gated-workflows.html",
     "insights/how-to-scope-web-api-pentest.html",
+    "insights/private-response-cache-boundary.html",
     "insights/saas-vapt-readiness-checklist.html",
+    "insights/server-owned-validation-rules.html",
+    "insights/session-authority-boundary.html",
     "insights/web-api-pentest-cost-scope-guide.html",
     "insights/what-good-pentest-report-includes.html",
     "logo.svg",
@@ -78,6 +89,9 @@ def resolve_output(value: Path) -> Path:
     output = value.expanduser()
     if not output.is_absolute():
         output = SOURCE_ROOT / output
+    # Check the lexical path before resolve() can hide a dangling link.
+    if any(part.is_symlink() for part in (output, *output.parents)):
+        raise SystemExit("error: output cannot contain a symbolic link")
     output = output.resolve(strict=False)
 
     forbidden = {Path("/"), Path.home().resolve(), SOURCE_ROOT}
@@ -87,35 +101,61 @@ def resolve_output(value: Path) -> Path:
         raise SystemExit(f"error: output already exists; choose a new empty path: {output}")
     if SOURCE_ROOT in output.parents:
         relative = output.relative_to(SOURCE_ROOT)
-        if relative.parts and relative.parts[0] in {".git", ".github", "vendor", "insights", ".well-known"}:
+        if relative.parts and relative.parts[0] in {
+            ".git", ".github", "vendor", "insights", ".well-known", "tests",
+            "website", "website-tools", "website-backups",
+        }:
             raise SystemExit("error: output cannot replace a source or repository directory")
     return output
 
 
-def validate_sources() -> None:
+def public_source(root: Path, relative: str) -> Path:
+    """Resolve one allowlisted regular file without following any symlink."""
+    public_path = PurePosixPath(relative)
+    if (
+        not relative or public_path.is_absolute() or ".." in public_path.parts
+        or public_path.as_posix() != relative or "\\" in relative
+    ):
+        raise ValueError(f"invalid public asset path: {relative}")
+    current = root
+    for part in public_path.parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(f"linked public asset or parent directory: {relative}")
+    if not stat.S_ISREG(current.stat().st_mode):
+        raise ValueError(f"public asset is not a regular file: {relative}")
+    current.resolve().relative_to(root.resolve())
+    return current
+
+
+def validate_sources(root: Path | None = None) -> None:
+    root = SOURCE_ROOT if root is None else root
     if len(PUBLIC_FILES) != len(PUBLIC_FILE_SET):
         raise SystemExit("error: duplicate path in PUBLIC_FILES")
     for relative in PUBLIC_FILES:
-        path = SOURCE_ROOT / relative
-        if path.is_symlink() or not path.is_file():
-            raise SystemExit(f"error: missing, linked, or non-file public asset: {relative}")
         try:
-            path.resolve().relative_to(SOURCE_ROOT)
-        except ValueError as error:
-            raise SystemExit(f"error: public asset resolves outside the site root: {relative}") from error
+            public_source(root, relative)
+        except (OSError, RuntimeError, ValueError) as error:
+            raise SystemExit(f"error: unsafe or missing public asset {relative}: {error}") from error
 
 
 def build(output: Path) -> None:
+    output = resolve_output(output)
     validate_sources()
     output.parent.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix=f".{output.name}.tmp-", dir=output.parent))
+    reserved_output = False
     try:
         for relative in PUBLIC_FILES:
-            source = SOURCE_ROOT / relative
+            source = public_source(SOURCE_ROOT, relative)
             destination = staging / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, destination, follow_symlinks=False)
 
+        # Check the copied bytes' paths too: a source changed to a symlink
+        # during copy must never turn into a linked release asset.
+        for relative in PUBLIC_FILES:
+            public_source(staging, relative)
         actual = frozenset(
             str(path.relative_to(staging))
             for path in staging.rglob("*")
@@ -125,10 +165,18 @@ def build(output: Path) -> None:
             missing = sorted(PUBLIC_FILE_SET - actual)
             extra = sorted(actual - PUBLIC_FILE_SET)
             raise RuntimeError(f"artifact manifest mismatch; missing={missing}, extra={extra}")
-        os.replace(staging, output)
+        # mkdir is an exclusive claim: rename/replace alone may overwrite an
+        # empty directory created after the initial output-path check.
+        output.mkdir()
+        reserved_output = True
+        for child in staging.iterdir():
+            os.rename(child, output / child.name)
+        staging.rmdir()
     except Exception:
         if staging.exists():
             shutil.rmtree(staging)
+        if reserved_output:
+            shutil.rmtree(output)
         raise
 
 

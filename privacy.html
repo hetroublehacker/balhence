@@ -25,7 +25,7 @@
   <meta name="twitter:description" content="How Balhence handles website enquiries, browser-stored scope drafts, and optional analytics.">
   <meta name="twitter:image" content="https://balhence.com/og-image.png">
   <meta name="twitter:image:alt" content="Balhence website privacy notice">
-  <link rel="icon" href="/favicon.svg?v=20260821f" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
   <script type="application/ld+json">
     {
@@ -44,17 +44,17 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="/styles.css?v=20260821f">
-  <link rel="stylesheet" href="/motion.css?v=20260821f">
+  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/motion.css?v=20260905c">
 </head>
 <body data-page="privacy" data-analytics="off">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blog.html" data-nav="insights">Insights</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
   <main id="main-content" class="legal-page">
     <article class="container-narrow">
       <span class="eyebrow">Website privacy</span>
       <h1>Privacy notice</h1>
-      <p class="legal-updated">Last updated: 21 August 2026</p>
+      <p class="legal-updated">Last updated: 4 September 2026</p>
       <p>This notice explains how Balhence handles personal information submitted through this website. It covers website enquiries and optional analytics; a signed client agreement governs information handled during a penetration-testing engagement.</p>
 
       <h2>Information you choose to provide</h2>
@@ -62,7 +62,7 @@
 
       <h2>Scope planner storage</h2>
       <p>The scope planner runs in your browser. Draft answers are saved locally under <code>balhence_scope_builder_v1</code> so you can resume on that device; they are not sent to Balhence merely by using the planner. When you continue to the contact page, a generated brief is passed through session storage under <code>balhence_scope_brief_v1</code>, expires after two hours, and is submitted only if you choose to send the contact form.</p>
-      <p>Use the planner’s reset control to remove saved planner data, or clear this site’s browser storage. Browser storage is tied to the browser profile rather than a user account, so do not use the planner on a shared device for sensitive planning and never enter credentials, tokens, customer records, or confidential architecture.</p>
+      <p>Use the planner's reset control to remove saved planner data, or clear this site's browser storage. Browser storage is tied to the browser profile rather than a user account, so do not use the planner on a shared device for sensitive planning and never enter credentials, tokens, customer records, or confidential architecture.</p>
 
       <h2>How the information is used</h2>
       <p>Enquiry information is used to respond, assess fit, prepare for a scoping conversation, produce a proposal if requested, maintain a record of the business conversation, and protect the form from abuse. It is not sold or used to build advertising profiles.</p>
@@ -72,11 +72,13 @@
       <p>AI output is treated as an untrusted lead rather than evidence. Live test actions, exploit validation, impact, severity, reporting, and re-test decisions remain under human control. The <a href="/insights/ai-native-penetration-testing-human-validated.html">AI-native VAPT operating model</a> explains these boundaries in more detail.</p>
 
       <h2>Form processing</h2>
-      <p>The enquiry form is processed by Formspree. When you submit it, the form contents, campaign tags present in the page URL, the same-site referring path or cross-site referring origin, and technical information needed to deliver the message are transmitted to that service. Query strings and fragments are removed from the stored referral value. Review <a href="https://formspree.io/legal/privacy-policy/" rel="external noopener">Formspree’s privacy policy</a> before submitting if you need more detail about that processing. You can avoid the form and email <a href="mailto:contact@balhence.com">contact@balhence.com</a> directly.</p>
+      <p>The enquiry form is processed by Formspree. When you submit it, the form contents, campaign tags present in the page URL, the same-site referring path or cross-site referring origin, and technical information needed to deliver the message are transmitted to that service. Query strings and fragments are removed from the stored referral value. Review <a href="https://formspree.io/legal/privacy-policy/" rel="external noopener">Formspree's privacy policy</a> before submitting if you need more detail about that processing. You can avoid the form and email <a href="mailto:contact@balhence.com">contact@balhence.com</a> directly.</p>
 
       <h2>Analytics choice</h2>
-      <p>Google Analytics is configured on eligible informational pages to understand page and conversion performance. It is not loaded on the scope planner, contact form, or this privacy page. On eligible pages, its script is not loaded unless you choose “Accept” in the analytics notice. Your choice is stored in your browser as <code>balhence_analytics_consent</code>. Choosing “Decline” prevents the analytics script from loading.</p>
-      <p>You can change the choice by clearing this site’s local storage in your browser and reloading the page. If analytics is accepted, Google processes usage information under its own terms and privacy controls.</p>
+      <p>The homepage remembers its pause-animation setting on this device under <code>balhence_motion_paused</code>. Use the animation control in the example finding to change it. Your device's reduced-motion preference takes priority.</p>
+      <p>Google Analytics is configured on eligible informational pages to understand page and conversion performance. It is not loaded on the scope planner, contact form, or this privacy page. On eligible pages, its script is not loaded unless you choose &quot;Accept&quot; in the analytics notice. Your choice is stored in your browser as <code>balhence_analytics_consent</code>. Choosing &quot;Decline&quot; prevents the analytics script from loading.</p>
+      <p>Use Analytics preferences below or in the footer to change your choice at any time. Declining stops further analytics collection and removes this site's analytics cookies without deleting your planner answers. If analytics is accepted, Google processes usage information under its own terms and privacy controls.</p>
+      <p><button class="btn btn-secondary btn-small" type="button" data-analytics-preferences>Analytics preferences</button></p>
 
       <h2>Legal basis and retention</h2>
       <p>Information supplied with an enquiry is processed to take steps you request before a possible contract and for the legitimate purpose of responding to business enquiries and preventing abuse. Optional analytics is based on your choice. Enquiry records are kept only as long as reasonably needed for the conversation, related legal or security needs, and ordinary business recordkeeping, then deleted or de-identified.</p>
@@ -91,10 +93,10 @@
       <p>Reasonable administrative and technical safeguards are used for website enquiries, but no internet transmission is risk-free. Sensitive engagement data, credentials, evidence, and reports use separately agreed delivery and retention controls rather than this public form.</p>
 
       <h2>Contact</h2>
-      <p>Send privacy questions or requests to <a href="mailto:contact@balhence.com?subject=Privacy%20request">contact@balhence.com</a> with “Privacy request” in the subject line.</p>
+      <p>Send privacy questions or requests to <a href="mailto:contact@balhence.com?subject=Privacy%20request">contact@balhence.com</a> with &quot;Privacy request&quot; in the subject line.</p>
     </article>
   </main>
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Manual web and API penetration testing with evidence engineers can act on.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blog.html">Insights</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>© <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260821f"></script><script src="/app.js?v=20260821f"></script><script src="/motion.js?v=20260821f"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260905c"></script><script src="/motion.js?v=20260905c"></script>
 </body>
 </html>

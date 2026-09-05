@@ -2,7 +2,7 @@
 """Serve the Balhence static site safely for local preview.
 
 This is a development server. It deliberately blocks repository metadata,
-dotfiles, symlinks, directory listings, and paths outside this site root.
+unapproved dotfiles, symlinks, directory listings, and non-public paths.
 It speaks plain HTTP and is not a production TLS server.
 """
 
@@ -16,11 +16,10 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlsplit
 
-from build_public import PUBLIC_FILE_SET
+from build_public import PUBLIC_FILE_SET, public_source
 
 
 SITE_ROOT = Path(__file__).resolve().parent
-ALLOWED_DOT_DIRECTORY = ".well-known"
 
 
 class PreviewHandler(SimpleHTTPRequestHandler):
@@ -30,7 +29,10 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         return self.server_version
 
     def end_headers(self) -> None:
-        requested_path = urlsplit(self.path).path.lower()
+        try:
+            requested_path = urlsplit(self.path).path.lower()
+        except ValueError:
+            requested_path = ""
         permits_same_origin_embed = requested_path.endswith(".pdf")
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
@@ -46,50 +48,33 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         super().end_headers()
 
     def _decoded_path(self) -> str:
-        value = urlsplit(self.path).path
-        for _ in range(3):
-            decoded = unquote(value)
-            if decoded == value:
-                break
-            value = decoded
-        return value
+        # Match the one decoding pass used by SimpleHTTPRequestHandler.
+        return unquote(urlsplit(self.path).path, errors="strict")
 
     def _allowed_request(self) -> bool:
-        decoded = self._decoded_path()
-        if "\x00" in decoded or "\\" in decoded:
+        try:
+            request = urlsplit(self.path)
+            if request.scheme or request.netloc:
+                return False
+            decoded = self._decoded_path()
+        except (UnicodeError, ValueError):
             return False
-
-        parts = PurePosixPath(decoded).parts
-        for index, part in enumerate(parts):
-            if part in {"", "/", "."}:
-                continue
-            if part == "..":
-                return False
-            if part.startswith(".") and not (index == 1 and part == ALLOWED_DOT_DIRECTORY):
-                return False
-
-        if decoded.endswith("/") and decoded != "/":
+        if not decoded.startswith("/") or "\x00" in decoded or "\\" in decoded:
+            return False
+        # Reject traversal and ambiguous spellings before pathlib normalizes them.
+        if any(part in {".", ".."} for part in decoded.split("/")):
+            return False
+        if "//" in decoded or (decoded.endswith("/") and decoded != "/"):
             return False
         relative = PurePosixPath(decoded).as_posix().lstrip("/") or "index.html"
         if relative not in PUBLIC_FILE_SET:
             return False
 
         try:
-            candidate = Path(self.translate_path(self.path))
-            resolved = candidate.resolve(strict=False)
-            resolved.relative_to(SITE_ROOT)
+            root = Path(self.directory).resolve()
+            public_source(root, relative)
         except (OSError, RuntimeError, ValueError):
             return False
-
-        current = SITE_ROOT
-        try:
-            relative_parts = candidate.relative_to(SITE_ROOT).parts
-        except ValueError:
-            return False
-        for part in relative_parts:
-            current = current / part
-            if current.is_symlink():
-                return False
         return True
 
     def _serve(self, head_only: bool) -> None:
@@ -116,10 +101,10 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             super().send_error(code, message, explain)
             return
 
-        error_page = SITE_ROOT / "404.html"
         try:
+            error_page = public_source(Path(self.directory).resolve(), "404.html")
             body = error_page.read_bytes()
-        except OSError:
+        except (OSError, RuntimeError, ValueError):
             super().send_error(code, message, explain)
             return
 
@@ -135,6 +120,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Serve the Balhence site over safe preview HTTP.")
     parser.add_argument("--port", type=int, default=8000, help="TCP port, default: 8000")
     parser.add_argument("--bind", default="127.0.0.1", help="Bind address, default: 127.0.0.1")
+    parser.add_argument("--directory", type=Path, default=SITE_ROOT, help="Site source or built artifact to preview")
     return parser.parse_args()
 
 
@@ -152,10 +138,13 @@ def main() -> None:
     if not 1 <= args.port <= 65535:
         raise SystemExit("error: --port must be between 1 and 65535")
 
-    handler = functools.partial(PreviewHandler, directory=str(SITE_ROOT))
+    root = args.directory.expanduser().resolve()
+    if not root.is_dir():
+        raise SystemExit(f"error: preview directory does not exist: {root}")
+    handler = functools.partial(PreviewHandler, directory=str(root))
     server = ThreadingHTTPServer((args.bind, args.port), handler)
     origin_host = "127.0.0.1" if args.bind in {"0.0.0.0", "::"} else args.bind
-    print(f"Serving {SITE_ROOT} at http://{origin_host}:{args.port}/")
+    print(f"Serving {root} at http://{origin_host}:{args.port}/")
     print(f"Serving the same {len(PUBLIC_FILE_SET)}-file allowlist used by the Pages build.")
     print("Plain HTTP only. Do not open this URL with https://")
     if not is_loopback(args.bind):

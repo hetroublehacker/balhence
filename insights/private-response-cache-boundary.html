@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>When the cache forgot who a response belonged to | Balhence</title>
+  <meta name="description" content="An anonymized engineering case study of private account content crossing a shared cache boundary, with proposed policy repairs and five local regression checks.">
+  <meta name="author" content="Balhence">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/private-response-cache-boundary.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="When the cache forgot who a response belonged to">
+  <meta property="og:description" content="A private origin response became public at an intermediary. A defensive look at cache policy, identity boundaries, and local regression coverage.">
+  <meta property="og:url" content="https://balhence.com/insights/private-response-cache-boundary.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Balhence security engineering case studies">
+  <meta property="article:published_time" content="2026-09-05">
+  <meta property="article:modified_time" content="2026-09-05">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="When the cache forgot who a response belonged to">
+  <meta name="twitter:description" content="A defensive case study in preserving account privacy across shared caches.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image:alt" content="Balhence security engineering case studies">
+  <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/motion.css?v=20260905c">
+  <link rel="stylesheet" href="/case-studies.css?v=20260905d">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://balhence.com/#organization",
+        "name": "Balhence",
+        "url": "https://balhence.com/",
+        "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.svg", "width": 512, "height": 512 }
+      },
+      {
+        "@type": "Article",
+        "@id": "https://balhence.com/insights/private-response-cache-boundary.html#article",
+        "headline": "When the cache forgot who a response belonged to",
+        "description": "An anonymized engineering case study of private account content crossing a shared cache boundary, with proposed policy repairs and five local regression checks.",
+        "url": "https://balhence.com/insights/private-response-cache-boundary.html",
+        "mainEntityOfPage": "https://balhence.com/insights/private-response-cache-boundary.html",
+        "datePublished": "2026-09-05",
+        "dateModified": "2026-09-05",
+        "inLanguage": "en",
+        "author": { "@id": "https://balhence.com/#organization" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "image": "https://balhence.com/og-image.png",
+        "articleSection": "Security engineering case studies"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/private-response-cache-boundary.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://balhence.com/blogs.html" },
+          { "@type": "ListItem", "position": 3, "name": "When the cache forgot who a response belonged to", "item": "https://balhence.com/insights/private-response-cache-boundary.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights" class="case-study">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header>
+    <nav class="container nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
+      <div class="nav-menu" id="primary-menu" data-menu>
+        <ul class="nav-links">
+          <li><a href="/services.html" data-nav="services">Services</a></li>
+          <li><a href="/about.html" data-nav="about">Approach</a></li>
+          <li><a href="/blogs.html" data-nav="insights" aria-current="page">Blog</a></li>
+          <li><a href="/contact.html" data-nav="contact">Contact</a></li>
+        </ul>
+        <a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <article>
+      <header class="article-hero">
+        <div class="container">
+          <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Cache boundaries</span></nav>
+          <h1>When the cache forgot who a response belonged to</h1>
+          <p class="article-deck">The account page required a session. Its response carried a private caching instruction. Then the same account content reached a fresh client without a session, and the investigation moved beyond the application.</p>
+          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>6 min read</span></div>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <div class="container article-layout">
+          <nav class="article-toc" aria-label="On this page">
+            <strong>On this page</strong>
+            <a href="#observation">A reassuring starting point</a>
+            <a href="#http-notebook">The HTTP notebook</a><a href="#boundary">Following the disagreement</a>
+            <a href="#limits">What the shared body proved</a>
+            <a href="#repair">Where the repair belongs</a>
+            <a href="#regression">Five checks before closure</a>
+            <a href="#review">The remaining question</a>
+          </nav>
+
+          <div class="article-content">
+            <aside class="article-callout" aria-label="Anonymization and evidence limits">
+              <p><strong>About this case study:</strong> This is an anonymized adaptation from private research notes. Organizations, products, identifiers, routes, and data have been removed or replaced. Engineering examples are synthetic. Source observations have not been independently revalidated, and the proposed fixes are not confirmed deployed.</p>
+            </aside>
+
+            <h2 id="observation">The account page gave two reassuring answers</h2>
+            <p>The starting point in the research notes looked ordinary. A signed-in client received private information from a controlled account, and the origin marked the response with a restrictive caching directive. The account handler required authentication. Its response also told the delivery system that the content was private.</p>
+            <p>The surprise was a later delivery of that same account body to a fresh client with no session. An intermediary had classified another representation as public and retained the response. The page's privacy instruction and the intermediary's decision no longer described the same content.</p>
+            <p>The control made the contradiction harder to dismiss: the canonical route denied the unauthenticated client. Access control still worked at the handler, while private content crossed the boundary elsewhere. That moved the question from whether the page required a login to how its response could be delivered without one.</p>
+
+            <section id="http-notebook" aria-labelledby="http-notebook-title">
+              <h2 id="http-notebook-title">The HTTP notebook</h2>
+              <p>The striking part was the absence of an authenticated context on the later read. The notes described private controlled-account content returning anyway. This rebuilt exchange illustrates that observation without the route variation or cache-priming sequence.</p>
+              <figure class="http-notebook">
+                <figcaption class="http-notebook-caption"><span class="http-notebook-label">Observation sketch / HTTP/1.1</span><span class="http-notebook-badge">SYNTHETIC + REDACTED</span></figcaption>
+                <div class="http-exchange">
+                  <div class="http-message"><h3>Read-only request</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic redacted HTTP request"><code>GET /redacted/observation HTTP/1.1
+Host: research.example
+Accept: application/json
+
+</code></pre></div>
+                  <div class="http-message"><h3>Illustrative anonymous observation</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic illustrative HTTP response"><code>HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: private, no-store
+Content-Length: 61
+
+{"account":"[REDACTED]","content":"synthetic-private-marker"}</code></pre></div>
+                </div>
+                <p class="http-notebook-note">Reconstructed for this article, not an original wire capture. The host uses the reserved .example namespace; paths, headers, and data are invented or redacted. Display only: no requests are sent.</p>
+              </figure>
+              <p>The request has no session cookie. The body uses a made-up marker, not personal data. A successful response would only matter here if the content were independently established as private.</p>
+            </section>
+
+            <h2 id="boundary">The disagreement sat between the handler and the client</h2>
+            <p>The notes point to routing and cache policy interpreting the same operation differently. The origin saw an account operation. The intermediary treated another representation of it as public, and its effective policy overrode the origin's privacy instruction. Reviewing either decision in isolation would have missed the conflict.</p>
+            <p>This explains how the access check could pass review while the delivery failed. A shared cache can answer before the application runs. Once it holds private content under a public classification, the code that would refuse an anonymous caller may never receive the request.</p>
+            <p>The repair therefore has two jobs: keep private responses out of shared storage and prevent shared lookup from returning them. Fixing only new storage would leave previously accepted objects in play. Routing, lookup, and storage all have to agree that account content belongs to an authenticated identity.</p>
+
+            <h2 id="limits">The same account body was the important evidence</h2>
+            <p>A successful status alone would leave room for a public page, a sign-in screen, or an unrelated response. Here, the reported comparison was the controlled account body itself, delivered to an unauthenticated client. Paired with the canonical route's denial, that supports a disclosure across the authentication boundary.</p>
+            <p>The conclusion stops there. The notes do not establish how many accounts were affected, how long objects could remain available, whether anyone accessed them historically, or whether every private feature behaved the same way. None of those claims follows from one demonstrated boundary crossing.</p>
+            <p>For a local repair review, independent client contexts and a harmless marker in a synthetic account fixture make the comparison easier to trust. A content fingerprint or a comparison of selected synthetic fields can identify the fixture without retaining a real account body. Credentials and private content do not belong in regression artifacts.</p>
+
+            <h2 id="repair">Move the privacy decision into the whole delivery path</h2>
+            <p>The proposed repair follows the point of disagreement. Strict canonical routing and an explicit allowlist define which resources are public. Private handlers bypass shared-cache lookup and storage, and the intermediary uses the same trusted route classification as the origin. An unknown or inconsistent classification defaults to bypass.</p>
+            <p>This illustrative policy separates the decision made before lookup from the decision made before storage. The route registry and response classification are server-owned metadata. Each intermediary must enforce an equivalent rule.</p>
+
+            <pre class="case-code" tabindex="0" aria-label="Illustrative defensive pseudocode"><code># Synthetic policy for the repaired application.
+lookup_policy(request, trusted_route):
+    if not trusted_route.is_canonical:
+        return BYPASS
+    if request.has_authentication_context:
+        return BYPASS
+    if trusted_route.kind != PUBLIC_STATIC_RESOURCE:
+        return BYPASS
+    return ALLOW_PUBLIC_LOOKUP
+
+storage_policy(lookup_decision, response):
+    if lookup_decision != ALLOW_PUBLIC_LOOKUP:
+        return DO_NOT_STORE
+    if response.depends_on_identity:
+        return DO_NOT_STORE
+    if response.is_authentication_result:
+        return DO_NOT_STORE
+    if not response.explicitly_public:
+        return DO_NOT_STORE
+    return STORE_PUBLIC_RESOURCE</code></pre>
+
+            <p>Changing a response header alone is insufficient when another policy can override it. Review the effective configuration, repair the classification, and invalidate previously stored objects associated with private content. The application team must also establish how routing changes reach each cache layer so a later deployment cannot silently reintroduce disagreement.</p>
+
+            <h2 id="regression">Five checks that would give the repair weight</h2>
+            <p>These are regression cases for a fixed application, using in-process handlers, synthetic identities, and fake cache adapters. They require no remote requests. Record cache reads and writes as assertions alongside the returned result.</p>
+
+            <div class="scope-table-wrap" role="region" tabindex="0" aria-labelledby="case-tests-caption">
+              <table class="scope-table">
+                <caption id="case-tests-caption">Local fixtures, actions, and expected state</caption>
+                <thead><tr><th scope="col">Case</th><th scope="col">Fixture and local action</th><th scope="col">Expected state</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">1. Every hop agrees</th><td>Connect fake intermediary adapters to a private handler. Evaluate a synthetic authenticated call through the repaired pipeline.</td><td>Every adapter bypasses shared lookup and storage; no account body enters a shared store.</td></tr>
+                  <tr><th scope="row">2. Anonymous isolation</th><td>Place a harmless synthetic account object in a fake legacy cache. Evaluate the private handler with an independent anonymous context.</td><td>The object is never read or returned. The handler denies access and migration cleanup removes the obsolete entry.</td></tr>
+                  <tr><th scope="row">3. Representation consistency</th><td>Give the resolver a synthetic noncanonical route descriptor for a private handler.</td><td>The descriptor is rejected or remains private. It cannot receive a public caching classification.</td></tr>
+                  <tr><th scope="row">4. Authentication results</th><td>Evaluate synthetic sign-in, access-denial, and session-dependent response objects against the storage policy.</td><td>Each returns do-not-store, including when a surrounding fixture proposes public storage.</td></tr>
+                  <tr><th scope="row">5. Public resource control</th><td>Evaluate an allowlisted, identity-independent static fixture with an anonymous context.</td><td>Public lookup and storage work as intended; the body contains only the public fixture.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="review">The handler was only part of the answer</h2>
+            <p>The finding began with a handler that appeared to protect its output. It turned on the delivery system making a different decision about that output. Application and infrastructure owners need a shared account of which resources may be cached, which bypass caching, and how old objects are retired after a policy change. Evidence from a repaired deployment would be needed to close that question; these notes do not establish closure.</p>
+            <p>A related failure of server-owned policy appears in <a href="/insights/server-owned-validation-rules.html">when a validation helper became a data query</a>. Both cases show how a correct local component can lose its intended boundary when another layer makes a broader decision.</p>
+
+            <section class="article-cta" aria-labelledby="article-cta-title">
+              <h2 id="article-cta-title">Review how private content reaches your users</h2>
+              <p>Bring your routing model, cache layers, and synthetic account fixtures. We can help define the boundaries and evidence your assessment needs.</p>
+              <a class="btn btn-primary" href="/contact.html" data-track="article_cache_contact">Discuss an assessment <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
+            </section>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div>
+        <div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div>
+        <div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Guides</a></li><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
+        <div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div>
+    </div>
+  </footer>
+
+  <script src="/config.js?v=20260905c"></script>
+  <script src="/app.js?v=20260905c"></script>
+  <script src="/motion.js?v=20260905c"></script>
+</body>
+</html>
