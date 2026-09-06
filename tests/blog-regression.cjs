@@ -93,6 +93,15 @@ async function main() {
     }
     pass("Every case card opens its article with five regression rows and a collection link");
 
+    await page.goto(`${origin}/insights/draft-write-authorization.html`);
+    const repair = page.locator('.case-remediation[aria-labelledby="policy"]');
+    assert.equal(await repair.locator("#policy").innerText(), "Closing the authorization gap");
+    assert.equal(await repair.locator("pre").count(), 0, "The repair section should read as prose, not pseudocode");
+    assert.equal(await repair.locator(".case-editorial").isVisible(), true);
+    assert.match(await repair.innerText(), /proposed repair/);
+    assert.match(await repair.innerText(), /Check the saved draft, not just the response/);
+    pass("The draft repair section uses story-led prose and a compact retest note");
+
     await page.goto(`${origin}/blog.html`);
     assert.equal(await page.locator(".insight-card").count(), 5);
     assert.ok(await page.locator('a[href="/blogs.html"]').count() > 0);
