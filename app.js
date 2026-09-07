@@ -4,6 +4,17 @@
   const config = window.BALHENCE_CONFIG || {};
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let analyticsEnabled = false;
+  // Fixed editorial labels, not arbitrary query text or visitor identifiers.
+  const enquirySources = new Set([
+    "home-nav", "home-hero", "home-faq", "home-closing",
+    "web-pentest", "api-pentest", "saas-pentest", "services",
+    "pentest-guides", "field-notes", "scope-planner", "sample-report",
+    "draft-write-authorization", "session-authority-boundary",
+    "private-response-cache-boundary", "server-owned-validation-rules",
+    "evidence-gated-workflows", "how-to-scope-web-api-pentest",
+    "what-good-pentest-report-includes", "saas-vapt-readiness-checklist",
+    "web-api-pentest-cost-scope-guide", "ai-native-penetration-testing-human-validated",
+  ]);
 
   document.documentElement.classList.add("js");
 
@@ -145,8 +156,11 @@
 
   function addAttribution(form) {
     const params = new URLSearchParams(window.location.search);
+    const source = params.get("source");
     const values = {
       source_page: boundedText(window.location.pathname, 512),
+      enquiry_source: enquirySources.has(source) ? source
+        : params.get("utm_source") === "scope-builder" ? "scope-planner" : "unlabelled",
       referrer: boundedText(safeReferrer(), 512),
       utm_source: boundedText(params.get("utm_source") || "", 200),
       utm_medium: boundedText(params.get("utm_medium") || "", 200),
@@ -252,7 +266,7 @@
           form.reset();
           if (status) {
             status.classList.add("is-success");
-            status.textContent = "Thank you. Your request is in. Expect a reply within one business day.";
+            status.textContent = "Thank you. Your request has been sent. We'll review your project and reply by email to clarify the scope and next steps.";
             status.focus();
           }
           trackEvent("generate_lead", { form_name: form.dataset.leadForm });
@@ -401,7 +415,15 @@
     window.dataLayer = window.dataLayer || [];
     if (!window.gtag) window.gtag = function () { if (analyticsEnabled) window.dataLayer.push(arguments); };
     window.gtag("js", new Date());
-    window.gtag("config", gaId, { anonymize_ip: true });
+    const referrer = safeReferrer();
+    window.gtag("config", gaId, {
+      anonymize_ip: true,
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+      page_location: window.location.origin + window.location.pathname,
+      page_referrer: referrer === "direct" ? ""
+        : referrer.startsWith("/") ? window.location.origin + referrer : referrer,
+    });
 
     const script = document.createElement("script");
     script.dataset.balhenceAnalytics = "";
@@ -413,7 +435,10 @@
   function initTrackedLinks() {
     document.querySelectorAll("[data-track]").forEach((element) => {
       element.addEventListener("click", () => {
-        trackEvent("select_content", {
+        const destination = element.href ? new URL(element.href, window.location.href) : null;
+        const requestsContact = destination && destination.origin === window.location.origin
+          && destination.pathname === "/contact.html";
+        trackEvent(requestsContact ? "contact_intent" : "select_content", {
           content_type: "cta",
           content_id: element.dataset.track,
         });
@@ -422,6 +447,8 @@
   }
 
   function trackEvent(name, params) {
-    if (typeof window.gtag === "function") window.gtag("event", name, params || {});
+    if (analyticsEnabled && document.body.dataset.analytics !== "off" && typeof window.gtag === "function") {
+      window.gtag("event", name, params || {});
+    }
   }
 })();

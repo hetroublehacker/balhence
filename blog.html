@@ -5,14 +5,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Security Guides &amp; AI-Native Practice | Balhence</title>
-  <meta name="description" content="Practical guides to AI-native testing, security scope, preparation, useful evidence, and remediation.">
+  <title>Penetration Testing Guides: Scope, Cost &amp; Reports | Balhence</title>
+  <meta name="description" content="Plan a useful application pentest: compare scope and cost, prepare your SaaS team, review the report, and understand human-validated AI-assisted testing.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://balhence.com/blog.html">
   <meta name="theme-color" content="#080d1f">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Balhence">
-  <meta property="og:title" content="Security Guides &amp; AI-Native Practice | Balhence">
+  <meta property="og:title" content="Penetration Testing Guides: Scope, Cost &amp; Reports | Balhence">
   <meta property="og:description" content="Practical guides to choosing a pentest, preparing your team, and making sense of the report.">
   <meta property="og:url" content="https://balhence.com/blog.html">
   <meta property="og:image" content="https://balhence.com/og-image.png">
@@ -21,7 +21,7 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="Balhence penetration testing guides for SaaS teams">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Security Guides &amp; AI-Native Practice | Balhence">
+  <meta name="twitter:title" content="Penetration Testing Guides: Scope, Cost &amp; Reports | Balhence">
   <meta name="twitter:description" content="Practical guides for scoping, preparing for, and evaluating web and API penetration tests.">
   <meta name="twitter:image" content="https://balhence.com/og-image.png">
   <meta name="twitter:image:alt" content="Balhence penetration testing guides for SaaS teams">
@@ -37,6 +37,7 @@
     "name": "Balhence penetration testing guides",
     "url": "https://balhence.com/blog.html",
     "description": "Practical penetration testing guidance for SaaS and fintech product teams.",
+    "dateModified": "2026-09-06",
     "isPartOf": { "@id": "https://balhence.com/#website" },
     "about": { "@id": "https://balhence.com/#organization" },
     "hasPart": [
@@ -51,7 +52,7 @@
 </head>
 <body data-page="insights">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=pentest-guides" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
 
   <main id="main-content">
     <section class="page-hero"><div class="container" data-reveal><nav class="case-library-nav" aria-label="Reading collections"><a href="/blogs.html">Case studies</a><a href="/blog.html" aria-current="page">Guides</a></nav><span class="eyebrow">Practical guides</span><h1>Make sense of<br>your next security step.</h1><p>How should AI fit into security work? What should you test, and what makes evidence useful? Start with our guides to testing, preparation, and making sense of the results.</p><div class="button-row"><a class="btn btn-secondary" href="/blogs.html">Read the security case studies <i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></a></div></div></section>
@@ -71,10 +72,10 @@
 
     <section class="section section-dark" aria-labelledby="editorial-title"><div class="container split-layout"><div class="split-sticky" data-reveal><span class="eyebrow">About these guides</span><h2 id="editorial-title">Advice you can put to work.</h2></div><div class="prose-large" data-reveal><p class="text-light">We write for people choosing and using a pentest: founders comparing quotes, engineers preparing access, and teams deciding which fixes to prioritize.</p><p class="text-muted-light">We distinguish technical references from our own judgment. External statistics include a source, date, context, and limitations. A pentest tells you about the systems and period tested; it cannot guarantee that a system is secure.</p></div></div></section>
 
-    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Put it into practice</span><h2>Have a test in mind?</h2><p>Choose a security discipline or draft a web and API test scope privately. If you're unsure what you need, send us an email.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/scope-builder.html" data-track="insights_bottom_builder">Build your scope <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="mailto:contact@balhence.com">Ask by email</a></div></div></div></section>
+    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Put it into practice</span><h2>Get a scope that fits your product.</h2><p>Compare our <a href="/web-application-penetration-testing.html">web application</a>, <a href="/api-penetration-testing.html">API</a>, and <a href="/saas-penetration-testing.html">SaaS penetration testing services</a>. Then share your application, key roles, and target date so we can discuss a practical proposal.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=pentest-guides" data-track="insights_bottom_contact">Request a pentest <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html" data-track="insights_bottom_builder">Draft your scope first</a></div></div></div></section>
   </main>
 
   <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Guides</a></li><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260905c"></script><script src="/motion.js?v=20260905c"></script>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260906a"></script><script src="/motion.js?v=20260905c"></script>
 </body>
 </html>

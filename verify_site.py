@@ -393,7 +393,7 @@ def verify_preview(root: Path) -> list[str]:
         requests += [("HEAD", "/index.html", 200), ("HEAD", "/missing-page", 404)]
         requests += [("GET", path, 404) for path in (
             "/.git/config", "/.env", "/build_public.py", "/serve.py", "/verify_site.py",
-            "/README.md", "/tests/test_site.py", "/website/index.html",
+            "/README.md", "/SEO-GROWTH.md", "/tests/test_site.py", "/website/index.html",
             "/website-tools/", "/website-backups/", "/vendor/", "/insights/",
             "/../index.html", "/%2e%2e/index.html", "/%252e%252e/index.html",
             "/vendor/../index.html", "/%2egit/config", "/index.html%00", "/%5cindex.html",

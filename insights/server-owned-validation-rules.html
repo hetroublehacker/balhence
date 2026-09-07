@@ -5,8 +5,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>When a validation helper became a data query | Balhence</title>
-  <meta name="description" content="An anonymized case study of exposed validation policy revealing candidate-value presence, with server-owned dispatch controls and five local regression checks.">
+  <title>Server-Side Validation: A Form's Data Exposure Story | Balhence</title>
+  <meta name="description" content="A public form helper answered questions it should not. An anonymized validation and data exposure story with proposed dispatch controls and five regression checks.">
   <meta name="author" content="Balhence">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://balhence.com/insights/server-owned-validation-rules.html">
@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="Balhence security engineering case studies">
   <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-09-05">
+  <meta property="article:modified_time" content="2026-09-06">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="When a validation helper became a data query">
   <meta name="twitter:description" content="Keep public validation actions explicit and validation policy under server control.">
@@ -52,7 +52,7 @@
         "url": "https://balhence.com/insights/server-owned-validation-rules.html",
         "mainEntityOfPage": "https://balhence.com/insights/server-owned-validation-rules.html",
         "datePublished": "2026-09-05",
-        "dateModified": "2026-09-05",
+        "dateModified": "2026-09-06",
         "inLanguage": "en",
         "author": { "@id": "https://balhence.com/#organization" },
         "publisher": { "@id": "https://balhence.com/#organization" },
@@ -84,7 +84,7 @@
           <li><a href="/blogs.html" data-nav="insights" aria-current="page">Blog</a></li>
           <li><a href="/contact.html" data-nav="contact">Contact</a></li>
         </ul>
-        <a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a>
+        <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=server-owned-validation-rules" data-track="nav_pentest">Request a pentest</a>
       </div>
       <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
     </nav>
@@ -97,7 +97,7 @@
           <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Validation boundaries</span></nav>
           <h1>When a validation helper became a data query</h1>
           <p class="article-deck">A public form appeared to ask a small question: is this input valid? The behavior in the research notes exposed a larger one: who gets to decide what the server checks, and what its answer reveals?</p>
-          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>6 min read</span></div>
+          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-09-06">6 September 2026</time></span><span>6 min read</span></div>
         </div>
       </header>
 
@@ -208,9 +208,9 @@ handle_public_input(envelope):
             <p>The companion story, <a href="/insights/private-response-cache-boundary.html">when the cache forgot who a response belonged to</a>, examines another layer making a decision that should preserve server-owned privacy. Our <a href="/blog.html">practical guides</a> cover how to scope and document those boundaries.</p>
 
             <section class="article-cta" aria-labelledby="article-cta-title">
-              <h2 id="article-cta-title">Review the actions your public interface exposes</h2>
-              <p>Bring your component boundaries, public workflows, and permission model. We can help define an assessment around the data those actions can reveal.</p>
-              <a class="btn btn-primary" href="/contact.html" data-track="article_validation_contact">Discuss an assessment <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
+              <h2 id="article-cta-title">What can your public interface reveal?</h2>
+              <p>Our <a href="/api-penetration-testing.html">API penetration testing</a> examines exposed actions, permission checks, and response data within the agreed scope. Share your application and public workflows so we can plan a test around those boundaries.</p>
+              <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=server-owned-validation-rules" data-track="article_validation_contact">Request a pentest <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
             </section>
           </div>
         </div>
@@ -231,7 +231,7 @@ handle_public_input(envelope):
   </footer>
 
   <script src="/config.js?v=20260905c"></script>
-  <script src="/app.js?v=20260905c"></script>
+  <script src="/app.js?v=20260906a"></script>
   <script src="/motion.js?v=20260905c"></script>
 </body>
 </html>

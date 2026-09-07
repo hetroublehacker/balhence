@@ -5,8 +5,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>When the cache forgot who a response belonged to | Balhence</title>
-  <meta name="description" content="An anonymized engineering case study of private account content crossing a shared cache boundary, with proposed policy repairs and five local regression checks.">
+  <title>Web Cache Data Exposure: A Private Response Story | Balhence</title>
+  <meta name="description" content="A private account response crossed a shared cache boundary. Follow the anonymized finding, its evidence limits, and five proposed cache privacy regression checks.">
   <meta name="author" content="Balhence">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://balhence.com/insights/private-response-cache-boundary.html">
@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="Balhence security engineering case studies">
   <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-09-05">
+  <meta property="article:modified_time" content="2026-09-06">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="When the cache forgot who a response belonged to">
   <meta name="twitter:description" content="A defensive case study in preserving account privacy across shared caches.">
@@ -52,7 +52,7 @@
         "url": "https://balhence.com/insights/private-response-cache-boundary.html",
         "mainEntityOfPage": "https://balhence.com/insights/private-response-cache-boundary.html",
         "datePublished": "2026-09-05",
-        "dateModified": "2026-09-05",
+        "dateModified": "2026-09-06",
         "inLanguage": "en",
         "author": { "@id": "https://balhence.com/#organization" },
         "publisher": { "@id": "https://balhence.com/#organization" },
@@ -84,7 +84,7 @@
           <li><a href="/blogs.html" data-nav="insights" aria-current="page">Blog</a></li>
           <li><a href="/contact.html" data-nav="contact">Contact</a></li>
         </ul>
-        <a class="btn btn-primary" href="/scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a>
+        <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=private-response-cache-boundary" data-track="nav_pentest">Request a pentest</a>
       </div>
       <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
     </nav>
@@ -97,7 +97,7 @@
           <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Cache boundaries</span></nav>
           <h1>When the cache forgot who a response belonged to</h1>
           <p class="article-deck">The account page required a session. Its response carried a private caching instruction. Then the same account content reached a fresh client without a session, and the investigation moved beyond the application.</p>
-          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>6 min read</span></div>
+          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-09-06">6 September 2026</time></span><span>6 min read</span></div>
         </div>
       </header>
 
@@ -205,9 +205,9 @@ storage_policy(lookup_decision, response):
             <p>A related failure of server-owned policy appears in <a href="/insights/server-owned-validation-rules.html">when a validation helper became a data query</a>. Both cases show how a correct local component can lose its intended boundary when another layer makes a broader decision.</p>
 
             <section class="article-cta" aria-labelledby="article-cta-title">
-              <h2 id="article-cta-title">Review how private content reaches your users</h2>
-              <p>Bring your routing model, cache layers, and synthetic account fixtures. We can help define the boundaries and evidence your assessment needs.</p>
-              <a class="btn btn-primary" href="/contact.html" data-track="article_cache_contact">Discuss an assessment <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
+              <h2 id="article-cta-title">Does private content stay private at every layer?</h2>
+              <p>Our <a href="/web-application-penetration-testing.html">web application penetration testing</a> considers the delivery layers in your agreed scope, not just the application handler. Tell us about your application, CDN or cache setup, and target date.</p>
+              <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=private-response-cache-boundary" data-track="article_cache_contact">Request a pentest <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
             </section>
           </div>
         </div>
@@ -228,7 +228,7 @@ storage_policy(lookup_decision, response):
   </footer>
 
   <script src="/config.js?v=20260905c"></script>
-  <script src="/app.js?v=20260905c"></script>
+  <script src="/app.js?v=20260906a"></script>
   <script src="/motion.js?v=20260905c"></script>
 </body>
 </html>

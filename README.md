@@ -21,6 +21,7 @@ This directory is the main website. The existing nested `website/`, `website-too
 - Security project routing plus a six-step web/API scope planner with local draft resume, PDF export, and a reviewed handoff to the contact form. The estimator does not price or estimate specialist work.
 - Interactive synthetic report with executive, technical, remediation, and re-test views.
 - Accessible mobile navigation, editable analytics preferences, and enquiry timeout/retry handling.
+- Search-focused web, API, and SaaS service pages with direct proposal requests, contextual research links, and a lower-friction enquiry form. The broader AI-native capability map remains available.
 
 The homepage uses CSS and the Web Animations API; it does not fetch animation libraries, fonts, analytics, or other third-party resources on initial load. Supporting pages retain the existing progressive motion layer.
 
@@ -45,6 +46,8 @@ Public company information, the Formspree endpoint, and analytics ID live in `co
 Planner answers are stored under `balhence_scope_builder_v1`. A completed brief uses `balhence_scope_brief_v1` in session storage, expires after two hours, and is submitted only with the contact form. Failed storage or handoff is reported with copy/PDF recovery; resetting the planner clears saved drafts.
 
 Explicit service links preselect the matching enquiry category. Selecting a different service skips a saved web/API brief without deleting it, so the brief cannot silently override a specialist enquiry.
+
+Enquiry links can carry a fixed `source` label. Only allowlisted labels become the submitted `enquiry_source`; unknown values become `unlabelled`. This creates no tracking cookie or stored browsing history. On eligible pages, consented `contact_intent` events count tracked enquiry-link clicks, not submitted forms. Contact remains analytics-free; measure received and qualified leads in Formspree, the inbox, and your lead log.
 
 Analytics stays off until acceptance and never loads on the planner, contact, or privacy pages. Visitors can change the choice through the footer. Homepage animation preference is stored as `balhence_motion_paused`.
 
@@ -75,9 +78,12 @@ node tests/interaction-regression.cjs
 node tests/experience-regression.cjs
 node tests/capability-regression.cjs
 node tests/blog-regression.cjs
+node tests/seo-conversion-regression.cjs
 ```
 
 They exercise local previews and block external traffic. GitHub Actions validates static pages, JavaScript syntax, build safeguards, and the release artifact before deployment; pull requests validate without deployment.
+
+The Python suite also checks search metadata uniqueness, ordinary-link reachability, commercial page schema and enquiry routes, and sitemap/article date consistency. See [SEO-GROWTH.md](SEO-GROWTH.md) for the search-intent map, Search Console setup, real inbox checks, and lead measurement. It is operational documentation, not a public asset. No rankings or enquiry volume are guaranteed.
 
 ## Publishing
 

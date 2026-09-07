@@ -59,6 +59,7 @@ PUBLIC_FILES = (
     "report-explorer.js",
     "report-viewer.html",
     "robots.txt",
+    "saas-penetration-testing.html",
     "sample-vapt-report.pdf",
     "scope-builder.css",
     "scope-builder.html",

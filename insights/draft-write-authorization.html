@@ -5,8 +5,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The draft you could change but could not read | Balhence</title>
-  <meta name="description" content="An anonymized case study of inconsistent draft authorization, with proposed write-policy design and five local regression checks for a corrected application.">
+  <title>Broken Access Control: A Draft Authorization Story | Balhence</title>
+  <meta name="description" content="A broken access control story: a draft could not be read but could be changed. Anonymized evidence, proposed authorization repairs, and five regression checks.">
   <meta name="author" content="Balhence">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://balhence.com/insights/draft-write-authorization.html">
@@ -84,7 +84,7 @@
           <li><a href="/blogs.html" data-nav="insights" aria-current="page">Blog</a></li>
           <li><a href="/contact.html" data-nav="contact">Contact</a></li>
         </ul>
-        <a class="btn btn-primary" href="../scope-builder.html" data-nav="scope" data-track="nav_scope_builder">Build your scope</a>
+        <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=draft-write-authorization" data-track="nav_pentest">Request a pentest</a>
       </div>
       <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
     </nav>
@@ -96,7 +96,7 @@
           <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Anonymized field report</span></nav>
           <h1>The draft you could change but could not read</h1>
           <p class="article-deck">The read was denied. The write persisted. An owner's view of the changed draft gave a permission mismatch a concrete consequence.</p>
-          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>6 min read</span><span>Authorization case study</span></div>
+          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-09-06">6 September 2026</time></span><span>6 min read</span><span>Authorization case study</span></div>
         </div>
       </header>
       <div class="article-body">
@@ -193,9 +193,9 @@ Content-Length: 25
             <p>The transferable lesson is to review authority at the point where state changes. A protected screen and a protected read are useful controls, but the stored draft depends on every mutation making its own complete authorization decision.</p>
             <div class="article-callout"><p><strong>Related case:</strong> <a href="/insights/session-authority-boundary.html">When two browsers inherited one cart</a> examines how navigation state became session authority. For planning and reporting advice, browse the <a href="/blog.html">Guides</a>.</p></div>
             <section class="article-cta" aria-labelledby="article-cta-title">
-              <h2 id="article-cta-title">Review the boundaries in your workflow</h2>
-              <p>Discuss account roles, shared resources, and background processing with our team.</p>
-              <a class="btn btn-primary" href="/contact.html" data-track="article_draft_authorization_contact">Discuss your application <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
+              <h2 id="article-cta-title">Who can change what in your application?</h2>
+              <p>Our <a href="/saas-penetration-testing.html">SaaS penetration tests</a> examine roles, tenant boundaries, shared resources, and the work that happens in the background. Share your product and target date to discuss a scope around the decisions that matter.</p>
+              <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=draft-write-authorization" data-track="article_draft_authorization_contact">Request a pentest <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
             </section>
           </div>
         </div>
@@ -214,7 +214,7 @@ Content-Length: 25
     </div>
   </footer>
   <script src="../config.js?v=20260905c"></script>
-  <script src="../app.js?v=20260905c"></script>
+  <script src="../app.js?v=20260906a"></script>
   <script src="/motion.js?v=20260905c"></script>
 </body>
 </html>
