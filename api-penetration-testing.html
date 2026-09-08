@@ -27,7 +27,7 @@
   <meta name="twitter:image:alt" content="Balhence API penetration testing services">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/styles.css?v=20260907a">
   <link rel="stylesheet" href="/motion.css?v=20260905c">
   <script type="application/ld+json">
   {
@@ -84,7 +84,7 @@
       <div class="container" data-reveal>
         <span class="eyebrow">REST, GraphQL, and connected services</span>
         <h1 id="api-hero-title">API penetration<br>testing.</h1>
-        <p>Know which accounts, services, and organizations can reach your data. We manually test API permissions and business workflows, then give your engineers confirmed findings and practical fix guidance.</p>
+        <p>Your API serves users, background jobs, and other products. We check what each caller can read and change, how the workflows behave, and where the access rules fall short.</p>
         <div class="button-row"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="api_hero_contact">Request an API pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-secondary" href="/report-viewer.html" data-track="api_hero_report">See the sample report</a></div>
       </div>
     </section>
@@ -100,14 +100,14 @@
 
     <section class="section section-dark" aria-labelledby="coverage-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">What we test</span><h2 id="coverage-title">Can users do more than they should?</h2><p>We check how access rules hold up across users, roles, organizations, and multi-step workflows. Tools help map the API, and a tester follows up on potential issues.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">What we test</span><h2 id="coverage-title">Who can do what with your data?</h2><p>We map normal access first, then test the rules across users, roles, organizations, and workflows. A tester checks each finding before it reaches your report.</p></div>
         <div class="coverage-grid">
-          <article class="coverage-card" data-reveal><h3>Object authorization</h3><p>Cross-user and cross-tenant access to records, files, exports, messages, invoices, and nested resources through predictable, leaked, or substituted identifiers.</p></article>
-          <article class="coverage-card" data-reveal><h3>Function authorization</h3><p>Restricted operations, administrative routes, hidden methods, alternate API versions, workflow transitions, and privilege checks enforced only by a client.</p></article>
-          <article class="coverage-card" data-reveal><h3>Property authorization</h3><p>Mass assignment, over-posting, excessive response fields, writable state flags, hidden attributes, and field-level access that differs by role or tenant.</p></article>
-          <article class="coverage-card" data-reveal><h3>Tenant isolation</h3><p>Organization switches, team hierarchies, invitations, ownership changes, delegated administration, shared resources, and identifiers that cross trust boundaries.</p></article>
-          <article class="coverage-card" data-reveal><h3>Data exposure</h3><p>Responses, errors, caches, logs, exports, introspection, metadata, and alternate representations that reveal more information than the requesting identity needs.</p></article>
-          <article class="coverage-card" data-reveal><h3>Business logic</h3><p>Sequence bypass, replay, duplicate execution, approval abuse, inventory or credit manipulation, race conditions, and assumptions made between dependent services.</p></article>
+          <article class="coverage-card" data-reveal><h3>Object authorization</h3><p>Check access to individual records, files, messages, and invoices. A valid account should not grant access to another user's private objects.</p></article>
+          <article class="coverage-card" data-reveal><h3>Function authorization</h3><p>Check restricted and administrative actions on the server, including older API versions and operations the interface doesn't show.</p></article>
+          <article class="coverage-card" data-reveal><h3>Property authorization</h3><p>A caller may be allowed to edit a record without being allowed to change every field. We check writable properties and sensitive response fields.</p></article>
+          <article class="coverage-card" data-reveal><h3>Tenant isolation</h3><p>Follow access through organization switches, invitations, shared resources, and ownership changes. Legitimate sharing belongs in the test model too.</p></article>
+          <article class="coverage-card" data-reveal><h3>Data exposure</h3><p>Look at responses, errors, caches, exports, and metadata for information the caller shouldn't receive.</p></article>
+          <article class="coverage-card" data-reveal><h3>Business logic</h3><p>Check the rules around approvals, credits, inventory, and other multi-step actions, including repeated or overlapping requests within agreed limits.</p></article>
         </div>
       </div>
     </section>
@@ -116,19 +116,19 @@
       <div class="container">
         <div class="section-heading" data-reveal><span class="eyebrow">Interfaces and identities</span><h2 id="interfaces-title">Include the services that use your API.</h2><p>Users aren't the only callers. We account for service accounts, webhooks, background jobs, and identity providers when agreeing on what to test.</p></div>
         <div class="service-grid">
-          <article class="service-card" data-reveal><span class="service-code">REST</span><h3>REST APIs</h3><p>Routes, methods, versions, content types, identifier handling, filtering, pagination, batch operations, error states, and inconsistent enforcement across equivalent endpoints.</p></article>
-          <article class="service-card" data-reveal><span class="service-code">GRAPHQL</span><h3>GraphQL APIs</h3><p>Schema exposure, resolver authorization, node and edge traversal, aliases, batching, mutations, subscriptions, complexity limits, and field-level data access.</p></article>
-          <article class="service-card" data-reveal><span class="service-code">EVENTS</span><h3>Webhooks and callbacks</h3><p>Signature validation, replay resistance, destination changes, event secrets, retry behavior, state confusion, server-side requests, and trust in inbound event data.</p></article>
-          <article class="service-card" data-reveal><span class="service-code">OAUTH</span><h3>OAuth and OIDC</h3><p>Authorization flow binding, redirect handling, scopes, claims, consent, token audience, refresh behavior, PKCE, discovery, session linkage, and client boundaries.</p></article>
-          <article class="service-card" data-reveal><span class="service-code">KEYS</span><h3>API keys and tokens</h3><p>Key scope, rotation and revocation, leakage paths, environment separation, token validation, expiry, replay, audience confusion, and fallback authentication behavior.</p></article>
-          <article class="service-card" data-reveal><span class="service-code">M2M</span><h3>Service accounts</h3><p>Machine identity privileges, client credentials, workload trust, impersonation, delegated access, secret handling, tenant context, and lateral actions between services.</p></article>
+          <article class="service-card" data-reveal><span class="service-code">REST</span><h3>REST APIs</h3><p>Check routes, methods, versions, and content types, including filtering, pagination, batch operations, and errors. Equivalent endpoints should enforce the same rules.</p></article>
+          <article class="service-card" data-reveal><span class="service-code">GRAPHQL</span><h3>GraphQL APIs</h3><p>Review schema exposure, resolver permissions, field access, mutations, and subscriptions. Batching and complexity checks stay within agreed resource limits.</p></article>
+          <article class="service-card" data-reveal><span class="service-code">EVENTS</span><h3>Webhooks and callbacks</h3><p>Check signatures, event secrets, retries, destinations, and how incoming events change product state. Repeated events should not quietly repeat a sensitive action.</p></article>
+          <article class="service-card" data-reveal><span class="service-code">OAUTH</span><h3>OAuth and OIDC</h3><p>Review redirects, consent, scopes, claims, PKCE, and token handling. Check that each login and authorization flow stays tied to the intended client and session.</p></article>
+          <article class="service-card" data-reveal><span class="service-code">KEYS</span><h3>API keys and tokens</h3><p>Check what keys can access, how they expire or get revoked, and whether credentials stay separate between environments. Review token validation and fallback behavior.</p></article>
+          <article class="service-card" data-reveal><span class="service-code">M2M</span><h3>Service accounts</h3><p>Review machine permissions, client credentials, delegated access, and secrets. A service account still needs a defined purpose and the right tenant context.</p></article>
         </div>
       </div>
     </section>
 
     <section class="section section-tint" aria-labelledby="abuse-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">Rate and resource limits</span><h2 id="abuse-title">Small checks, agreed limits.</h2><p>We check for weak rate and resource controls using minimal traffic. Volumetric denial-of-service testing is excluded unless a separate, explicit agreement defines a safe method.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Rate and resource limits</span><h2 id="abuse-title">This isn't a load test.</h2><p>We use low-volume, bounded checks for weak rate and resource controls. Volumetric denial-of-service testing needs a separate agreement and a safe method.</p></div>
         <div class="principle-grid">
           <article class="principle-card" data-reveal><h3>Rate and quota controls</h3><p>Low-volume checks for identity, endpoint, tenant, IP, and token limits, including alternate methods, batch features, and distributed control inconsistencies.</p></article>
           <article class="principle-card" data-reveal><h3>Resource consumption</h3><p>Bounded tests of expensive filters, search, uploads, exports, GraphQL complexity, pagination, asynchronous jobs, and fan-out behavior.</p></article>
@@ -160,7 +160,7 @@
 
     <section class="section section-dark" aria-labelledby="method-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">How we work</span><h2 id="method-title">Understand the API, then test its assumptions.</h2><p>We agree on coverage and safety rules, learn how normal access works, and check where it can fail. You stay informed as findings are confirmed.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">During the test</span><h2 id="method-title">Start with how it's supposed to work.</h2><p>Documentation and a conversation with your engineers help establish the expected behavior. We test against that and keep you informed as findings are confirmed.</p></div>
         <div class="process-grid">
           <article class="process-step" data-reveal><span>01</span><h3>Agree on the scope</h3><p>Confirm the APIs, accounts, sensitive data, workflows, exclusions, and questions you need the test to answer.</p></article>
           <article class="process-step" data-reveal><span>02</span><h3>Understand normal access</h3><p>Map what each role and organization should be able to access, then record normal requests for comparison.</p></article>
@@ -210,8 +210,8 @@
       <div class="container deliverable-layout">
         <div class="deliverable-copy" data-reveal>
           <span class="eyebrow">Deliverables</span>
-          <h2 id="deliverables-title">A report your engineers can work from.</h2>
-          <p>Each finding shows which account, resource, or action is affected, what needs to happen first, and how to reproduce the issue. We make clear what we observed and what that means for your product. Our <a href="/insights/what-good-pentest-report-includes.html">guide to a useful pentest report</a> explains what to look for when reviewing a sample.</p>
+          <h2 id="deliverables-title">Enough detail to investigate and fix.</h2>
+          <p>Each finding names the affected accounts and resources, explains what we observed, and includes the evidence your engineers need. We separate demonstrated impact from assumptions. See our <a href="/insights/what-good-pentest-report-includes.html">guide to a useful pentest report</a> for what to look for in a sample.</p>
           <div class="button-row"><a class="btn btn-dark" href="/report-viewer.html" data-track="api_deliverable_report">Explore the sample report</a><a class="btn btn-secondary" href="/sample-vapt-report.pdf" data-track="api_deliverable_pdf">Open the sample PDF</a></div>
         </div>
         <ol class="deliverable-list" data-reveal>
@@ -227,12 +227,12 @@
       <div class="container">
         <div class="section-heading" data-reveal><span class="eyebrow">Planning the schedule</span><h2 id="timeline-title">What affects how long the test takes?</h2><p>We'll propose a test window after reviewing the scope and confirming access. These are the details that affect the work.</p></div>
         <div class="coverage-grid">
-          <article class="coverage-card" data-reveal><h3>Identity combinations</h3><p>Roles, tenant types, service accounts, OAuth clients, delegated access, and administrative hierarchies create the meaningful authorization matrix.</p></article>
-          <article class="coverage-card" data-reveal><h3>Workflow depth</h3><p>Payments, approvals, exports, provisioning, invitations, asynchronous jobs, and multi-step state changes require scenario-led testing.</p></article>
+          <article class="coverage-card" data-reveal><h3>Identity combinations</h3><p>More roles, tenant types, service accounts, and delegated permissions mean more access relationships to check.</p></article>
+          <article class="coverage-card" data-reveal><h3>Workflow depth</h3><p>A payment or approval flow takes more time to understand and test than a simple lookup. Background jobs add another step to follow.</p></article>
           <article class="coverage-card" data-reveal><h3>Documentation and test data</h3><p>Current API inventories, stable schemas, and useful test data reduce time spent on discovery and troubleshooting.</p></article>
           <article class="coverage-card" data-reveal><h3>Integration count</h3><p>Identity providers, webhooks, storage, queues, partner APIs, and downstream services add distinct trust boundaries and failure modes.</p></article>
           <article class="coverage-card" data-reveal><h3>Environment constraints</h3><p>Production safeguards, allowlisting, rate ceilings, maintenance windows, deployments, and unavailable features can shape sequencing and depth.</p></article>
-          <article class="coverage-card" data-reveal><h3>Reporting needs</h3><p>Engineering remediation, customer assurance, framework mapping, evidence review, and stakeholder walkthroughs require different presentation depth.</p></article>
+          <article class="coverage-card" data-reveal><h3>Reporting needs</h3><p>Tell us who will read the report and what they need from it. Customer reviews, engineering work, and framework mapping can require different detail.</p></article>
         </div>
       </div>
     </section>
@@ -269,7 +269,7 @@
     <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Plan your API test</span><h2>Tell us how your API fits together.</h2><p>Start with the interfaces, roles, integrations, and deadline. A short description is enough for the first conversation; do not send API keys, tokens, or customer data.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="api_bottom_contact">Request an API pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html?trigger=baseline" data-track="api_bottom_builder">Draft your scope first</a></div></div></div></section>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260906a"></script><script src="/motion.js?v=20260905c"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260907a"></script><script src="/motion.js?v=20260905c"></script>
 </body>
 </html>

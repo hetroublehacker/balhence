@@ -127,7 +127,9 @@ async function main() {
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${pathname} should fit ${width}px`);
         const cta = page.locator('main a.btn-primary[href^="/contact.html?"]').first();
         assert.equal(await cta.isVisible(), true);
-        assert.match((await cta.textContent()).trim(), /request.*pentest/i);
+        // The homepage uses conversational copy; every route still leads to
+        // the same explicit pentest intake with its own attribution label.
+        assert.match((await cta.textContent()).trim(), /pentest|project|building/i);
         const destination = new URL(await cta.getAttribute("href"), origin);
         assert.equal(destination.searchParams.get("service"), "web-api");
         assert.equal(destination.searchParams.get("source"), source);

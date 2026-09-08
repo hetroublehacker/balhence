@@ -93,7 +93,8 @@
 .case-editorial p,
 .article-content .case-editorial p {
   margin: 0;
-  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
   line-height: 1.7;
 }
 
@@ -360,7 +361,8 @@
   padding: 16px 20px;
   border-top: 1px solid #35464e;
   color: #b2c3ce;
-  font-size: 0.77rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
   line-height: 1.75;
 }
 

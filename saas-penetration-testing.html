@@ -27,7 +27,7 @@
   <meta name="twitter:image:alt" content="Balhence SaaS penetration testing services">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/styles.css?v=20260907a">
   <link rel="stylesheet" href="/motion.css?v=20260905c">
   <script type="application/ld+json">
   {
@@ -84,37 +84,37 @@
       <div class="container" data-reveal>
         <span class="eyebrow">For SaaS product and engineering teams</span>
         <h1 id="saas-hero-title">SaaS penetration<br>testing.</h1>
-        <p>Your customers share a product, not permission to each other's data. We test tenant boundaries, roles, SSO, and critical workflows across your web app and APIs, with findings your engineers can act on.</p>
+        <p>One product, many customers, and plenty of places for permissions to go wrong. We test tenant isolation, user roles, SSO, and the workflows that connect your web app and APIs.</p>
         <div class="button-row"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=saas-pentest" data-track="saas_hero_contact">Request a SaaS pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-secondary" href="/report-viewer.html" data-track="saas_hero_report">See the sample report</a></div>
       </div>
     </section>
 
     <section class="section section-paper" aria-labelledby="fit-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">Start with the decision</span><h2 id="fit-title">A release, a customer review, or a clearer baseline.</h2><p>Tell us why you need the test. The useful scope for a new enterprise SSO feature may differ from a broad product assessment.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Why now?</span><h2 id="fit-title">The reason for testing shapes the scope.</h2><p>A new SSO feature needs a different look from a first assessment of the whole product. Start with the decision your team needs to make.</p></div>
         <div class="service-grid">
           <article class="service-card" data-reveal><span class="service-code">RELEASE</span><h3>Shipping a sensitive change</h3><p>Focus on new permissions, customer administration, billing, integrations, or identity flows and the existing features they affect.</p></article>
-          <article class="service-card primary" data-reveal><span class="service-code">CUSTOMER</span><h3>Answering security due diligence</h3><p>Confirm the customer's scope, report, and re-test expectations before testing. A report supports their review; acceptance remains their decision.</p></article>
-          <article class="service-card" data-reveal><span class="service-code">BASELINE</span><h3>Understanding product risk</h3><p>Assess the connected application, prioritize confirmed issues, and give engineering a record of coverage and remaining limitations.</p></article>
+          <article class="service-card primary" data-reveal><span class="service-code">CUSTOMER</span><h3>A customer needs a report</h3><p>Check what they expect from the scope, report, and re-test before booking. Their reviewer decides whether the evidence meets the request.</p></article>
+          <article class="service-card" data-reveal><span class="service-code">BASELINE</span><h3>You need a starting point</h3><p>Assess the connected product and give engineering a list of confirmed issues, priorities, and areas that still need a closer look.</p></article>
         </div>
       </div>
     </section>
 
     <section class="section section-dark" aria-labelledby="coverage-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">SaaS-specific coverage</span><h2 id="coverage-title">Follow the customer boundary through the product.</h2><p>A tenant check on the main screen says little about an export, background job, or administrative action. The scope follows those connected workflows.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">SaaS-specific coverage</span><h2 id="coverage-title">Permissions have to hold beyond the main screen.</h2><p>An export, background job, or admin action still needs to respect the right customer's boundaries. We follow the workflows through those less visible parts.</p></div>
         <div class="coverage-grid">
-          <article class="coverage-card" data-reveal><h3>Tenant isolation</h3><p>Customer records, files, search, exports, shared links, and background jobs should preserve the correct organization context. We compare controlled tenants and document legitimate sharing exceptions.</p></article>
-          <article class="coverage-card" data-reveal><h3>Roles and customer administration</h3><p>Owners, administrators, members, and guests have different authority. Invitations, team moves, ownership transfers, support access, and deprovisioning need consistent rules as relationships change.</p></article>
-          <article class="coverage-card" data-reveal><h3>SSO and connected identities</h3><p>Organization-specific SSO, account linking, recovery, sessions, and provisioning affect who belongs to a customer account. Included identity-provider configurations and test identities are agreed before testing.</p></article>
-          <article class="coverage-card" data-reveal><h3>Integrations and product state</h3><p>API keys, webhooks, service accounts, billing entitlements, approvals, and asynchronous work cross boundaries the browser cannot enforce. Third-party platforms themselves are excluded without their authorization.</p></article>
+          <article class="coverage-card" data-reveal><h3>Tenant isolation</h3><p>Check records, files, search, exports, shared links, and background jobs using controlled tenants. Where sharing is allowed, we document the exception and test its limits.</p></article>
+          <article class="coverage-card" data-reveal><h3>Roles and customer administration</h3><p>Owners, admins, members, and guests need different permissions. We check what happens when someone is invited, moved, given ownership, or removed.</p></article>
+          <article class="coverage-card" data-reveal><h3>SSO and connected identities</h3><p>Review how SSO, account linking, recovery, sessions, and provisioning affect membership. We agree on the identity-provider configurations and test accounts first.</p></article>
+          <article class="coverage-card" data-reveal><h3>Integrations and product state</h3><p>Check API keys, webhooks, service accounts, billing permissions, approvals, and background work. Third-party platforms stay out of scope without their authorization.</p></article>
         </div>
       </div>
     </section>
 
     <section class="section section-paper" aria-labelledby="scope-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">A useful starting scope</span><h2 id="scope-title">Bring roles and workflows, not just a URL.</h2><p>Provide the main modules, APIs, tenant model, identity flows, integrations, and deadline. Two controlled tenants and representative roles help make isolation checks meaningful.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Planning the test</span><h2 id="scope-title">Tell us how customers use the product.</h2><p>A short walkthrough of the modules, APIs, roles, and integrations helps us scope the work. For isolation checks, we need two controlled tenants and representative accounts.</p></div>
         <div class="transparency-box" data-reveal>
           <div class="transparency-panel"><span class="eyebrow">Prepare access</span><h3>Make the environment representative</h3><p>Use a stable build, synthetic records, working role-specific accounts, API documentation, and a technical contact. Note differences from production, especially SSO, billing, feature flags, and background processing.</p><p>The <a href="/insights/saas-vapt-readiness-checklist.html">SaaS pentest readiness checklist</a> helps your team prepare these details.</p></div>
           <div class="transparency-panel"><span class="eyebrow">Agree boundaries</span><h3>Keep testing controlled</h3><p>Written authorization defines hosts, roles, safe data, request limits, contacts, and stop conditions. Production testing requires explicit safeguards. Destructive testing, load testing, cloud configuration review, and source review are not included by default.</p><p>Need broader coverage? See the <a href="/services.html#capabilities">full security capability map</a>.</p></div>
@@ -125,9 +125,9 @@
     <section class="section section-tint" aria-labelledby="deliverables-title">
       <div class="container deliverable-layout">
         <div class="deliverable-copy" data-reveal>
-          <span class="eyebrow">Evidence your team can use</span><h2 id="deliverables-title">Clear findings. Clear limits.</h2>
-          <p>AI-native tools support the work; a tester validates reported findings. The report distinguishes observed impact from assumptions and records what was not tested.</p>
-          <p>Read the <a href="/insights/draft-write-authorization.html">redacted draft-authorization story</a> for an educational example of that reasoning. It is not a client endorsement or a fix confirmation.</p>
+          <span class="eyebrow">The report</span><h2 id="deliverables-title">What failed, why it matters, what to fix.</h2>
+          <p>A tester verifies every reported finding. You'll see the evidence, the demonstrated impact, and what we couldn't check. AI assists the work; it doesn't decide whether an issue is confirmed.</p>
+          <p>The <a href="/insights/draft-write-authorization.html">redacted draft-authorization story</a> shows how we explain those distinctions. It's an educational reconstruction, not a client endorsement or confirmation of a deployed fix.</p>
           <div class="button-row"><a class="btn btn-dark" href="/report-viewer.html" data-track="saas_deliverable_report">Explore the sample report</a></div>
         </div>
         <ol class="deliverable-list" data-reveal>
@@ -151,10 +151,10 @@
       </div>
     </section>
 
-    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Plan your SaaS test</span><h2>What are you building, and when do you need the results?</h2><p>Send a short product description, your main roles, and the reason for testing. Keep credentials, tokens, and customer data out of the enquiry.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=saas-pentest" data-track="saas_bottom_contact">Request a SaaS pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html?trigger=baseline" data-track="saas_bottom_builder">Draft your scope first</a></div></div></div></section>
+    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Plan your SaaS test</span><h2>Let's talk about your product.</h2><p>A short description, the main roles, and any deadline are enough to start. Leave credentials, tokens, and customer data out of the enquiry.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=saas-pentest" data-track="saas_bottom_contact">Request a SaaS pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html?trigger=baseline" data-track="saas_bottom_builder">Draft your scope first</a></div></div></div></section>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/saas-vapt-readiness-checklist.html">SaaS readiness guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260906a"></script><script src="/motion.js?v=20260905c"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/saas-vapt-readiness-checklist.html">SaaS readiness guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260907a"></script><script src="/motion.js?v=20260905c"></script>
 </body>
 </html>

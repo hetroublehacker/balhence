@@ -27,7 +27,7 @@
   <meta name="twitter:image:alt" content="Choose a security project scope with Balhence">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/styles.css?v=20260907a">
   <link rel="stylesheet" href="/scope-builder.css?v=20260905c">
   <link rel="stylesheet" href="/motion.css?v=20260905c">
   <script type="application/ld+json">
@@ -97,9 +97,9 @@
     <section class="sb-hero" aria-labelledby="scope-title">
       <div class="container sb-hero-grid">
         <div class="sb-hero-copy" data-reveal>
-          <span class="eyebrow">The right scope comes first</span>
-          <h1 id="scope-title">Start with your<br>security goal.</h1>
-          <p>Choose the area you want to work on. For web and API tests, build a private draft brief here. Cloud, AI, infrastructure, and specialist projects start with a conversation about your systems and goals.</p>
+          <span class="eyebrow">Project planner</span>
+          <h1 id="scope-title">Work out what<br>needs testing.</h1>
+          <p>Planning a web or API test? Draft a brief here without sending anything. For cloud, AI, infrastructure, or specialist work, choose an area and we'll talk through the scope.</p>
           <div class="button-row">
             <a class="btn btn-primary" href="#project-routing" data-track="scope_hero_start">Choose a starting point <span aria-hidden="true"><i class="ui-icon ui-icon-arrow ui-icon-down" aria-hidden="true"></i></span></a>
             <a class="btn btn-quiet" href="#scope-builder" data-track="scope_hero_web_api">Open the web &amp; API planner</a>
@@ -133,7 +133,7 @@
         <div class="section-heading" data-reveal>
           <span class="eyebrow">Choose your starting point</span>
           <h2 id="routing-title">What are we working on?</h2>
-          <p>Use the planner for web and API tests. For other work, pick an area to start a tailored scope review. <a href="/contact.html?service=custom" data-capability-route="custom">Cross-disciplinary project?</a> Or <a href="/contact.html?service=not-sure" data-capability-route="not-sure">not sure where to start?</a> Let's talk it through.</p>
+          <p>The web and API planner is below. Everything else starts with a conversation. <a href="/contact.html?service=custom" data-capability-route="custom">Need several kinds of work?</a> Or <a href="/contact.html?service=not-sure" data-capability-route="not-sure">not sure where to start?</a> That's fine too.</p>
         </div>
         <div class="trigger-grid" data-capability-routes>
           <article class="trigger-card" data-reveal>
@@ -191,7 +191,7 @@
           <div>
             <span class="eyebrow">Free web &amp; API planner</span>
             <h2 id="builder-title">Plan your web or API test.</h2>
-            <p>About five minutes, six steps, no sign-up. We only ask for counts and general choices. Answers stay in this browser; confirm systems and access later, under an NDA. <a href="#project-routing">Working on something else?</a></p>
+            <p>Six short steps, no sign-up. We ask for counts and general choices, not private system details. Answers stay in this browser; systems and access can be confirmed later, under an NDA. <a href="#project-routing">Working on something else?</a></p>
           </div>
           <div class="sb-safety-note" role="note">
             <span aria-hidden="true">!</span>
@@ -230,7 +230,7 @@
             <form id="scope-planner-form">
               <fieldset class="sb-step" data-step="0">
                 <legend><span>01 / Business outcome</span>Why does the test need to happen now?</legend>
-                <p class="sb-step-lead">Tell us what prompted the test so the plan reflects your priorities and deadline.</p>
+                <p class="sb-step-lead">Start with the reason you're planning a test and when you need the results.</p>
 
                 <div class="sb-question" data-question="business_trigger">
                   <h3 id="trigger-label">Main reason for testing</h3>
@@ -286,8 +286,8 @@
               </fieldset>
 
               <fieldset class="sb-step" data-step="1">
-                <legend><span>02 / Target surfaces</span>What can an attacker reach?</legend>
-                <p class="sb-step-lead">Select deployable surfaces, then bound the number of distinct applications and API groups.</p>
+                <legend><span>02 / Target surfaces</span>Which parts need testing?</legend>
+                <p class="sb-step-lead">Choose the types of application, then count the separate apps and API groups you want included.</p>
 
                 <div class="sb-question" data-required-group="surfaces">
                   <h3 id="surface-label">In-scope surfaces</h3>
@@ -316,8 +316,8 @@
               </fieldset>
 
               <fieldset class="sb-step" data-step="2">
-                <legend><span>03 / Trust model</span>Which boundaries must hold?</legend>
-                <p class="sb-step-lead">Authorization and tenant isolation usually create more meaningful work than endpoint count alone.</p>
+                <legend><span>03 / Trust model</span>Who uses the application?</legend>
+                <p class="sb-step-lead">Different roles, customer accounts, and sign-in methods each add access rules to check.</p>
 
                 <div class="sb-input-row">
                   <label class="sb-select-field"><span>Distinct user roles</span><select name="role_count" required><option value="">Select</option><option value="1_2">1-2 roles</option><option value="3_4">3-4 roles</option><option value="5_7">5-7 roles</option><option value="8plus">8+ roles</option></select></label>
@@ -355,11 +355,11 @@
               </fieldset>
 
               <fieldset class="sb-step" data-step="3">
-                <legend><span>04 / Critical workflows</span>Where would abuse hurt most?</legend>
-                <p class="sb-step-lead">The best tests follow value and privilege through the product, not just a generic vulnerability checklist.</p>
+                <legend><span>04 / Critical workflows</span>Which actions matter most?</legend>
+                <p class="sb-step-lead">Think about money, sensitive information, approvals, and actions that would be difficult to undo.</p>
 
                 <div class="sb-question" data-required-group="workflows">
-                  <h3 id="workflow-label">Priority abuse paths</h3>
+                  <h3 id="workflow-label">Workflows to focus on</h3>
                   <p id="workflow-help">Choose the workflows that deserve manual business-logic testing.</p>
                   <div class="sb-choice-grid sb-choice-grid-two" aria-labelledby="workflow-label" aria-describedby="workflow-help">
                     <label class="sb-choice sb-choice-compact"><input type="checkbox" name="workflows" value="payments"><span class="sb-choice-content"><b>Payments &amp; billing</b><small>Amounts, plans, credits, refunds</small></span></label>
@@ -411,7 +411,7 @@
 
                 <div class="sb-question">
                   <h3 id="readiness-label">Inputs already available</h3>
-                  <p id="readiness-help">Missing items become explicit readiness gaps in your brief.</p>
+                  <p id="readiness-help">Anything missing will appear in your brief as something to prepare.</p>
                   <div class="sb-readiness-list" aria-labelledby="readiness-label" aria-describedby="readiness-help">
                     <label><input type="checkbox" name="readiness" value="authorization"><span><b>Written authorization owner</b><small>Someone can sign the scope and rules of engagement.</small></span></label>
                     <label><input type="checkbox" name="readiness" value="accounts"><span><b>Controlled accounts for each role</b><small>Including a second tenant where isolation is in scope.</small></span></label>
@@ -429,8 +429,8 @@
               </fieldset>
 
               <fieldset class="sb-step" data-step="5">
-                <legend><span>06 / Evidence &amp; timing</span>What does &quot;done&quot; need to look like?</legend>
-                <p class="sb-step-lead">Select the outputs required to make a decision, fix the findings, and show closure.</p>
+                <legend><span>06 / Evidence &amp; timing</span>What do you need at the end?</legend>
+                <p class="sb-step-lead">Choose the reports and follow-up your team or customer needs.</p>
 
                 <div class="sb-question" data-required-group="deliverables">
                   <h3 id="deliverable-label">Required outputs</h3>
@@ -452,7 +452,7 @@
 
                 <div class="sb-final-note">
                   <span aria-hidden="true"><i class="ui-icon ui-icon-check" aria-hidden="true"></i></span>
-                  <p><strong>The result is a planning brief, not a quote.</strong> Balhence will validate the asset inventory, access assumptions, safety rules, calendar, and exclusions before issuing a statement of work.</p>
+                  <p><strong>This produces a draft brief, not a quote.</strong> We'll check the systems, access, safety rules, timing, and exclusions with you before proposing the work.</p>
                 </div>
 
                 <div class="sb-step-actions sb-final-actions">
@@ -546,13 +546,13 @@
       <div class="container">
         <div class="section-heading">
           <span class="eyebrow">What the web &amp; API planner does</span>
-          <h2 id="method-title">A starting point, not a commitment.</h2>
-          <p>This worksheet covers web and API testing, not every security discipline. It helps organize the systems, access, evidence, and safety details. We review the final scope with you before work begins.</p>
+          <h2 id="method-title">What happens to this draft?</h2>
+          <p>Keep it, download it, or choose to send it with an enquiry. It covers web and API planning only. We still review the final scope with you before any work begins.</p>
         </div>
         <div class="sb-method-grid">
-          <article><span>01 / BOUNDS</span><h3>Counts what changes effort</h3><p>Applications, APIs, roles, tenants, authentication paths, integrations, workflows, and environments.</p></article>
-          <article><span>02 / SAFETY</span><h3>Surfaces missing prerequisites</h3><p>Authorization, controlled accounts, safe data, contacts, documentation, windows, rate limits, and stop conditions.</p></article>
-          <article><span>03 / HONESTY</span><h3>Returns a band, not a quote</h3><p>The output is deliberately indicative. Asset validation and rules of engagement can still change timing or commercial terms.</p></article>
+          <article><span>01 / COVERAGE</span><h3>A summary of the work</h3><p>Apps, APIs, roles, tenants, sign-in methods, integrations, workflows, and environments in one place.</p></article>
+          <article><span>02 / PREPARATION</span><h3>A list of what's missing</h3><p>Permission, test accounts, safe data, documentation, contacts, and testing rules still to arrange.</p></article>
+          <article><span>03 / TIMING</span><h3>An initial estimate</h3><p>The suggested window is only a guide. Reviewing the actual systems and testing rules may change the timing and terms.</p></article>
         </div>
       </div>
     </section>
@@ -561,7 +561,7 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div>
+        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div>
         <div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div>
         <div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html" aria-current="page">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
         <div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div>
@@ -571,7 +571,7 @@
   </footer>
 
   <script src="/config.js?v=20260905c"></script>
-  <script src="/app.js?v=20260906a"></script>
+  <script src="/app.js?v=20260907a"></script>
   <script src="/vendor/jspdf-4.2.1.umd.min.js" integrity="sha384-qovJwSBbRDPP5cEjCp8S0UP66wrvnjaa60XMOGzTNanrThcrGfXfnZkvgY8N1KT3"></script>
   <script src="/scope-pdf.js?v=20260905c"></script>
   <script src="/scope-builder.js?v=20260905c"></script>

@@ -266,7 +266,7 @@
           form.reset();
           if (status) {
             status.classList.add("is-success");
-            status.textContent = "Thank you. Your request has been sent. We'll review your project and reply by email to clarify the scope and next steps.";
+            status.textContent = "Thank you. Your request has been sent. We'll get back to you by email to talk through the project.";
             status.focus();
           }
           trackEvent("generate_lead", { form_name: form.dataset.leadForm });

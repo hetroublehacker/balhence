@@ -1,10 +1,10 @@
 # Search visibility and pentest enquiries
 
-Implementation and owner checklist, 6 September 2026. This file is operational documentation and is excluded from the public site artifact.
+Implementation and owner checklist, updated 7 September 2026. This file is operational documentation and is excluded from the public site artifact.
 
 ## What this release changes
 
-The homepage now explains the application pentest offer immediately, with a direct enquiry and a sample report as the first two actions. Broader AI-native security capabilities remain available. There are distinct web, API, and SaaS service pages, and the guides and research stories link to the relevant service and enquiry path.
+The simplified homepage introduces the practice in plain language, with a direct enquiry and sample report as the first two actions. Its compact service section links to distinct web, API, and SaaS pages as well as broader security capabilities. The guides and research stories retain their relevant service and enquiry paths. The headline is editorial; the page title, description and service links retain the application-pentesting search intent.
 
 The contact form asks for name, email, service, and permission to respond. Company, URL, timing, reason, and project detail are optional. It retains the scope-planner handoff, email fallback, native no-JavaScript submission, and recovery after failed delivery. No new response-time promise, testimonial, certification, price, or customer claim has been invented.
 

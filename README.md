@@ -14,16 +14,18 @@ This directory is the main website. The existing nested `website/`, `website-too
 
 ## Experience
 
-- Minimal homepage with staged typography, an animated SVG trust boundary, three interactive evidence states, tool previews, scroll reveals, and a sticky engagement story.
+- Four-section homepage: a short introduction, compact services, two field notes, and a direct enquiry. An illustrative security map connects applications, cloud, AI, data, identity, and code through an access-and-trust review. Animated route traces and pointer highlighting add motion without live scanning or invented results. The dark hero, logo, lavender buttons, and footer use the shared site styling.
+- Self-hosted Bricolage Grotesque throughout the shared site, paired with Newsreader for article prose and editorial accents. Code and HTTP remain monospace. Font licenses ship with the assets; the separate CTF keeps its terminal styling.
+- Shorter, conversational service copy and ten edited articles. Research stories preserve their observation limits, redactions, synthetic HTTP and defensive test cases; guides focus on practical decisions.
 - Twelve security capability areas, with cross-disciplinary and specialist enquiries routed to a tailored scope review. AI-native positioning retains human ownership, agreed data use, and explicit project boundaries.
 - A dedicated Blog at `/blogs.html` with five anonymized research case studies, local search/topic filters, and 25 illustrative defensive regression cases. Existing preparation and procurement guides remain at `/blog.html`.
-- Animation pauses while the demo is offscreen or the tab is hidden. Visitors can pause it, and reduced-motion preferences are honored. Keyboard and touch controls work independently of animation.
+- Animation stops while the map is offscreen or the tab is hidden, draws at a maximum of 30fps, and caps pixel density. A saved pause control, reduced-motion/slow-device/save-data preferences, and a matching static SVG fallback keep the experience optional. No information depends on motion or pointer input.
 - Security project routing plus a six-step web/API scope planner with local draft resume, PDF export, and a reviewed handoff to the contact form. The estimator does not price or estimate specialist work.
 - Interactive synthetic report with executive, technical, remediation, and re-test views.
 - Accessible mobile navigation, editable analytics preferences, and enquiry timeout/retry handling.
 - Search-focused web, API, and SaaS service pages with direct proposal requests, contextual research links, and a lower-friction enquiry form. The broader AI-native capability map remains available.
 
-The homepage uses CSS and the Web Animations API; it does not fetch animation libraries, fonts, analytics, or other third-party resources on initial load. Supporting pages retain the existing progressive motion layer.
+The homepage uses Canvas 2D, CSS and the Web Animations API, without an animation library. Font files are served locally; no third-party resources load until eligible analytics consent. Supporting pages retain the existing progressive motion layer.
 
 ## Main files
 

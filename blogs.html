@@ -6,14 +6,14 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Penetration Testing Blog &amp; Bug Bounty Stories | Balhence</title>
-  <meta name="description" content="Read anonymized pentest and bug bounty stories about access control, sessions, caching, and business logic, with synthetic HTTP examples and practical fix guidance.">
+  <meta name="description" content="Pentest and bug bounty field notes: what happened, what the evidence proved, and what to check after a fix. Redacted stories with synthetic HTTP examples.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://balhence.com/blogs.html">
   <meta name="theme-color" content="#0c0c12">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Balhence">
   <meta property="og:title" content="Penetration Testing Blog &amp; Bug Bounty Stories | Balhence">
-  <meta property="og:description" content="The story behind the finding. Five anonymized research notes with synthetic HTTP examples and practical engineering lessons.">
+  <meta property="og:description" content="Five security findings, told through the details that mattered. Redacted field notes with synthetic HTTP and practical repair checks.">
   <meta property="og:url" content="https://balhence.com/blogs.html">
   <meta property="og:image" content="https://balhence.com/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -22,12 +22,12 @@
   <meta property="og:image:alt" content="Balhence practical security research and engineering lessons">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Penetration Testing Blog &amp; Bug Bounty Stories | Balhence">
-  <meta name="twitter:description" content="The story behind the finding. Five anonymized research notes with synthetic HTTP examples and practical engineering lessons.">
+  <meta name="twitter:description" content="Five security findings, told through the details that mattered. Redacted field notes with synthetic HTTP and practical repair checks.">
   <meta name="twitter:image" content="https://balhence.com/og-image.png">
   <meta name="twitter:image:alt" content="Balhence practical security research and engineering lessons">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/styles.css?v=20260907a">
   <link rel="stylesheet" href="/motion.css?v=20260905c">
   <link rel="stylesheet" href="/case-studies.css?v=20260905d">
   <script type="application/ld+json">
@@ -39,7 +39,7 @@
     "url": "https://balhence.com/blogs.html",
     "description": "Five anonymized bug bounty and pentest stories generalized from private research notes, with synthetic HTTP examples, engineering lessons, and 25 regression checks. Observations have not been independently revalidated; proposed fixes are not claimed to be deployed.",
     "datePublished": "2026-09-05",
-    "dateModified": "2026-09-06",
+    "dateModified": "2026-09-07",
     "inLanguage": "en",
     "isPartOf": { "@id": "https://balhence.com/#website" },
     "about": { "@id": "https://balhence.com/#organization" },
@@ -61,21 +61,21 @@
     <section class="page-hero case-hub-hero" aria-labelledby="case-hub-title">
       <div class="container" data-reveal>
         <nav class="case-library-nav" aria-label="Reading collections"><a href="/blogs.html" aria-current="page">Field notes</a><a href="/blog.html">Practical guides <span aria-hidden="true">/</span></a></nav>
-        <span class="eyebrow">Balhence / research journal</span>
-        <h1 id="case-hub-title">Bug bounty notes.<br><span>The story behind <br>the finding.</span></h1>
-        <p>A draft that would not open. A cart that looked familiar. A response in the wrong place. Bug bounty and pentest stories, from the first odd detail to the boundary it revealed.</p>
-        <div class="case-hub-summary"><span><strong>01 - 05</strong> published notes</span><span><strong>HTTP</strong> synthetic examples</span><span>Updated <time datetime="2026-09-06">06 Sep 2026</time></span></div>
+        <span class="eyebrow">Pentesting / bug bounty</span>
+        <h1 id="case-hub-title">Field notes.<br><span>The details matter.</span></h1>
+        <p>What happened, what the evidence actually proved, and what a repair needs to get right. Five findings, with the identifying details taken out.</p>
+        <div class="case-hub-summary"><span><strong>01 - 05</strong> published notes</span><span><strong>HTTP</strong> synthetic examples</span><span>Updated <time datetime="2026-09-07">07 Sep 2026</time></span></div>
       </div>
     </section>
 
     <section class="section case-library" aria-labelledby="case-library-title">
       <div class="container">
         <aside class="case-editorial case-editorial-hub" aria-labelledby="case-editorial-title">
-          <strong id="case-editorial-title">A note on the notes</strong>
-          <p>Adapted from private research notes. Identities, routes, and data have been removed or replaced. HTTP examples are synthetic illustrations, not original captures. Observations have not been independently revalidated; proposed fixes are not claimed to be deployed.</p>
+          <strong id="case-editorial-title">Before you read</strong>
+          <p>These stories draw on private research notes. Identities, routes, and data have been removed or replaced. The HTTP is synthetic, not an original capture. Observations have not been independently revalidated; repairs are proposed, not confirmed deployed.</p>
         </aside>
 
-        <div class="case-library-heading"><div><span class="eyebrow">The notebook / 5 entries</span><h2 id="case-library-title">Follow the finding.</h2></div><p>The observation, the HTTP context,<br>and five regression checks for each case.</p></div>
+        <div class="case-library-heading"><div><span class="eyebrow">The notebook / 5 entries</span><h2 id="case-library-title">Pick a story.</h2></div><p>Each note includes HTTP context<br>and five checks for the proposed repair.</p></div>
 
         <div class="case-controls" data-case-controls hidden>
           <div class="case-search-row"><label class="case-search-label" for="case-search">Search the notebook<input id="case-search" data-case-search type="search" placeholder="Search topic or observation" autocomplete="off" aria-controls="case-grid"></label><button class="case-reset" type="button" data-case-reset>Reset filters</button></div>
@@ -93,25 +93,25 @@
         <div class="case-grid" id="case-grid">
           <article class="case-card case-card-featured" data-case-card data-topic="authorization">
             <a class="case-card-link" href="/insights/draft-write-authorization.html" aria-labelledby="draft-title">
-              <div class="case-feature-copy"><div class="case-card-meta"><span class="case-topic"><span class="case-file">01 /</span> Authorization</span><span>Featured note</span></div><h3 id="draft-title">The draft you could change but could not read</h3><p>The read route said no. A separate write route accepted a change. The detail that turned a blocked draft into a question about object ownership, queued work, and where permission actually gets checked.</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>6 min read</span></div></div>
+              <div class="case-feature-copy"><div class="case-card-meta"><span class="case-topic"><span class="case-file">01 /</span> Authorization</span><span>Featured note</span></div><h3 id="draft-title">The draft you could change but could not read</h3><p>An unrelated account couldn't open the draft. Its edits still appeared in the owner's view. The saved contents, not the response code, established the finding.</p><div class="case-card-bottom"><span class="text-link">Read the note</span><span>6 min read</span></div></div>
               <div class="case-boundary-note" aria-hidden="true"><span class="case-note-label">Notebook 001 / the contradiction</span><div><span>Read policy</span><strong>Access denied</strong></div><div><span>Write policy</span><strong>Change accepted</strong></div><p>Same draft.<br>Two different decisions.</p><span class="case-note-rule"></span></div>
             </a>
           </article>
 
           <article class="case-card" data-case-card data-topic="sessions">
-            <a class="case-card-link" href="/insights/session-authority-boundary.html" aria-labelledby="sessions-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">02 /</span> Sessions</span><span>6 min read</span></div><h3 id="sessions-title">When two browsers inherited one cart</h3><p>A fresh browser should have meant a fresh cart. Familiar contents raised a different question: when had a client value become authority the server was willing to trust?</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>5 regression checks</span></div></a>
+            <a class="case-card-link" href="/insights/session-authority-boundary.html" aria-labelledby="sessions-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">02 /</span> Sessions</span><span>6 min read</span></div><h3 id="sessions-title">When two browsers inherited one cart</h3><p>Two anonymous sessions began separately. Then an edit in one appeared in the other. The server had let navigation state choose whose cart to use.</p><div class="case-card-bottom"><span class="text-link">Read the note</span><span>5 regression checks</span></div></a>
           </article>
 
           <article class="case-card" data-case-card data-topic="caching">
-            <a class="case-card-link" href="/insights/private-response-cache-boundary.html" aria-labelledby="caching-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">03 /</span> Caching</span><span>6 min read</span></div><h3 id="caching-title">When the cache forgot who a response belonged to</h3><p>The origin knew a response was private. A shared delivery layer reused it anyway. Following that response meant looking beyond the application to the decisions made at the edge.</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>5 regression checks</span></div></a>
+            <a class="case-card-link" href="/insights/private-response-cache-boundary.html" aria-labelledby="caching-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">03 /</span> Caching</span><span>6 min read</span></div><h3 id="caching-title">When the cache forgot who a response belonged to</h3><p>The origin marked account content private. A shared cache delivered it without a session. The login check worked; the delivery policy didn't.</p><div class="case-card-bottom"><span class="text-link">Read the note</span><span>5 regression checks</span></div></a>
           </article>
 
           <article class="case-card" data-case-card data-topic="validation">
-            <a class="case-card-link" href="/insights/server-owned-validation-rules.html" aria-labelledby="validation-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">04 /</span> Validation</span><span>6 min read</span></div><h3 id="validation-title">When a validation helper became a data query</h3><p>A small form check knew more than it needed to. The investigation followed the point where a supplied value stopped being data and began choosing application policy.</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>5 regression checks</span></div></a>
+            <a class="case-card-link" href="/insights/server-owned-validation-rules.html" aria-labelledby="validation-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">04 /</span> Validation</span><span>6 min read</span></div><h3 id="validation-title">When a validation helper became a data query</h3><p>A public form exposed more than a value check. Its helper answered questions about stored data that an anonymous visitor shouldn't have been able to ask.</p><div class="case-card-bottom"><span class="text-link">Read the note</span><span>5 regression checks</span></div></a>
           </article>
 
           <article class="case-card" data-case-card data-topic="workflows">
-            <a class="case-card-link" href="/insights/evidence-gated-workflows.html" aria-labelledby="workflows-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">05 /</span> Workflows</span><span>6 min read</span></div><h3 id="workflows-title">Submitted is not the same as verified</h3><p>The submission succeeded. The required evidence was another matter. A workflow story about what a success response establishes, and what the server still needs to prove.</p><div class="case-card-bottom"><span class="text-link">Open field note</span><span>5 regression checks</span></div></a>
+            <a class="case-card-link" href="/insights/evidence-gated-workflows.html" aria-labelledby="workflows-title"><div class="case-card-meta"><span class="case-topic"><span class="case-file">05 /</span> Workflows</span><span>6 min read</span></div><h3 id="workflows-title">Submitted is not the same as verified</h3><p>Required evidence was missing, but the server recorded the case as submitted. Why that result matters, and why it doesn't prove an approval bypass.</p><div class="case-card-bottom"><span class="text-link">Read the note</span><span>5 regression checks</span></div></a>
           </article>
         </div>
 
@@ -120,10 +120,10 @@
       </div>
     </section>
 
-    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Apply the lessons</span><h2>Could your product<br>have the same blind spots?</h2><p>Our <a href="/web-application-penetration-testing.html">web application</a>, <a href="/api-penetration-testing.html">API</a>, and <a href="/saas-penetration-testing.html">SaaS pentests</a> examine the roles, data boundaries, and business logic behind your product. Tell us what you are building and when you need it tested.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=field-notes" data-track="case_studies_contact">Request a pentest <i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></a><a class="btn btn-quiet" href="/report-viewer.html" data-track="case_studies_sample_report">See a sample report</a></div></div></div></section>
+    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Work with Balhence</span><h2>Let's take a closer<br>look at your product.</h2><p>We test <a href="/web-application-penetration-testing.html">web applications</a>, <a href="/api-penetration-testing.html">APIs</a>, and <a href="/saas-penetration-testing.html">SaaS products</a>, including roles, shared data, and the workflows your customers use. Tell us what you're building and when you need it tested.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=field-notes" data-track="case_studies_contact">Request a pentest <i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></a><a class="btn btn-quiet" href="/report-viewer.html" data-track="case_studies_sample_report">See a sample report</a></div></div></div></section>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Guides</a></li><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260906a"></script><script src="/motion.js?v=20260905c"></script><script src="/case-studies.js?v=20260905c"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Guides</a></li><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260907a"></script><script src="/motion.js?v=20260905c"></script><script src="/case-studies.js?v=20260905c"></script>
 </body>
 </html>

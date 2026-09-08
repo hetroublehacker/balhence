@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="Balhence security engineering case studies">
   <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-09-06">
+  <meta property="article:modified_time" content="2026-09-07">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="When the cache forgot who a response belonged to">
   <meta name="twitter:description" content="A defensive case study in preserving account privacy across shared caches.">
@@ -30,7 +30,7 @@
   <meta name="twitter:image:alt" content="Balhence security engineering case studies">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/styles.css?v=20260907a">
   <link rel="stylesheet" href="/motion.css?v=20260905c">
   <link rel="stylesheet" href="/case-studies.css?v=20260905d">
   <script type="application/ld+json">
@@ -52,7 +52,7 @@
         "url": "https://balhence.com/insights/private-response-cache-boundary.html",
         "mainEntityOfPage": "https://balhence.com/insights/private-response-cache-boundary.html",
         "datePublished": "2026-09-05",
-        "dateModified": "2026-09-06",
+        "dateModified": "2026-09-07",
         "inLanguage": "en",
         "author": { "@id": "https://balhence.com/#organization" },
         "publisher": { "@id": "https://balhence.com/#organization" },
@@ -96,8 +96,8 @@
         <div class="container">
           <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Cache boundaries</span></nav>
           <h1>When the cache forgot who a response belonged to</h1>
-          <p class="article-deck">The account page required a session. Its response carried a private caching instruction. Then the same account content reached a fresh client without a session, and the investigation moved beyond the application.</p>
-          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-09-06">6 September 2026</time></span><span>6 min read</span></div>
+          <p class="article-deck">The application required a login and marked the response private. A shared cache still delivered the account's content to a client with no session.</p>
+          <div class="article-byline"><span>By Balhence</span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-09-07">7 September 2026</time></span><span>6 min read</span></div>
         </div>
       </header>
 
@@ -105,23 +105,23 @@
         <div class="container article-layout">
           <nav class="article-toc" aria-label="On this page">
             <strong>On this page</strong>
-            <a href="#observation">A reassuring starting point</a>
+            <a href="#observation">The login check worked</a>
             <a href="#http-notebook">The HTTP notebook</a><a href="#boundary">Following the disagreement</a>
             <a href="#limits">What the shared body proved</a>
             <a href="#repair">Where the repair belongs</a>
-            <a href="#regression">Five checks before closure</a>
+            <a href="#regression">Check lookup and storage separately</a>
             <a href="#review">The remaining question</a>
           </nav>
 
           <div class="article-content">
             <aside class="article-callout" aria-label="Anonymization and evidence limits">
-              <p><strong>About this case study:</strong> This is an anonymized adaptation from private research notes. Organizations, products, identifiers, routes, and data have been removed or replaced. Engineering examples are synthetic. Source observations have not been independently revalidated, and the proposed fixes are not confirmed deployed.</p>
+              <p><strong>What this article covers:</strong> An account-content disclosure documented in private research notes. Organizations, products, identifiers, routes, and data have been removed or replaced. Examples are synthetic and source observations have not been independently revalidated. The repair is proposed; fixes are not confirmed deployed.</p>
             </aside>
 
-            <h2 id="observation">The account page gave two reassuring answers</h2>
-            <p>The starting point in the research notes looked ordinary. A signed-in client received private information from a controlled account, and the origin marked the response with a restrictive caching directive. The account handler required authentication. Its response also told the delivery system that the content was private.</p>
-            <p>The surprise was a later delivery of that same account body to a fresh client with no session. An intermediary had classified another representation as public and retained the response. The page's privacy instruction and the intermediary's decision no longer described the same content.</p>
-            <p>The control made the contradiction harder to dismiss: the canonical route denied the unauthenticated client. Access control still worked at the handler, while private content crossed the boundary elsewhere. That moved the question from whether the page required a login to how its response could be delivered without one.</p>
+            <h2 id="observation">The login check worked</h2>
+            <p>At the application, the account page behaved as expected. A signed-in client received information from a controlled account. An anonymous client was denied on the canonical route. The private response also carried a restrictive caching instruction.</p>
+            <p>Yet the same account body later reached a fresh client with no session. An intermediary had treated another representation as public and stored it. The application's privacy instruction had not survived the delivery path.</p>
+            <p>That explains why the successful login check wasn't the end of the investigation. The handler could refuse anonymous requests and private content could still escape through a layer in front of it. Both observations were true.</p>
 
             <section id="http-notebook" aria-labelledby="http-notebook-title">
               <h2 id="http-notebook-title">The HTTP notebook</h2>
@@ -147,18 +147,18 @@ Content-Length: 61
             </section>
 
             <h2 id="boundary">The disagreement sat between the handler and the client</h2>
-            <p>The notes point to routing and cache policy interpreting the same operation differently. The origin saw an account operation. The intermediary treated another representation of it as public, and its effective policy overrode the origin's privacy instruction. Reviewing either decision in isolation would have missed the conflict.</p>
-            <p>This explains how the access check could pass review while the delivery failed. A shared cache can answer before the application runs. Once it holds private content under a public classification, the code that would refuse an anonymous caller may never receive the request.</p>
-            <p>The repair therefore has two jobs: keep private responses out of shared storage and prevent shared lookup from returning them. Fixing only new storage would leave previously accepted objects in play. Routing, lookup, and storage all have to agree that account content belongs to an authenticated identity.</p>
+            <p>The origin and the intermediary disagreed about what they were handling. One saw an account operation. The other applied a public caching classification, overriding the privacy instruction. Reviewing just the application code or just the cache configuration would miss the relationship between those decisions.</p>
+            <p>A shared cache can answer without running the handler at all. If it already holds private content as a public object, the login check may never get a chance to reject the request.</p>
+            <p>The repair therefore needs two separate checks: may this request use shared storage, and may this response enter it? Blocking new writes is not enough when old objects remain available. Lookup, storage, and route classification need to agree.</p>
 
             <h2 id="limits">The same account body was the important evidence</h2>
-            <p>A successful status alone would leave room for a public page, a sign-in screen, or an unrelated response. Here, the reported comparison was the controlled account body itself, delivered to an unauthenticated client. Paired with the canonical route's denial, that supports a disclosure across the authentication boundary.</p>
-            <p>The conclusion stops there. The notes do not establish how many accounts were affected, how long objects could remain available, whether anyone accessed them historically, or whether every private feature behaved the same way. None of those claims follows from one demonstrated boundary crossing.</p>
-            <p>For a local repair review, independent client contexts and a harmless marker in a synthetic account fixture make the comparison easier to trust. A content fingerprint or a comparison of selected synthetic fields can identify the fixture without retaining a real account body. Credentials and private content do not belong in regression artifacts.</p>
+            <p>A 200 response could be a public page or a sign-in screen. The useful evidence was the body: it matched private content from the controlled account and was delivered without a session. Together with the canonical route's denial, that supports an authentication-boundary disclosure.</p>
+            <p>It does not tell us how many accounts were affected, how long a cached object lived, or whether anyone accessed one before the research. Those require separate evidence. There is no basis here for claiming a historical breach or exposure across every private feature.</p>
+            <p>In a local regression suite, use independent client contexts and a harmless marker in a synthetic account. Compare that marker or a fingerprint of the fixture. The test doesn't need real account bodies or credentials in its output.</p>
 
-            <h2 id="repair">Move the privacy decision into the whole delivery path</h2>
-            <p>The proposed repair follows the point of disagreement. Strict canonical routing and an explicit allowlist define which resources are public. Private handlers bypass shared-cache lookup and storage, and the intermediary uses the same trusted route classification as the origin. An unknown or inconsistent classification defaults to bypass.</p>
-            <p>This illustrative policy separates the decision made before lookup from the decision made before storage. The route registry and response classification are server-owned metadata. Each intermediary must enforce an equivalent rule.</p>
+            <h2 id="repair">Make every cache layer respect the same rule</h2>
+            <p>Start the proposed repair with a clear list of resources that are actually public. Use strict canonical routing and trusted route metadata shared with the intermediary. Private handlers bypass shared lookup and storage. If the classification is unknown or the layers disagree, bypass rather than guess.</p>
+            <p>The illustrative policy below checks before lookup and again before storage. The application owns the route registry and response classification; they are not claims accepted from the client. Each intermediary needs an equivalent rule.</p>
 
             <pre class="case-code" tabindex="0" aria-label="Illustrative defensive pseudocode"><code># Synthetic policy for the repaired application.
 lookup_policy(request, trusted_route):
@@ -181,10 +181,10 @@ storage_policy(lookup_decision, response):
         return DO_NOT_STORE
     return STORE_PUBLIC_RESOURCE</code></pre>
 
-            <p>Changing a response header alone is insufficient when another policy can override it. Review the effective configuration, repair the classification, and invalidate previously stored objects associated with private content. The application team must also establish how routing changes reach each cache layer so a later deployment cannot silently reintroduce disagreement.</p>
+            <p>Then deal with what is already stored. Invalidate objects associated with private content and check the effective configuration, not just the header the application emits. Document how a routing change reaches each cache layer; otherwise, a later deployment can bring the disagreement back.</p>
 
-            <h2 id="regression">Five checks that would give the repair weight</h2>
-            <p>These are regression cases for a fixed application, using in-process handlers, synthetic identities, and fake cache adapters. They require no remote requests. Record cache reads and writes as assertions alongside the returned result.</p>
+            <h2 id="regression">Check lookup and storage separately</h2>
+            <p>Run these five local cases with in-process handlers, synthetic identities, and fake cache adapters. Assert which cache reads and writes happened, as well as what the caller received. No remote requests are needed.</p>
 
             <div class="scope-table-wrap" role="region" tabindex="0" aria-labelledby="case-tests-caption">
               <table class="scope-table">
@@ -201,8 +201,8 @@ storage_policy(lookup_decision, response):
             </div>
 
             <h2 id="review">The handler was only part of the answer</h2>
-            <p>The finding began with a handler that appeared to protect its output. It turned on the delivery system making a different decision about that output. Application and infrastructure owners need a shared account of which resources may be cached, which bypass caching, and how old objects are retired after a policy change. Evidence from a repaired deployment would be needed to close that question; these notes do not establish closure.</p>
-            <p>A related failure of server-owned policy appears in <a href="/insights/server-owned-validation-rules.html">when a validation helper became a data query</a>. Both cases show how a correct local component can lose its intended boundary when another layer makes a broader decision.</p>
+            <p>The application team and the infrastructure team need to be able to answer the same questions: what is public, what bypasses shared caching, and what happens to old objects when the policy changes? A header in the source code doesn't answer those questions for a deployed system. A verified repair would need evidence from that system; these notes do not establish one.</p>
+            <p><a href="/insights/server-owned-validation-rules.html">When a validation helper became a data query</a> follows a different disagreement between layers: a small public form sitting in front of a much broader internal helper.</p>
 
             <section class="article-cta" aria-labelledby="article-cta-title">
               <h2 id="article-cta-title">Does private content stay private at every layer?</h2>
@@ -218,7 +218,7 @@ storage_policy(lookup_decision, response):
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div>
+        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div>
         <div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div>
         <div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/blog.html">Guides</a></li><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div>
         <div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div>
@@ -228,7 +228,7 @@ storage_policy(lookup_decision, response):
   </footer>
 
   <script src="/config.js?v=20260905c"></script>
-  <script src="/app.js?v=20260906a"></script>
+  <script src="/app.js?v=20260907a"></script>
   <script src="/motion.js?v=20260905c"></script>
 </body>
 </html>

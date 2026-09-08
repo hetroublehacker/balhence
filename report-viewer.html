@@ -27,7 +27,7 @@
   <meta name="twitter:image:alt" content="Balhence sample web and API penetration test report">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260905c">
+  <link rel="stylesheet" href="/styles.css?v=20260907a">
   <link rel="stylesheet" href="/report-explorer.css?v=20260905c">
   <link rel="stylesheet" href="/motion.css?v=20260905c">
   <script type="application/ld+json">
@@ -78,16 +78,16 @@
         <div data-reveal>
           <nav class="breadcrumb breadcrumb-dark" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">Sample report</span></nav>
           <span class="eyebrow">Sample report / fictional examples</span>
-          <h1>What does a<br>good report look like?</h1>
-          <p>See how we explain a finding, show the evidence, and recommend a fix. The systems, accounts, and findings in this sample are fictional.</p>
+          <h1>Read a finding.<br>Follow the evidence.</h1>
+          <p>A report should help you understand the problem and work on a fix. Browse this example to see the format. All systems, accounts, findings, and re-test results shown here are fictional.</p>
           <div class="button-row">
             <a class="btn btn-primary" href="#report-console">Explore the report <span aria-hidden="true"><i class="ui-icon ui-icon-arrow ui-icon-down" aria-hidden="true"></i></span></a>
             <a class="btn btn-secondary" href="/sample-vapt-report.pdf" download data-track="report_download">Download full PDF</a>
           </div>
           <ul class="report-assurances" aria-label="Sample report assurances">
             <li>Synthetic evidence</li>
-            <li>Controlled accounts</li>
-            <li>No client claims</li>
+            <li>Fictional accounts</li>
+            <li>Not a client report</li>
           </ul>
         </div>
         <div class="report-orbit" aria-hidden="true" data-reveal>
@@ -106,8 +106,8 @@
       <div class="container">
         <div class="section-heading report-section-heading" data-reveal>
           <span class="eyebrow">Explore the sample</span>
-          <h2 id="explorer-title">One finding, from discovery to fix.</h2>
-          <p>Start with the summary, then look at the technical details, the suggested fix, and the re-test result.</p>
+          <h2 id="explorer-title">Four ways to read the same finding.</h2>
+          <p>Choose the summary, technical evidence, suggested fix, or illustrative re-test. Each view answers a different question.</p>
         </div>
 
         <div class="report-console" id="report-console" data-report-console data-reveal>
@@ -119,7 +119,7 @@
           </div>
 
           <section class="report-panel is-active" id="panel-executive" role="tabpanel" aria-labelledby="tab-executive" data-report-panel="executive">
-            <div class="panel-heading"><div><span class="console-kicker">Decision view</span><h3>Cross-tenant access breaks the product's trust boundary.</h3></div><span class="severity">HIGH</span></div>
+            <div class="panel-heading"><div><span class="console-kicker">For the release decision</span><h3>One customer's account can read another customer's invoice.</h3></div><span class="severity">HIGH</span></div>
             <div class="executive-grid">
               <div class="executive-narrative">
                 <p>A standard user in one controlled tenant can retrieve an invoice belonging to another controlled tenant by changing an object identifier. The server confirms authentication but does not enforce object ownership.</p>
@@ -173,7 +173,7 @@ return invoice</code></pre><p>Resolve the object inside the authorized tenant bo
           </section>
 
           <section class="report-panel" id="panel-retest" role="tabpanel" aria-labelledby="tab-retest" data-report-panel="retest">
-            <div class="panel-heading"><div><span class="console-kicker">Closure view</span><h3>Verification records what changed and what was not re-tested.</h3></div><span class="status-pill status-fixed">FIXED</span></div>
+            <div class="panel-heading"><div><span class="console-kicker">After the illustrative fix</span><h3>What changed, and what still wasn't checked.</h3></div><span class="status-pill status-fixed">FIXED</span></div>
             <div class="retest-timeline">
               <div><span>Original</span><strong>200 OK</strong><p>Tenant A session retrieved controlled Tenant B invoice.</p></div>
               <i aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></i>
@@ -200,12 +200,12 @@ return invoice</code></pre><p>Resolve the object inside the authorized tenant bo
       </div>
     </section>
 
-    <section class="section section-dark"><div class="container"><div class="cta-panel cta-panel-outline" data-reveal><div><span class="eyebrow">From a sample to your application</span><h2>Want this clarity for your own product?</h2><p>Tell us about your application, the main roles, and the deadline. We'll discuss the coverage, report, walkthrough, and re-test your team needs before proposing the work.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=sample-report" data-track="report_request_pentest">Request a pentest proposal <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html" data-track="report_scope_builder">Draft your scope first</a></div></div></div></section>
+    <section class="section section-dark"><div class="container"><div class="cta-panel cta-panel-outline" data-reveal><div><span class="eyebrow">Your application</span><h2>Need a report your team can work from?</h2><p>Tell us what needs testing and who will read the results. We'll agree on coverage, the handover, and any re-test before proposing the work.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=sample-report" data-track="report_request_pentest">Request a pentest proposal <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html" data-track="report_scope_builder">Draft your scope first</a></div></div></div></section>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>AI-native security. Broad expertise. Clear outcomes.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/blogs.html">Blog</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/insights/how-to-scope-web-api-pentest.html">Scoping guide</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
   <script src="/config.js?v=20260905c"></script>
-  <script src="/app.js?v=20260906a"></script>
+  <script src="/app.js?v=20260907a"></script>
   <script src="/report-explorer.js?v=20260905c"></script>
   <script src="/motion.js?v=20260905c"></script>
 </body>
