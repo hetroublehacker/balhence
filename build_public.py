@@ -17,6 +17,7 @@ PUBLIC_FILES = (
     ".well-known/security.txt",
     "404.html",
     "CNAME",
+    "d4627c921ee756e5a1d004e47bed20a8.txt",
     "about.html",
     "api-penetration-testing.html",
     "app.js",

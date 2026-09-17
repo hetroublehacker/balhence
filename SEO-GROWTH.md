@@ -33,8 +33,21 @@ These are intent choices, not measured keyword volumes. Search Console data shou
 2. The `balhence.com` domain property is already verified in Google Search Console. Keep property access and performance data private.
 3. The canonical sitemap is already submitted and accepted. After publishing, inspect the new India URL and updated services URL, then request indexing if they are available. A submitted sitemap is a discovery signal, not confirmation of indexing. See [Google's sitemap instructions](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap).
 4. Send one clearly labelled, non-sensitive test enquiry yourself. Confirm the Formspree submission appears and reaches the intended inbox, then check the email reply path and spam folder. Automated tests use a mock and do not establish real inbox delivery.
-5. If you use Bing Webmaster Tools, verify the same domain and submit the same canonical sitemap through your account.
+5. Bing Webmaster Tools uses the `msvalidate.01` tag in `index.html` to verify `https://balhence.com/`. Keep that tag on the live homepage, verify the property, and submit `https://balhence.com/sitemap.xml` through the HTH account.
 6. Add only permissioned, verifiable proof: a real public professional profile, current credentials, approved testimonials, or a client reference. Link the website from profiles you control. Review identity and permission before adding `sameAs`, review, or credential markup.
+
+### Notify IndexNow participants after a release
+
+`d4627c921ee756e5a1d004e47bed20a8.txt` is the public IndexNow ownership key. Once deployment has finished, confirm `https://balhence.com/d4627c921ee756e5a1d004e47bed20a8.txt` serves the same text as the local file. For each **new or substantively updated canonical page**, submit its exact URL once:
+
+```bash
+indexnow_key="$(tr -d '\n' < d4627c921ee756e5a1d004e47bed20a8.txt)"
+curl --fail-with-body -G 'https://api.indexnow.org/indexnow' \
+  --data-urlencode 'url=https://balhence.com/penetration-testing-india.html' \
+  --data-urlencode "key=$indexnow_key"
+```
+
+Replace the example `url` with each changed canonical URL. The root key file follows IndexNow's preferred `{key}.txt` format, so no `keyLocation` parameter is needed. Do not resubmit unchanged URLs or submit before the key file is live. An accepted notification does not guarantee crawling, indexing, or ranking, and IndexNow does not submit URLs to Google. See the [IndexNow documentation](https://www.indexnow.org/documentation) and [FAQ](https://www.indexnow.org/faq).
 
 Earlier live checks confirmed HTTPS 200 on the homepage, permanent redirects from HTTP, www, and the GitHub Pages project URL, an accessible robots.txt, and a real missing-page 404. Live form delivery and Core Web Vitals remain unverified.
 
