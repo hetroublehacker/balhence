@@ -122,6 +122,18 @@
       </div>
     </section>
 
+    <section class="section section-dark" aria-labelledby="india-evidence-title">
+      <div class="container">
+        <div class="section-heading" data-reveal><span class="eyebrow">Fictional worked example</span><h2 id="india-evidence-title">What should a VAPT finding prove?</h2><p>Our fictional sample uses two controlled test tenants to show the evidence behind an access-control finding. It illustrates a report format, not a client result.</p></div>
+        <div class="coverage-grid">
+          <article class="coverage-card" data-reveal><h3>Reproduce the boundary failure</h3><p>A standard user in synthetic Tenant A requests an invoice owned by controlled Tenant B by changing only the object ID on <code>GET /api/v1/invoices/{id}</code>.</p></article>
+          <article class="coverage-card" data-reveal><h3>Show the effect</h3><p>The fictional response returns Tenant B's invoice instead of denying access. The finding records the test accounts, request, response and potential cross-tenant data exposure.</p></article>
+          <article class="coverage-card" data-reveal><h3>Define the fix and re-test</h3><p>Constrain invoice lookup to the authorized tenant. Then check that cross-tenant reads and exports are denied while the same-tenant read still works; record any routes outside the re-test scope.</p></article>
+        </div>
+        <p>Explore the <a href="/report-viewer.html">full fictional sample finding and report</a> to see the evidence, remediation and bounded re-test together.</p>
+      </div>
+    </section>
+
     <section class="section section-paper" aria-labelledby="india-compare-title">
       <div class="container">
         <div class="section-heading" data-reveal><span class="eyebrow">Compare proposals</span><h2 id="india-compare-title">How should you choose a VAPT provider?</h2><p>When comparing penetration testing quotes in India, ask what is actually tested and what your team receives. A lower number is hard to compare until the scope is clear.</p></div>
@@ -141,6 +153,7 @@
           <details class="faq-item"><summary>Is this a VAPT service for companies in India?</summary><p>Yes. For web, API and SaaS products, we plan an authorized penetration test with your team and deliver it remotely. The proposal defines the exact systems, approach and report.</p></details>
           <details class="faq-item"><summary>How is the price determined?</summary><p>It depends on the number of systems, user roles, integrations, environments and depth of testing. Tell us your goals and timeline; we will write a scope and quote before any testing starts. The <a href="/insights/web-api-pentest-cost-scope-guide.html">cost and scope guide</a> explains the main effort drivers.</p></details>
           <details class="faq-item"><summary>Can the report support a customer or audit review?</summary><p>Share the reviewer's exact requirements, including any named assessor or report format. We will check whether the proposed scope and deliverables fit before starting. A pentest alone does not certify compliance or guarantee audit acceptance.</p></details>
+          <details class="faq-item"><summary>Do we need a CERT-In empanelled auditor?</summary><p>Check the exact customer, tender or regulatory requirement. If it names an empanelled auditor, verify the proposed provider against <a href="https://www.cert-in.org.in/s2cMainServlet?pageid=CERTEMPANEL">CERT-In's current list</a> before commissioning the work. This page does not claim CERT-In empanelment; a general VAPT report should not be presented as an empanelled audit.</p></details>
           <details class="faq-item"><summary>Can you test our live product?</summary><p>When authorized and appropriate, yes. We agree on safe techniques, test accounts, rate limits, escalation contacts and stop conditions first. Higher-risk scenarios may need a representative test environment.</p></details>
         </div>
       </div>
