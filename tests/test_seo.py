@@ -18,6 +18,7 @@ from verify_site import Document, ORIGIN, local_target, strict_json
 
 
 COMMERCIAL_PAGES = (
+    "penetration-testing-india.html",
     "web-application-penetration-testing.html",
     "api-penetration-testing.html",
     "saas-penetration-testing.html",

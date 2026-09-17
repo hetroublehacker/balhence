@@ -1,10 +1,12 @@
 # Search visibility and pentest enquiries
 
-Implementation and owner checklist, updated 7 September 2026. This file is operational documentation and is excluded from the public site artifact.
+Implementation and owner checklist, updated 17 September 2026. This file is operational documentation and is excluded from the public site artifact.
 
 ## What this release changes
 
 The simplified homepage introduces the practice in plain language, with a direct enquiry and sample report as the first two actions. Its compact service section links to distinct web, API, and SaaS pages as well as broader security capabilities. The guides and research stories retain their relevant service and enquiry paths. The headline is editorial; the page title, description and service links retain the application-pentesting search intent.
+
+The India page gives the geographic query its own answer: remote coverage, web/API/SaaS scope, authorization and data-handling steps, reporting, a practical quote-comparison checklist and an enquiry route. The homepage and services page link to it in visible text. Its `Service.areaServed` markup describes India service coverage without asserting an Indian office or legal entity.
 
 The contact form asks for name, email, service, and permission to respond. Company, URL, timing, reason, and project detail are optional. It retains the scope-planner handoff, email fallback, native no-JavaScript submission, and recovery after failed delivery. No new response-time promise, testimonial, certification, price, or customer claim has been invented.
 
@@ -15,6 +17,7 @@ Search engines need useful, clearly described content and discoverable links; ne
 | Visitor's task | Main page | Supporting evidence |
 | --- | --- | --- |
 | Find an application pentest provider | `/` and `/services.html` | Scope, deliverables, broader capabilities |
+| Find remote penetration testing for a team in India | `/penetration-testing-india.html` | Web, API and SaaS coverage, India engagement logistics, proposal comparison, sample report |
 | Arrange a web application penetration test | `/web-application-penetration-testing.html` | Scoping guide, authorization stories, sample report |
 | Test an API or its integrations | `/api-penetration-testing.html` | API coverage, controlled access, session and cache stories |
 | Assess a multi-tenant SaaS product | `/saas-penetration-testing.html` | Tenant/role coverage, SSO, readiness checklist |
@@ -26,14 +29,18 @@ These are intent choices, not measured keyword volumes. Search Console data shou
 
 ## Owner actions after publishing
 
-1. Publish through the existing GitHub Actions workflow and confirm its deployment succeeds. This editing session does not push or deploy changes.
-2. Verify the `balhence.com` property in Google Search Console if it is not already verified. Use the verification method and value supplied by your own account; do not publish a guessed verification token.
-3. Submit `https://balhence.com/sitemap.xml` in the property's Sitemaps report. Inspect the homepage and the web, API, and SaaS pages, then request indexing where appropriate. A submitted sitemap is a discovery signal, not confirmation of indexing. See [Google's sitemap instructions](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap).
+1. Publish through the existing GitHub Actions workflow and confirm its deployment succeeds.
+2. The `balhence.com` domain property is already verified in Google Search Console. Keep property access and performance data private.
+3. The canonical sitemap is already submitted and accepted. After publishing, inspect the new India URL and updated services URL, then request indexing if they are available. A submitted sitemap is a discovery signal, not confirmation of indexing. See [Google's sitemap instructions](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap).
 4. Send one clearly labelled, non-sensitive test enquiry yourself. Confirm the Formspree submission appears and reaches the intended inbox, then check the email reply path and spam folder. Automated tests use a mock and do not establish real inbox delivery.
 5. If you use Bing Webmaster Tools, verify the same domain and submit the same canonical sitemap through your account.
 6. Add only permissioned, verifiable proof: a real public professional profile, current credentials, approved testimonials, or a client reference. Link the website from profiles you control. Review identity and permission before adding `sameAs`, review, or credential markup.
 
-The live checks during this work confirmed HTTPS 200 on the homepage, permanent redirects from HTTP, www, and the GitHub Pages project URL, an accessible robots.txt, and a real missing-page 404. They did not establish Search Console ownership, index coverage, rankings, Core Web Vitals, or live form delivery.
+Earlier live checks confirmed HTTPS 200 on the homepage, permanent redirects from HTTP, www, and the GitHub Pages project URL, an accessible robots.txt, and a real missing-page 404. Live form delivery and Core Web Vitals remain unverified.
+
+## Generative AI search
+
+Google says an AI Overview or AI Mode supporting link must come from an indexed page eligible for a normal snippet. It recommends original, useful content and clear technical structure, and says there is no special AI schema, AI text file or guaranteed placement. See [Google's AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) and [AI features guidance](https://developers.google.com/search/docs/appearance/ai-features). Track the new page's index status, India query impressions, India country results and Generative AI impressions in Search Console after publication. Record the actual performance numbers outside this public repository.
 
 ## Measure leads, not just clicks
 

@@ -14,13 +14,14 @@ const ROOT = path.resolve(__dirname, "..");
 const CONSENT = "balhence_analytics_consent";
 const BUYER_ROUTES = [
   ["/", "home-hero"],
+  ["/penetration-testing-india.html", "india-pentest"],
   ["/web-application-penetration-testing.html", "web-pentest"],
   ["/api-penetration-testing.html", "api-pentest"],
   ["/saas-penetration-testing.html", "saas-pentest"],
 ];
 const SOURCES = [
   "home-nav", "home-hero", "home-faq", "home-closing",
-  "web-pentest", "api-pentest", "saas-pentest", "services",
+  "web-pentest", "api-pentest", "saas-pentest", "india-pentest", "services",
   "pentest-guides", "field-notes", "scope-planner", "sample-report",
   "draft-write-authorization", "session-authority-boundary",
   "private-response-cache-boundary", "server-owned-validation-rules",
@@ -139,7 +140,7 @@ async function main() {
         assert.equal(await page.locator('input[name="enquiry_source"]').inputValue(), source);
         assert.equal(await page.locator("script[data-balhence-analytics]").count(), 0);
       }
-      pass(`Homepage and three pentest pages fit ${width}px and link directly to preselected, attributed enquiries`);
+      pass(`Homepage and four pentest pages fit ${width}px and link directly to preselected, attributed enquiries`);
     }
 
     for (const source of SOURCES) {
@@ -296,7 +297,7 @@ async function main() {
       assert.equal(await nojs.locator('form[data-lead-form]').getAttribute("method"), "post");
       assert.match(await nojs.locator('form[data-lead-form]').getAttribute("action"), /^https:\/\/formspree\.io\/f\/[a-z0-9]+$/);
     }
-    pass("All four buyer pages reach the contact form without JavaScript");
+    pass("All five buyer pages reach the contact form without JavaScript");
 
     await fillEnquiry(nojs);
     assert.equal(await nojs.locator("#privacy-consent").getAttribute("required"), "");

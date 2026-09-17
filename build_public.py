@@ -54,6 +54,7 @@ PUBLIC_FILES = (
     "og-pentest-report.png",
     "og-saas-pentest-readiness.png",
     "og-scope-pentest.png",
+    "penetration-testing-india.html",
     "privacy.html",
     "report-explorer.css",
     "report-explorer.js",
