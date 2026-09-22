@@ -13,6 +13,17 @@ from pathlib import Path, PurePosixPath
 
 SOURCE_ROOT = Path(__file__).resolve().parent
 PUBLIC_FILES = (
+    "ai-llm-penetration-testing.html",
+    "compliance-penetration-testing.html",
+    "hipaa-penetration-testing.html",
+    "insights/does-soc-2-require-penetration-testing.html",
+    "insights/how-to-plan-llm-security-testing.html",
+    "insights/ptaas-vs-annual-penetration-test.html",
+    "pci-dss-penetration-testing.html",
+    "penetration-testing-as-a-service.html",
+    "penetration-testing-services-usa.html",
+    "soc-2-penetration-testing.html",
+
     ".nojekyll",
     ".well-known/security.txt",
     "404.html",

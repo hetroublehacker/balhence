@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
+from html.parser import HTMLParser
 import unittest
 from urllib.parse import parse_qs, urlsplit
 import xml.etree.ElementTree as ET
@@ -22,7 +23,22 @@ COMMERCIAL_PAGES = (
     "web-application-penetration-testing.html",
     "api-penetration-testing.html",
     "saas-penetration-testing.html",
+    "soc-2-penetration-testing.html",
+    "ai-llm-penetration-testing.html",
+    "penetration-testing-services-usa.html",
+    "compliance-penetration-testing.html",
+    "pci-dss-penetration-testing.html",
+    "hipaa-penetration-testing.html",
+    "penetration-testing-as-a-service.html",
 )
+ENQUIRY_SERVICES = {
+    "soc-2-penetration-testing.html": "soc2",
+    "ai-llm-penetration-testing.html": "ai",
+    "compliance-penetration-testing.html": "compliance",
+    "pci-dss-penetration-testing.html": "pci",
+    "hipaa-penetration-testing.html": "hipaa",
+    "penetration-testing-as-a-service.html": "ptaas",
+}
 SITEMAP_NAMESPACE = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 ARTICLE_TYPES = {"Article", "BlogPosting", "TechArticle"}
 
@@ -73,6 +89,43 @@ class SearchDocument(Document):
             self._anchor.text += data
 
 
+class LaunchMarkup(HTMLParser):
+    """Inspect rendered FAQ text and alternate-language links independently of JSON-LD."""
+
+    def __init__(self, source):
+        super().__init__(convert_charrefs=True)
+        self.alternates = {}
+        self.faqs = []
+        self.current = None
+        self.part = None
+        self.feed(source)
+
+    def handle_starttag(self, tag, attrs):
+        values = dict(attrs)
+        if tag == "link" and values.get("rel") == "alternate" and values.get("hreflang"):
+            language = values["hreflang"]
+            if language in self.alternates:
+                raise AssertionError(f"Duplicate hreflang: {language}")
+            self.alternates[language] = values.get("href")
+        if tag == "details" and "faq-item" in values.get("class", "").split():
+            self.current = {"summary": [], "p": []}
+        if self.current is not None and tag in ("summary", "p"):
+            self.part = tag
+
+    def handle_endtag(self, tag):
+        if self.current is None:
+            return
+        if tag == "details":
+            self.faqs.append(tuple(normalized(" ".join(self.current[key])) for key in ("summary", "p")))
+            self.current = None
+        if tag in ("summary", "p", "details"):
+            self.part = None
+
+    def handle_data(self, data):
+        if self.current is not None and self.part and data.strip():
+            self.current[self.part].append(data.strip())
+
+
 def schema_objects(value):
     """Visit graph, list and nested JSON-LD objects without assuming layout."""
     if isinstance(value, dict):
@@ -105,7 +158,7 @@ def linked_path(source: str, anchor: Anchor) -> str | None:
 def pentest_enquiry(source: str, anchor: Anchor) -> bool:
     return (
         linked_path(source, anchor) == "contact.html"
-        and parse_qs(urlsplit(anchor.href).query).get("service") == ["web-api"]
+        and parse_qs(urlsplit(anchor.href).query).get("service") == [ENQUIRY_SERVICES.get(source, "web-api")]
         and bool(normalized(anchor.text))
     )
 
@@ -210,6 +263,50 @@ class SearchAndConversionTests(unittest.TestCase):
                     linked_path(relative, anchor) == "report-viewer.html" and normalized(anchor.text)
                     for anchor in anchors
                 ), "Commercial page needs a readable sample-report link in its content")
+
+    def test_launch_pages_have_contextual_incoming_links_and_scope_routes(self):
+        for relative in COMMERCIAL_PAGES[4:]:
+            with self.subTest(page=relative):
+                incoming = {
+                    source for source, document in self.documents.items()
+                    if source != relative and any(
+                        anchor.in_main and linked_path(source, anchor) == relative
+                        for anchor in document.anchors
+                    )
+                }
+                self.assertGreaterEqual(len(incoming), 3, "Needs contextual links beyond shared navigation")
+                self.assertTrue(any(
+                    anchor.in_main and linked_path(relative, anchor) == "scope-builder.html"
+                    for anchor in self.documents[relative].anchors
+                ))
+
+    def test_faq_schema_matches_visible_questions_and_answers(self):
+        for relative, document in self.documents.items():
+            rendered = LaunchMarkup((SOURCE_ROOT / relative).read_text()).faqs
+            if not rendered:
+                continue
+            with self.subTest(page=relative):
+                faqs = [node for node in schema_nodes(document) if "FAQPage" in schema_types(node)]
+                self.assertEqual(len(faqs), 1)
+                described = [
+                    (normalized(item["name"]), normalized(item["acceptedAnswer"]["text"]))
+                    for item in faqs[0]["mainEntity"]
+                ]
+                self.assertEqual(described, rendered)
+
+    def test_country_alternates_are_reciprocal_and_self_canonical(self):
+        expected = {
+            "en-US": f"{ORIGIN}/penetration-testing-services-usa.html",
+            "en-IN": f"{ORIGIN}/penetration-testing-india.html",
+        }
+        for relative, document in self.documents.items():
+            alternates = LaunchMarkup((SOURCE_ROOT / relative).read_text()).alternates
+            if relative not in ("penetration-testing-services-usa.html", "penetration-testing-india.html"):
+                self.assertEqual(alternates, {}, relative)
+                continue
+            with self.subTest(page=relative):
+                self.assertEqual(alternates, expected)
+                self.assertEqual(document.canonicals, [f"{ORIGIN}/{relative}"])
 
     def test_homepage_has_direct_pentest_intake_and_broad_service_routes(self):
         anchors = [anchor for anchor in self.documents["index.html"].anchors if anchor.in_main]

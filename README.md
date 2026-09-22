@@ -14,15 +14,16 @@ This directory is the main website. The existing nested `website/`, `website-too
 
 ## Experience
 
-- Four-section homepage: a short introduction, compact services, two field notes, and a direct enquiry. An illustrative security map connects applications, cloud, AI, data, identity, and code through an access-and-trust review. Animated route traces and pointer highlighting add motion without live scanning or invented results. The dark hero, logo, lavender buttons, and footer use the shared site styling.
+- Five-section homepage: a short introduction, application services, compliance/AI/ongoing testing, two field notes, and a direct enquiry. An illustrative security map connects applications, cloud, AI, data, identity, and code through an access-and-trust review. Animated route traces and pointer highlighting add motion without live scanning or invented results. The dark hero, logo, lavender buttons, and footer use the shared site styling.
 - Self-hosted Bricolage Grotesque throughout the shared site, paired with Newsreader for article prose and editorial accents. Code and HTTP remain monospace. Font licenses ship with the assets; the separate CTF keeps its terminal styling.
-- Shorter, conversational service copy and ten edited articles. Research stories preserve their observation limits, redactions, synthetic HTTP and defensive test cases; guides focus on practical decisions.
+- Conversational service copy and thirteen articles. Research stories preserve their observation limits, redactions, synthetic HTTP and defensive test cases; guides focus on practical decisions.
 - Twelve security capability areas, with cross-disciplinary and specialist enquiries routed to a tailored scope review. AI-native positioning retains human ownership, agreed data use, and explicit project boundaries.
 - A dedicated Blog at `/blogs.html` with five anonymized research case studies, local search/topic filters, and 25 illustrative defensive regression cases. Existing preparation and procurement guides remain at `/blog.html`.
 - Animation stops while the map is offscreen or the tab is hidden, draws at a maximum of 30fps, and caps pixel density. A saved pause control, reduced-motion/slow-device/save-data preferences, and a matching static SVG fallback keep the experience optional. No information depends on motion or pointer input.
 - Security project routing plus a six-step web/API scope planner with local draft resume, PDF export, and a reviewed handoff to the contact form. The estimator does not price or estimate specialist work.
 - Interactive synthetic report with executive, technical, remediation, and re-test views.
 - Accessible mobile navigation, editable analytics preferences, and enquiry timeout/retry handling.
+- Seven US launch pages cover SOC 2, compliance, PCI DSS, HIPAA, AI/LLM testing, PTaaS, and remote services for US companies. A keyboard-accessible Solutions disclosure, contextual links, service-specific intake, and reciprocal US/India language links connect the pages.
 - Search-focused web, API, and SaaS service pages with direct proposal requests, contextual research links, and a lower-friction enquiry form. The broader AI-native capability map remains available.
 
 The homepage uses Canvas 2D, CSS and the Web Animations API, without an animation library. Font files are served locally; no third-party resources load until eligible analytics consent. Supporting pages retain the existing progressive motion layer.
@@ -81,11 +82,12 @@ node tests/experience-regression.cjs
 node tests/capability-regression.cjs
 node tests/blog-regression.cjs
 node tests/seo-conversion-regression.cjs
+node tests/us-launch-regression.cjs
 ```
 
 They exercise local previews and block external traffic. GitHub Actions validates static pages, JavaScript syntax, build safeguards, and the release artifact before deployment; pull requests validate without deployment.
 
-The Python suite also checks search metadata uniqueness, ordinary-link reachability, commercial page schema and enquiry routes, and sitemap/article date consistency. See [SEO-GROWTH.md](SEO-GROWTH.md) for the search-intent map, Search Console setup, real inbox checks, and lead measurement. It is operational documentation, not a public asset. No rankings or enquiry volume are guaranteed.
+The Python suite also checks search metadata uniqueness, ordinary-link reachability, commercial page schema and enquiry routes, sitemap/article date consistency, visible FAQ/schema parity, contextual incoming links, and reciprocal US/India alternates. See [SEO-GROWTH.md](SEO-GROWTH.md) for the search-intent map, Search Console setup, real inbox checks, and lead measurement. It is operational documentation, not a public asset. No rankings or enquiry volume are guaranteed.
 
 ## Publishing
 

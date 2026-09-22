@@ -96,7 +96,11 @@ body.menu-open {
 
 .analytics-preferences:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-@view-transition { navigation: auto; }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+
+::view-transition { pointer-events: none; }
 
 ::view-transition-old(root) { animation-duration: 180ms; }
 ::view-transition-new(root) { animation-duration: 240ms; }
@@ -1616,7 +1620,8 @@ p {
   background: var(--lime);
 }
 
-.package-card h2 {
+.package-card h2,
+.package-card h3 {
   margin-bottom: 14px;
   font-size: clamp(1.65rem, 2.8vw, 2.2rem);
 }
@@ -3041,4 +3046,76 @@ p {
   .article-layout {
     display: block;
   }
+}
+
+/* US service content and the progressively enhanced Solutions disclosure. */
+.nav-solutions { position: relative; }
+.nav-solutions > summary {
+  padding: 10px 0;
+  color: #aeb9cb;
+  font-size: .88rem;
+  font-weight: 680;
+  cursor: pointer;
+  list-style: none;
+}
+.nav-solutions > summary::-webkit-details-marker { display: none; }
+.nav-solutions > summary::after { content: " +"; }
+.nav-solutions[open] > summary::after { content: " -"; }
+.nav-solutions > summary:hover,
+.nav-solutions[open] > summary { color: #f4f7ff; }
+.solutions-links {
+  position: absolute;
+  top: 100%;
+  left: -20px;
+  z-index: 30;
+  width: 280px;
+  max-height: calc(100svh - 120px);
+  overflow-y: auto;
+  margin: 0;
+  padding: 12px 20px;
+  list-style: none;
+  background: #080d1f;
+  border: 1px solid #39435b;
+  border-radius: 10px;
+  box-shadow: 0 16px 40px #0004;
+}
+.nav-links .solutions-links a { display: block; padding: 10px 0; line-height: 1.4; }
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
+  margin-bottom: 24px;
+  font-size: .8rem;
+  line-height: 1.5;
+}
+.breadcrumbs a { text-underline-offset: 3px; }
+.breadcrumbs [aria-current] { opacity: .85; }
+.launch-page .page-hero h1 { max-width: 1100px; font-size: clamp(2.6rem, 5.8vw, 5.5rem); }
+.launch-page .page-hero p { max-width: 780px; }
+.launch-section { border-bottom: 1px solid var(--line); }
+.launch-copy > h2 { max-width: 920px; margin-bottom: 26px; font-size: clamp(1.9rem, 3.4vw, 3rem); }
+.launch-copy > p, .launch-copy > ul { max-width: 850px; }
+.launch-copy > p { line-height: 1.8; }
+.launch-copy > p + p { margin-top: 18px; }
+.launch-copy .service-grid, .launch-copy .scope-table-wrap { margin-block: 28px; }
+.launch-copy .faq-list { max-width: 900px; }
+.launch-links { display: grid; gap: 12px; margin: 24px 0; padding-left: 22px; line-height: 1.6; }
+.scope-table caption { text-align: left; padding: 14px; font-weight: 650; }
+.scope-table th[scope="row"] { min-width: 160px; text-align: left; }
+.home-solutions { background: var(--paper-deep); }
+.home-solutions .section-intro { margin-bottom: 36px; }
+.home-solutions .section-intro > p:not(.home-kicker) { max-width: 760px; }
+.home-solutions .section-intro h2 { max-width: 860px; }
+.home-solutions .service-card h3 { font-size: 1.45rem; }
+.home-page .site-footer { padding-top: 56px; }
+@media (max-width: 1000px) and (min-width: 861px) {
+  .nav-menu { gap: 18px; }
+  .nav-links { gap: 18px; }
+}
+@media (max-width: 860px) {
+  .nav-solutions > summary { font-size: 1.4rem; padding: 9px 0; }
+  .solutions-links { position: static; width: 100%; max-height: none; padding: 8px 16px; margin-block: 8px; box-shadow: none; }
+  .nav-links .solutions-links a { font-size: 1rem; padding: 9px 0; }
+  .launch-page .page-hero h1 { overflow-wrap: break-word; }
 }

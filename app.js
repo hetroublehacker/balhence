@@ -14,6 +14,10 @@
     "evidence-gated-workflows", "how-to-scope-web-api-pentest",
     "what-good-pentest-report-includes", "saas-vapt-readiness-checklist",
     "web-api-pentest-cost-scope-guide", "ai-native-penetration-testing-human-validated",
+    "soc2-pentest", "pci-pentest", "hipaa-pentest", "compliance-pentest",
+    "ai-pentest", "ptaas-pentest", "usa-pentest",
+    "does-soc-2-require-penetration-testing", "how-to-plan-llm-security-testing",
+    "ptaas-vs-annual-penetration-test",
   ]);
 
   document.documentElement.classList.add("js");
@@ -21,6 +25,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     setCurrentYear();
     setActiveNavigation();
+    initSolutionsNavigation();
     initNavigation();
     initHeader();
     initReveals();
@@ -41,6 +46,28 @@
     if (!page) return;
     document.querySelectorAll(`[data-nav="${page}"]`).forEach((link) => {
       link.setAttribute("aria-current", "page");
+    });
+  }
+
+  function initSolutionsNavigation() {
+    const menus = [...document.querySelectorAll("[data-solutions-menu]")];
+    document.addEventListener("click", (event) => {
+      menus.forEach((menu) => {
+        if (!menu.contains(event.target) || event.target.closest("a")) menu.open = false;
+      });
+    });
+    document.addEventListener("focusin", (event) => {
+      menus.forEach((menu) => {
+        if (!menu.contains(event.target)) menu.open = false;
+      });
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      const open = menus.find((menu) => menu.open);
+      if (!open) return;
+      event.preventDefault();
+      open.open = false;
+      open.querySelector("summary").focus();
     });
   }
 
@@ -71,6 +98,7 @@
           if (firstLink && toggle.getAttribute("aria-expanded") === "true") firstLink.focus();
         });
       } else {
+        menu.querySelectorAll("[data-solutions-menu]").forEach((details) => { details.open = false; });
         backgroundState.forEach((inert, node) => { node.inert = inert; });
         backgroundState.clear();
         if (restoreFocus) toggle.focus();
@@ -86,12 +114,14 @@
     });
 
     document.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented) return;
       if (toggle.getAttribute("aria-expanded") !== "true") return;
       if (event.key === "Escape") {
         event.preventDefault();
         setOpen(false, true);
       } else if (event.key === "Tab") {
-        const controls = [...menu.querySelectorAll("a[href], button:not([disabled])"), toggle];
+        const controls = [...menu.querySelectorAll("a[href], summary, button:not([disabled])"), toggle]
+          .filter((node) => node.getClientRects().length > 0);
         const first = controls[0];
         const last = controls[controls.length - 1];
         const active = document.activeElement;

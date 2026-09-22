@@ -99,7 +99,7 @@ async function waitForMotionState(page, expected) {
     await page.locator("[data-consent-decline]").click();
     await page.waitForTimeout(1300);
     assert.equal(await page.locator("h1").count(), 1);
-    assert.equal(await page.locator("main > section").count(), 4);
+    assert.equal(await page.locator("main > section").count(), 5);
     const fonts = await page.evaluate(() => ({
       body: getComputedStyle(document.body).fontFamily,
       accent: getComputedStyle(document.querySelector(".hero-line-serif")).fontFamily,
@@ -109,7 +109,7 @@ async function waitForMotionState(page, expected) {
     assert.match(fonts.accent, /Newsreader/);
     assert.ok(fonts.loaded.includes("Bricolage Grotesque"));
     assert.ok(fonts.loaded.includes("Newsreader"));
-    pass("The four-section homepage loads its local sans and editorial serif fonts");
+    pass("The homepage with its compliance and AI section loads its local sans and editorial serif fonts");
 
     await assertSystemLabels(page.locator(SECURITY_MAP));
     const homeHeader = await headerStyleTokens(page);
@@ -278,7 +278,7 @@ async function waitForMotionState(page, expected) {
     await nojs.goto(origin);
     assert.equal(await nojs.locator("h1").isVisible(), true);
     assert.equal(await nojs.locator(".nav-menu").isVisible(), true);
-    assert.equal(await nojs.locator("main > section").count(), 4);
+    assert.equal(await nojs.locator("main > section").count(), 5);
     assert.equal(await nojs.locator(".security-fallback").isVisible(), true);
     await assertSystemLabels(nojs.locator(SECURITY_MAP));
     assert.equal(await nojs.locator(CANVAS).isVisible(), false);
@@ -290,7 +290,7 @@ async function waitForMotionState(page, expected) {
     await nojs.locator('main a.btn-primary[href*="source=home-hero"]').click();
     await nojs.waitForURL("**/contact.html?**");
     assert.equal(await nojs.locator("form[data-lead-form]").isVisible(), true);
-    pass("Without JavaScript the SVG, mobile navigation, four sections, and enquiry route remain usable");
+    pass("Without JavaScript the SVG, mobile navigation, five sections, and enquiry route remain usable");
     assert.deepEqual(errors, []);
     assert.deepEqual(external, []);
     console.log(`${passed} experience checks passed; no uncaught errors or external requests.`);

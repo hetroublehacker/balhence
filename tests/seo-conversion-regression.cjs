@@ -13,6 +13,14 @@ const { chromium } = require("playwright");
 const ROOT = path.resolve(__dirname, "..");
 const CONSENT = "balhence_analytics_consent";
 const BUYER_ROUTES = [
+  ["/soc-2-penetration-testing.html", "soc2-pentest", "soc2"],
+  ["/ai-llm-penetration-testing.html", "ai-pentest", "ai"],
+  ["/penetration-testing-services-usa.html", "usa-pentest", "web-api"],
+  ["/compliance-penetration-testing.html", "compliance-pentest", "compliance"],
+  ["/pci-dss-penetration-testing.html", "pci-pentest", "pci"],
+  ["/hipaa-penetration-testing.html", "hipaa-pentest", "hipaa"],
+  ["/penetration-testing-as-a-service.html", "ptaas-pentest", "ptaas"],
+
   ["/", "home-hero"],
   ["/penetration-testing-india.html", "india-pentest"],
   ["/web-application-penetration-testing.html", "web-pentest"],
@@ -20,6 +28,17 @@ const BUYER_ROUTES = [
   ["/saas-penetration-testing.html", "saas-pentest"],
 ];
 const SOURCES = [
+  "soc2-pentest",
+  "ai-pentest",
+  "usa-pentest",
+  "compliance-pentest",
+  "pci-pentest",
+  "hipaa-pentest",
+  "ptaas-pentest",
+  "does-soc-2-require-penetration-testing",
+  "how-to-plan-llm-security-testing",
+  "ptaas-vs-annual-penetration-test",
+
   "home-nav", "home-hero", "home-faq", "home-closing",
   "web-pentest", "api-pentest", "saas-pentest", "india-pentest", "services",
   "pentest-guides", "field-notes", "scope-planner", "sample-report",
@@ -121,7 +140,7 @@ async function main() {
 
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const [pathname, source] of BUYER_ROUTES) {
+      for (const [pathname, source, service = "web-api"] of BUYER_ROUTES) {
         const response = await page.goto(`${origin}${pathname}`);
         assert.equal(response.status(), 200);
         assert.equal(await page.locator("h1").count(), 1);
@@ -130,17 +149,17 @@ async function main() {
         assert.equal(await cta.isVisible(), true);
         // The homepage uses conversational copy; every route still leads to
         // the same explicit pentest intake with its own attribution label.
-        assert.match((await cta.textContent()).trim(), /pentest|project|building/i);
+        assert.match((await cta.textContent()).trim(), /pentest|penetration test|project|building/i);
         const destination = new URL(await cta.getAttribute("href"), origin);
-        assert.equal(destination.searchParams.get("service"), "web-api");
+        assert.equal(destination.searchParams.get("service"), service);
         assert.equal(destination.searchParams.get("source"), source);
         await cta.click();
         await page.waitForURL(url => url.pathname === "/contact.html");
-        assert.equal(await page.locator("#service").inputValue(), "web-api");
+        assert.equal(await page.locator("#service").inputValue(), service);
         assert.equal(await page.locator('input[name="enquiry_source"]').inputValue(), source);
         assert.equal(await page.locator("script[data-balhence-analytics]").count(), 0);
       }
-      pass(`Homepage and four pentest pages fit ${width}px and link directly to preselected, attributed enquiries`);
+      pass(`Homepage and all eleven service landing pages fit ${width}px and link directly to preselected, attributed enquiries`);
     }
 
     for (const source of SOURCES) {
@@ -297,7 +316,7 @@ async function main() {
       assert.equal(await nojs.locator('form[data-lead-form]').getAttribute("method"), "post");
       assert.match(await nojs.locator('form[data-lead-form]').getAttribute("action"), /^https:\/\/formspree\.io\/f\/[a-z0-9]+$/);
     }
-    pass("All five buyer pages reach the contact form without JavaScript");
+    pass("All buyer pages reach the contact form without JavaScript");
 
     await fillEnquiry(nojs);
     assert.equal(await nojs.locator("#privacy-consent").getAttribute("required"), "");
