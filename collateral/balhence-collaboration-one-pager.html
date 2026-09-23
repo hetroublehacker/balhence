@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Balhence">
+  <meta name="description" content="A one-page introduction guide for consultants and agencies whose clients need security testing.">
+  <title>Balhence | Consultant and agency introductions</title>
+  <style>
+    @font-face {
+      font-family: "Bricolage Grotesque";
+      src: url("../vendor/fonts/bricolage-grotesque-latin.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "Newsreader";
+      src: url("../vendor/fonts/newsreader-italic-latin.woff2") format("woff2");
+      font-style: italic;
+      font-weight: 400 600;
+    }
+    :root {
+      color-scheme: light;
+      --night: #0c0c12;
+      --night-soft: #17131f;
+      --paper: #faf9f7;
+      --ink: #1b1b24;
+      --muted: #5c5964;
+      --line: #e5e1e8;
+      --accent: #9b8cff;
+      --mint: #5eead4;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background: #dcd9e2; }
+    body { margin: 0; color: var(--ink); font-family: "Bricolage Grotesque", "Trebuchet MS", sans-serif; }
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .sheet { width: 8.5in; height: 11in; margin: 24px auto; overflow: hidden; background: var(--paper); box-shadow: 0 24px 80px rgba(15, 11, 25, .19); }
+    .hero { position: relative; height: 312px; padding: 34px 49px 37px; overflow: hidden; color: #f4f3fb; background: var(--night); }
+    .hero::before { position: absolute; width: 415px; height: 415px; top: -188px; right: -149px; border: 1px solid rgba(155, 140, 255, .28); border-radius: 50%; box-shadow: 0 0 0 48px rgba(155, 140, 255, .045), 0 0 0 100px rgba(155, 140, 255, .035); content: ""; }
+    .hero::after { position: absolute; right: 64px; bottom: -58px; width: 255px; height: 255px; border: 1px solid rgba(94, 234, 212, .17); border-radius: 50%; content: ""; }
+    .hero > * { position: relative; z-index: 1; }
+    .masthead { display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 21px; font-weight: 700; letter-spacing: -.045em; }
+    .brand-mark { display: grid; width: 31px; height: 31px; place-items: center; color: var(--night); background: var(--accent); border-radius: 8px; font-size: 14px; font-weight: 700; letter-spacing: -.09em; }
+    .document-type, .eyebrow, .section-label, .item-number, .channel, .footnote { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .document-type { color: #aeb1c0; font-size: 10px; font-weight: 700; letter-spacing: .13em; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; margin: 28px 0 13px; color: var(--mint); font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    .eyebrow::before { display: block; width: 24px; height: 2px; background: var(--accent); content: ""; }
+    h1 { max-width: 700px; margin: 0; font-size: 43px; font-weight: 550; letter-spacing: -.055em; line-height: 1.06; }
+    h1 em { display: block; color: #c4baff; font-family: "Newsreader", Georgia, serif; font-size: 1.05em; font-weight: 400; letter-spacing: -.035em; }
+    .hero-lead { max-width: 680px; margin: 16px 0 0; color: #c7cbd7; font-size: 14.6px; line-height: 1.5; }
+    .content { padding: 28px 49px 0; }
+    .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 38px; }
+    .section-label { margin: 0 0 16px; color: #5946a8; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    h2 { margin: 0 0 14px; font-size: 23px; font-weight: 600; letter-spacing: -.045em; line-height: 1.17; }
+    .signal-list, .promise-list { margin: 0; padding: 0; list-style: none; }
+    .signal-list li, .promise-list li { display: grid; grid-template-columns: 26px 1fr; gap: 9px; align-items: start; padding: 10px 0; border-top: 1px solid var(--line); font-size: 13.2px; line-height: 1.43; }
+    .item-number { padding-top: 2px; color: #7562c2; font-size: 10px; font-weight: 700; }
+    .promise-list .item-number { color: #167a6a; }
+    .collaboration { margin-top: 20px; padding-top: 21px; border-top: 1px solid #d9d5de; }
+    .collaboration-head { display: flex; justify-content: space-between; align-items: end; gap: 22px; margin-bottom: 17px; }
+    .collaboration-head .section-label { margin-bottom: 8px; }
+    .collaboration-head h2 { margin-bottom: 0; }
+    .collaboration-head p { max-width: 300px; margin: 0 0 2px; color: var(--muted); font-size: 11.5px; line-height: 1.42; text-align: right; }
+    .formats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .format { min-height: 116px; padding: 16px 16px 14px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+    .format b { display: block; margin-bottom: 9px; color: var(--ink); font-size: 15px; font-weight: 700; letter-spacing: -.025em; }
+    .format p { margin: 0; color: var(--muted); font-size: 11.8px; line-height: 1.42; }
+    .format-number { display: block; margin-bottom: 13px; color: #7457e8; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 9px; font-weight: 700; letter-spacing: .08em; }
+    .closing { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; align-items: center; margin: 18px 49px 0; padding: 18px 22px; color: #f4f3fb; background: var(--night-soft); border-radius: 14px; }
+    .closing h2 { margin: 0 0 6px; color: #f4f3fb; font-size: 22px; }
+    .closing p { margin: 0; color: #bec2d0; font-size: 11.7px; line-height: 1.45; }
+    .contact-block { text-align: right; }
+    .channel { display: block; margin-bottom: 8px; color: var(--mint); font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .contact-block a { display: block; color: #f4f3fb; font-size: 14px; font-weight: 700; text-decoration: none; }
+    .contact-block .domain { margin-top: 6px; color: #bcb1ff; font-size: 11px; font-weight: 600; }
+    .footer { display: flex; justify-content: space-between; gap: 30px; margin: 10px 49px 0; padding-top: 8px; border-top: 1px solid #ddd9e1; }
+    .footer p { max-width: 410px; margin: 0; color: #686471; font-size: 10px; line-height: 1.35; }
+    .footer a { color: #51409c; font-size: 10px; font-weight: 700; white-space: nowrap; }
+    @page { size: letter; margin: 0; }
+    @media print {
+      html { background: #fff; }
+      .sheet { margin: 0; box-shadow: none; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <header class="hero">
+      <div class="masthead">
+        <div class="brand"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></div>
+        <span class="document-type">CLIENT INTRODUCTIONS</span>
+      </div>
+      <p class="eyebrow">For consultants and agencies</p>
+      <h1>Security testing for <em>the clients you advise.</em></h1>
+      <p class="hero-lead">Balhence provides manual, human-verified penetration testing for web applications, APIs and SaaS products, plus relevant cloud, identity and AI systems. Reported findings are checked by a person and explained with clear evidence and practical fixes.</p>
+    </header>
+
+    <div class="content">
+      <div class="two-column">
+        <section aria-labelledby="when-title">
+          <p class="section-label">When to bring us in</p>
+          <h2 id="when-title">Client needs we can help with</h2>
+          <ul class="signal-list">
+            <li><span class="item-number">01</span><span>They are launching or changing a web application, API or SaaS product.</span></li>
+            <li><span class="item-number">02</span><span>They need testing evidence for a customer security review or audit.</span></li>
+            <li><span class="item-number">03</span><span>They want to assess an AI feature's access to data, tools and actions.</span></li>
+          </ul>
+        </section>
+        <section aria-labelledby="expect-title">
+          <p class="section-label">What clients can expect</p>
+          <h2 id="expect-title">A clear path from scope to findings</h2>
+          <ul class="promise-list">
+            <li><span class="item-number">01</span><span>A written scope, deliverables and safety rules before testing.</span></li>
+            <li><span class="item-number">02</span><span>Findings checked by a person, with evidence and practical fixes.</span></li>
+            <li><span class="item-number">03</span><span>A report walkthrough and follow-up checks when agreed in scope.</span></li>
+          </ul>
+        </section>
+      </div>
+
+      <section class="collaboration" aria-labelledby="formats-title">
+        <div class="collaboration-head">
+          <div><p class="section-label">Client introductions</p><h2 id="formats-title">A simple introduction, agreed up front.</h2></div>
+          <p>We agree on your involvement before contacting the client.</p>
+        </div>
+        <div class="formats">
+          <div class="format"><span class="format-number">01 / CHECK FIT</span><b>Share the need</b><p>Tell us the type of client, system and timing. We can confirm fit before an introduction.</p></div>
+          <div class="format"><span class="format-number">02 / INTRODUCE</span><b>Connect by email</b><p>With the client's consent, connect us and share the question they need answered.</p></div>
+          <div class="format"><span class="format-number">03 / SCOPE</span><b>We take it forward</b><p>Balhence speaks with the client, sends a written scope and quote, and delivers agreed testing.</p></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div><h2 id="closing-title">Let's discuss an introduction.</h2><p>Tell us the clients you advise and the testing requests you see. No client name is needed to start.</p></div>
+      <div class="contact-block"><span class="channel">Contact Balhence</span><a href="mailto:contact@balhence.com?subject=Client%20introduction">contact@balhence.com</a><a class="domain" href="https://balhence.com/services.html">balhence.com/services.html</a></div>
+    </section>
+    <footer class="footer"><p>Testing starts only after a written agreement, defined scope and authorization. Your role in the introduction is agreed in advance.</p><a href="https://balhence.com/report-viewer.html">View the fictional sample report &rarr;</a></footer>
+  </main>
+</body>
+</html>
