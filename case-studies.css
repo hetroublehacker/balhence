@@ -290,6 +290,7 @@
 .case-facts dt:last-of-type, .case-facts dd:last-of-type { border-bottom: 0; }
 .case-facts > div:not(:last-child) > dt, .case-facts > div:not(:last-child) > dd { border-bottom: 1px solid var(--line); }
 .case-kicker { color: var(--accent-strong); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.article-hero .case-kicker { color: var(--accent); }
 .case-study .scope-table-wrap { max-width: 100%; overflow-x: auto; }
 .case-study .scope-table td, .case-study .scope-table th { vertical-align: top; }
 
@@ -420,6 +421,7 @@
 }
 
 @media print {
+  .article-hero .case-kicker { color: #000; }
   .case-hub main { --ink: #000; --ink-soft: #222; --muted: #333; --line: #888; --paper: #fff; --paper-deep: #fff; --white: #fff; --signal: #000; --accent: #444; --accent-strong: #444; color: #000; background: #fff; }
   .case-controls, .case-library-nav, .case-hub .cta-panel { display: none; }
   .case-card[hidden] { display: block; }

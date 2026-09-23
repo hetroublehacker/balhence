@@ -950,7 +950,7 @@ p {
 .check-list li {
   position: relative;
   padding-left: 24px;
-  color: #b3c0d4;
+  color: var(--muted);
   font-size: 0.88rem;
 }
 
@@ -1626,7 +1626,8 @@ p {
   font-size: clamp(1.65rem, 2.8vw, 2.2rem);
 }
 
-.featured h2 {
+.package-card.featured h2,
+.package-card.featured h3 {
   color: #f2f6ff;
 }
 
@@ -1960,8 +1961,17 @@ p {
   background: var(--night-2);
 }
 
+.transparency-panel h2,
 .transparency-panel h3 {
   margin-bottom: 18px;
+  color: #f4f7ff;
+}
+
+.transparency-panel p {
+  color: #aab8ce;
+}
+
+.transparency-panel p a {
   color: #f4f7ff;
 }
 
