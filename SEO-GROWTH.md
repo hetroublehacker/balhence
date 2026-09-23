@@ -68,6 +68,16 @@ These keywords are intent targets from the playbook, checked against current ser
 - New layouts checked at 320, 390, 768, 900, and 1440 pixels as applicable. Cross-document transitions are limited to scripting-enabled browsers with no reduced-motion preference so native navigation does not leave a click-blocking transition layer.
 - Build only the allowlisted artifact. After deployment, verify canonical URLs return 200, inspect the new pages in Search Console/Bing, and notify IndexNow once for substantive changes. Local tests do not establish deployment, indexing, rankings, or inbox delivery.
 
+### Page Content and Playbook implementation - 23 September 2026
+
+The seven preparation sections labeled as proposed in the version 2 Page Content document are now implemented in the corresponding SOC 2, AI/LLM, US delivery, compliance, PCI DSS, HIPAA, and PTaaS service pages. Each appears at the document's specified position, uses its proposed heading and core copy, and leads to the existing service-specific enquiry. The Services hub now states its general search intent in the first H2 while retaining the brand H1. It also links contextually to the SOC 2, LLM, and PTaaS planning guides.
+
+Contextual links now connect PCI scoping to web and API testing, compliance evidence to web, API, and SaaS testing, and the AI agent section to the existing anonymized workflow field note. The scope-planner links on the seven launch pages and Services hub identify the planner's web/API coverage. Duplicate Services links on the US and compliance pages were removed. Titles, canonicals, and country alternates remain the same. The changed eight canonical URLs have `2026-09-23` sitemap `lastmod` values; seven service WebPage modification dates match.
+
+The published heading targets follow buyer intent from the two documents. Keyword volume, difficulty, and top ranking positions were not established by this source update; use actual Search Console query and page data to decide later title or content changes.
+
+After these edits, source verification passed for 35 HTML pages, 2021 URL references, and 80 allowlisted files. All 44 Python tests, 10 US launch browser checks, and 16 SEO/conversion browser checks passed. A separate 80-file public artifact passed artifact and HTTP preview verification. Browser form delivery and analytics were mocked, and the live deployment was not inspected in this check.
+
 ## Owner actions after publishing
 
 1. Publish through the existing GitHub Actions workflow and confirm its deployment succeeds.
