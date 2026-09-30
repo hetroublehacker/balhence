@@ -10,7 +10,15 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const slowUpdate = window.matchMedia("(update: slow)");
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const preferenceKey = "balhence_motion_paused";
   const cleanups = [];
+  const pointerCleanups = [];
+  const shownItems = new WeakSet();
+  let paused = false;
+  let deviceReduced = reducedMotion.matches;
+  let deviceSlow = slowUpdate.matches;
+  let pointerAllowed = finePointer.matches;
+  let preferenceButtons = [];
   let progressNode = null;
   let revealObserver = null;
   let scrollFrame = 0;
@@ -20,6 +28,8 @@
   let activeDepth = null;
   let hero = null;
 
+  try { paused = localStorage.getItem(preferenceKey) === "true"; } catch (error) { /* Storage is optional. */ }
+
   const onReady = (callback) => {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", callback, { once: true });
@@ -28,16 +38,57 @@
     callback();
   };
 
-  const listen = (target, type, handler, options) => {
+  const listen = (target, type, handler, options, group = cleanups) => {
     target.addEventListener(type, handler, options);
-    cleanups.push(() => target.removeEventListener(type, handler, options));
+    group.push(() => target.removeEventListener(type, handler, options));
   };
 
-  const isMotionAllowed = () => !reducedMotion.matches && !slowUpdate.matches;
+  const isMotionAllowed = () => !paused && !deviceReduced && !deviceSlow;
 
   const isOptedOut = (element) => Boolean(element.closest('[data-motion="none"]'));
 
   const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
+
+  function markShown(item, immediate = false) {
+    shownItems.add(item);
+    if (item.hasAttribute("data-reveal")) item.classList.add("is-visible");
+    if (item.hasAttribute("data-motion-reveal")) item.classList.add("is-motion-visible");
+    if (immediate) item.classList.remove("motion-entrance");
+    if (revealObserver) revealObserver.unobserve(item);
+  }
+
+  function prepareEntrance(item) {
+    if (shownItems.has(item) || item.matches(".is-visible, .is-motion-visible")) {
+      markShown(item, true);
+      return;
+    }
+    if (isMotionAllowed() && !isOptedOut(item)) item.classList.add("motion-entrance");
+  }
+
+  function revealFocusedAncestors(target) {
+    if (!(target instanceof Element)) return;
+    let item = target.closest("[data-reveal], [data-motion-reveal]");
+    while (item) {
+      item.classList.add("motion-focus-visible");
+      markShown(item, true);
+      item = item.parentElement && item.parentElement.closest("[data-reveal], [data-motion-reveal]");
+    }
+  }
+
+  function updatePreferenceButtons() {
+    const forced = deviceReduced || deviceSlow;
+    const label = forced ? "Still by preference" : paused ? "Play motion" : "Pause motion";
+    const reason = deviceReduced ? "Motion disabled by reduced-motion preference" : "Motion disabled by slow-update preference";
+    preferenceButtons.forEach((button) => {
+      button.hidden = false;
+      button.disabled = forced;
+      button.setAttribute("aria-pressed", String(!isMotionAllowed()));
+      button.setAttribute("aria-label", forced ? reason : label);
+      const labelNode = button.querySelector("[data-motion-preference-label], [data-motion-label]");
+      if (labelNode) labelNode.textContent = label;
+      else button.textContent = label;
+    });
+  }
 
   function addAutomaticHooks() {
     const staggerGroups = document.querySelectorAll([
@@ -60,7 +111,8 @@
       Array.from(group.children).forEach((item, index) => {
         if (!item.matches("[data-reveal], [data-motion-reveal]")) return;
         item.classList.add("motion-stagger-item");
-        item.style.setProperty("--motion-delay", `${Math.min(index, 7) * 72}ms`);
+        item.style.setProperty("--motion-delay", `${Math.min(index * 45, 180)}ms`);
+        prepareEntrance(item);
       });
     });
 
@@ -77,7 +129,7 @@
     document.querySelectorAll(manualRevealSelectors).forEach((item, index) => {
       if (isOptedOut(item) || item.hasAttribute("data-reveal")) return;
       item.setAttribute("data-motion-reveal", "");
-      item.style.setProperty("--motion-delay", `${(index % 4) * 64}ms`);
+      item.style.setProperty("--motion-delay", `${(index % 5) * 45}ms`);
     });
 
     const cardSelectors = [
@@ -109,22 +161,28 @@
     if (!items.length) return;
 
     if (!("IntersectionObserver" in window)) {
-      items.forEach((item) => item.classList.add("is-motion-visible"));
+      items.forEach((item) => markShown(item, true));
       return;
     }
 
     revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-motion-visible");
-        revealObserver.unobserve(entry.target);
+        markShown(entry.target);
       });
     }, {
-      threshold: 0.1,
-      rootMargin: "0px 0px -24px",
+      threshold: 0,
+      rootMargin: "0px 0px 48px 0px",
     });
 
-    items.forEach((item) => revealObserver.observe(item));
+    items.forEach((item) => {
+      if (isOptedOut(item)) {
+        markShown(item, true);
+        return;
+      }
+      prepareEntrance(item);
+      if (!shownItems.has(item)) revealObserver.observe(item);
+    });
     cleanups.push(() => revealObserver && revealObserver.disconnect());
   }
 
@@ -178,7 +236,11 @@
     ]);
     activeCard = null;
     activeDepth = null;
-    hero && hero.classList.remove("is-motion-hovered");
+    if (hero) {
+      hero.classList.remove("is-motion-hovered");
+      hero.style.removeProperty("--motion-hero-x");
+      hero.style.removeProperty("--motion-hero-y");
+    }
     root.classList.remove("motion-pointer-active");
   }
 
@@ -191,7 +253,7 @@
 
   function renderPointer() {
     pointerFrame = 0;
-    if (!lastPointer || document.hidden) return;
+    if (!lastPointer || document.hidden || !isMotionAllowed() || !pointerAllowed) return;
 
     const { clientX, clientY, target } = lastPointer;
     const elementTarget = target instanceof Element ? target : null;
@@ -242,11 +304,11 @@
   }
 
   function initPointerEffects() {
-    if (!finePointer.matches) return;
+    if (!pointerAllowed || !isMotionAllowed()) return;
     hero = document.querySelector(".hero");
 
     const onPointerMove = (event) => {
-      if (event.pointerType === "touch") return;
+      if (event.pointerType === "touch" || document.hidden) return;
       lastPointer = {
         clientX: event.clientX,
         clientY: event.clientY,
@@ -262,16 +324,32 @@
       resetPointerEffects();
     };
 
-    listen(document, "pointermove", onPointerMove, { passive: true });
-    listen(document.documentElement, "pointerleave", onPointerLeave, { passive: true });
-    listen(window, "blur", onPointerLeave);
-    cleanups.push(onPointerLeave);
+    listen(document, "pointermove", onPointerMove, { passive: true }, pointerCleanups);
+    listen(document.documentElement, "pointerleave", onPointerLeave, { passive: true }, pointerCleanups);
+    listen(window, "blur", onPointerLeave, undefined, pointerCleanups);
+    pointerCleanups.push(onPointerLeave);
+  }
+
+  function stopPointerEffects() {
+    while (pointerCleanups.length) {
+      try { pointerCleanups.pop()(); } catch (error) { /* Optional pointer effects never block navigation. */ }
+    }
+    if (pointerFrame) window.cancelAnimationFrame(pointerFrame);
+    pointerFrame = 0;
+    lastPointer = null;
+    resetPointerEffects();
   }
 
   function initVisibilityHandling() {
     const onVisibilityChange = () => {
       root.classList.toggle("motion-paused", document.hidden);
+      root.classList.toggle("is-motion-paused", document.hidden || !isMotionAllowed());
       if (document.hidden) {
+        if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
+        if (pointerFrame) window.cancelAnimationFrame(pointerFrame);
+        scrollFrame = 0;
+        pointerFrame = 0;
+        lastPointer = null;
         resetPointerEffects();
         return;
       }
@@ -282,6 +360,7 @@
   }
 
   function destroy() {
+    stopPointerEffects();
     while (cleanups.length) {
       const cleanup = cleanups.pop();
       try { cleanup(); } catch (error) { /* Motion cleanup must never block the page. */ }
@@ -312,16 +391,17 @@
     hero = null;
     root.style.removeProperty("--motion-hero-shift");
     root.classList.remove("motion-capable", "motion-paused", "motion-pointer-active");
+    document.querySelectorAll(".motion-entrance.is-visible, .motion-entrance.is-motion-visible").forEach((item) => markShown(item, true));
   }
 
   function start() {
     destroy();
     addAutomaticHooks();
+    updatePreferenceButtons();
+    root.classList.toggle("is-motion-paused", !isMotionAllowed() || document.hidden);
     if (!isMotionAllowed()) {
       root.classList.add("motion-reduced");
-      document.querySelectorAll("[data-motion-reveal]").forEach((item) => {
-        item.classList.add("is-motion-visible");
-      });
+      document.querySelectorAll("[data-reveal], [data-motion-reveal]").forEach((item) => markShown(item, true));
       return;
     }
 
@@ -331,17 +411,57 @@
     initScrollProgress();
     initPointerEffects();
     initVisibilityHandling();
+    revealFocusedAncestors(document.activeElement);
   }
 
   onReady(() => {
+    preferenceButtons = Array.from(document.querySelectorAll("button[data-motion-preference]"));
+    preferenceButtons.forEach((button) => button.addEventListener("click", () => {
+      if (deviceReduced || deviceSlow) return;
+      paused = !paused;
+      try { localStorage.setItem(preferenceKey, String(paused)); } catch (error) { /* Keep this page's choice when storage is unavailable. */ }
+      start();
+      window.dispatchEvent(new CustomEvent("balhence:motion-preference", { detail: { paused } }));
+    }));
+    document.addEventListener("focusin", (event) => revealFocusedAncestors(event.target));
+    document.addEventListener("animationend", (event) => {
+      if (event.animationName !== "motion-item-in" || !(event.target instanceof Element)) return;
+      if (event.target.classList.contains("motion-entrance")) markShown(event.target, true);
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== preferenceKey && event.key !== null) return;
+      let nextPaused = event.newValue === "true";
+      if (event.key === null) {
+        try { nextPaused = localStorage.getItem(preferenceKey) === "true"; } catch (error) { nextPaused = false; }
+      }
+      if (nextPaused === paused) return;
+      paused = nextPaused;
+      start();
+    });
+    window.addEventListener("balhence:motion-preference", (event) => {
+      if (!event.detail || typeof event.detail.paused !== "boolean" || event.detail.paused === paused) return;
+      paused = event.detail.paused;
+      start();
+    });
     start();
-    const restart = () => start();
+    const restart = () => {
+      deviceReduced = reducedMotion.matches;
+      deviceSlow = slowUpdate.matches;
+      start();
+    };
+    const updatePointerPreference = () => {
+      pointerAllowed = finePointer.matches;
+      stopPointerEffects();
+      if (isMotionAllowed()) initPointerEffects();
+    };
     if (typeof reducedMotion.addEventListener === "function") {
       reducedMotion.addEventListener("change", restart);
       slowUpdate.addEventListener("change", restart);
+      finePointer.addEventListener("change", updatePointerPreference);
     } else {
       reducedMotion.addListener(restart);
       slowUpdate.addListener(restart);
+      finePointer.addListener(updatePointerPreference);
     }
     window.addEventListener("pagehide", (event) => {
       if (!event.persisted) destroy();

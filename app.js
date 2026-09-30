@@ -2,7 +2,6 @@
   "use strict";
 
   const config = window.BALHENCE_CONFIG || {};
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let analyticsEnabled = false;
   // Fixed editorial labels, not arbitrary query text or visitor identifiers.
   const enquirySources = new Set([
@@ -152,26 +151,71 @@
     const items = document.querySelectorAll("[data-reveal]");
     if (!items.length) return;
 
-    const revealAll = () => items.forEach((item) => item.classList.add("is-visible"));
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const slowUpdate = window.matchMedia("(update: slow)");
+    const pending = new Set([...items].filter((item) => !item.classList.contains("is-visible")));
+    let observer = null;
 
-    if (reducedMotion || !("IntersectionObserver" in window)) {
+    const revealAll = () => {
+      if (observer) observer.disconnect();
+      observer = null;
+      pending.clear();
+      root.classList.remove("reveal-ready");
+      items.forEach((item) => item.classList.add("is-visible"));
+    };
+
+    const reveal = (item) => {
+      item.classList.add("is-visible");
+      pending.delete(item);
+      if (!observer) return;
+      observer.unobserve(item);
+      if (!pending.size) {
+        observer.disconnect();
+        observer = null;
+      }
+    };
+
+    const revealFocusedAncestors = (target) => {
+      if (!(target instanceof Element)) return;
+      let item = target.closest("[data-reveal]");
+      while (item) {
+        reveal(item);
+        item = item.parentElement && item.parentElement.closest("[data-reveal]");
+      }
+    };
+
+    const motionIsLimited = () => reducedMotion.matches || slowUpdate.matches;
+
+    if (!pending.size || motionIsLimited() || !("IntersectionObserver" in window)) {
       revealAll();
       return;
     }
 
     try {
-      const observer = new IntersectionObserver((entries) => {
+      observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
+          reveal(entry.target);
         });
-      }, { threshold: 0.12, rootMargin: "0px 0px -32px" });
+      }, { threshold: 0, rootMargin: "0px 0px 48px 0px" });
 
-      document.documentElement.classList.add("reveal-ready");
-      items.forEach((item) => observer.observe(item));
+      root.classList.add("reveal-ready");
+      pending.forEach((item) => observer.observe(item));
+      revealFocusedAncestors(document.activeElement);
+      document.addEventListener("focusin", (event) => revealFocusedAncestors(event.target));
+
+      const onMotionChange = () => {
+        if (motionIsLimited()) revealAll();
+      };
+      [reducedMotion, slowUpdate].forEach((query) => {
+        if (typeof query.addEventListener === "function") {
+          query.addEventListener("change", onMotionChange);
+        } else if (typeof query.addListener === "function") {
+          query.addListener(onMotionChange);
+        }
+      });
     } catch (error) {
-      document.documentElement.classList.remove("reveal-ready");
       revealAll();
     }
   }

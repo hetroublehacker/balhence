@@ -2560,8 +2560,8 @@ p {
 
 .reveal-ready [data-reveal] {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+  transform: translateY(12px);
+  transition: opacity 360ms var(--ease), transform 360ms var(--ease);
 }
 
 .reveal-ready [data-reveal].is-visible {

@@ -89,9 +89,9 @@
 .minimal-footer .footer-links a { color: #a2aec2; font-size: .73rem; }
 .home-page .footer-bottom { width: 100%; margin-top: 12px; padding-top: 20px; font-size: .61rem; }
 .home-page .analytics-preferences { color: #a2aec2; font-family: var(--font-sans); font-size: .73rem; }
-.home-motion .hero-line > span { animation: line-enter 1150ms var(--ease) 60ms both; }
-.home-motion .hero-line:nth-child(2) > span { animation-delay: 190ms; }
-.home-motion .hero-enter { animation: soft-enter 1000ms var(--ease) 350ms both; }
+.home-motion.home-intro .hero-line > span { animation: line-enter 420ms var(--ease) both; }
+.home-motion.home-intro .hero-line:nth-child(2) > span { animation-delay: 45ms; }
+.home-motion .hero-enter { animation: none; }
 .home-motion.is-motion-paused *, .home-motion.is-motion-paused *::before, .home-motion.is-motion-paused *::after { animation-play-state: paused !important; }
 @keyframes line-enter { from { transform: translateY(115%); } to { transform: translateY(0); } }
 @keyframes soft-enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }

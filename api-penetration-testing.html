@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="has-page-flow">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
@@ -27,8 +27,9 @@
   <meta name="twitter:image:alt" content="Balhence API penetration testing services">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260930a">
-  <link rel="stylesheet" href="/motion.css?v=20260905c">
+  <link rel="stylesheet" href="/styles.css?v=20260930b">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
+  <link rel="stylesheet" href="/flow.css?v=20260930b">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -199,9 +200,11 @@
         <span class="eyebrow">REST, GraphQL, and connected services</span>
         <h1 id="api-hero-title">API penetration<br>testing.</h1>
         <p>API penetration testing checks who can call each endpoint, what they can read or change, and where data flows, including object and function-level authorization. Balhence tests REST and GraphQL APIs by hand, maps relevant findings to the OWASP API Security Top 10, and provides evidence and practical fixes.</p>
-        <div class="button-row"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="api_hero_contact">Request an API pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-secondary" href="/report-viewer.html" data-track="api_hero_report">See the sample report</a></div>
+        <div class="button-row"><a class="btn btn-primary btn-flow" data-track="api_hero_contact" href="/contact.html?service=web-api&amp;source=api-pentest">Request an API pentest quote <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a><a class="btn btn-secondary" href="/report-viewer.html" data-track="api_hero_report">See the sample report</a></div>
       </div>
     </section>
+
+    <div class="page-flow"><div class="container"><span class="page-flow-label" aria-hidden="true">Explore this page</span><nav class="section-jump" data-flow-nav aria-label="On this page"><a href="#coverage-title">Coverage</a><a href="#scope-title">Plan the scope</a><a href="#method-title">Process</a><a href="#deliverables-title">Report</a></nav></div></div>
 
     <section class="proof-strip" aria-label="API testing principles">
       <div class="container proof-grid">
@@ -285,7 +288,7 @@
           </div>
           <p>Mark missing documentation, unavailable callers, and excluded providers before estimating effort. The <a href="/insights/how-to-scope-web-api-pentest.html">web and API scoping guide</a> helps turn this inventory into an agreed boundary. Use the <a href="/insights/what-good-pentest-report-includes.html">pentest report checklist</a> to agree how assessed and unavailable areas will be recorded.</p>
         </div>
-        <div class="button-row"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="api_scope_contact">Request a scoped quote</a><a class="btn btn-secondary" href="/scope-builder.html?trigger=baseline" data-track="api_scope_builder">Start a private draft scope</a></div>
+        <div class="button-row"><a class="btn btn-primary btn-flow" data-track="api_scope_contact" href="/contact.html?service=web-api&amp;source=api-pentest">Request a scoped quote <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a><a class="btn btn-secondary" href="/scope-builder.html?trigger=baseline" data-track="api_scope_builder">Start a private draft scope</a></div>
       </div>
     </section>
 
@@ -398,10 +401,11 @@
       </div>
     </section>
 
-    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Plan your API test</span><h2>Plan your API penetration testing scope.</h2><p>Start with the interfaces, roles, integrations, and deadline. A short description is enough for the first conversation; do not send API keys, tokens, or customer data.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="api_bottom_contact">Request an API pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html?trigger=baseline" data-track="api_bottom_builder">Draft your scope first</a></div></div></div></section>
+    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Plan your API test</span><h2>Plan your API penetration testing scope.</h2><p>Start with the interfaces, roles, integrations, and deadline. A short description is enough for the first conversation; do not send API keys, tokens, or customer data.</p></div><div class="cta-actions"><a class="btn btn-primary btn-flow" data-track="api_bottom_contact" href="/contact.html?service=web-api&amp;source=api-pentest">Request an API pentest quote <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html?trigger=baseline" data-track="api_bottom_builder">Draft your scope first</a></div></div></div></section>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260922a"></script><script src="/motion.js?v=20260905c"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><button class="motion-preference" type="button" data-motion-preference hidden aria-pressed="false">Pause motion</button><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260930b"></script><script src="/motion.js?v=20260930b"></script>
+  <script src="/flow.js?v=20260930b"></script>
 </body>
 </html>

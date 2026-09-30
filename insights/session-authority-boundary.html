@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="has-article-flow">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
@@ -30,9 +30,10 @@
   <meta name="twitter:image:alt" content="Balhence application security case study">
   <link rel="icon" href="../favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="../site.webmanifest">
-  <link rel="stylesheet" href="../styles.css?v=20260930a">
-  <link rel="stylesheet" href="/motion.css?v=20260905c">
+  <link rel="stylesheet" href="../styles.css?v=20260930b">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/case-studies.css?v=20260923a">
+  <link rel="stylesheet" href="/flow.css?v=20260930b">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -223,7 +224,7 @@ persist_cookie_for(session)</code></pre>
             <section class="article-cta" aria-labelledby="article-cta-title">
               <h2 id="article-cta-title">Does each session stay in its own lane?</h2>
               <p>A <a href="/web-application-penetration-testing.html">web application penetration test</a> can examine anonymous sessions, sign-in transitions, and the state carried between workflows. Tell us how your product handles these journeys and when you need an assessment.</p>
-              <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=session-authority-boundary" data-track="article_session_boundary_contact">Request a pentest <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
+              <a class="btn btn-primary btn-flow" data-track="article_session_boundary_contact" href="/contact.html?service=web-api&amp;source=session-authority-boundary">Request a pentest <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a>
             </section>
           </div>
         </div>
@@ -231,9 +232,10 @@ persist_cookie_for(session)</code></pre>
     </article>
       <section class="section section-paper launch-section" aria-labelledby="service-reading-title"><div class="container launch-copy"><h2 id="service-reading-title">Related testing services and reading</h2><ul class="launch-links"><li><a href="/web-application-penetration-testing.html">Web application and session testing</a></li><li><a href="/insights/private-response-cache-boundary.html">Private responses and shared caches</a></li><li><a href="/insights/draft-write-authorization.html">Read and write authorization boundaries</a></li></ul><p><a href="/blog.html">All penetration testing guides</a> | <a href="/blogs.html">Research field notes</a></p></div></section>
   </main>
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><button class="motion-preference" type="button" data-motion-preference hidden aria-pressed="false">Pause motion</button><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
   <script src="../config.js?v=20260905c"></script>
-  <script src="../app.js?v=20260922a"></script>
-  <script src="/motion.js?v=20260905c"></script>
+  <script src="../app.js?v=20260930b"></script>
+  <script src="/motion.js?v=20260930b"></script>
+  <script src="/flow.js?v=20260930b"></script>
 </body>
 </html>

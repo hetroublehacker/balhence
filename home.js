@@ -221,6 +221,7 @@
       resetPointer();
     }
     schedule();
+    window.dispatchEvent(new CustomEvent("balhence:motion-preference", { detail: { paused } }));
   }
   toggle.addEventListener("click", () => {
     paused = !paused;
@@ -244,15 +245,15 @@
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         reveal.unobserve(entry.target);
-        if (!canMove() || !entry.target.animate) continue;
+        if (!canMove() || !entry.target.animate || entry.target.contains(document.activeElement)) continue;
         const animation = entry.target.animate(
-          [{ opacity: 0, transform: "translateY(22px)" }, { opacity: 1, transform: "translateY(0)" }],
-          { duration: 850, easing: "cubic-bezier(.22,1,.36,1)" }
+          [{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "translateY(0)" }],
+          { duration: 380, easing: "cubic-bezier(.22,1,.36,1)" }
         );
         animations.add(animation);
         animation.finished.catch(() => {}).finally(() => animations.delete(animation));
       }
-    }, { threshold: .12 });
+    }, { threshold: 0, rootMargin: "0px 0px 48px 0px" });
     document.querySelectorAll("[data-home-reveal]").forEach(node => reveal.observe(node));
   }
   if ("ResizeObserver" in window) new ResizeObserver(resize).observe(diagram);
@@ -266,6 +267,19 @@
     updateMotion();
   });
   fine.addEventListener("change", resetPointer);
+  document.addEventListener("focusin", event => {
+    animations.forEach(animation => {
+      if (animation.effect?.target?.contains(event.target)) {
+        animation.cancel();
+        animations.delete(animation);
+      }
+    });
+  });
+  addEventListener("storage", event => {
+    if (event.key !== "balhence_motion_paused" && event.key !== null) return;
+    paused = event.newValue === "true";
+    updateMotion();
+  });
   document.addEventListener("visibilitychange", () => {
     root.classList.toggle("is-motion-paused", !canMove() || document.hidden);
     animations.forEach(animation => document.hidden ? animation.pause() : animation.play());
@@ -279,4 +293,8 @@
   addEventListener("pageshow", updateMotion);
   resize();
   updateMotion();
+  if (canMove() && window.scrollY < 10) {
+    root.classList.add("home-intro");
+    setTimeout(() => root.classList.remove("home-intro"), 500);
+  }
 })();

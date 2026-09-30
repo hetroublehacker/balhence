@@ -45,6 +45,8 @@ PUBLIC_FILES = (
     "experience.css",
     "experience.js",
     "favicon.svg",
+    "flow.css",
+    "flow.js",
     "home.css",
     "home.js",
     "index.html",
@@ -94,6 +96,7 @@ PUBLIC_FILES = (
     "vendor/fonts/newsreader-OFL.txt",
     "vendor/jspdf-4.2.1.umd.min.js",
     "vendor/three-experience-0.185.1.module.min.js",
+    "vendor/threeui-community-LICENSE.txt",
     "web-application-penetration-testing.html",
 )
 PUBLIC_FILE_SET = frozenset(PUBLIC_FILES)

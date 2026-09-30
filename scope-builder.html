@@ -27,9 +27,10 @@
   <meta name="twitter:image:alt" content="Choose a security project scope with Balhence">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260930a">
+  <link rel="stylesheet" href="/styles.css?v=20260930b">
   <link rel="stylesheet" href="/scope-builder.css?v=20260923a">
-  <link rel="stylesheet" href="/motion.css?v=20260905c">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
+  <link rel="stylesheet" href="/flow.css?v=20260930b">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -114,7 +115,7 @@
           <h1 id="scope-title">Draft your penetration test scope</h1>
           <p>The Balhence scope builder helps you draft a penetration test scope: application boundaries, user roles, integrations, and deadlines. Prepare a private draft, review the assumptions, and choose whether to share it. The web and API planner is a starting point for a scoped proposal; other systems need a scoping conversation.</p>
           <div class="button-row">
-            <a class="btn btn-primary" href="#project-routing" data-track="scope_hero_start">Choose a starting point <span aria-hidden="true"><i class="ui-icon ui-icon-arrow ui-icon-down" aria-hidden="true"></i></span></a>
+            <a class="btn btn-primary btn-flow" data-track="scope_hero_start" href="#project-routing">Choose a starting point <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow ui-icon-down"></i></span></a>
             <a class="btn btn-quiet" href="#scope-builder" data-track="scope_hero_web_api">Open the web &amp; API planner</a>
           </div>
           <ul class="sb-hero-notes" aria-label="Planning safeguards">
@@ -544,7 +545,7 @@
               <button class="sb-tool-button sb-print-fallback" type="button" data-print hidden disabled>Print fallback</button>
             </div>
 
-            <a class="btn btn-primary sb-contact-cta is-disabled" href="/contact.html?service=web-api&amp;utm_source=scope-builder&amp;utm_medium=website&amp;utm_campaign=scope-planner" aria-disabled="true" data-contact-cta data-track="scope_result_contact">Continue to a scope review <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a>
+            <a aria-disabled="true" class="btn btn-primary sb-contact-cta is-disabled btn-flow" data-contact-cta="" data-track="scope_result_contact" href="/contact.html?service=web-api&amp;utm_source=scope-builder&amp;utm_medium=website&amp;utm_campaign=scope-planner">Continue to a scope review <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a>
             <p class="sb-privacy-line">Your answers stay in this browser. You can review the brief on the contact page before deciding whether to send it.</p>
           </aside>
 
@@ -572,13 +573,14 @@
       <section class="section section-paper launch-section" aria-labelledby="scope-services-title"><div class="container launch-copy"><h2 id="scope-services-title">Choose the testing scope your project needs</h2><ul class="launch-links"><li><a href="/web-application-penetration-testing.html">Web application testing</a></li><li><a href="/api-penetration-testing.html">API penetration testing</a></li><li><a href="/saas-penetration-testing.html">SaaS and tenant isolation</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 evidence planning</a></li><li><a href="/ai-llm-penetration-testing.html">AI and LLM testing</a></li></ul><p><a href="/insights/how-to-scope-web-api-pentest.html">Read the scoping guide</a> or <a href="/contact.html?source=scope-planner">discuss your draft with us</a>.</p></div></section>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><button class="motion-preference" type="button" data-motion-preference hidden aria-pressed="false">Pause motion</button><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
 
   <script src="/config.js?v=20260905c"></script>
-  <script src="/app.js?v=20260922a"></script>
+  <script src="/app.js?v=20260930b"></script>
   <script src="/vendor/jspdf-4.2.1.umd.min.js" integrity="sha384-qovJwSBbRDPP5cEjCp8S0UP66wrvnjaa60XMOGzTNanrThcrGfXfnZkvgY8N1KT3"></script>
   <script src="/scope-pdf.js?v=20260905c"></script>
   <script src="/scope-builder.js?v=20260905c"></script>
-  <script src="/motion.js?v=20260905c"></script>
+  <script src="/motion.js?v=20260930b"></script>
+  <script src="/flow.js?v=20260930b"></script>
 </body>
 </html>

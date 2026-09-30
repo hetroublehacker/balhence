@@ -16,7 +16,7 @@ This directory is the main website. The existing nested `website/`, `website-too
 
 - Five-section homepage: a short introduction, application services, compliance/AI/ongoing testing, two field notes, and a direct enquiry. An illustrative security map connects applications, cloud, AI, data, identity, and code through an access-and-trust review. Animated route traces and pointer highlighting add motion without live scanning or invented results. The dark hero, logo, lavender buttons, and footer use the shared site styling.
 - Self-hosted Bricolage Grotesque throughout the shared site, paired with Newsreader for article prose and editorial accents. Code and HTTP remain monospace. Font licenses ship with the assets; the separate CTF keeps its terminal styling.
-- Conversational service copy and thirteen articles. Research stories preserve their observation limits, redactions, synthetic HTTP and defensive test cases; guides focus on practical decisions.
+- Conversational service copy and fourteen articles. Research stories preserve their observation limits, redactions, synthetic HTTP and defensive test cases; guides focus on practical decisions.
 - Twelve security capability areas, with cross-disciplinary and specialist enquiries routed to a tailored scope review. AI-native positioning retains human ownership, agreed data use, and explicit project boundaries.
 - A dedicated Blog at `/blogs.html` with five anonymized research case studies, local search/topic filters, and 25 illustrative defensive regression cases. Existing preparation and procurement guides remain at `/blog.html`.
 - Animation stops while the map is offscreen or the tab is hidden, draws at a maximum of 30fps, and caps pixel density. A saved pause control, reduced-motion/slow-device/save-data preferences, and a matching static SVG fallback keep the experience optional. No information depends on motion or pointer input.
@@ -89,9 +89,23 @@ They exercise local previews and block external traffic. GitHub Actions validate
 
 The Python suite also checks search metadata uniqueness, ordinary-link reachability, commercial page schema and enquiry routes, sitemap/article date consistency, visible FAQ/schema parity, contextual incoming links, and reciprocal US/India alternates. See [SEO-GROWTH.md](SEO-GROWTH.md) for the search-intent map, Search Console setup, real inbox checks, and lead measurement. It is operational documentation, not a public asset. No rankings or enquiry volume are guaranteed.
 
+## Shared interaction design
+
+The 30 September UI update adapts ThreeUI Community patterns to the site's static HTML. The public artifact includes the MIT notice at `vendor/threeui-community-LICENSE.txt`; source provenance and the pinned revision are recorded in `vendor/README.md`.
+
+The current **Latest Landing Pages** reference is [Kage](https://threeui.com/landing-pages/kage-landing-page), and the **Latest Hero Sections** reference is [Sylva - Living Green](https://threeui.com/hero/sylva/living-green). Their numbered chapter links, framed illustration, and small contextual panels informed the homepage composition. Balhence retains its own illustration, brand, content, and assets.
+
+`flow.css` and `flow.js` supply shared button feedback, hero surfaces, section navigation, and overflow-table hints on every public page. Service docks use native anchors with a current-section state; articles retain their desktop contents list and expose a scrollable contents row on phones. The service chooser precedes the capability catalog. Contact offers a direct form jump. The report viewer, planner, privacy notice, and CTF keep the controls appropriate to their tasks.
+
+Primary actions are immediately visible. Reveals use short, bounded movement, unobserve completed items, and show focused content immediately. Motion preference uses the existing `balhence_motion_paused` key and synchronizes across tabs and page types; OS reduced-motion and slow-update preferences take precedence. The homepage has its pause control beside the illustration; other animated pages expose a footer control. No new analytics or external runtime requests are added.
+
+Native links, navigation, tables and forms work without JavaScript. `tests/flow-regression.cjs` covers section tracking, resizing, form access, table scrolling and preference transitions; the existing experience, interaction, conversion, guide and launch suites cover the surrounding journeys.
+
+Release verification: 45 Python checks and 70 browser checks passed. All 36 public pages were reviewed at 390px and 1440px, including visible headings, section targets and table containment. The allowlisted build contains 84 files; source and artifact validation both checked 2,325 URL references. No test sent an enquiry.
+
 ## Publishing
 
-Set GitHub Pages source to **GitHub Actions** before pushing. Publish the generated artifact, never the repository root. No push or deployment was performed for this upgrade.
+Set GitHub Pages source to **GitHub Actions** before pushing. Publish the generated artifact, never the repository root. A local build verifies the artifact; confirm the Actions deployment separately after pushing.
 
 Use HTTPS and appropriate response headers in production. The preview demonstrates defensive headers; the production host must provide them. Confirm the configured origin, form delivery, and externally shared business claims before publishing.
 
