@@ -1,6 +1,6 @@
 # Search visibility and pentest enquiries
 
-Implementation and owner checklist, updated 22 September 2026. This file is operational documentation and is excluded from the public site artifact.
+Implementation and owner checklist, updated 30 September 2026. This file is operational documentation and is excluded from the public site artifact.
 
 ## What this release changes
 
@@ -26,6 +26,22 @@ Search engines need useful, clearly described content and discoverable links; ne
 | Request a proposal | `/contact.html` | Short enquiry, clear next steps, direct email |
 
 These are intent choices, not measured keyword volumes. Search Console data should guide later changes. Avoid cloned city/service pages, keyword repetition, fake ratings, and speculative claims about certifications or client outcomes.
+
+## Content and discovery upgrade - 30 September 2026
+
+- Added a source-linked comparison of vulnerability scans, vulnerability assessments, manual penetration tests, and retests. The worked example is fictional; procurement questions clarify what "VAPT" includes. Homepage, Services, India, and Guides link to it in visible text, and the public allowlist and sitemap include its canonical URL.
+- Added decision paths to the homepage and a service-selection table to Services. Preserved both brand H1s and the five-section homepage experience. Long Services and India pages now have native section links.
+- Added role/workflow, API inventory, and tenant/membership worksheets to the web, API, and SaaS pages. These explain preparation using controlled accounts and synthetic data, not client outcomes.
+- Added baseline/change-cycle/retest evidence tables to PTaaS and its comparison guide. Coverage is scheduled and bounded; ongoing service does not imply continuous monitoring or a fresh full test on every release.
+- Replaced generic India headings with descriptive coverage, remote delivery, proposal-comparison, and FAQ headings. Added an assessment-selection table and a clearly fictional SaaS brief. Shared navigation and footers now expose India and US services.
+- Differentiated reports for SOC 2, AI/LLM, PCI DSS, HIPAA, compliance, and US delivery with the boundary, versions, perspectives, data-handling and review fields relevant to each engagement. Retests are conditional on the agreement.
+- Published organization authorship links and publication/evidence standards on Approach. No public individual credentials or client proof were added. Contact metadata and visible delivery expectations cover India and the US without asserting an office.
+- Synchronized substantial modification dates to `2026-09-30` for the homepage, Services, India, web/API/SaaS, seven US launch service pages, Approach, Contact, Guides, the PTaaS comparison article, and the new assessment guide. Preserved the original publication date of the PTaaS article and existing dates on pages changed only by shared navigation or byline links.
+- Updated shared CSS caching and contained table scrolling. Article tables fit their desktop reading column and remain keyboard accessible on mobile. Added spacing around article tables and corrected decorative overflow on Approach at tablet widths.
+
+Release checks passed: `python3 verify_site.py --preview` validates 36 HTML pages, 2199 URL references, and 81 allowlisted files. All 45 Python checks pass, including collection-to-article metadata and visible-link consistency. Existing browser suites pass 16 SEO/conversion, 10 US launch/navigation, and 11 experience checks. The separate 81-file artifact at `/tmp/balhence-seo-20260930-final` passes artifact and HTTP preview validation. Enquiry delivery and analytics are mocked in browser tests; these results do not establish deployment or real lead delivery.
+
+The headings target specific buyer questions. Search volume, top keyword positions, current rankings, and Search Console performance were not measured for this release. Use actual property data to refine the next changes; publishing useful content is not proof of indexing or placement.
 
 ## US launch implementation - 22 September 2026
 
@@ -104,7 +120,7 @@ Earlier live checks confirmed HTTPS 200 on the homepage, permanent redirects fro
 
 ## Generative AI search
 
-Google says an AI Overview or AI Mode supporting link must come from an indexed page eligible for a normal snippet. It recommends original, useful content and clear technical structure, and says there is no special AI schema, AI text file or guaranteed placement. See [Google's AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) and [AI features guidance](https://developers.google.com/search/docs/appearance/ai-features). Track the new page's index status, India query impressions, India country results and Generative AI impressions in Search Console after publication. Record the actual performance numbers outside this public repository.
+Google says an AI Overview or AI Mode supporting link must come from an indexed page eligible for a normal snippet. It recommends original, useful content and clear technical structure, and says there is no special AI schema, AI text file or guaranteed placement. See [Google's AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) and [AI features guidance](https://developers.google.com/search/docs/appearance/ai-features). Track index status, query and landing-page impressions/clicks, and India country performance in Search Console after publication. Google includes AI Overviews and AI Mode traffic in the overall Performance report under the Web search type; this plan does not assume a separate AI impressions metric. Record the actual performance numbers outside this public repository.
 
 ## Measure leads, not just clicks
 

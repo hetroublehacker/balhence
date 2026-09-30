@@ -27,7 +27,7 @@
   <meta name="twitter:image:alt" content="Balhence API penetration testing services">
   <link rel="icon" href="/favicon.svg?v=20260905c" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260923a">
+  <link rel="stylesheet" href="/styles.css?v=20260930a">
   <link rel="stylesheet" href="/motion.css?v=20260905c">
   <script type="application/ld+json">
 {
@@ -49,7 +49,7 @@
       "breadcrumb": {
         "@id": "https://balhence.com/api-penetration-testing.html#breadcrumb"
       },
-      "dateModified": "2026-09-22"
+      "dateModified": "2026-09-30"
     },
     {
       "@type": "BreadcrumbList",
@@ -186,7 +186,7 @@
     <nav class="container nav-shell" aria-label="Primary navigation">
       <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
       <div class="nav-menu" id="primary-menu" data-menu>
-        <ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul>
+        <ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul>
         <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="nav_pentest">Request a pentest</a>
       </div>
       <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
@@ -228,7 +228,7 @@
 
     <section class="section section-paper" aria-labelledby="interfaces-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">Interfaces and identities</span><h2 id="interfaces-title">Include the services that use your API.</h2><p>Users aren't the only callers. We account for service accounts, webhooks, background jobs, and identity providers when agreeing on what to test.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Interfaces and identities</span><h2 id="interfaces-title">API testing across protocols and caller identities</h2><p>Users aren't the only callers. We account for service accounts, webhooks, background jobs, and identity providers when agreeing on what to test.</p></div>
         <div class="service-grid">
           <article class="service-card" data-reveal><span class="service-code">REST</span><h3>REST APIs</h3><p>Check routes, methods, versions, and content types, including filtering, pagination, batch operations, and errors. Equivalent endpoints should enforce the same rules.</p></article>
           <article class="service-card" data-reveal><span class="service-code">GRAPHQL</span><h3>GraphQL APIs</h3><p>Review schema exposure, resolver permissions, field access, mutations, and subscriptions. Batching and complexity checks stay within agreed resource limits.</p></article>
@@ -242,7 +242,7 @@
 
     <section class="section section-tint" aria-labelledby="abuse-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">Rate and resource limits</span><h2 id="abuse-title">This isn't a load test.</h2><p>We use low-volume, bounded checks for weak rate and resource controls. Volumetric denial-of-service testing needs a separate agreement and a safe method.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Rate and resource limits</span><h2 id="abuse-title">API rate limits and resource control testing</h2><p>We use low-volume, bounded checks for weak rate and resource controls. Volumetric denial-of-service testing needs a separate agreement and a safe method.</p></div>
         <div class="principle-grid">
           <article class="principle-card" data-reveal><h3>Rate and quota controls</h3><p>Low-volume checks for identity, endpoint, tenant, IP, and token limits, including alternate methods, batch features, and distributed control inconsistencies.</p></article>
           <article class="principle-card" data-reveal><h3>Resource consumption</h3><p>Bounded tests of expensive filters, search, uploads, exports, GraphQL complexity, pagination, asynchronous jobs, and fan-out behavior.</p></article>
@@ -269,6 +269,22 @@
             </tbody>
           </table>
         </div>
+        <div class="launch-copy scope-worksheet" data-reveal>
+          <h3 id="caller-inventory-title">API caller and permission worksheet</h3>
+          <p>A useful inventory connects each interface to its callers and intended data access. This synthetic billing example helps engineers describe the scope without sharing production credentials. List active versions and any shared identity controls alongside these rows.</p>
+          <div class="scope-table-wrap">
+            <table class="scope-table" aria-labelledby="caller-inventory-title">
+              <thead><tr><th scope="col">Interface and caller</th><th scope="col">Expected access</th><th scope="col">Scope input</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">REST / customer member</th><td>Read that customer's permitted invoice records</td><td>OpenAPI inventory, member account, and synthetic invoices</td></tr>
+                <tr><th scope="row">GraphQL / customer administrator</th><td>View billing fields assigned to the administrative role</td><td>Schema, role policy, and representative billing queries</td></tr>
+                <tr><th scope="row">Webhook / payment sandbox</th><td>Update only the agreed payment workflow</td><td>Controlled event source and documented event states</td></tr>
+                <tr><th scope="row">Worker / service account</th><td>Process assigned jobs within its environment and tenant permissions</td><td>Credential lifecycle policy and synthetic queued jobs</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Mark missing documentation, unavailable callers, and excluded providers before estimating effort. The <a href="/insights/how-to-scope-web-api-pentest.html">web and API scoping guide</a> helps turn this inventory into an agreed boundary. Use the <a href="/insights/what-good-pentest-report-includes.html">pentest report checklist</a> to agree how assessed and unavailable areas will be recorded.</p>
+        </div>
         <div class="button-row"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="api_scope_contact">Request a scoped quote</a><a class="btn btn-secondary" href="/scope-builder.html?trigger=baseline" data-track="api_scope_builder">Start a private draft scope</a></div>
       </div>
     </section>
@@ -287,7 +303,7 @@
 
     <section class="section section-paper" aria-labelledby="readiness-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">Getting ready</span><h2 id="readiness-title">Set up access before testing starts.</h2><p>A stable environment, working test accounts, and clear testing rules help us spend the time on your API.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Getting ready</span><h2 id="readiness-title">API pentest access and environment readiness</h2><p>A stable environment, working test accounts, and clear testing rules help us spend the time on your API.</p></div>
         <div class="transparency-box" data-reveal>
         <div class="transparency-panel">
           <span class="eyebrow">Readiness checklist</span>
@@ -305,7 +321,7 @@
 
     <section class="section section-tint" aria-labelledby="boundaries-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">Scope and safety</span><h2 id="boundaries-title">Put the testing rules in writing.</h2><p>The signed scope and rules of engagement name the systems, methods, rate limits, evidence handling, contacts, and exclusions.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Scope and safety</span><h2 id="boundaries-title">API pentest authorization and safety controls</h2><p>The signed scope and rules of engagement name the systems, methods, rate limits, evidence handling, contacts, and exclusions.</p></div>
         <div class="transparency-box" data-reveal>
         <div class="transparency-panel">
           <span class="eyebrow">Authorization and safety</span>
@@ -341,7 +357,7 @@
 
     <section class="section section-dark" aria-labelledby="timeline-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">Planning the schedule</span><h2 id="timeline-title">What affects how long the test takes?</h2><p>We'll propose a test window after reviewing the scope and confirming access. These are the details that affect the work.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Planning the schedule</span><h2 id="timeline-title">API penetration testing timelines and effort</h2><p>We'll propose a test window after reviewing the scope and confirming access. These are the details that affect the work.</p></div>
         <div class="coverage-grid">
           <article class="coverage-card" data-reveal><h3>Identity combinations</h3><p>More roles, tenant types, service accounts, and delegated permissions mean more access relationships to check.</p></article>
           <article class="coverage-card" data-reveal><h3>Workflow depth</h3><p>A payment or approval flow takes more time to understand and test than a simple lookup. Background jobs add another step to follow.</p></article>
@@ -355,7 +371,7 @@
 
     <section class="section section-paper" aria-labelledby="related-title">
       <div class="container">
-        <div class="section-heading" data-reveal><span class="eyebrow">Related services</span><h2 id="related-title">Test the API on its own or include your web app?</h2><p>Focus on the API when services, integrations, and access rules are your main concern. Include the web app when browser behavior, sessions, uploads, and user workflows are part of the same risk.</p></div>
+        <div class="section-heading" data-reveal><span class="eyebrow">Related services</span><h2 id="related-title">API-only or combined web and API penetration testing</h2><p>Focus on the API when services, integrations, and access rules are your main concern. Include the web app when browser behavior, sessions, uploads, and user workflows are part of the same risk.</p></div>
         <div class="service-grid">
           <article class="service-card" data-reveal><span class="service-code">WEB</span><h3>Web application penetration testing</h3><p>Cover browser behavior, sessions, user journeys, client and server trust, and application-specific business logic.</p><a class="text-link" href="/web-application-penetration-testing.html">Explore web application testing</a></article>
           <article class="service-card" data-reveal><span class="service-code">SAAS</span><h3>SaaS penetration testing</h3><p>Assess the product's tenant boundaries, customer administration, integrations, and shared web and API workflows together.</p><a class="text-link" href="/saas-penetration-testing.html">Explore SaaS testing</a></article>
@@ -382,10 +398,10 @@
       </div>
     </section>
 
-    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Plan your API test</span><h2>Tell us how your API fits together.</h2><p>Start with the interfaces, roles, integrations, and deadline. A short description is enough for the first conversation; do not send API keys, tokens, or customer data.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="api_bottom_contact">Request an API pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html?trigger=baseline" data-track="api_bottom_builder">Draft your scope first</a></div></div></div></section>
+    <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Plan your API test</span><h2>Plan your API penetration testing scope.</h2><p>Start with the interfaces, roles, integrations, and deadline. A short description is enough for the first conversation; do not send API keys, tokens, or customer data.</p></div><div class="cta-actions"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=api-pentest" data-track="api_bottom_contact">Request an API pentest quote <span aria-hidden="true"><i class="ui-icon ui-icon-arrow" aria-hidden="true"></i></span></a><a class="btn btn-quiet" href="/scope-builder.html?trigger=baseline" data-track="api_bottom_builder">Draft your scope first</a></div></div></div></section>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements, serving US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
   <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260922a"></script><script src="/motion.js?v=20260905c"></script>
 </body>
 </html>

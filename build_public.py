@@ -19,6 +19,7 @@ PUBLIC_FILES = (
     "insights/does-soc-2-require-penetration-testing.html",
     "insights/how-to-plan-llm-security-testing.html",
     "insights/ptaas-vs-annual-penetration-test.html",
+    "insights/vulnerability-assessment-vs-penetration-testing.html",
     "pci-dss-penetration-testing.html",
     "penetration-testing-as-a-service.html",
     "penetration-testing-services-usa.html",

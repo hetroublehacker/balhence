@@ -357,6 +357,38 @@ class SearchAndConversionTests(unittest.TestCase):
                     checked += 1
         self.assertGreater(checked, 0, "Expected published article dates to be checked")
 
+    def test_collection_articles_match_their_linked_published_pages(self):
+        checked = 0
+        for relative, document in self.documents.items():
+            for collection in schema_nodes(document):
+                if "CollectionPage" not in schema_types(collection):
+                    continue
+                for item in collection.get("hasPart", []):
+                    if not schema_types(item) & ARTICLE_TYPES:
+                        continue
+                    with self.subTest(collection=relative, article=item.get("url")):
+                        target = local_target(relative, item["url"])
+                        self.assertIsNotNone(target)
+                        path = target[0]
+                        self.assertIn(path, self.documents)
+                        self.assertTrue(self.documents[path].indexable)
+                        self.assertTrue(any(
+                            anchor.in_main and linked_path(relative, anchor) == path
+                            and normalized(anchor.text)
+                            for anchor in document.anchors
+                        ), "Collection metadata needs a visible link to the article")
+                        articles = [
+                            node for node in schema_nodes(self.documents[path])
+                            if schema_types(node) & ARTICLE_TYPES
+                            and node.get("url") == item["url"]
+                        ]
+                        self.assertEqual(len(articles), 1)
+                        self.assertEqual(normalized(item["headline"]), normalized(articles[0]["headline"]))
+                        if "@id" in item:
+                            self.assertEqual(item["@id"], articles[0]["@id"])
+                        checked += 1
+        self.assertGreater(checked, 0, "Expected a linked article collection")
+
 
 if __name__ == "__main__":
     unittest.main()
