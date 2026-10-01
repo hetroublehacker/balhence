@@ -57,10 +57,7 @@ function initialize(hero: HTMLElement) {
     scene.dataset.particles = "0";
     scene.dataset.dissolveStrength = "0.00";
     const canvas = document.createElement("canvas");
-    const hint = document.createElement("span");
-    hint.className = "typography-vortex-component__hint";
-    hint.textContent = "MOVE / DISSOLVE - CLICK / SUCTION";
-    scene.append(canvas, hint);
+    scene.append(canvas);
     frame.append(scene);
     field.append(frame);
     hero.prepend(field);
