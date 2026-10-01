@@ -100,10 +100,6 @@ PUBLIC_FILES = (
     "vendor/three-experience-0.185.1.module.min.js",
     "vendor/threeui-community-LICENSE.txt",
     "vendor/threeui/LICENSE.txt",
-    "vendor/react-LICENSE.txt",
-    "vendor/threeui/FONT-LICENSES.txt",
-    "vendor/threeui/src/shaders/threeui.css",
-    "vendor/threeui/src/shaders/fonts/fragment-mono.woff2",
     "web-application-penetration-testing.html",
 )
 PUBLIC_FILE_SET = frozenset(PUBLIC_FILES)

@@ -55,7 +55,7 @@ async function expectStill(page) {
 
 async function expectFallback(page, state = "static") {
   await page.waitForFunction(({ selector, expected }) => document.querySelector(selector)?.dataset.typeFieldState === expected, { selector: HOST, expected: state });
-  assert.equal(await page.locator(WRAPPER).count(), 0, "The preference fallback must not run the vendor animation");
+  assert.equal(await page.locator(WRAPPER).count(), 0, "The preference fallback must not run the background animation");
   assert.equal(await page.locator(FIELD).count(), 0);
   assert.equal(await page.locator("h1").isVisible(), true);
   assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
@@ -110,6 +110,7 @@ async function main() {
   const missing = [];
   const external = [];
   const deliveries = [];
+  const retiredAnimationAssets = [];
   try {
     for (let attempt = 0; attempt < 40; attempt++) {
       if (serverError) throw serverError;
@@ -125,6 +126,7 @@ async function main() {
         await context.route("**/*", route => {
           const request = route.request();
           const url = new URL(request.url());
+          if (/(?:fragment-mono|threeui\.css)/i.test(url.pathname)) retiredAnimationAssets.push(request.url());
           if (url.origin !== origin) {
             external.push(request.url());
             return route.abort();
@@ -162,7 +164,6 @@ async function main() {
       await page.waitForFunction(({ selector, expected }) => document.querySelector(selector)?.dataset.typeFieldState === expected, { selector: HOST, expected: state });
       if (state === "running") {
         await page.locator(FIELD).waitFor();
-        assert.equal(await page.evaluate(() => Array.from(document.fonts).some(font => font.family.replaceAll('"', "") === "ThreeUI Fragment Mono" && font.status === "loaded")), true, `${pathname}: the authored font is loaded before the canvas mounts`);
       }
     }
 
@@ -175,6 +176,36 @@ async function main() {
       await expectMoving(page);
       assert.equal(await page.evaluate(() => localStorage.getItem("balhence_motion_paused")), null);
     });
+
+    await check("Local typography renders and moves without waiting for font APIs", {}, async page => {
+      // Deliberately do not use open(): it waits for document.fonts.ready to
+      // stabilize foreground layout in the other checks.
+      await page.goto(`${origin}/services.html`, { waitUntil: "domcontentloaded" });
+      await expectMoving(page);
+      const glyphRuns = await page.evaluate(() => Array.from(window.__typeFieldGlyphRuns.values()));
+      const brandedPhrase = "BALHENCE/PENETRATIONTESTING/WEB&APISECURITY/SAAS/CLOUD/IDENTITY/AI&LLMSECURITY/";
+      assert.ok(glyphRuns.some(run => run.includes(brandedPhrase)), "The cached ring drawings should contain Balhence's service wording");
+      assert.equal(await page.locator("h1").isVisible(), true);
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
+    }, context => context.addInitScript(() => {
+      // Mock only the JavaScript font API; normal CSS font requests and text
+      // rendering continue. A renderer that waits for either promise will fail.
+      const pending = new Promise(() => {});
+      Object.defineProperty(document.fonts, "ready", { configurable: true, get: () => pending });
+      Object.defineProperty(document.fonts, "load", { configurable: true, value: () => pending });
+      const runs = new Map();
+      window.__typeFieldGlyphRuns = runs;
+      const fillText = CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText = function (text, ...args) {
+        // Observe rendered glyphs on cached ring canvases rather than checking
+        // a configuration attribute that could differ from the visible scene.
+        if (!this.canvas.isConnected && String(text).length === 1) {
+          const current = runs.get(this.canvas) || "";
+          if (current.length < 512) runs.set(this.canvas, current + text);
+        }
+        return fillText.call(this, text, ...args);
+      };
+    }));
 
     await check("An obsolete saved pause value cannot disable the field after controls are removed", {}, async page => {
       await open(page, "/services.html");
@@ -191,7 +222,7 @@ async function main() {
       if (location.protocol === "http:") localStorage.setItem("balhence_motion_paused", "true");
     }));
 
-    await check("Reduced motion uses a CSS fallback and runtime changes mount or remove the exact renderer", { reducedMotion: "reduce" }, async page => {
+    await check("Reduced motion uses a CSS fallback and runtime changes mount or remove the renderer", { reducedMotion: "reduce" }, async page => {
       await open(page, "/services.html", "static");
       await expectFallback(page);
       assert.notEqual(await page.locator(HOST).evaluate(host => getComputedStyle(host).backgroundImage), "none", "The existing CSS surface should remain visible without a canvas");
@@ -310,12 +341,12 @@ async function main() {
     }));
 
     for (const width of [390, 1440]) {
-      await check(`The exact field remains decorative and contained across hero families at ${width}px`, { viewport: { width, height: 1000 } }, async page => {
+      await check(`The local field remains decorative and contained across hero families at ${width}px`, { viewport: { width, height: 1000 } }, async page => {
         for (const pathname of ["/", "/services.html", "/insights/ptaas-vs-annual-penetration-test.html", "/report-viewer.html", "/scope-builder.html", "/privacy.html", "/404.html", "/ctf.html"]) {
           await open(page, pathname);
           assert.equal(await page.locator(FIELD).count(), 1, `${pathname}: one decorative field`);
           assert.equal(await page.locator(WRAPPER).getAttribute("aria-hidden"), "true", `${pathname}: the decorative scene is hidden from assistive technology`);
-          assert.equal(await page.locator(`${WRAPPER} > .shader-frame > .typography-vortex-component`).count(), 1, `${pathname}: the configured Scene retains its authored structure`);
+          assert.equal(await page.locator(`${WRAPPER} > .shader-frame > .typography-vortex-component`).count(), 1, `${pathname}: one native scene wrapper contains the renderer`);
           const layout = await page.locator(FIELD).evaluate(canvas => {
             const host = canvas.closest(".type-field-host");
             const bounds = canvas.getBoundingClientRect();
@@ -356,7 +387,7 @@ async function main() {
       });
     }
 
-    await check("Every published page loads one shared exact field with no motion controls", {}, async page => {
+    await check("Every published page loads one shared local field with no motion controls", {}, async page => {
       const pages = JSON.parse(execFileSync("python3", ["-c", "import json; from build_public import PUBLIC_FILES; print(json.dumps([p for p in PUBLIC_FILES if p.endswith('.html')]))"], { cwd: ROOT, encoding: "utf8" }));
       assert.ok(pages.length >= 36, "The coverage list should include every public HTML page");
       for (const file of pages) {
@@ -389,7 +420,7 @@ async function main() {
       await response;
     });
 
-    for (const [name, observed] of [["Uncaught browser errors", errors], ["Missing local resources", missing], ["External requests", external], ["Form submissions", deliveries]]) {
+    for (const [name, observed] of [["Uncaught browser errors", errors], ["Missing local resources", missing], ["External requests", external], ["Form submissions", deliveries], ["Retired animation font or vendor stylesheet requests", retiredAnimationAssets]]) {
       if (observed.length) failures.push({ name, error: new Error(JSON.stringify(observed)) });
     }
     for (const failure of failures) console.error(`${failure.name}\n${failure.error.stack}`);

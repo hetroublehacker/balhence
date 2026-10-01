@@ -20,40 +20,22 @@ for (const [file, expected] of Object.entries(hashes)) {
   if (file.endsWith(".woff2") && bytes.length !== 15176) throw new Error("Incorrect font size");
 }
 
-// Publish the registered CSS byte-for-byte, including its relative font path.
-// type-field.css loads it before the script; skip CSS rewriting by the JS bundler.
-const styles = await readFile(path.join(root, "type-field.css"), "utf8");
-if (!styles.includes('@import url("/vendor/threeui/src/shaders/threeui.css?v=5a736cd3")')) {
-  throw new Error("The registered ThreeUI stylesheet must be loaded by type-field.css");
-}
 const result = await build({
   absWorkingDir: root,
-  entryPoints: ["src/animation/mount.tsx"],
+  entryPoints: ["src/animation/mount.ts"],
   outfile: "type-field.js",
   bundle: true,
   minify: true,
   write: false,
   format: "iife",
   target: ["es2020"],
-  jsx: "automatic",
   charset: "ascii",
   legalComments: "eof",
-  define: { "process.env.NODE_ENV": '"production"' },
-  plugins: [{
-    name: "verified-threeui-source",
-    setup(builder) {
-      builder.onResolve({ filter: /^@designcodeio\/threeui$/ }, () => ({
-        path: path.join(vendor, "src/shaders/typography-vortex/TypographyVortexCanvas.tsx"),
-      }));
-      builder.onResolve({ filter: /^@designcodeio\/threeui\/style\.css$/ }, () => ({
-        path: "registered-css-loaded-by-type-field-css", namespace: "threeui-css",
-      }));
-      builder.onLoad({ filter: /.*/, namespace: "threeui-css" }, () => ({
-        contents: "", loader: "js",
-      }));
-    },
-  }],
+  banner: { js: "/*! Balhence native canvas adapter. Includes ThreeUI renderer (MIT); see /vendor/threeui/LICENSE.txt. */" },
 });
+if (result.outputFiles.some(output => output.contents.length > 16000)) {
+  throw new Error("Animation exceeded its 16 KB startup budget; inspect bundled dependencies");
+}
 for (const output of result.outputFiles) {
   if (process.argv.includes("--check")) {
     const current = await readFile(output.path);

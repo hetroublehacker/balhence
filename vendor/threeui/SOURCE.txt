@@ -17,23 +17,31 @@ Package tarball:
 https://registry.npmjs.org/@designcodeio/threeui/-/threeui-1.2.0.tgz
 
 Licenses: LICENSE.txt (ThreeUI MIT), FONT-LICENSES.txt (Fragment Mono OFL).
-The isolated React runtime uses ../react-LICENSE.txt (MIT).
 
-Integration: src/animation/Scene.tsx contains the requested configured usage.
-The build aliases @designcodeio/threeui to the verified local source. Its
-stylesheet import is fulfilled by type-field.css, which imports the exact
-registered CSS without bundler rewriting. The original relative fonts/ path
-and binary bytes are preserved in the published artifact.
+Integration: src/animation/mount.ts is the site's native DOM/canvas adapter.
+After the exact-component integration, the user requested faster startup and
+website-specific words. The adapter now invokes the verified renderer directly,
+without React, the shared ThreeUI stylesheet, or a downloaded animation font.
+Its phrase names Balhence and published security services. Other rendering
+settings retain the requested values: dark, speed 1, ringGrowth 1.21, opacity 1,
+dissolveRadius 1, particleAmount 1 and suctionDuration 920.
+
+Only the renderer is bundled at runtime. The source component, shared CSS and
+font remain here as verified provenance; the latter two are not published or
+requested by the website. The renderer's system monospace fallback is used.
+type-field.css supplies the small site-specific canvas layout. The script is
+loaded asynchronously from the page head and mounts when the hero is parsed;
+it does not wait for fonts, footer scripts or DOMContentLoaded.
 
 The site adapter positions the component behind hero content and forwards
 pointer events without preventing links or native touch scrolling. The source
 renderer owns ring rendering, pointer dissolution, dust, click suction,
-offscreen suspension and document visibility. The authored default phrase is
-retained because the configured usage does not override it.
+offscreen suspension and document visibility. The registered component and
+renderer remain byte-for-byte intact.
 
 The adapter does not mount animated decoration for reduced motion, slow
 display updates, data saving, forced colors or printing. The site's static
-background remains visible in those modes and if Canvas/font loading fails.
+background remains visible in those modes and if Canvas 2D is unavailable.
 
 Rebuild after editing the adapter:
   npm ci --ignore-scripts --no-audit --no-fund

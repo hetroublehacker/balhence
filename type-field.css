@@ -1,6 +1,4 @@
-@import url("/vendor/threeui/src/shaders/threeui.css?v=5a736cd3");
-
-/* Site embedding only. The registered ThreeUI stylesheet stays unchanged. */
+/* Native canvas layout. System monospace keeps animation independent of fonts. */
 @font-face {
   font-family: "Bricolage Grotesque";
   src: url("/vendor/fonts/bricolage-grotesque-latin.woff2") format("woff2");
@@ -25,6 +23,25 @@
   mask-image: linear-gradient(90deg, #00000008, #00000020 62%, #000000b0 82%, #000);
 }
 .type-field .shader-frame { width: 100%; height: 100%; }
+.type-field .typography-vortex-component {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: #151515;
+}
+.type-field canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.type-field .typography-vortex-component__hint {
+  position: absolute;
+  right: 18px;
+  bottom: 16px;
+  color: #62625e;
+  font: 400 9px/1 ui-monospace, monospace;
+  letter-spacing: .1em;
+}
 /* Keep long headings and the illustration legible above the moving field. */
 .home-hero.type-field-host > .type-field { opacity: .95; }
 .type-field-host.page-hero::after,
