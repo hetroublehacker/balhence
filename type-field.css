@@ -1,0 +1,72 @@
+/* Original Balhence typography field: open orbital paths behind the hero. */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/vendor/fonts/bricolage-grotesque-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+.type-field-host { position: relative; isolation: isolate; overflow: clip; }
+.type-field-host > .container,
+.type-field-host > .container-narrow,
+.type-field-host > .utility-hero-content,
+.type-field-host > .terminal { position: relative; z-index: 1; }
+.type-field-host > .type-field {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+  opacity: .8;
+  mask-image: linear-gradient(90deg, #00000012, #00000038 35%, #000 76%);
+}
+/* Keep long headings and the illustration legible above the moving field. */
+.home-hero.type-field-host > .type-field { opacity: .95; }
+.type-field-host.page-hero::after,
+.type-field-host.report-hero::before,
+.type-field-host.sb-hero::before { opacity: .32; }
+.type-field-host.sb-hero::after { animation: none; opacity: 0; }
+.type-field-toggle {
+  position: absolute;
+  right: max(20px, calc((100% - var(--max, 1180px)) / 2));
+  bottom: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid #75698c;
+  border-radius: 999px;
+  background: #191621;
+  color: #d7cee7;
+  font: 500 11px / 1.4 var(--font-sans, "Bricolage Grotesque", sans-serif);
+  cursor: pointer;
+}
+.type-field-toggle::before {
+  content: "";
+  width: 6px;
+  height: 8px;
+  border-inline: 2px solid currentColor;
+}
+.type-field-toggle[aria-pressed="true"]::before { border: 0; width: 8px; background: currentColor; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.type-field-toggle:hover { background: #30273f; color: #fff; }
+.type-field-toggle:focus-visible { outline: 2px solid #c1b4ff; outline-offset: 3px; }
+.type-field-toggle:disabled { cursor: default; color: #b9afca; }
+.privacy-hero .legal-updated { margin-bottom: 20px; font-size: .8rem; color: #b9afca; }
+.legal-page.legal-body { padding-top: 64px; }
+.not-found.type-field-host,
+.ctf-page { background: radial-gradient(ellipse at 88% 12%, #9b8cff24, transparent 48%), linear-gradient(125deg, #15151c, #1b1825); }
+.ctf-page.type-field-host { height: auto; min-height: 100vh; }
+.ctf-page.type-field-host > .type-field { opacity: .45; }
+.ctf-page .terminal { padding-bottom: 86px; }
+.ctf-page .type-field-toggle { position: fixed; right: 16px; bottom: 14px; min-height: 44px; }
+@media (max-width: 860px) {
+  .type-field-host > .type-field { opacity: .62; mask-image: linear-gradient(90deg, #00000020, #00000065 65%, #000); }
+  .home-hero.type-field-host > .type-field { opacity: .72; }
+  .type-field-toggle { min-height: 44px; bottom: 6px; right: 16px; }
+}
+@media (forced-colors: active) { .type-field { display: none; } }
+@media print { .type-field, .type-field-toggle { display: none !important; } }

@@ -87,6 +87,8 @@ PUBLIC_FILES = (
     "site.webmanifest",
     "sitemap.xml",
     "styles.css",
+    "type-field.css",
+    "type-field.js",
     "vendor/ScrollTrigger-3.15.0.min.js",
     "vendor/gsap-3.15.0.min.js",
     "vendor/fonts/bricolage-grotesque-latin.woff2",

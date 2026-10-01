@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-BlincMq1sJ/PBolw2F6aHx/DNJ/hCcvuokCdQzx+PRc='; style-src 'sha256-7aWtIAqUQhbNubwCb2rqseB2r6UC/gwyUKOK4o/ka2o='; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-k3I6wddpxlwIdvjs5Mbjov8h+imOP2bhfjeOVe87OQw='; style-src 'self' 'sha256-7aWtIAqUQhbNubwCb2rqseB2r6UC/gwyUKOK4o/ka2o='; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'" />
   <meta name="referrer" content="no-referrer" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
@@ -352,8 +352,9 @@
     }
   </style>
   <link rel="stylesheet" href="/flow.css?v=20260930b">
+  <link rel="stylesheet" href="/type-field.css?v=20261001a">
 </head>
-<body>
+<body class="ctf-page">
 
 <main class="terminal">
   <h1 class="sr-only">Balhence CTF security challenge</h1>
@@ -645,11 +646,13 @@
   document.querySelector(".term-submit").addEventListener("click", submitAnswer);
   document.getElementById("hint-btn").addEventListener("click", showHint);
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && document.getElementById("input-area").classList.contains("visible")) {
+    if (e.key === "Enter" && e.target === document.getElementById("term-input") && document.getElementById("input-area").classList.contains("visible")) {
+      e.preventDefault();
       submitAnswer();
     }
   });
 </script>
   <script src="/flow.js?v=20260930b"></script>
+  <script src="/type-field.js?v=20261001a"></script>
 </body>
 </html>

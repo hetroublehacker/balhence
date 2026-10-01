@@ -101,7 +101,17 @@ Primary actions are immediately visible. Reveals use short, bounded movement, un
 
 Native links, navigation, tables and forms work without JavaScript. `tests/flow-regression.cjs` covers section tracking, resizing, form access, table scrolling and preference transitions; the existing experience, interaction, conversion, guide and launch suites cover the surrounding journeys.
 
-Release verification: 45 Python checks and 70 browser checks passed. All 36 public pages were reviewed at 390px and 1440px, including visible headings, section targets and table containment. The allowlisted build contains 84 files; source and artifact validation both checked 2,325 URL references. No test sent an enquiry.
+30 September release verification: 45 Python checks and 70 browser checks passed. All 36 public pages were reviewed at 390px and 1440px, including visible headings, section targets and table containment. That build contained 84 files; source and artifact validation both checked 2,325 URL references. No test sent an enquiry.
+
+### Typography background - 1 October 2026
+
+All 36 public pages load `type-field.css` and `type-field.js`. The original Canvas 2D composition uses open, tilted paths carrying Balhence security vocabulary in lavender and teal. [ThreeUI Typography Vortex](https://threeui.com/text-animation/typography-vortex) was a visual reference; no renderer code, media or fonts from that component are used. The local Bricolage font is reused.
+
+The background stays behind the hero content. Privacy uses the same dark hero above its paper reading area; the 404 and CTF layouts share the background while retaining their task controls. Canvas is decorative and ignores pointer input. Existing homepage controls, new hero controls and footer controls share the saved motion preference. Rendering stops while paused, offscreen, hidden, or when reduced motion, slow updates, forced colors or data saving require a static view. Drawing is capped at 24 frames per second, pixel ratio 1.5 and approximately 2.4 million canvas pixels. Text sprites are cached and rebuilt on size/font changes. Without JavaScript or Canvas 2D, the original CSS backgrounds and page content remain available.
+
+Run `node tests/type-field-regression.cjs` for rendered-motion, pause, device-preference, fallback, responsive and all-page coverage checks. The public build now contains 86 files. No new external runtime requests or analytics are introduced.
+
+1 October verification: 45 Python checks and 44 browser checks passed (12 typography, 10 page-flow, 11 homepage/report/planner, 11 interaction checks). Every public page initializes the same background; eight layout families were checked at 390px and 1440px. Source and artifact validation cover 2,398 URL references. The CTF keyboard handler is scoped to the answer field so using Enter on the new pause control cannot submit an answer.
 
 ## Publishing
 

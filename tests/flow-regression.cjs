@@ -230,14 +230,15 @@ async function main() {
       assert.equal(await page.evaluate(key => localStorage.getItem(key), MOTION_KEY), "true");
       await page.locator('.section-intro a[href="/services.html#capabilities"]').click();
       await page.waitForURL("**/services.html#capabilities");
-      const footerToggle = page.getByRole("button", { name: "Play motion", exact: true });
+      const footer = page.getByRole("contentinfo");
+      const footerToggle = footer.getByRole("button", { name: "Play motion", exact: true });
       assert.equal(await footerToggle.getAttribute("aria-pressed"), "true");
       assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "auto");
       await footerToggle.click();
       assert.equal(await page.evaluate(key => localStorage.getItem(key), MOTION_KEY), "false");
-      assert.equal(await page.getByRole("button", { name: "Pause motion", exact: true }).getAttribute("aria-pressed"), "false");
+      assert.equal(await footer.getByRole("button", { name: "Pause motion", exact: true }).getAttribute("aria-pressed"), "false");
       await page.reload();
-      assert.equal(await page.getByRole("button", { name: "Pause motion", exact: true }).isEnabled(), true);
+      assert.equal(await footer.getByRole("button", { name: "Pause motion", exact: true }).isEnabled(), true);
       await page.goto(origin);
       assert.match(await heroToggle.textContent(), /Pause motion/);
       assert.equal(await heroToggle.getAttribute("aria-pressed"), "false");
