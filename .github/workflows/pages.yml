@@ -23,6 +23,10 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+      - name: Verify the exact ThreeUI source and generated animation bundle
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run check:animation
       - name: Check static pages and publication boundaries
         run: python3 verify_site.py
       - name: Run build and preview regression checks

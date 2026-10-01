@@ -1,4 +1,6 @@
-/* Original Balhence typography field: open orbital paths behind the hero. */
+@import url("/vendor/threeui/src/shaders/threeui.css?v=5a736cd3");
+
+/* Site embedding only. The registered ThreeUI stylesheet stays unchanged. */
 @font-face {
   font-family: "Bricolage Grotesque";
   src: url("/vendor/fonts/bricolage-grotesque-latin.woff2") format("woff2");
@@ -20,8 +22,9 @@
   pointer-events: none;
   user-select: none;
   opacity: .8;
-  mask-image: linear-gradient(90deg, #00000012, #00000038 35%, #000 76%);
+  mask-image: linear-gradient(90deg, #00000008, #00000020 62%, #000000b0 82%, #000);
 }
+.type-field .shader-frame { width: 100%; height: 100%; }
 /* Keep long headings and the illustration legible above the moving field. */
 .home-hero.type-field-host > .type-field { opacity: .95; }
 .type-field-host.page-hero::after,
@@ -35,7 +38,7 @@
 .ctf-page.type-field-host { height: auto; min-height: 100vh; }
 .ctf-page.type-field-host > .type-field { opacity: .45; }
 @media (max-width: 860px) {
-  .type-field-host > .type-field { opacity: .62; mask-image: linear-gradient(90deg, #00000020, #00000065 65%, #000); }
+  .type-field-host > .type-field { opacity: .62; mask-image: linear-gradient(90deg, #00000010, #00000038 65%, #00000078); }
   .home-hero.type-field-host > .type-field { opacity: .72; }
 }
 @media (forced-colors: active) { .type-field { display: none; } }

@@ -1,0 +1,15 @@
+{
+  "name": "balhence-website",
+  "private": true,
+  "scripts": {
+    "build:animation": "node scripts/build-animation.mjs",
+    "check:animation": "node scripts/build-animation.mjs --check"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

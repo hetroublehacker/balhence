@@ -1,0 +1,44 @@
+TypographyVortexCanvas registered source
+
+Source bundle: https://threeui.com/source-code/typography-vortex.json
+Supplied source revision: 5a736cd3c1f6f19802f61ebb10e1701b9f7aa26e
+Retrieved: 2026-10-01
+
+The three registered source files are stored byte-for-byte, without edits.
+Their SHA-256 hashes and the font hash are checked by scripts/build-animation.mjs.
+The supplied revision is a ThreeUI source identifier, not a verified public
+GitHub commit. Provenance is established by the registered bundle and hashes.
+
+The font was decoded from the ThreeUI Fragment Mono data URI in the official
+@designcodeio/threeui@1.2.0 package's lib-dist/style.css. The npm tarball's
+registry integrity was verified before extraction. Font size: 15176 bytes.
+
+Package tarball:
+https://registry.npmjs.org/@designcodeio/threeui/-/threeui-1.2.0.tgz
+
+Licenses: LICENSE.txt (ThreeUI MIT), FONT-LICENSES.txt (Fragment Mono OFL).
+The isolated React runtime uses ../react-LICENSE.txt (MIT).
+
+Integration: src/animation/Scene.tsx contains the requested configured usage.
+The build aliases @designcodeio/threeui to the verified local source. Its
+stylesheet import is fulfilled by type-field.css, which imports the exact
+registered CSS without bundler rewriting. The original relative fonts/ path
+and binary bytes are preserved in the published artifact.
+
+The site adapter positions the component behind hero content and forwards
+pointer events without preventing links or native touch scrolling. The source
+renderer owns ring rendering, pointer dissolution, dust, click suction,
+offscreen suspension and document visibility. The authored default phrase is
+retained because the configured usage does not override it.
+
+The adapter does not mount animated decoration for reduced motion, slow
+display updates, data saving, forced colors or printing. The site's static
+background remains visible in those modes and if Canvas/font loading fails.
+
+Rebuild after editing the adapter:
+  npm ci --ignore-scripts --no-audit --no-fund
+  npm run build:animation
+  npm run check:animation
+
+type-field.js is committed for the static hosting workflow. CI verifies that
+it matches the pinned dependencies and checked source before deployment.
