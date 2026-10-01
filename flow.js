@@ -10,22 +10,10 @@
   const root = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const slow = matchMedia("(update: slow)");
-  let paused = false;
-  try { paused = localStorage.getItem("balhence_motion_paused") === "true"; } catch { /* Optional preference. */ }
-  const syncMotion = () => root.classList.toggle("flow-still", paused || reduced.matches || slow.matches);
+  const syncMotion = () => root.classList.toggle("flow-still", reduced.matches || slow.matches);
   syncMotion();
   reduced.addEventListener("change", syncMotion);
   slow.addEventListener("change", syncMotion);
-  addEventListener("storage", event => {
-    if (event.key !== "balhence_motion_paused" && event.key !== null) return;
-    paused = event.newValue === "true";
-    syncMotion();
-  });
-  addEventListener("balhence:motion-preference", event => {
-    if (typeof event.detail?.paused !== "boolean") return;
-    paused = event.detail.paused;
-    syncMotion();
-  });
 
   function initPageFlow() {
     const nav = document.querySelector("[data-flow-nav], .article-toc");

@@ -12,7 +12,7 @@ const net = require("node:net");
 const { chromium } = require("playwright");
 const ROOT = path.resolve(__dirname, "..");
 const FIELD = "canvas[data-type-field]";
-const MOTION_KEY = "balhence_motion_paused";
+const MOTION_CONTROLS = "[data-motion-toggle], [data-motion-preference], [data-type-field-toggle]";
 
 async function availablePort() {
   const probe = net.createServer();
@@ -41,7 +41,7 @@ async function expectStill(page) {
   const first = await pixels(page);
   assert.ok(first.painted > 100, "The static fallback should retain a drawn decorative field");
   await page.waitForTimeout(350);
-  assert.deepEqual(await pixels(page), first, "A paused field must not change its rendered pixels");
+  assert.deepEqual(await pixels(page), first, "A static field must not change its rendered pixels");
 }
 
 async function expectMoving(page) {
@@ -120,51 +120,37 @@ async function main() {
       await page.locator(FIELD).waitFor();
     }
 
-    await check("Homepage field moves and its existing control freezes and resumes the pixels", {}, async page => {
+    await check("Homepage field keeps moving without a motion button or saved playback state", {}, async page => {
       await open(page, "/");
-      assert.equal(await page.locator("[data-type-field-toggle]").count(), 0, "Homepage should use its existing motion control");
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
       await expectMoving(page);
-      const toggle = page.locator("[data-motion-toggle]");
-      await toggle.click();
-      assert.equal(await toggle.getAttribute("aria-pressed"), "true");
-      await expectStill(page);
-      await toggle.click();
-      assert.equal(await toggle.getAttribute("aria-pressed"), "false");
-      await expectMoving(page);
-    });
-
-    await check("Saved service motion preference synchronizes the hero and footer controls", {}, async page => {
-      await open(page, "/services.html");
-      const local = page.locator("[data-type-field-toggle]");
-      const footer = page.locator("[data-motion-preference]");
-      assert.equal(await local.getAttribute("aria-pressed"), "true");
-      assert.equal(await footer.getAttribute("aria-pressed"), "true");
-      await expectStill(page);
-      await local.click();
-      assert.equal(await footer.getAttribute("aria-pressed"), "false");
-      assert.equal(await page.evaluate(key => localStorage.getItem(key), MOTION_KEY), "false");
-      await expectMoving(page);
-      await footer.click();
-      assert.equal(await local.getAttribute("aria-pressed"), "true");
-      await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-      await expectStill(page);
       await page.reload();
       await page.evaluate(() => document.fonts.ready);
-      assert.equal(await local.getAttribute("aria-pressed"), "true");
-      await expectStill(page);
+      await expectMoving(page);
+      assert.equal(await page.evaluate(() => localStorage.getItem("balhence_motion_paused")), null);
+    });
+
+    await check("An obsolete saved pause value cannot disable the field after controls are removed", {}, async page => {
+      await open(page, "/services.html");
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
+      await expectMoving(page);
+      assert.equal(await page.evaluate(() => localStorage.getItem("balhence_motion_paused")), "true", "The removed preference should be ignored without overwriting storage");
+      await page.reload();
+      await page.evaluate(() => document.fonts.ready);
+      await expectMoving(page);
+      await open(page, "/");
+      await expectMoving(page);
+      await page.waitForFunction(() => document.querySelector("[data-security-map]").dataset.motionState === "running");
     }, context => context.addInitScript(() => {
-      if (localStorage.getItem("balhence_motion_paused") === null) localStorage.setItem("balhence_motion_paused", "true");
+      if (location.protocol === "http:") localStorage.setItem("balhence_motion_paused", "true");
     }));
 
     await check("Reduced-motion preference keeps a drawn still frame and runtime changes resume or freeze it", { reducedMotion: "reduce" }, async page => {
       await open(page, "/services.html");
-      const toggle = page.locator("[data-type-field-toggle]");
-      assert.equal(await toggle.isDisabled(), true);
-      assert.match(await toggle.textContent(), /preference/i);
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
       await expectStill(page);
       await page.emulateMedia({ reducedMotion: "no-preference" });
       await expectMoving(page);
-      assert.equal(await toggle.isDisabled(), false);
       await page.emulateMedia({ reducedMotion: "reduce" });
       await expectStill(page);
     });
@@ -172,7 +158,7 @@ async function main() {
     for (const preference of ["slow", "saveData"]) {
       await check(`${preference} device preference keeps the typography static`, {}, async page => {
         await open(page, "/services.html");
-        assert.equal(await page.locator("[data-type-field-toggle]").isDisabled(), true);
+        assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
         await expectStill(page);
       }, context => context.addInitScript(preference => {
         if (preference === "slow") {
@@ -198,6 +184,33 @@ async function main() {
       await expectMoving(page);
     });
 
+    await check("The decorative field follows a mouse without moving content and respects reduced motion", {}, async page => {
+      await page.clock.install();
+      await page.addInitScript(() => {
+        const request = window.requestAnimationFrame.bind(window);
+        window.requestAnimationFrame = callback => request(() => callback(0));
+      });
+      await open(page, "/services.html");
+      await page.clock.runFor(600);
+      assert.equal(await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches), true);
+      const before = await pixels(page);
+      await page.clock.runFor(200);
+      assert.deepEqual(await pixels(page), before, "Autonomous drift must be frozen so this test measures only pointer response");
+      const bounds = await page.locator(".type-field-host").boundingBox();
+      const heading = await page.locator("h1").boundingBox();
+      await page.mouse.move(bounds.x + bounds.width * .85, bounds.y + bounds.height * .6);
+      await page.clock.runFor(600);
+      assert.notDeepEqual(await pixels(page), before, "Mouse movement should change the decorative field");
+      assert.deepEqual(await page.locator("h1").boundingBox(), heading, "Pointer effects must not shift foreground content");
+      assert.equal(await page.locator(FIELD).evaluate(canvas => getComputedStyle(canvas).pointerEvents), "none");
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.clock.runFor(100);
+      const still = await pixels(page);
+      await page.mouse.move(bounds.x + bounds.width * .3, bounds.y + bounds.height * .4);
+      await page.clock.runFor(600);
+      assert.deepEqual(await pixels(page), still, "Pointer input must respect the device reduced-motion preference");
+    });
+
     await check("Without JavaScript the heading and native enquiry link remain usable", { javaScriptEnabled: false, viewport: { width: 390, height: 844 } }, async page => {
       await page.goto(`${origin}/services.html`);
       assert.equal(await page.locator(FIELD).count(), 0);
@@ -211,7 +224,7 @@ async function main() {
     await check("Unavailable Canvas 2D leaves headings and enquiry navigation working", {}, async page => {
       await page.goto(`${origin}/services.html`);
       assert.equal(await page.locator(FIELD).count(), 0);
-      assert.equal(await page.locator("[data-type-field-toggle]").count(), 0);
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
       assert.equal(await page.locator("h1").isVisible(), true);
       await page.locator(".page-hero .btn-primary").click();
       await page.waitForURL("**/contact.html?service=web-api&source=services");
@@ -264,7 +277,7 @@ async function main() {
       });
     }
 
-    await check("Every published page loads one shared field and its stylesheet", { reducedMotion: "reduce" }, async page => {
+    await check("Every published page loads one shared field with no motion controls", { reducedMotion: "reduce" }, async page => {
       const pages = JSON.parse(execFileSync("python3", ["-c", "import json; from build_public import PUBLIC_FILES; print(json.dumps([p for p in PUBLIC_FILES if p.endswith('.html')]))"], { cwd: ROOT, encoding: "utf8" }));
       assert.ok(pages.length >= 36, "The coverage list should include every public HTML page");
       for (const file of pages) {
@@ -275,28 +288,25 @@ async function main() {
         assert.equal(await page.locator(FIELD).count(), 1, `${file}: one initialized canvas`);
         assert.equal(await page.locator(FIELD).evaluate(canvas => getComputedStyle(canvas).position), "absolute", `${file}: field stylesheet applied`);
         assert.equal(await page.locator(FIELD).getAttribute("aria-hidden"), "true");
+        assert.equal(await page.locator(MOTION_CONTROLS).count(), 0, `${file}: no obsolete motion controls in the DOM`);
+        assert.equal(await page.getByRole("button", { name: /(?:pause|play|resume)\s+(?:motion|animation)/i }).count(), 0, `${file}: no replacement playback button`);
         assert.equal(await page.locator("h1").isVisible(), true, `${file}: main heading retained`);
       }
     });
 
-    await check("The CTF pause button supports Enter without submitting a challenge answer", {}, async page => {
+    await check("The CTF native back link works by keyboard without submitting a challenge answer", {}, async page => {
       await open(page, "/ctf.html");
       const input = page.locator("#term-input");
       await input.waitFor({ state: "visible", timeout: 10000 });
       await input.fill("local keyboard check");
       const output = await page.locator("#output").textContent();
-      const toggle = page.locator("[data-type-field-toggle]");
-      await toggle.focus();
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
+      await page.locator(".back-link").focus();
+      assert.equal(await input.inputValue(), "local keyboard check", "Focusing a native link must not submit or clear the challenge input");
+      assert.equal(await page.locator("#output").textContent(), output);
+      const response = page.waitForURL("**/index.html");
       await page.keyboard.press("Enter");
-      assert.equal(await toggle.getAttribute("aria-pressed"), "true");
-      assert.equal(await input.inputValue(), "local keyboard check", "Pausing must not submit or clear the challenge input");
-      assert.equal(await page.locator("#output").textContent(), output, "Pausing must not append challenge feedback");
-      await expectStill(page);
-      await page.keyboard.press("Enter");
-      assert.equal(await toggle.getAttribute("aria-pressed"), "false");
-      await expectMoving(page);
-      await page.locator(".back-link").click();
-      await page.waitForURL("**/index.html");
+      await response;
     });
 
     for (const [name, observed] of [["Uncaught browser errors", errors], ["Missing local resources", missing], ["External requests", external], ["Form submissions", deliveries]]) {

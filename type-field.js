@@ -17,13 +17,12 @@
   host.classList.add("type-field-host");
   host.prepend(canvas);
 
-  const key = "balhence_motion_paused";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const slow = matchMedia("(update: slow)");
   const forcedColors = matchMedia("(forced-colors: active)");
+  const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
   const connection = navigator.connection;
-  const readPause = () => { try { return localStorage.getItem(key) === "true"; } catch { return false; } };
-  let paused = readPause();
+  let pointerAllowed = finePointer.matches;
   let deviceLimited = reduced.matches || slow.matches || forcedColors.matches || Boolean(connection?.saveData);
   let visible = false;
   let suspended = false;
@@ -37,32 +36,12 @@
   let sprites = [];
   const words = ["BALHENCE", "SCOPE", "IDENTITY", "ACCESS", "EVIDENCE", "VERIFY"];
   const tau = Math.PI * 2;
-  const home = host.classList.contains("home-hero");
-  let button = null;
+  const pointer = { x: 0, y: 0, targetX: 0, targetY: 0, strength: 0, targetStrength: 0 };
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-  function updateButton() {
-    if (!button) return;
-    button.disabled = deviceLimited;
-    button.textContent = deviceLimited ? "Still by preference" : paused ? "Play motion" : "Pause motion";
-    button.setAttribute("aria-pressed", String(paused || deviceLimited));
-    button.setAttribute("aria-label", deviceLimited ? "Motion disabled by device preference" : button.textContent);
-  }
-
-  // The homepage already has a visible shared control beside its illustration.
-  // Other heroes get a nearby control so pausing never requires a footer trip.
-  if (!home || !document.querySelector("[data-motion-toggle]:not([hidden])")) {
-    button = document.createElement("button");
-    button.type = "button";
-    button.className = "type-field-toggle";
-    button.dataset.typeFieldToggle = "";
-    button.addEventListener("click", () => {
-      if (deviceLimited) return;
-      paused = !paused;
-      try { localStorage.setItem(key, String(paused)); } catch { /* In-memory choice still works. */ }
-      sync();
-      dispatchEvent(new CustomEvent("balhence:motion-preference", { detail: { paused } }));
-    });
-    host.append(button);
+  function resetPointer(immediate = false) {
+    pointer.targetStrength = 0;
+    if (immediate) pointer.strength = 0;
   }
 
   function point(path, t) {
@@ -130,6 +109,16 @@
   function draw() {
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     ctx.clearRect(0, 0, width, height);
+    const driftX = clamp(pointer.x / width - .5, -.5, .5) * 90 * pointer.strength;
+    const driftY = clamp(pointer.y / height - .5, -.5, .5) * 56 * pointer.strength;
+    if (pointer.strength > .001) {
+      const glow = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 210);
+      glow.addColorStop(0, `rgba(155,140,255,${.10 * pointer.strength})`);
+      glow.addColorStop(1, "rgba(155,140,255,0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, width, height);
+    }
+    ctx.translate(driftX, driftY);
     paths.forEach((path, index) => {
       ctx.strokeStyle = path.color;
       ctx.lineWidth = .65;
@@ -151,10 +140,14 @@
         if (p.x < -140 || p.x > width + 140 || p.y < -50 || p.y > height + 50) continue;
         const sprite = sprites[index][(n + index) % words.length];
         if (!sprite) continue;
+        const dx = p.x + driftX - pointer.x, dy = p.y + driftY - pointer.y;
+        const distance = Math.hypot(dx, dy);
+        const influence = Math.max(0, 1 - distance / 190) ** 2 * pointer.strength;
+        const direction = Math.atan2(dy, dx);
         ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.angle);
-        ctx.globalAlpha = .30 + .08 * Math.sin(n * 1.7 + index);
+        ctx.translate(p.x + Math.cos(direction) * influence * 28, p.y + Math.sin(direction) * influence * 28);
+        ctx.rotate(p.angle + Math.sin(direction - p.angle) * influence * .18);
+        ctx.globalAlpha = (.30 + .08 * Math.sin(n * 1.7 + index)) * (1 - influence * .65);
         ctx.drawImage(sprite.image, -sprite.width / 2, -sprite.height - 5, sprite.width, sprite.height);
         ctx.restore();
       }
@@ -168,13 +161,19 @@
     ctx.globalAlpha = 1;
   }
 
-  const allowed = () => !paused && !deviceLimited && !document.hidden && !suspended && visible;
+  const allowed = () => !deviceLimited && !document.hidden && !suspended && visible;
   function tick(time) {
     frame = 0;
     if (!allowed()) return;
     if (!last || time - last >= 1000 / 24 - 1) {
-      elapsed += last ? Math.min(time - last, 100) / 1000 : 0;
+      const delta = last ? Math.min(time - last, 100) : 1000 / 24;
+      elapsed += last ? delta / 1000 : 0;
       last = time;
+      const blend = 1 - Math.exp(-delta / 180);
+      pointer.x += (pointer.targetX - pointer.x) * blend;
+      pointer.y += (pointer.targetY - pointer.y) * blend;
+      pointer.strength += (pointer.targetStrength - pointer.strength) * blend;
+      if (!pointer.targetStrength && pointer.strength < .001) pointer.strength = 0;
       draw();
     }
     frame = requestAnimationFrame(tick);
@@ -183,7 +182,7 @@
     if (frame) cancelAnimationFrame(frame);
     frame = 0; last = 0;
     canvas.dataset.state = allowed() ? "running" : "static";
-    updateButton();
+    if (!allowed()) resetPointer(true);
     if (allowed()) frame = requestAnimationFrame(tick);
   }
   function resize() {
@@ -193,11 +192,14 @@
     const nextRatio = Math.min(devicePixelRatio || 1, 1.5, Math.sqrt(2400000 / nextWidth / nextHeight));
     if (nextWidth === width && nextHeight === height && nextRatio === ratio && paths.length) return;
     width = nextWidth; height = nextHeight; ratio = nextRatio;
+    resetPointer(true);
     canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
     buildPaths(); draw();
   }
   const preferenceChanged = () => {
     deviceLimited = reduced.matches || slow.matches || forcedColors.matches || Boolean(connection?.saveData);
+    resetPointer(true);
+    draw();
     sync();
   };
   [reduced, slow, forcedColors].forEach(query => {
@@ -205,15 +207,28 @@
     else query.addListener(preferenceChanged);
   });
   connection?.addEventListener?.("change", preferenceChanged);
-  addEventListener("balhence:motion-preference", event => {
-    if (typeof event.detail?.paused !== "boolean") return;
-    paused = event.detail.paused; sync();
+  const pointerPreferenceChanged = () => {
+    pointerAllowed = finePointer.matches;
+    resetPointer(true);
+    draw();
+  };
+  if (finePointer.addEventListener) finePointer.addEventListener("change", pointerPreferenceChanged);
+  else finePointer.addListener(pointerPreferenceChanged);
+  host.addEventListener("pointermove", event => {
+    if (!allowed() || !pointerAllowed || event.pointerType === "touch") return;
+    const bounds = host.getBoundingClientRect();
+    const x = clamp(event.clientX - bounds.left, 0, width);
+    const y = clamp(event.clientY - bounds.top, 0, height);
+    if (pointer.strength === 0) { pointer.x = x; pointer.y = y; }
+    pointer.targetX = x; pointer.targetY = y; pointer.targetStrength = 1;
+  }, { passive: true });
+  host.addEventListener("pointerleave", () => resetPointer());
+  addEventListener("blur", () => resetPointer(true));
+  addEventListener("scroll", () => resetPointer(), { passive: true });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) resetPointer(true);
+    sync();
   });
-  addEventListener("storage", event => {
-    if (event.key !== key && event.key !== null) return;
-    paused = readPause(); sync();
-  });
-  document.addEventListener("visibilitychange", sync);
   addEventListener("pagehide", () => { suspended = true; sync(); });
   addEventListener("pageshow", () => { suspended = false; sync(); });
   addEventListener("resize", resize, { passive: true });

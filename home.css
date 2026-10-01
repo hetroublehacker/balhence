@@ -32,12 +32,6 @@
 .map-label-apps { left: 20%; top: 33%; }.map-label-cloud { left: 50%; top: 21.3%; }.map-label-ai { left: 80%; top: 33%; }.map-label-data { left: 80%; top: 71.3%; }.map-label-identity { left: 50%; top: 83%; }.map-label-code { left: 20%; top: 71.3%; }
 .map-center-label { left: 50%; top: 55.5%; color: #d8cff6; font-size: clamp(.59rem, 1.1vw, .82rem); }
 .security-caption { display: flex; gap: 14px; justify-content: center; align-items: center; flex-wrap: wrap; font-size: .64rem; color: #aca4bd; position: relative; margin-top: -10px; }
-.motion-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 9px 10px; border: 1px solid #474052; border-radius: 3px; color: #c5bdd8; background: transparent; font: inherit; cursor: pointer; }
-.motion-toggle:hover { border-color: #9483b0; background: #211a2d; }
-.motion-toggle:disabled { cursor: default; opacity: .8; }
-.motion-toggle [data-motion-icon] { display: inline-block; width: 8px; height: 9px; border-left: 2px solid currentColor; border-right: 2px solid currentColor; }
-.motion-toggle [data-motion-icon].is-play { height: 0; width: 0; border: 5px solid transparent; border-left: 7px solid currentColor; border-right: 0; }
-.motion-toggle[hidden] { display: none; }
 .hero-bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 25px; margin-top: 44px; border-top: 1px solid var(--line); }
 .hero-bottom p { margin: 0; font-size: .69rem; color: var(--muted); }
 .scroll-cue { display: flex; align-items: center; gap: 17px; text-decoration: none; font-size: .68rem; color: var(--muted); }

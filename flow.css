@@ -121,8 +121,6 @@
 .table-scroll-hint:not([hidden]) + .scope-table-wrap { margin-top: 0; }
 .scope-table-wrap.has-table-overflow { scrollbar-width: thin; scrollbar-color: #8b78ad #ece6f3; }
 .scope-table-wrap:focus-visible { outline: 2px solid #7251b5; outline-offset: 4px; }
-.motion-preference { min-height: 44px; padding: 8px 0; color: inherit; border: 0; background: transparent; font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
-.motion-preference:disabled { text-decoration: none; cursor: default; }
 
 /* Controls and focused content must never wait for entrance effects. */
 [data-reveal]:focus-within,
@@ -182,7 +180,7 @@
   .btn, .btn .ui-icon, .section-jump a { transition: none !important; transform: none !important; }
 }
 @media print {
-  .page-flow, .motion-preference, .table-scroll-hint { display: none !important; }
+  .page-flow, .table-scroll-hint { display: none !important; }
   .home-chapters { display: none; }
   .page-hero, .article-hero, .report-hero, .sb-hero { background: #fff; color: #111; }
 }

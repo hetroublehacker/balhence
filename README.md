@@ -52,7 +52,7 @@ Explicit service links preselect the matching enquiry category. Selecting a diff
 
 Enquiry links can carry a fixed `source` label. Only allowlisted labels become the submitted `enquiry_source`; unknown values become `unlabelled`. This creates no tracking cookie or stored browsing history. On eligible pages, consented `contact_intent` events count tracked enquiry-link clicks, not submitted forms. Contact remains analytics-free; measure received and qualified leads in Formspree, the inbox, and your lead log.
 
-Analytics stays off until acceptance and never loads on the planner, contact, or privacy pages. Visitors can change the choice through the footer. Homepage animation preference is stored as `balhence_motion_paused`.
+Analytics stays off until acceptance and never loads on the planner, contact, or privacy pages. Visitors can change the choice through the footer. Decorative motion follows device preferences without storing a separate animation setting.
 
 Form submissions require Formspree connectivity. Live form delivery has not been exercised during this upgrade; automated tests intercept submissions.
 
@@ -97,7 +97,7 @@ The current **Latest Landing Pages** reference is [Kage](https://threeui.com/lan
 
 `flow.css` and `flow.js` supply shared button feedback, hero surfaces, section navigation, and overflow-table hints on every public page. Service docks use native anchors with a current-section state; articles retain their desktop contents list and expose a scrollable contents row on phones. The service chooser precedes the capability catalog. Contact offers a direct form jump. The report viewer, planner, privacy notice, and CTF keep the controls appropriate to their tasks.
 
-Primary actions are immediately visible. Reveals use short, bounded movement, unobserve completed items, and show focused content immediately. Motion preference uses the existing `balhence_motion_paused` key and synchronizes across tabs and page types; OS reduced-motion and slow-update preferences take precedence. The homepage has its pause control beside the illustration; other animated pages expose a footer control. No new analytics or external runtime requests are added.
+Primary actions are immediately visible. Reveals use short, bounded movement, unobserve completed items, and show focused content immediately. Motion follows OS reduced-motion and slow-update preferences. Visible animation controls have been removed from every page; old saved pause values are no longer read or written. No new analytics or external runtime requests are added.
 
 Native links, navigation, tables and forms work without JavaScript. `tests/flow-regression.cjs` covers section tracking, resizing, form access, table scrolling and preference transitions; the existing experience, interaction, conversion, guide and launch suites cover the surrounding journeys.
 
@@ -107,11 +107,13 @@ Native links, navigation, tables and forms work without JavaScript. `tests/flow-
 
 All 36 public pages load `type-field.css` and `type-field.js`. The original Canvas 2D composition uses open, tilted paths carrying Balhence security vocabulary in lavender and teal. [ThreeUI Typography Vortex](https://threeui.com/text-animation/typography-vortex) was a visual reference; no renderer code, media or fonts from that component are used. The local Bricolage font is reused.
 
-The background stays behind the hero content. Privacy uses the same dark hero above its paper reading area; the 404 and CTF layouts share the background while retaining their task controls. Canvas is decorative and ignores pointer input. Existing homepage controls, new hero controls and footer controls share the saved motion preference. Rendering stops while paused, offscreen, hidden, or when reduced motion, slow updates, forced colors or data saving require a static view. Drawing is capped at 24 frames per second, pixel ratio 1.5 and approximately 2.4 million canvas pixels. Text sprites are cached and rebuilt on size/font changes. Without JavaScript or Canvas 2D, the original CSS backgrounds and page content remain available.
+The background stays behind the hero content. Privacy uses the same dark hero above its paper reading area; the 404 and CTF layouts share the background while retaining their task controls. Canvas is decorative and ignores pointer input. On devices with a fine pointer and hover, the field follows the mouse with bounded, smoothed drift. Nearby words gently move aside and fade, with a soft cursor glow. Text, buttons and layout stay stationary. Touch input never steers the field. There are no pause or play controls. Rendering stops while offscreen, hidden, or when reduced motion, slow updates, forced colors or data saving require a static view. Drawing is capped at 24 frames per second, pixel ratio 1.5 and approximately 2.4 million canvas pixels. Text sprites are cached and rebuilt on size/font changes. Without JavaScript or Canvas 2D, the original CSS backgrounds and page content remain available.
 
-Run `node tests/type-field-regression.cjs` for rendered-motion, pause, device-preference, fallback, responsive and all-page coverage checks. The public build now contains 86 files. No new external runtime requests or analytics are introduced.
+Run `node tests/type-field-regression.cjs` for rendered-motion, pointer-response, device-preference, fallback, responsive and all-page coverage checks. The public build now contains 86 files. No new external runtime requests or analytics are introduced.
 
-1 October verification: 45 Python checks and 44 browser checks passed (12 typography, 10 page-flow, 11 homepage/report/planner, 11 interaction checks). Every public page initializes the same background; eight layout families were checked at 390px and 1440px. Source and artifact validation cover 2,398 URL references. The CTF keyboard handler is scoped to the answer field so using Enter on the new pause control cannot submit an answer.
+Initial 1 October verification: 45 Python checks and 44 browser checks passed (12 typography, 10 page-flow, 11 homepage/report/planner, 11 interaction checks). Every public page initializes the same background; eight layout families were checked at 390px and 1440px. Source and artifact validation cover 2,398 URL references. The CTF keyboard handler is scoped to the answer field.
+
+After removing controls and adding mouse response, 34 targeted browser checks passed (13 typography, 10 page-flow, 11 homepage/report/planner), including all-page control absence and rendered-pixel pointer checks with autonomous animation time frozen.
 
 ## Publishing
 

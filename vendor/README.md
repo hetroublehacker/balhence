@@ -73,7 +73,7 @@ When updating either animation dependency:
 - Pinned revision: `68802d5428071ada5c20db8094b1649e6bb770ed`
 - License: MIT, complete notice in `threeui-community-LICENSE.txt` and included in the public build.
 - Adapted button source: `src/shaders/rectangle-buttons/RectangleButtons.tsx`, Understory Arrow Pill styles (endcap layout, focus, short arrow travel, reduced motion).
-- Adapted interaction reference: `public/landing-pages/kage.html` (one-time intersection reveals and section tracking), hardened for focus visibility, tall sections, native anchors, saved pause, and device preferences.
+- Adapted interaction reference: `public/landing-pages/kage.html` (one-time intersection reveals and section tracking), hardened for focus visibility, tall sections, native anchors and device preferences.
 - Visual hero reference: `public/landing-pages/inner-green-3d.html` (Sylva - Living Green). Only the composition informs the local framed security illustration and contextual cards; its media and scene are not redistributed.
 - Local implementation: `flow.css`, `flow.js`, and the existing `home.css`, `home.js`, `app.js`, `motion.css`, `motion.js` layers. `flow.css` and `flow.js` preserve source attribution comments.
 

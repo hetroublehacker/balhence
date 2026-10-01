@@ -10,15 +10,12 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const slowUpdate = window.matchMedia("(update: slow)");
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-  const preferenceKey = "balhence_motion_paused";
   const cleanups = [];
   const pointerCleanups = [];
   const shownItems = new WeakSet();
-  let paused = false;
   let deviceReduced = reducedMotion.matches;
   let deviceSlow = slowUpdate.matches;
   let pointerAllowed = finePointer.matches;
-  let preferenceButtons = [];
   let progressNode = null;
   let revealObserver = null;
   let scrollFrame = 0;
@@ -27,8 +24,6 @@
   let activeCard = null;
   let activeDepth = null;
   let hero = null;
-
-  try { paused = localStorage.getItem(preferenceKey) === "true"; } catch (error) { /* Storage is optional. */ }
 
   const onReady = (callback) => {
     if (document.readyState === "loading") {
@@ -43,7 +38,7 @@
     group.push(() => target.removeEventListener(type, handler, options));
   };
 
-  const isMotionAllowed = () => !paused && !deviceReduced && !deviceSlow;
+  const isMotionAllowed = () => !deviceReduced && !deviceSlow;
 
   const isOptedOut = (element) => Boolean(element.closest('[data-motion="none"]'));
 
@@ -73,21 +68,6 @@
       markShown(item, true);
       item = item.parentElement && item.parentElement.closest("[data-reveal], [data-motion-reveal]");
     }
-  }
-
-  function updatePreferenceButtons() {
-    const forced = deviceReduced || deviceSlow;
-    const label = forced ? "Still by preference" : paused ? "Play motion" : "Pause motion";
-    const reason = deviceReduced ? "Motion disabled by reduced-motion preference" : "Motion disabled by slow-update preference";
-    preferenceButtons.forEach((button) => {
-      button.hidden = false;
-      button.disabled = forced;
-      button.setAttribute("aria-pressed", String(!isMotionAllowed()));
-      button.setAttribute("aria-label", forced ? reason : label);
-      const labelNode = button.querySelector("[data-motion-preference-label], [data-motion-label]");
-      if (labelNode) labelNode.textContent = label;
-      else button.textContent = label;
-    });
   }
 
   function addAutomaticHooks() {
@@ -397,7 +377,6 @@
   function start() {
     destroy();
     addAutomaticHooks();
-    updatePreferenceButtons();
     root.classList.toggle("is-motion-paused", !isMotionAllowed() || document.hidden);
     if (!isMotionAllowed()) {
       root.classList.add("motion-reduced");
@@ -415,33 +394,10 @@
   }
 
   onReady(() => {
-    preferenceButtons = Array.from(document.querySelectorAll("button[data-motion-preference]"));
-    preferenceButtons.forEach((button) => button.addEventListener("click", () => {
-      if (deviceReduced || deviceSlow) return;
-      paused = !paused;
-      try { localStorage.setItem(preferenceKey, String(paused)); } catch (error) { /* Keep this page's choice when storage is unavailable. */ }
-      start();
-      window.dispatchEvent(new CustomEvent("balhence:motion-preference", { detail: { paused } }));
-    }));
     document.addEventListener("focusin", (event) => revealFocusedAncestors(event.target));
     document.addEventListener("animationend", (event) => {
       if (event.animationName !== "motion-item-in" || !(event.target instanceof Element)) return;
       if (event.target.classList.contains("motion-entrance")) markShown(event.target, true);
-    });
-    window.addEventListener("storage", (event) => {
-      if (event.key !== preferenceKey && event.key !== null) return;
-      let nextPaused = event.newValue === "true";
-      if (event.key === null) {
-        try { nextPaused = localStorage.getItem(preferenceKey) === "true"; } catch (error) { nextPaused = false; }
-      }
-      if (nextPaused === paused) return;
-      paused = nextPaused;
-      start();
-    });
-    window.addEventListener("balhence:motion-preference", (event) => {
-      if (!event.detail || typeof event.detail.paused !== "boolean" || event.detail.paused === paused) return;
-      paused = event.detail.paused;
-      start();
     });
     start();
     const restart = () => {

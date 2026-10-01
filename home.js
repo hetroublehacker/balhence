@@ -5,15 +5,12 @@
   const root = document.documentElement;
   const canvas = diagram.querySelector("[data-security-canvas]");
   const context = canvas.getContext("2d");
-  const toggle = document.querySelector("[data-motion-toggle]");
-  if (!context || !toggle || typeof Path2D !== "function") return; // The inline SVG remains visible.
+  if (!context || typeof Path2D !== "function") return; // The inline SVG remains visible.
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const slow = matchMedia("(update: slow)");
   const fine = matchMedia("(hover: hover) and (pointer: fine)");
   const saveData = Boolean(navigator.connection && navigator.connection.saveData);
   const animations = new Set();
-  let paused = false;
-  try { paused = localStorage.getItem("balhence_motion_paused") === "true"; } catch { /* Storage is optional. */ }
   let visible = true;
   let frame = 0;
   let lastTime = 0;
@@ -27,7 +24,7 @@
   let deviceReduced = reduced.matches;
   let deviceSlow = slow.matches;
   const deviceStatic = () => deviceReduced || deviceSlow || saveData;
-  const canMove = () => !paused && !deviceStatic();
+  const canMove = () => !deviceStatic();
   const canRun = () => canMove() && visible && !document.hidden;
   const TAU = Math.PI * 2;
   const nodes = [
@@ -209,25 +206,13 @@
     const enabled = canMove();
     root.classList.toggle("home-motion", enabled);
     root.classList.toggle("is-motion-paused", !enabled || document.hidden);
-    toggle.hidden = false;
-    toggle.disabled = deviceStatic();
-    toggle.setAttribute("aria-pressed", String(!enabled));
-    toggle.setAttribute("aria-label", deviceStatic() ? "Animation disabled by device preference" : paused ? "Play animation" : "Pause animation");
-    toggle.querySelector("[data-motion-label]").textContent = deviceStatic() ? "Still by preference" : paused ? "Play motion" : "Pause motion";
-    toggle.querySelector("[data-motion-icon]").classList.toggle("is-play", !enabled);
     if (!enabled) {
       animations.forEach(animation => animation.cancel());
       animations.clear();
       resetPointer();
     }
     schedule();
-    window.dispatchEvent(new CustomEvent("balhence:motion-preference", { detail: { paused } }));
   }
-  toggle.addEventListener("click", () => {
-    paused = !paused;
-    try { localStorage.setItem("balhence_motion_paused", String(paused)); } catch { /* Keep this page's preference. */ }
-    updateMotion();
-  });
   diagram.addEventListener("pointermove", event => {
     if (!canRun() || !fine.matches) return;
     const bounds = canvas.getBoundingClientRect();
@@ -274,11 +259,6 @@
         animations.delete(animation);
       }
     });
-  });
-  addEventListener("storage", event => {
-    if (event.key !== "balhence_motion_paused" && event.key !== null) return;
-    paused = event.newValue === "true";
-    updateMotion();
   });
   document.addEventListener("visibilitychange", () => {
     root.classList.toggle("is-motion-paused", !canMove() || document.hidden);

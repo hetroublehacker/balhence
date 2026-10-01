@@ -11,7 +11,7 @@ const net = require("node:net");
 const { chromium } = require("playwright");
 
 const ROOT = path.resolve(__dirname, "..");
-const MOTION_KEY = "balhence_motion_paused";
+const MOTION_CONTROLS = "[data-motion-toggle], [data-motion-preference], [data-type-field-toggle]";
 const GUIDE = "/insights/ptaas-vs-annual-penetration-test.html";
 
 async function availablePort() {
@@ -221,49 +221,37 @@ async function main() {
       assert.equal((await region.getAttribute("aria-describedby") || "").includes(hintId), false, "Desktop visitors should not receive an obsolete overflow instruction");
     });
 
-    await check("Homepage pause follows visitors to Services and a footer can resume it", { reducedMotion: "no-preference" }, async page => {
+    await check("Homepage and Services retain motion without exposing playback controls", { reducedMotion: "no-preference" }, async page => {
       await page.goto(origin);
-      const heroToggle = page.locator("[data-motion-toggle]");
-      await heroToggle.waitFor({ state: "visible" });
-      await heroToggle.click();
-      assert.match(await heroToggle.textContent(), /Play motion/);
-      assert.equal(await page.evaluate(key => localStorage.getItem(key), MOTION_KEY), "true");
+      await page.waitForFunction(() => document.querySelector("[data-security-map]").dataset.motionState === "running");
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
       await page.locator('.section-intro a[href="/services.html#capabilities"]').click();
       await page.waitForURL("**/services.html#capabilities");
-      const footer = page.getByRole("contentinfo");
-      const footerToggle = footer.getByRole("button", { name: "Play motion", exact: true });
-      assert.equal(await footerToggle.getAttribute("aria-pressed"), "true");
-      assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "auto");
-      await footerToggle.click();
-      assert.equal(await page.evaluate(key => localStorage.getItem(key), MOTION_KEY), "false");
-      assert.equal(await footer.getByRole("button", { name: "Pause motion", exact: true }).getAttribute("aria-pressed"), "false");
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
+      assert.equal(await page.locator("html").evaluate(element => element.classList.contains("motion-capable")), true);
+      assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "smooth");
       await page.reload();
-      assert.equal(await footer.getByRole("button", { name: "Pause motion", exact: true }).isEnabled(), true);
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
+      assert.equal(await page.evaluate(() => localStorage.getItem("balhence_motion_paused")), null);
       await page.goto(origin);
-      assert.match(await heroToggle.textContent(), /Pause motion/);
-      assert.equal(await heroToggle.getAttribute("aria-pressed"), "false");
+      await page.waitForFunction(() => document.querySelector("[data-security-map]").dataset.motionState === "running");
     });
 
-    await check("Device reduced-motion preference overrides the saved play setting on both controls", { reducedMotion: "no-preference" }, async page => {
+    await check("Device reduced-motion changes keep homepage and service flows usable", { reducedMotion: "no-preference" }, async page => {
       await page.goto(origin);
-      const heroToggle = page.locator("[data-motion-toggle]");
-      await heroToggle.waitFor({ state: "visible" });
-      assert.equal(await heroToggle.isEnabled(), true);
+      await page.waitForFunction(() => document.querySelector("[data-security-map]").dataset.motionState === "running");
       await page.emulateMedia({ reducedMotion: "reduce" });
-      await page.waitForFunction(() => document.querySelector("[data-motion-toggle]").disabled);
-      assert.equal(await heroToggle.getAttribute("aria-pressed"), "true");
-      assert.match(await heroToggle.textContent(), /preference/i);
-      assert.match(await heroToggle.getAttribute("aria-label"), /preference/i);
+      await page.waitForFunction(() => document.querySelector("[data-security-map]").dataset.motionState === "static");
+      assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "auto");
       await page.goto(`${origin}/services.html`);
-      const footerToggle = page.locator("button[data-motion-preference]");
-      assert.equal(await footerToggle.isDisabled(), true);
-      assert.equal(await footerToggle.getAttribute("aria-pressed"), "true");
-      assert.match(await footerToggle.textContent(), /preference/i);
-      assert.match(await footerToggle.getAttribute("aria-label"), /reduced-motion preference/i);
+      assert.equal(await page.locator("html").evaluate(element => element.classList.contains("motion-capable")), false);
+      assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "auto");
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
+      assert.equal(await page.locator("h1").isVisible(), true);
       await page.emulateMedia({ reducedMotion: "no-preference" });
-      await page.waitForFunction(() => !document.querySelector("button[data-motion-preference]").disabled);
-      assert.match(await footerToggle.textContent(), /Pause motion/);
-      assert.equal(await footerToggle.getAttribute("aria-pressed"), "false");
+      await page.waitForFunction(() => document.documentElement.classList.contains("motion-capable"));
+      assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "smooth");
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
     });
 
     await check("Focusing an unrevealed enquiry action exposes its content immediately", { reducedMotion: "no-preference" }, async page => {
@@ -292,7 +280,7 @@ async function main() {
       await page.waitForURL("**#included-title");
       await expectJumpBelowHeader(page, "#included-title");
       assert.equal(await page.getByRole("heading", { name: "What every security engagement includes" }).isVisible(), true);
-      assert.equal(await page.locator("button[data-motion-preference]").isVisible(), false);
+      assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
       await page.goto(`${origin}/contact.html`);
       await page.getByRole("link", { name: "Start your enquiry" }).click();
       await page.waitForURL("**#enquiry-form");

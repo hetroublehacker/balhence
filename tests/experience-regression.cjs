@@ -7,10 +7,9 @@ const path = require("node:path");
 const net = require("node:net");
 const { chromium } = require("playwright");
 
-const MOTION_KEY = "balhence_motion_paused";
 const SECURITY_MAP = "[data-security-map]";
 const CANVAS = "[data-security-canvas]";
-const TOGGLE = "[data-motion-toggle]";
+const MOTION_CONTROLS = "[data-motion-toggle], [data-motion-preference], [data-type-field-toggle]";
 const SYSTEM_LABELS = ["Applications", "Cloud", "AI systems", "Data", "Identity", "Code"];
 
 async function headerStyleTokens(page) {
@@ -145,40 +144,27 @@ async function waitForMotionState(page, expected) {
     assert.notDeepEqual(await canvasFingerprint(page), offscreenFrame);
     pass("The security-system map stops offscreen and resumes when it returns to view");
 
-    await page.locator(TOGGLE).click();
-    assert.equal(await page.evaluate(key => localStorage.getItem(key), MOTION_KEY), "true");
-    assert.equal(await page.locator("html").evaluate(el => el.classList.contains("home-motion")), false);
-    assert.equal(await page.locator(TOGGLE).getAttribute("aria-pressed"), "true");
-    const pausedFrame = await canvasFingerprint(page);
-    await page.waitForTimeout(1000);
-    assert.deepEqual(await canvasFingerprint(page), pausedFrame);
+    assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
     await page.reload();
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(200);
-    assert.equal(await page.locator(TOGGLE).getAttribute("aria-label"), "Play animation");
-    assert.equal(await page.locator(SECURITY_MAP).getAttribute("data-motion-state"), "static");
+    await waitForMotionState(page, "running");
     const reloadedFrame = await canvasFingerprint(page);
     await page.waitForTimeout(800);
-    assert.deepEqual(await canvasFingerprint(page), reloadedFrame);
-    await page.locator(TOGGLE).click();
-    assert.equal(await page.evaluate(key => localStorage.getItem(key), MOTION_KEY), "false");
-    await page.waitForTimeout(500);
     assert.notDeepEqual(await canvasFingerprint(page), reloadedFrame);
-    pass("Pause freezes the canvas, persists across reload, and resumes on request");
+    assert.equal(await page.evaluate(() => localStorage.getItem("balhence_motion_paused")), null);
+    pass("The map keeps animating after reload without motion buttons or saved playback state");
 
-    // Verify native media-query changes separately with saved playback enabled.
+    // Native device preferences still control motion after removal of site controls.
     const mediaContext = await createContext({ reducedMotion: "no-preference" });
-    await mediaContext.addInitScript(key => {
+    await mediaContext.addInitScript(() => {
       if (location.protocol !== "http:") return; // Initial about:blank has no storage origin.
-      localStorage.setItem(key, "false");
       localStorage.setItem("balhence_analytics_consent", "declined");
-    }, MOTION_KEY);
+    });
     const mediaPage = await mediaContext.newPage();
     await mediaPage.goto(origin);
     await mediaPage.evaluate(() => document.fonts.ready);
     await mediaPage.emulateMedia({ reducedMotion: "reduce" });
-    await mediaPage.waitForFunction(() => document.querySelector("[data-motion-toggle]").disabled, null, { timeout: 5000 });
-    assert.equal(await mediaPage.locator(TOGGLE).getAttribute("aria-pressed"), "true");
+    await waitForMotionState(mediaPage, "static");
     assert.equal(await mediaPage.locator("html").evaluate(el => el.classList.contains("home-motion")), false);
     assert.equal(await mediaPage.locator(SECURITY_MAP).getAttribute("data-motion-state"), "static");
     const reducedFrame = await canvasFingerprint(mediaPage);
@@ -186,14 +172,16 @@ async function waitForMotionState(page, expected) {
     assert.deepEqual(await canvasFingerprint(mediaPage), reducedFrame);
     await mediaPage.reload();
     await mediaPage.evaluate(() => document.fonts.ready);
-    assert.equal(await mediaPage.locator(TOGGLE).isDisabled(), true);
+    assert.equal(await mediaPage.locator(MOTION_CONTROLS).count(), 0);
     assert.equal(await mediaPage.locator(SECURITY_MAP).getAttribute("data-motion-state"), "static");
     assert.equal(await mediaPage.locator(".hero-line > span").first().evaluate(el => getComputedStyle(el).transform), "none");
     await mediaPage.emulateMedia({ reducedMotion: "no-preference" });
     await mediaPage.waitForFunction(() => document.querySelector("[data-security-map]").dataset.motionState === "running", null, { timeout: 5000 });
-    assert.equal(await mediaPage.locator(TOGGLE).isDisabled(), false);
+    const resumedFrame = await canvasFingerprint(mediaPage);
+    await mediaPage.waitForTimeout(350);
+    assert.notDeepEqual(await canvasFingerprint(mediaPage), resumedFrame);
     await mediaContext.close();
-    pass("Reduced-motion preference overrides saved playback on load and during a visit");
+    pass("Reduced-motion preference keeps the map still on load and freezes or resumes it during a visit");
 
     const pointerContext = await createContext();
     const pointerPage = await pointerContext.newPage();
@@ -216,13 +204,14 @@ async function waitForMotionState(page, expected) {
     await pointerPage.mouse.move(bounds.x + bounds.width * .8, bounds.y + bounds.height * .25);
     await pointerPage.clock.runFor(450);
     assert.notDeepEqual(await canvasFingerprint(pointerPage), beforePointer, "Pointer movement should highlight a security route");
-    await pointerPage.locator(TOGGLE).click();
-    const pointerPaused = await canvasFingerprint(pointerPage);
+    await pointerPage.emulateMedia({ reducedMotion: "reduce" });
+    await pointerPage.clock.runFor(100);
+    const pointerReduced = await canvasFingerprint(pointerPage);
     await pointerPage.mouse.move(bounds.x + bounds.width * .2, bounds.y + bounds.height * .5);
     await pointerPage.clock.runFor(500);
-    assert.deepEqual(await canvasFingerprint(pointerPage), pointerPaused, "Pointer input must not bypass the pause control");
+    assert.deepEqual(await canvasFingerprint(pointerPage), pointerReduced, "Pointer input must not bypass the device reduced-motion preference");
     await pointerContext.close();
-    pass("Pointer movement highlights a security route, but cannot move a paused canvas");
+    pass("Pointer movement highlights a security route and respects device reduced motion");
 
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
@@ -282,7 +271,7 @@ async function waitForMotionState(page, expected) {
     assert.equal(await nojs.locator(".security-fallback").isVisible(), true);
     await assertSystemLabels(nojs.locator(SECURITY_MAP));
     assert.equal(await nojs.locator(CANVAS).isVisible(), false);
-    assert.equal(await nojs.locator(TOGGLE).isVisible(), false);
+    assert.equal(await nojs.locator(MOTION_CONTROLS).count(), 0);
     assert.equal(await nojs.locator('.service-row[href="/web-application-penetration-testing.html"]').isVisible(), true);
     assert.equal(await nojs.locator('.service-row[href="/api-penetration-testing.html"]').isVisible(), true);
     assert.equal(await nojs.locator('.service-row[href="/saas-penetration-testing.html"]').isVisible(), true);
