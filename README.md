@@ -40,7 +40,15 @@ The homepage uses Canvas 2D, CSS and the Web Animations API, without an animatio
 | `services.html`, service pages, `insights/` | Service coverage and buyer guides |
 | `blogs.html`, `case-studies.*`, case-study articles in `insights/` | Redacted stories, progressive filtering, and defensive test ideas |
 | `build_public.py`, `serve.py`, `verify_site.py` | Publication boundary and validation |
+| `favicon.svg`, `logo.svg`, `scripts/build-brand-icons.py` | Vector brand mark and PNG/ICO icon generation |
 | `../website-tools/toolkit.py` | Local PDF and editable client-kit generation |
+
+The search favicon is the stable `/favicon.png` URL: a 96px opaque square with
+the B/slash mark inside the circular crop area. The website displays the matching
+circular `logo.svg`; Organization schema uses the 512px `logo.png`. PNG app icons
+and the browser ICO share the same vector mark. Regenerate them with
+`python3 scripts/build-brand-icons.py` (requires Pillow and CairoSVG). Keep the
+favicon URL stable when updating its artwork so search crawlers can refresh it.
 
 ## Data and configuration
 

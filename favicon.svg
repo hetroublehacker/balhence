@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <title>Balhence B slash mark</title>
-  <rect width="512" height="512" rx="132" fill="#9b8cff"/>
-  <text x="256" y="349" fill="#080d1f" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="252" font-weight="900" letter-spacing="-24" text-anchor="middle">B/</text>
+  <rect width="512" height="512" fill="#9b8cff"/>
+  <path fill="#080d1f" fill-rule="evenodd" d="M126 136h87c53 0 81 24 81 63 0 24-15 45-37 52 32 8 50 29 50 59 0 44-31 68-86 68h-95V136Zm51 49v45h35c21 0 32-9 32-23s-11-22-32-22h-35Zm0 88v56h43c24 0 36-10 36-27s-13-29-36-29h-43Z"/>
+  <path fill="#080d1f" d="M348 128h45l-67 256h-45l67-256Z"/>
 </svg>

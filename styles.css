@@ -479,8 +479,8 @@ p {
   place-items: center;
   overflow: hidden;
   color: transparent;
-  background: transparent url("/favicon.svg?v=20260905b") center / contain no-repeat;
-  border-radius: 8px;
+  background: #9b8cff url("/logo.svg?v=20261005a") center / cover no-repeat;
+  border-radius: 50%;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0;
   font-weight: 900;
