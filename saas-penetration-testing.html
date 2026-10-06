@@ -53,7 +53,7 @@
       "breadcrumb": {
         "@id": "https://balhence.com/saas-penetration-testing.html#breadcrumb"
       },
-      "dateModified": "2026-09-30"
+      "dateModified": "2026-10-06"
     },
     {
       "@type": "BreadcrumbList",
@@ -89,10 +89,10 @@
       },
       "serviceType": "SaaS penetration testing",
       "description": "Manual security testing of SaaS web and API workflows, tenant isolation, roles, customer administration, SSO, integrations, and sensitive data handling within an agreed scope.",
-      "areaServed": {
-        "@type": "Country",
-        "name": "United States"
-      }
+      "areaServed": [
+        { "@type": "Country", "name": "India" },
+        { "@type": "Country", "name": "United States" }
+      ]
     },
     {
       "@type": "FAQPage",
@@ -186,7 +186,7 @@
         <div class="coverage-grid">
           <article class="coverage-card" data-reveal><h3>Tenant isolation</h3><p>Check records, files, search, exports, shared links, and background jobs using controlled tenants. Where sharing is allowed, we document the exception and test its limits.</p></article>
           <article class="coverage-card" data-reveal><h3>Roles and customer administration</h3><p>Owners, admins, members, and guests need different permissions. We check what happens when someone is invited, moved, given ownership, or removed.</p></article>
-          <article class="coverage-card" data-reveal><h3>SSO and connected identities</h3><p>Review how SSO, account linking, recovery, sessions, and provisioning affect membership. We agree on the identity-provider configurations and test accounts first.</p></article>
+          <article class="coverage-card" data-reveal><h3>SSO and connected identities</h3><p>Review how SSO, account linking, recovery, sessions, and provisioning affect membership. We agree on the identity-provider configurations and test accounts first.</p><p>Use separate controlled browsers to describe which workspace and account state each session should retain. The <a href="/insights/session-authority-boundary.html">session isolation field note</a> illustrates the ownership problem; your SaaS membership rules define the expected result.</p></article>
           <article class="coverage-card" data-reveal><h3>Integrations and product state</h3><p>Check API keys, webhooks, service accounts, billing permissions, approvals, and background work. Third-party platforms stay out of scope without their authorization.</p></article>
         </div>
       </div>
@@ -197,7 +197,7 @@
         <div class="section-heading" data-reveal><span class="eyebrow">Planning the test</span><h2 id="scope-title">Planning your SaaS penetration testing scope</h2><p>A short walkthrough of the modules, APIs, roles, and integrations helps us scope the work. For isolation checks, we need two controlled tenants and representative accounts. If your team is in India, use the <a href="/penetration-testing-india.html">remote SaaS VAPT brief</a> to plan the testing window, evidence rules and report deadline.</p></div>
         <div class="transparency-box" data-reveal>
           <div class="transparency-panel"><span class="eyebrow">Prepare access</span><h3>Make the environment representative</h3><p>Use a stable build, synthetic records, working role-specific accounts, API documentation, and a technical contact. Note differences from production, especially SSO, billing, feature flags, and background processing.</p><p>The <a href="/insights/saas-vapt-readiness-checklist.html">SaaS pentest readiness checklist</a> helps your team prepare these details.</p></div>
-          <div class="transparency-panel"><span class="eyebrow">Agree boundaries</span><h3>Keep testing controlled</h3><p>Written authorization defines hosts, roles, safe data, request limits, contacts, and stop conditions. Production testing requires explicit safeguards. Destructive testing, load testing, cloud configuration review, and source review are not included by default.</p><p>Need broader coverage? See the <a href="/services.html#capabilities">full security capability map</a>.</p></div>
+          <div class="transparency-panel"><span class="eyebrow">Agree boundaries</span><h3>Keep testing controlled</h3><p>Written authorization defines hosts, roles, safe data, request limits, contacts, and stop conditions. Production testing requires explicit safeguards. Destructive testing, load testing, cloud configuration review, and source review are not included by default.</p><p>If the assessment needs to cover IAM permissions, storage access or workload boundaries, agree a separate <a href="/cloud-penetration-testing.html">cloud penetration testing scope</a> alongside the application test. Record the responsibilities and shared findings once across both workstreams.</p><p>Need broader coverage? See the <a href="/services.html#capabilities">full security capability map</a>.</p></div>
         </div>
         <div class="launch-copy scope-worksheet" data-reveal>
           <h3 id="tenant-lifecycle-title">SaaS tenant and membership worksheet</h3>
@@ -254,7 +254,7 @@
   </main>
 
   <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260930b"></script><script src="/motion.js?v=20261001b"></script>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script>
   <script src="/flow.js?v=20261001b"></script>
 </body>
 </html>

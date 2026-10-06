@@ -53,7 +53,7 @@
       "breadcrumb": {
         "@id": "https://balhence.com/web-application-penetration-testing.html#breadcrumb"
       },
-      "dateModified": "2026-09-30"
+      "dateModified": "2026-10-06"
     },
     {
       "@type": "BreadcrumbList",
@@ -89,10 +89,10 @@
       },
       "serviceType": "Web application penetration testing",
       "description": "Manual web application security testing focused on browser workflows, authentication, session handling, authorization, business logic, input handling, file features, and integration trust.",
-      "areaServed": {
-        "@type": "Country",
-        "name": "United States"
-      }
+      "areaServed": [
+        { "@type": "Country", "name": "India" },
+        { "@type": "Country", "name": "United States" }
+      ]
     },
     {
       "@type": "FAQPage",
@@ -216,8 +216,8 @@
       <div class="container">
         <div class="section-heading" data-reveal><span class="eyebrow">What we test</span><h2 id="coverage-title">What we test in a web application</h2><p>We follow how people use the application and check the controls behind those actions. Each reported finding is confirmed by a tester.</p></div>
         <div class="coverage-grid">
-          <article class="coverage-card" data-reveal><h3>Browser workflows</h3><p>What happens across a multi-step action? We check state changes, browser storage, caching, cross-origin behavior, and assumptions made by the interface.</p></article>
-          <article class="coverage-card" data-reveal><h3>Authentication &amp; session</h3><p>Registration, sign-in, recovery, MFA, and SSO. We also check how sessions start, expire, and end when access is revoked.</p></article>
+          <article class="coverage-card" data-reveal><h3>Browser workflows</h3><p>What happens across a multi-step action? We check state changes, browser storage, caching, cross-origin behavior, and assumptions made by the interface.</p><p>Private content needs the same access rules at the application and cache layers. Our <a href="/insights/private-response-cache-boundary.html">anonymized cache data exposure story</a> explains why a working login check can leave that boundary untested.</p></article>
+          <article class="coverage-card" data-reveal><h3>Authentication &amp; session</h3><p>Registration, sign-in, recovery, MFA, and SSO. We also check how sessions start, expire, and end when access is revoked.</p><p>Session ownership is a separate question from successful sign-in. The <a href="/insights/session-authority-boundary.html">session isolation field note</a> illustrates why two controlled browsers and their application state matter when assessing that boundary.</p></article>
           <article class="coverage-card" data-reveal><h3>Access control</h3><p>Can each role reach only the records and actions it should? We include tenant separation, invitations, admin functions, and role changes.</p></article>
           <article class="coverage-card" data-reveal><h3>Business logic</h3><p>Payments, credits, approvals, and other sensitive workflows. We check whether their rules survive repeated actions, unexpected ordering, or overlapping work.</p></article>
           <article class="coverage-card" data-reveal><h3>Input &amp; server-side handling</h3><p>How the server parses and uses incoming data, including injection risks, request forgery, redirects, errors, and data passed to other systems.</p></article>
@@ -345,7 +345,7 @@
   </main>
 
   <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260930b"></script><script src="/motion.js?v=20261001b"></script>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script>
   <script src="/flow.js?v=20261001b"></script>
 </body>
 </html>

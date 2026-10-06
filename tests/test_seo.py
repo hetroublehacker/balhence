@@ -30,6 +30,9 @@ COMMERCIAL_PAGES = (
     "pci-dss-penetration-testing.html",
     "hipaa-penetration-testing.html",
     "penetration-testing-as-a-service.html",
+    "cloud-penetration-testing.html",
+    "network-penetration-testing.html",
+    "services.html",
 )
 ENQUIRY_SERVICES = {
     "soc-2-penetration-testing.html": "soc2",
@@ -38,6 +41,8 @@ ENQUIRY_SERVICES = {
     "pci-dss-penetration-testing.html": "pci",
     "hipaa-penetration-testing.html": "hipaa",
     "penetration-testing-as-a-service.html": "ptaas",
+    "cloud-penetration-testing.html": "cloud",
+    "network-penetration-testing.html": "infrastructure",
 }
 SITEMAP_NAMESPACE = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 ARTICLE_TYPES = {"Article", "BlogPosting", "TechArticle"}

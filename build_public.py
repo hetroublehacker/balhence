@@ -14,6 +14,7 @@ from pathlib import Path, PurePosixPath
 SOURCE_ROOT = Path(__file__).resolve().parent
 PUBLIC_FILES = (
     "ai-llm-penetration-testing.html",
+    "cloud-penetration-testing.html",
     "compliance-penetration-testing.html",
     "hipaa-penetration-testing.html",
     "insights/does-soc-2-require-penetration-testing.html",
@@ -21,6 +22,7 @@ PUBLIC_FILES = (
     "insights/ptaas-vs-annual-penetration-test.html",
     "insights/vulnerability-assessment-vs-penetration-testing.html",
     "pci-dss-penetration-testing.html",
+    "network-penetration-testing.html",
     "penetration-testing-as-a-service.html",
     "penetration-testing-services-usa.html",
     "soc-2-penetration-testing.html",

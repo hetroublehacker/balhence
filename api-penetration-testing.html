@@ -53,7 +53,7 @@
       "breadcrumb": {
         "@id": "https://balhence.com/api-penetration-testing.html#breadcrumb"
       },
-      "dateModified": "2026-09-30"
+      "dateModified": "2026-10-06"
     },
     {
       "@type": "BreadcrumbList",
@@ -89,10 +89,10 @@
       },
       "serviceType": "API penetration testing",
       "description": "Manual security testing for REST and GraphQL APIs, webhooks, identity flows, service accounts, authorization, tenant isolation, business logic, data exposure, and resource controls.",
-      "areaServed": {
-        "@type": "Country",
-        "name": "United States"
-      }
+      "areaServed": [
+        { "@type": "Country", "name": "India" },
+        { "@type": "Country", "name": "United States" }
+      ]
     },
     {
       "@type": "FAQPage",
@@ -226,7 +226,7 @@
           <article class="coverage-card" data-reveal><h3>Function authorization</h3><p>Check restricted and administrative actions on the server, including older API versions and operations the interface doesn't show.</p></article>
           <article class="coverage-card" data-reveal><h3>Property authorization</h3><p>A caller may be allowed to edit a record without being allowed to change every field. We check writable properties and sensitive response fields.</p></article>
           <article class="coverage-card" data-reveal><h3>Tenant isolation</h3><p>Follow access through organization switches, invitations, shared resources, and ownership changes. Legitimate sharing belongs in the test model too.</p></article>
-          <article class="coverage-card" data-reveal><h3>Data exposure</h3><p>Look at responses, errors, caches, exports, and metadata for information the caller shouldn't receive.</p></article>
+          <article class="coverage-card" data-reveal><h3>Data exposure</h3><p>Look at responses, errors, caches, exports, and metadata for information the caller shouldn't receive.</p><p>Include gateways and shared caches in the boundary when they handle private API responses. The <a href="/insights/private-response-cache-boundary.html">private response caching field note</a> shows why response reuse needs its own access checks.</p></article>
           <article class="coverage-card" data-reveal><h3>Business logic</h3><p>Check the rules around approvals, credits, inventory, and other multi-step actions, including repeated or overlapping requests within agreed limits.</p></article>
         </div>
       </div>
@@ -236,7 +236,7 @@
       <div class="container">
         <div class="section-heading" data-reveal><span class="eyebrow">Interfaces and identities</span><h2 id="interfaces-title">API testing across protocols and caller identities</h2><p>Users aren't the only callers. We account for service accounts, webhooks, background jobs, and identity providers when agreeing on what to test.</p></div>
         <div class="service-grid">
-          <article class="service-card" data-reveal><span class="service-code">REST</span><h3>REST APIs</h3><p>Check routes, methods, versions, and content types, including filtering, pagination, batch operations, and errors. Equivalent endpoints should enforce the same rules.</p></article>
+          <article class="service-card" data-reveal><span class="service-code">REST</span><h3>REST APIs</h3><p>Check routes, methods, versions, and content types, including filtering, pagination, batch operations, and errors. Equivalent endpoints should enforce the same rules.</p><p>Include form-validation and lookup helpers in the inventory, even when their replies are only yes or no. Our <a href="/insights/server-owned-validation-rules.html">server-side validation and data exposure story</a> explains why the server must control the rule behind that answer.</p></article>
           <article class="service-card" data-reveal><span class="service-code">GRAPHQL</span><h3>GraphQL APIs</h3><p>Review schema exposure, resolver permissions, field access, mutations, and subscriptions. Batching and complexity checks stay within agreed resource limits.</p></article>
           <article class="service-card" data-reveal><span class="service-code">EVENTS</span><h3>Webhooks and callbacks</h3><p>Check signatures, event secrets, retries, destinations, and how incoming events change product state. Repeated events should not quietly repeat a sensitive action.</p></article>
           <article class="service-card" data-reveal><span class="service-code">OAUTH</span><h3>OAuth and OIDC</h3><p>Review redirects, consent, scopes, claims, PKCE, and token handling. Check that each login and authorization flow stays tied to the intended client and session.</p></article>
@@ -408,7 +408,7 @@
   </main>
 
   <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20260930b"></script><script src="/motion.js?v=20261001b"></script>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script>
   <script src="/flow.js?v=20261001b"></script>
 </body>
 </html>

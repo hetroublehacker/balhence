@@ -20,6 +20,8 @@ const BUYER_ROUTES = [
   ["/pci-dss-penetration-testing.html", "pci-pentest", "pci"],
   ["/hipaa-penetration-testing.html", "hipaa-pentest", "hipaa"],
   ["/penetration-testing-as-a-service.html", "ptaas-pentest", "ptaas"],
+  ["/cloud-penetration-testing.html", "cloud-pentest", "cloud"],
+  ["/network-penetration-testing.html", "network-pentest", "infrastructure"],
 
   ["/", "home-hero"],
   ["/penetration-testing-india.html", "india-pentest"],
@@ -35,6 +37,8 @@ const SOURCES = [
   "pci-pentest",
   "hipaa-pentest",
   "ptaas-pentest",
+  "cloud-pentest",
+  "network-pentest",
   "does-soc-2-require-penetration-testing",
   "how-to-plan-llm-security-testing",
   "ptaas-vs-annual-penetration-test",
@@ -159,7 +163,7 @@ async function main() {
         assert.equal(await page.locator('input[name="enquiry_source"]').inputValue(), source);
         assert.equal(await page.locator("script[data-balhence-analytics]").count(), 0);
       }
-      pass(`Homepage and all eleven service landing pages fit ${width}px and link directly to preselected, attributed enquiries`);
+      pass(`Homepage and all ${BUYER_ROUTES.length - 1} service landing pages fit ${width}px and link directly to preselected, attributed enquiries`);
     }
 
     for (const source of SOURCES) {

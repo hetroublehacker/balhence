@@ -7,6 +7,7 @@
   const enquirySources = new Set([
     "home-nav", "home-hero", "home-faq", "home-closing",
     "web-pentest", "api-pentest", "saas-pentest", "india-pentest", "services",
+    "cloud-pentest", "network-pentest",
     "pentest-guides", "field-notes", "scope-planner", "sample-report",
     "draft-write-authorization", "session-authority-boundary",
     "private-response-cache-boundary", "server-owned-validation-rules",

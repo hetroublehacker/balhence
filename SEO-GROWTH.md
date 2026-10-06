@@ -1,6 +1,20 @@
 # Search visibility and pentest enquiries
 
-Implementation and owner checklist, updated 30 September 2026. This file is operational documentation and is excluded from the public site artifact.
+Implementation and owner checklist, updated 6 October 2026. This file is operational documentation and is excluded from the public site artifact.
+
+## Service coverage and discovery upgrade - 6 October 2026
+
+- Added dedicated cloud and network penetration testing pages for services already offered in the catalog. Each explains assessment boundaries, access preparation, limitations, reporting, quotation drivers and agreed retests. Cloud configuration review is distinguished from impact validation; external, internal and segmentation network testing have separate scope requirements. Cloud provider policies and NIST planning guidance link to primary sources checked for this release.
+- Connected both pages from the homepage, Services, India and US coverage sections. The new pages link to each other where connectivity overlaps. SaaS explains when a separate cloud scope is needed. Shared discovery and findings are allocated once in combined engagements, while additional testing depth is named in the proposal.
+- Expanded India coverage to cloud, network and AI/LLM testing alongside web, API and SaaS. Its title, descriptions, visible coverage, preparation checklist, first FAQ and service markup now agree. The page continues to describe remote delivery without asserting an office or auditor accreditation.
+- Added contextual cache, session and server-validation field-note links to relevant application coverage. General Services and web/API/SaaS/AI service markup now consistently describes India and US coverage; the country pages retain their specific region. AI testing explains when agent permissions need separate cloud coverage. Completed the Services WebPage/service/breadcrumb identities and unified two existing organization author references.
+- Added both canonical URLs to the public allowlist and sitemap. Changed significant modification dates only on the eight existing pages whose substantive content changed. Article dates were retained for identity-only fixes. New enquiry sources are fixed labels; all public pages reference the current shared script, and Contact remains analytics-free.
+
+Checks passed: 38 HTML pages, 2587 URL references and 94 allowlisted files; all 45 Python checks; 16 SEO/conversion browser checks covering the homepage and 13 service pages at 320, 390, 768 and 1440 pixels; 10 US launch/navigation checks; JavaScript syntax and the immutable ThreeUI/source bundle check. Enquiries and analytics were mocked, with no live form delivery. The separate 94-file artifact at `/tmp/balhence-seo-20261006-verified` passes artifact and HTTP preview verification. Pwchrome visual review confirms the shared animation and readable desktop/mobile layouts. Publication and search indexing remain post-deployment checks.
+
+The browser connector available for this audit uses its default pwchrome profile. It did not provide the authorized Balhence Search Console performance data, so no query volume, impression, click, position or ranking increase is attributed to this release. These changes address documented service coverage and discovery gaps. After publishing, inspect the two new URLs and changed India/US pages in the existing Search Console property and compare query/page performance with the same prior period.
+
+Google states that its Search AI features use the existing SEO fundamentals: crawlable text, useful content, internal discovery and accurate structured data. No additional AI file or special markup was added. Reference: [Google Search AI features guidance](https://developers.google.com/search/docs/appearance/ai-features). Eligibility does not guarantee indexing, ranking or citation.
 
 ## What this release changes
 
@@ -17,10 +31,12 @@ Search engines need useful, clearly described content and discoverable links; ne
 | Visitor's task | Main page | Supporting evidence |
 | --- | --- | --- |
 | Find an application pentest provider | `/` and `/services.html` | Scope, deliverables, broader capabilities |
-| Find remote penetration testing for a team in India | `/penetration-testing-india.html` | Web, API and SaaS coverage, India engagement logistics, proposal comparison, sample report |
+| Find remote penetration testing for a team in India | `/penetration-testing-india.html` | Application, cloud, network and AI coverage, remote logistics, proposal comparison, sample report |
 | Arrange a web application penetration test | `/web-application-penetration-testing.html` | Scoping guide, authorization stories, sample report |
 | Test an API or its integrations | `/api-penetration-testing.html` | API coverage, controlled access, session and cache stories |
 | Assess a multi-tenant SaaS product | `/saas-penetration-testing.html` | Tenant/role coverage, SSO, readiness checklist |
+| Assess customer-controlled cloud resources | `/cloud-penetration-testing.html` | IAM, storage, workloads, configuration-review distinction, provider policies |
+| Assess external/internal networks or segmentation | `/network-penetration-testing.html` | Approved assets, starting positions, access requirements, operational limits |
 | Understand cost and compare proposals | `/insights/web-api-pentest-cost-scope-guide.html` | Effort drivers and scope, not an invented price |
 | Evaluate reporting quality | `/report-viewer.html` | Explicitly synthetic report and downloadable PDF |
 | Request a proposal | `/contact.html` | Short enquiry, clear next steps, direct email |
