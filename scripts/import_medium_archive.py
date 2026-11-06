@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build the local, author-owned Medium reading archive from the public RSS feed.
+"""Build Balhence's first-party research library from the author's public RSS feed.
 
 The generated pages preserve the authored text and original publication metadata.
-Medium tracking pixels and RSS-only publication footer sentences are excluded. Images
+Platform tracking pixels and RSS-only publication footer sentences are excluded. Images
 uploaded with the stories are copied locally; third-party embeds remain lazy-loaded.
 """
 
@@ -32,6 +32,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FEED = "https://medium.com/feed/@hetroublehacker"
 CONTENT_NAMESPACE = "http://purl.org/rss/1.0/modules/content/"
 DC_NAMESPACE = "http://purl.org/dc/elements/1.1/"
+LOCAL_MODIFIED = "2026-11-06"
 
 
 @dataclass(frozen=True)
@@ -41,13 +42,14 @@ class Post:
     canonical: str
     published: str
     modified: str
-    publication: str
+    seo_title: str
+    description: str
     related_url: str
     related_label: str
 
     @property
     def output(self) -> str:
-        return f"insights/medium-{self.slug}.html"
+        return f"research/{self.slug}.html"
 
 
 POSTS = (
@@ -57,7 +59,8 @@ POSTS = (
         "https://hetroublehacker.medium.com/how-i-approached-dependency-confusion-272b46f66907",
         "2022-01-31T17:10:25Z",
         "2022-01-31T17:10:25Z",
-        "Medium",
+        "Dependency Confusion Bug Bounty Methodology | Balhence",
+        "Learn how Aditya Soni identified unclaimed npm package names and validated dependency confusion findings using GitHub search, Bash, and httpx.",
         "/web-application-penetration-testing.html",
         "Web application penetration testing",
     ),
@@ -67,7 +70,8 @@ POSTS = (
         "https://hetroublehacker.medium.com/assigned-my-first-cve-2020-28726-1900aeef79f6",
         "2020-12-09T12:39:26Z",
         "2020-12-09T12:39:26Z",
-        "Medium",
+        "CVE-2020-28726 Vulnerability Research | Balhence",
+        "A first-hand account of discovering and disclosing CVE-2020-28726 in SeedDMS, from HTML injection to an open redirect proof of impact.",
         "/web-application-penetration-testing.html",
         "Web application penetration testing",
     ),
@@ -77,27 +81,30 @@ POSTS = (
         "https://infosecwriteups.com/the-first-bounty-target-disclosing-multiple-reports-b963bffb36cd",
         "2020-11-21T22:22:40Z",
         "2020-11-21T22:22:40Z",
-        "InfoSec Write-ups",
+        "Bug Bounty Case Studies: Seven Findings | Balhence",
+        "Seven practical bug bounty case studies covering authorization, session management, CSRF, open redirects, IDOR, and password reset behavior.",
         "/blog.html",
         "Current penetration testing guides",
     ),
     Post(
         "27f622bc47c0",
-        "first-xss",
+        "tale-of-my-first-xss",
         "https://infosecwriteups.com/tale-of-my-first-xss-27f622bc47c0",
         "2020-05-26T20:09:06Z",
         "2020-05-26T20:09:06Z",
-        "InfoSec Write-ups",
+        "My First XSS Bug Bounty Finding | Balhence",
+        "A first-hand XSS bug bounty story covering parameter discovery, fuzzing, validation, and lessons learned from an established program.",
         "/web-application-penetration-testing.html",
         "Web application penetration testing",
     ),
     Post(
         "7080e48df8b4",
-        "http-request-smuggling",
+        "http-request-smuggling-plain-english",
         "https://medium.com/cyberverse/http-request-smuggling-in-plain-english-7080e48df8b4",
         "2020-04-13T20:06:28Z",
         "2020-04-13T20:06:28Z",
-        "Cyber Verse",
+        "HTTP Request Smuggling Explained: CL.TE vs TE.CL | Balhence",
+        "A plain-English guide to HTTP request smuggling, including Content-Length, Transfer-Encoding, CL.TE, TE.CL, and practical testing references.",
         "/web-application-penetration-testing.html",
         "Web application penetration testing",
     ),
@@ -107,7 +114,8 @@ POSTS = (
         "https://infosecwriteups.com/how-inspect-element-got-me-a-bounty-58d3a9946225",
         "2020-02-06T19:47:28Z",
         "2020-04-20T20:44:44Z",
-        "InfoSec Write-ups",
+        "Inspect Element and Server-Side Validation | Balhence",
+        "How bypassing a disabled form field exposed missing server-side validation and led to a valid bug bounty report.",
         "/insights/server-owned-validation-rules.html",
         "When validation rules belong on the server",
     ),
@@ -117,7 +125,8 @@ POSTS = (
         "https://medium.com/cyberverse/crlf-injection-playbook-472c67f1cb46",
         "2020-01-12T10:58:20Z",
         "2020-01-12T11:07:45Z",
-        "Cyber Verse",
+        "CRLF Injection Testing Playbook | Balhence",
+        "A CRLF injection testing playbook based on public reports, including response splitting, XSS chains, open redirects, payloads, and mitigations.",
         "/web-application-penetration-testing.html",
         "Web application penetration testing",
     ),
@@ -127,7 +136,8 @@ POSTS = (
         "https://medium.com/cyberverse/bug-bounty-with-bash-438596ff72f5",
         "2020-01-05T22:16:21Z",
         "2020-01-05T22:16:21Z",
-        "Cyber Verse",
+        "Bug Bounty Automation with Bash | Balhence",
+        "Practical Bash workflows for bug bounty reconnaissance, subdomain enumeration, takeover checks, CORS testing, and repeatable automation.",
         "/blog.html",
         "Current penetration testing guides",
     ),
@@ -137,17 +147,19 @@ POSTS = (
         "https://medium.com/cyberverse/find-secret-api-keys-22cdcc829976",
         "2019-12-22T11:36:26Z",
         "2019-12-22T15:48:34Z",
-        "Cyber Verse",
+        "How to Find Exposed API Keys | Balhence",
+        "A practical guide to finding exposed API keys in JavaScript and public assets using search patterns, reconnaissance tools, and manual validation.",
         "/api-penetration-testing.html",
         "API penetration testing",
     ),
     Post(
         "2b3dbe9fa0b8",
-        "burp-idor-automation",
+        "automating-burp-idor",
         "https://medium.com/cyberverse/automating-burp-to-find-idors-2b3dbe9fa0b8",
         "2019-12-12T07:53:36Z",
         "2019-12-12T07:53:36Z",
-        "Cyber Verse",
+        "Automating IDOR Testing in Burp Suite | Balhence",
+        "A practical Burp Suite workflow for IDOR testing with Autorize and AutoRepeater, including session comparison and identifier replacement.",
         "/api-penetration-testing.html",
         "API penetration testing",
     ),
@@ -354,7 +366,7 @@ def copy_image(url: str, post: Post, number: int) -> tuple[str, int, int]:
     if not content_type.lower().startswith("image/"):
         raise RuntimeError(f"Medium asset is not an image: {url} ({content_type})")
     extension = image_extension(url, content_type)
-    relative = f"assets/medium/{post.post_id}-{number:02d}{extension}"
+    relative = f"assets/research/{post.post_id}-{number:02d}{extension}"
     destination = ROOT / relative
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(payload)
@@ -415,12 +427,28 @@ def sanitize_body(raw: str, post: Post):
         iframe["loading"] = "lazy"
         iframe["title"] = f"{provider} media embedded in the original article"
         iframe["referrerpolicy"] = "strict-origin-when-cross-origin"
+        # The RSS fallback is an encoded platform redirect, not visible story
+        # content. Keep the working embed while avoiding a stale source-domain
+        # URL in Balhence's first-party page markup.
+        iframe.clear()
 
     source_hash = text_hash(soup)
+    first_party_articles = {
+        clean_canonical(candidate.canonical): f"/{candidate.output}" for candidate in POSTS
+    }
     for link in soup.find_all("a"):
         href = link.get("href", "")
         if href and urllib.parse.urlsplit(href).scheme not in {"http", "https", "mailto"}:
             raise RuntimeError(f"Unexpected link scheme in {post.post_id}: {href}")
+        source_article = clean_canonical(href) if href.startswith(("http://", "https://")) else ""
+        local_article = first_party_articles.get(source_article)
+        if not local_article and source_article:
+            local_article = next(
+                (f"/{candidate.output}" for candidate in POSTS if candidate.post_id in source_article),
+                None,
+            )
+        if local_article:
+            link["href"] = local_article
         link["rel"] = "noopener noreferrer"
 
     expected_images = ALT_TEXT.get(post.post_id, {})
@@ -452,7 +480,7 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
     local_url = f"https://balhence.com/{post.output}"
     lead_image = body.find("img")
     og_image = f"https://balhence.com{lead_image['src']}" if lead_image else "https://balhence.com/og-image.png"
-    description = f"Preserved reading copy of {title} by Aditya Soni, originally published on {post.publication} on {date_label(post.published)}."
+    description = post.description
     tags = " / ".join(categories)
     structured = {
         "@context": "https://schema.org",
@@ -464,10 +492,49 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
                 "name": title,
                 "description": description,
                 "datePublished": post.published,
-                "dateModified": post.modified,
+                "dateModified": LOCAL_MODIFIED,
                 "inLanguage": "en",
+                "mainEntity": {"@id": f"{local_url}#article"},
+                "breadcrumb": {"@id": f"{local_url}#breadcrumb"},
+            },
+            {
+                "@type": "BlogPosting",
+                "@id": f"{local_url}#article",
+                "url": local_url,
+                "mainEntityOfPage": {"@id": f"{local_url}#webpage"},
+                "headline": title,
+                "description": description,
+                "datePublished": post.published,
+                "dateModified": LOCAL_MODIFIED,
+                "inLanguage": "en",
+                "image": og_image,
+                "keywords": categories,
                 "author": {"@id": "https://balhence.com/about.html#researcher"},
-                "isBasedOn": {"@id": f"{post.canonical}#article", "url": post.canonical},
+                "publisher": {"@id": "https://balhence.com/#organization"},
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": f"{local_url}#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://balhence.com/",
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Security research",
+                        "item": "https://balhence.com/blogs.html#hetroublehacker-writing",
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": title,
+                        "item": local_url,
+                    },
+                ],
             },
             {
                 "@type": "Person",
@@ -475,7 +542,19 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
                 "name": "Aditya Soni",
                 "alternateName": "HeTroubleHacker",
                 "url": "https://balhence.com/about.html#researcher",
-                "sameAs": ["https://medium.com/@hetroublehacker"],
+                "sameAs": [
+                    "https://www.linkedin.com/in/adtyasoni/",
+                    "https://hackerone.com/hetroublehacker",
+                    "https://app.intigriti.com/profile/hetroublemak3r",
+                    "https://x.com/hetroublehacker",
+                ],
+            },
+            {
+                "@type": "Organization",
+                "@id": "https://balhence.com/#organization",
+                "name": "Balhence",
+                "url": "https://balhence.com/",
+                "logo": {"@type": "ImageObject", "url": "https://balhence.com/logo.png"},
             },
         ],
     }
@@ -486,11 +565,11 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; frame-src https://cdn.embedly.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{escaped(title)} | Aditya Soni</title>
+  <title>{escaped(post.seo_title)}</title>
   <meta name="description" content="{escaped(description)}">
   <meta name="author" content="{escaped(creator)}">
-  <meta name="robots" content="noindex,follow,max-image-preview:large">
-  <link rel="canonical" href="{escaped(post.canonical)}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="{local_url}">
   <meta name="theme-color" content="#080d1f">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Balhence">
@@ -499,7 +578,7 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
   <meta property="og:url" content="{local_url}">
   <meta property="og:image" content="{escaped(og_image)}">
   <meta property="article:published_time" content="{post.published}">
-  <meta property="article:modified_time" content="{post.modified}">
+  <meta property="article:modified_time" content="{LOCAL_MODIFIED}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{escaped(title)}">
   <meta name="twitter:description" content="{escaped(description)}">
@@ -516,24 +595,23 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
 {json_script(structured)}
   </script>
 </head>
-<body data-page="insights" class="medium-archive-post">
+<body data-page="insights" class="research-archive-post">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=research-archive" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
 
   <main id="main-content">
     <article>
-      <header class="article-hero medium-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#hetroublehacker-writing">Research archive</a><span aria-hidden="true">/</span><span aria-current="page">{escaped(title)}</span></nav><span class="eyebrow">Original research archive</span><h1>{escaped(title)}</h1><p class="article-deck">A preserved reading copy of Aditya Soni's original article from {escaped(post.publication)}.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><time datetime="{post.published}">{date_label(post.published)}</time><span>{minutes} min read</span></div></div></header>
+      <header class="article-hero research-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#hetroublehacker-writing">Security research</a><span aria-hidden="true">/</span><span aria-current="page">{escaped(title)}</span></nav><span class="eyebrow">Original security research</span><h1>{escaped(title)}</h1><p class="article-deck">Practical security research by Aditya Soni / HeTroubleHacker.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><time datetime="{post.published}">{date_label(post.published)}</time><span>{minutes} min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
-        <nav class="article-toc" aria-label="Article details"><strong>Article record</strong><a href="#original-article">Original article text</a><a href="{escaped(post.canonical)}">Read on Medium</a><a href="/blogs.html#hetroublehacker-writing">All archived writing</a><a href="/about.html#researcher">About Aditya</a></nav>
-        <div class="article-content medium-article-content">
-          <aside class="medium-origin-note" aria-label="Publication note"><strong>Publication note</strong><p>This reading copy preserves the original wording and publication date. Medium remains the canonical publication while the archive is reviewed for a future migration.</p><a class="text-link" href="{escaped(post.canonical)}">Open the original on Medium</a></aside>
-          <div class="medium-imported-body" id="original-article" data-medium-post-id="{post.post_id}" data-medium-text-sha256="{body_hash}">
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the research</a><a href="/blogs.html#hetroublehacker-writing">All security research</a><a href="/about.html#researcher">About Aditya</a></nav>
+        <div class="article-content research-article-content">
+          <div class="research-article-body" id="research-article" data-research-post-id="{post.post_id}" data-research-text-sha256="{body_hash}">
 {str(body)}
           </div>
-          <aside class="medium-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the verified profile</a><a class="btn btn-secondary" href="https://medium.com/@hetroublehacker">Follow on Medium</a></div></aside>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#hetroublehacker-writing">Browse all research</a></div></aside>
           <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>From research to a scoped assessment.</h2><p>Explore {escaped(post.related_label)} or browse the current Balhence field notes for evidence-focused testing stories.</p><div class="button-row"><a class="btn btn-primary" href="{escaped(post.related_url)}">{escaped(post.related_label)}</a><a class="btn btn-quiet" href="/blogs.html">Research field notes</a></div></div>
-          <p class="medium-topic-line"><strong>Original topics:</strong> {escaped(tags)}</p>
+          <p class="research-topic-line"><strong>Research topics:</strong> {escaped(tags)}</p>
         </div>
       </div></div>
     </article>
@@ -591,9 +669,10 @@ def main() -> None:
                 "path": post.output,
                 "post_id": post.post_id,
                 "title": title,
-                "canonical": post.canonical,
+                "source_url": post.canonical,
                 "published": post.published,
-                "modified": post.modified,
+                "source_modified": post.modified,
+                "local_modified": LOCAL_MODIFIED,
                 "text_sha256": body_hash,
                 "images": image_count,
                 "image_assets": image_assets,

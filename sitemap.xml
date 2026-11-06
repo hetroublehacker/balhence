@@ -9,6 +9,16 @@
   <url><loc>https://balhence.com/about.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/blog.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://balhence.com/blogs.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/dependency-confusion.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/cve-2020-28726.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/first-bounty-target.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/tale-of-my-first-xss.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/http-request-smuggling-plain-english.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/inspect-element-bounty.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/crlf-injection-playbook.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/bug-bounty-with-bash.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/find-secret-api-keys.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/automating-burp-idor.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/insights/draft-write-authorization.html</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://balhence.com/insights/session-authority-boundary.html</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://balhence.com/insights/private-response-cache-boundary.html</loc><lastmod>2026-09-22</lastmod></url>

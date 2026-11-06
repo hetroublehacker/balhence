@@ -76,7 +76,7 @@ python3 serve.py --directory _site --port 8000
 
 The builder requires a new output path and refuses overwrites. It publishes an exact allowlist; source files, tests, collateral, backups, and repository metadata stay outside the artifact.
 
-Keep first-party text ASCII-only, including text written as HTML entities. Use CSS or SVG for decorative icons and plain punctuation for copy. The verifier checks this before publishing; vendor libraries, licenses, binary assets, and the explicitly named `insights/medium-*.html` author-owned archive imports are excluded. Those imports retain their original Unicode wording and are protected by source-text fidelity tests instead of being silently normalized.
+Keep first-party text ASCII-only, including text written as HTML entities. Use CSS or SVG for decorative icons and plain punctuation for copy. The verifier checks this before publishing; vendor libraries, licenses, binary assets, and the explicitly named `research/*.html` author-owned archive imports are excluded. Those imports retain their original Unicode wording and are protected by source-text fidelity tests instead of being silently normalized.
 
 Case studies are generalized adaptations, not public vulnerability disclosures. Do not copy source reports, target identities, exact routes, payloads, credentials, personal data, or private evidence into the repository or public artifact. Synthetic implementation sketches and regression cases describe proposed defensive controls; they do not establish that a source issue has been fixed or independently reproduced. Source reports stay outside this project and outside the publication allowlist.
 
@@ -97,9 +97,9 @@ They exercise local previews and block external traffic. GitHub Actions validate
 
 The Python suite also checks search metadata uniqueness, ordinary-link reachability, commercial page schema and enquiry routes, sitemap/article date consistency, visible FAQ/schema parity, contextual incoming links, and reciprocal US/India alternates. See [SEO-GROWTH.md](SEO-GROWTH.md) for the search-intent map, Search Console setup, real inbox checks, and lead measurement. It is operational documentation, not a public asset. No rankings or enquiry volume are guaranteed.
 
-### Refreshing the author-owned Medium archive
+### Refreshing the first-party research archive
 
-The ten `insights/medium-*.html` reading copies and their 43 local images are generated from Aditya Soni's public Medium RSS feed. Install the maintainer-only parser dependencies, then run the importer against a reviewed feed capture:
+The ten `research/*.html` first-party articles and their 43 local images are generated from Aditya Soni's public RSS feed. Install the maintainer-only parser dependencies, then run the importer against a reviewed feed capture:
 
 ```bash
 python3 -m pip install -r requirements-maintainer.txt

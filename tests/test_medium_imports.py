@@ -1,4 +1,4 @@
-"""Regression checks for the author-owned Medium archive."""
+"""Regression checks for the first-party author research archive."""
 
 from __future__ import annotations
 
@@ -48,9 +48,9 @@ class ArchivePage(HTMLParser):
             self.author_profile_link = True
         if tag == "h1":
             self.in_h1 = True
-        if tag == "div" and "medium-imported-body" in classes:
+        if tag == "div" and "research-article-body" in classes:
             self.capture_depth = 1
-            self.import_hash = values.get("data-medium-text-sha256", "")
+            self.import_hash = values.get("data-research-text-sha256", "")
             return
         if self.capture_depth:
             if tag not in VOID_ELEMENTS:
@@ -84,7 +84,7 @@ class ArchivePage(HTMLParser):
             self.body_parts.append(data)
 
 
-class MediumArchiveTests(unittest.TestCase):
+class ResearchArchiveTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
@@ -93,7 +93,7 @@ class MediumArchiveTests(unittest.TestCase):
         self.assertEqual(len(self.manifest), 10)
         self.assertEqual(len({item["path"] for item in self.manifest}), 10)
         self.assertEqual(len({item["post_id"] for item in self.manifest}), 10)
-        self.assertEqual(len({item["canonical"] for item in self.manifest}), 10)
+        self.assertEqual(len({item["source_url"] for item in self.manifest}), 10)
 
     def test_archive_pages_preserve_text_images_and_publication_record(self):
         for item in self.manifest:
@@ -101,8 +101,9 @@ class MediumArchiveTests(unittest.TestCase):
                 self.assertIn(item["path"], PUBLIC_FILE_SET)
                 source = (SOURCE_ROOT / item["path"]).read_text(encoding="utf-8")
                 page = ArchivePage(source)
-                self.assertIn("noindex", page.robots.lower())
-                self.assertEqual(page.canonical, item["canonical"])
+                self.assertNotIn("noindex", page.robots.lower())
+                self.assertIn("index", page.robots.lower())
+                self.assertEqual(page.canonical, f'https://balhence.com/{item["path"]}')
                 self.assertEqual(normalized(page.h1_parts), item["title"])
                 self.assertTrue(page.author_profile_link)
                 self.assertEqual(page.import_hash, item["text_sha256"])
@@ -117,14 +118,17 @@ class MediumArchiveTests(unittest.TestCase):
                     self.assertTrue(all(page.image_alts))
                 self.assertNotIn("medium.com/_/stat", source)
                 self.assertNotIn("where people are continuing the conversation by highlighting", source)
+                self.assertNotIn("Medium remains the canonical publication", source)
+                self.assertNotIn("Read on Medium", source)
+                self.assertNotIn("Follow on Medium", source)
                 for image in page.images:
-                    self.assertRegex(image, r"\A/assets/medium/[a-zA-Z0-9.-]+\Z")
+                    self.assertRegex(image, r"\A/assets/research/[a-zA-Z0-9.-]+\Z")
                     relative = image.lstrip("/")
                     self.assertIn(relative, PUBLIC_FILE_SET)
                     self.assertTrue((SOURCE_ROOT / relative).is_file())
 
     def test_dependency_confusion_gist_is_restored_as_visible_code(self):
-        source = (SOURCE_ROOT / "insights/medium-dependency-confusion.html").read_text(encoding="utf-8")
+        source = (SOURCE_ROOT / "research/dependency-confusion.html").read_text(encoding="utf-8")
         self.assertIn("find . -type f -name package.json", source)
         self.assertIn("https://gist.github.com/hetroublehacker/c4a0d4e994e63092d8c9efbc03bcf5e2", source)
         self.assertNotIn("medium.com/media/2ef920021c6845811eb3d2a3298ef24d/href", source)

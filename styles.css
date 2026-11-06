@@ -2243,9 +2243,9 @@ p {
   border-color: #f1f5ff;
 }
 
-/* Author-owned Medium archive */
-.medium-origin-note,
-.medium-author-note {
+/* First-party research archive */
+.research-origin-note,
+.research-author-note {
   margin-bottom: 46px;
   padding: 26px;
   background: #fbfcff;
@@ -2253,11 +2253,11 @@ p {
   border-radius: var(--radius);
 }
 
-.medium-origin-note {
+.research-origin-note {
   border-left: 4px solid var(--mint);
 }
 
-.medium-origin-note > strong {
+.research-origin-note > strong {
   display: block;
   margin-bottom: 8px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -2266,47 +2266,47 @@ p {
   text-transform: uppercase;
 }
 
-.medium-origin-note p,
-.medium-author-note p,
-.medium-topic-line {
+.research-origin-note p,
+.research-author-note p,
+.research-topic-line {
   font-family: var(--font-body);
   font-size: 0.92rem;
   line-height: 1.65;
 }
 
-.medium-imported-body {
+.research-article-body {
   scroll-margin-top: calc(var(--header-height) + 30px);
 }
 
-.medium-imported-body > p:first-child {
+.research-article-body > p:first-child {
   color: var(--ink-soft);
   font-size: 1.2rem;
 }
 
-.medium-imported-body a {
+.research-article-body a {
   overflow-wrap: anywhere;
 }
 
-.medium-imported-body h3,
-.medium-imported-body h4 {
+.research-article-body h3,
+.research-article-body h4 {
   scroll-margin-top: calc(var(--header-height) + 30px);
 }
 
-.medium-imported-body h3 {
+.research-article-body h3 {
   margin-top: 54px;
   font-size: clamp(1.65rem, 3vw, 2.3rem);
 }
 
-.medium-imported-body h4 {
+.research-article-body h4 {
   margin-top: 36px;
   font-size: clamp(1.25rem, 2.2vw, 1.65rem);
 }
 
-.medium-imported-body figure {
+.research-article-body figure {
   margin: 38px 0;
 }
 
-.medium-imported-body img {
+.research-article-body img {
   display: block;
   width: auto;
   max-width: 100%;
@@ -2316,7 +2316,7 @@ p {
   border-radius: var(--radius-sm);
 }
 
-.medium-imported-body figcaption {
+.research-article-body figcaption {
   max-width: 620px;
   margin: 10px auto 0;
   color: var(--muted);
@@ -2325,19 +2325,19 @@ p {
   text-align: center;
 }
 
-.medium-imported-body blockquote {
+.research-article-body blockquote {
   margin: 34px 0;
   padding: 2px 0 2px 24px;
   color: var(--ink-soft);
   border-left: 3px solid var(--accent-soft);
 }
 
-.medium-imported-body blockquote p {
+.research-article-body blockquote p {
   margin-bottom: 0;
   font-style: italic;
 }
 
-.medium-imported-body pre {
+.research-article-body pre {
   max-width: 100%;
   overflow-x: auto;
   margin: 28px 0;
@@ -2353,7 +2353,7 @@ p {
   overflow-wrap: anywhere;
 }
 
-.medium-imported-body iframe {
+.research-article-body iframe {
   display: block;
   width: 100%;
   max-width: 854px;
@@ -2364,40 +2364,40 @@ p {
   border-radius: var(--radius-sm);
 }
 
-.medium-imported-body hr {
+.research-article-body hr {
   margin: 48px 0;
   border: 0;
   border-top: 1px solid var(--line);
 }
 
-.medium-author-note {
+.research-author-note {
   margin-top: 62px;
   margin-bottom: 0;
   background: var(--paper);
 }
 
-.medium-author-note h2 {
+.research-author-note h2 {
   margin: 12px 0 14px;
   font-size: clamp(1.65rem, 3vw, 2.3rem);
 }
 
-.medium-author-note .button-row {
+.research-author-note .button-row {
   margin-top: 22px;
 }
 
-.medium-topic-line {
+.research-topic-line {
   margin-top: 28px;
   color: var(--muted);
 }
 
-.medium-archive-grid {
+.research-archive-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   margin-top: 38px;
 }
 
-.medium-archive-card {
+.research-archive-card {
   display: flex;
   min-height: 250px;
   flex-direction: column;
@@ -2410,28 +2410,28 @@ p {
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
-.medium-archive-card:hover {
+.research-archive-card:hover {
   border-color: #9cacc4;
   box-shadow: var(--shadow-sm);
   transform: translateY(-4px);
 }
 
-.medium-archive-card .insight-meta {
+.research-archive-card .insight-meta {
   margin-bottom: auto;
 }
 
-.medium-archive-card h3 {
+.research-archive-card h3 {
   margin: 44px 0 14px;
   font-size: clamp(1.25rem, 2vw, 1.6rem);
 }
 
-.medium-archive-card p {
+.research-archive-card p {
   margin-bottom: 22px;
   color: var(--muted);
   font-size: 0.86rem;
 }
 
-.medium-archive-card .text-link {
+.research-archive-card .text-link {
   margin-top: auto;
 }
 
@@ -2781,7 +2781,7 @@ p {
   .service-grid,
   .package-grid,
   .insight-grid,
-  .medium-archive-grid {
+  .research-archive-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -3080,7 +3080,7 @@ p {
   .coverage-grid,
   .principle-grid,
   .insight-grid,
-  .medium-archive-grid,
+  .research-archive-grid,
   .form-grid,
   .transparency-box {
     grid-template-columns: 1fr;

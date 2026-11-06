@@ -205,8 +205,8 @@ class ValidatorTests(SiteFixture):
             ["index.html:2:5: HTML entity renders non-ASCII U+2019"],
         )
 
-    def test_exact_medium_archives_keep_original_unicode(self):
-        self.assertFalse(verify_site.checks_ascii("insights/medium-dependency-confusion.html"))
+    def test_exact_research_archives_keep_original_unicode(self):
+        self.assertFalse(verify_site.checks_ascii("research/dependency-confusion.html"))
         self.assertTrue(verify_site.checks_ascii("insights/ai-native-penetration-testing-human-validated.html"))
         self.assertTrue(verify_site.checks_ascii("blogs.html"))
 

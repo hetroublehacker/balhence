@@ -2,7 +2,7 @@
 """Check the public static site using only Python's standard library.
 
 Validates first-party ASCII text, files and local URLs, HTML anchors and metadata,
-JSON-LD, the sitemap, and manifest. Exact author-owned archive imports retain their
+JSON-LD, the sitemap, and manifest. Exact author-owned research imports retain their
 original Unicode. --preview also exercises the actual allowlisted HTTP handler on
 an ephemeral loopback port. External links are not fetched.
 """
@@ -39,11 +39,11 @@ HTML_ENTITY = re.compile(r"&(?:#[xX][0-9a-fA-F]+|#[0-9]+|[a-zA-Z][a-zA-Z0-9]*);?
 def checks_ascii(relative: str) -> bool:
     """Check our published text, without rewriting dependencies or licenses."""
     path = Path(relative)
-    exact_medium_archive = path.parent == Path("insights") and path.name.startswith("medium-")
+    exact_research_archive = path.parent == Path("research")
     return (
         path.suffix.lower() in PUBLIC_TEXT_SUFFIXES
         and "vendor" not in path.parts
-        and not exact_medium_archive
+        and not exact_research_archive
         and not path.name.upper().startswith(("LICENSE", "LICENCE", "COPYING", "NOTICE"))
     )
 
