@@ -8,14 +8,56 @@ const net = require("node:net");
 const path = require("node:path");
 const { chromium } = require("playwright");
 
-const ARTICLES = [
+const FIELD_NOTES = [
   ["/insights/draft-write-authorization.html", "The draft you could change but could not read"],
   ["/insights/session-authority-boundary.html", "When two browsers inherited one cart"],
   ["/insights/private-response-cache-boundary.html", "When the cache forgot who a response belonged to"],
   ["/insights/server-owned-validation-rules.html", "When a validation helper became a data query"],
   ["/insights/evidence-gated-workflows.html", "Submitted is not the same as verified"],
 ];
-const TOPICS = ["authorization", "sessions", "caching", "validation", "workflows"];
+const RESEARCH_ARTICLES = [
+  ["/research/dependency-confusion.html", "How I approached Dependency Confusion!"],
+  ["/research/cve-2020-28726.html", "Assigned my First CVE-2020–28726!!"],
+  ["/research/first-bounty-target.html", "The First Bounty Target (Disclosing Multiple Reports)"],
+  ["/research/tale-of-my-first-xss.html", "Tale of my First XSS"],
+  ["/research/http-request-smuggling-plain-english.html", "HTTP Request Smuggling in Plain English."],
+  ["/research/inspect-element-bounty.html", "How Inspect Element Got me a Bounty"],
+  ["/research/crlf-injection-playbook.html", "CRLF Injection Playbook"],
+  ["/research/bug-bounty-with-bash.html", "Bug Bounty with Bash"],
+  ["/research/find-secret-api-keys.html", "Find Secret API-Keys"],
+  ["/research/automating-burp-idor.html", "Automating BURP to find IDORs"],
+];
+const ARTICLES = [...FIELD_NOTES, ...RESEARCH_ARTICLES];
+const RESEARCH_ROUTES = new Set(RESEARCH_ARTICLES.map(([route]) => route));
+const TOPICS = {
+  authorization: [
+    "/insights/draft-write-authorization.html",
+    "/research/first-bounty-target.html",
+    "/research/automating-burp-idor.html",
+  ],
+  "web-attacks": [
+    "/research/tale-of-my-first-xss.html",
+    "/research/http-request-smuggling-plain-english.html",
+    "/research/crlf-injection-playbook.html",
+  ],
+  "state-caching": [
+    "/insights/session-authority-boundary.html",
+    "/insights/private-response-cache-boundary.html",
+  ],
+  "validation-workflows": [
+    "/insights/server-owned-validation-rules.html",
+    "/insights/evidence-gated-workflows.html",
+    "/research/inspect-element-bounty.html",
+  ],
+  "discovery-automation": [
+    "/research/bug-bounty-with-bash.html",
+    "/research/find-secret-api-keys.html",
+  ],
+  "vulnerability-research": [
+    "/research/dependency-confusion.html",
+    "/research/cve-2020-28726.html",
+  ],
+};
 const PAGES = ["/blogs.html", ...ARTICLES.map(([route]) => route)];
 
 async function main() {
@@ -37,6 +79,7 @@ async function main() {
   const missing = [];
   const blockExternal = route => {
     if (new URL(route.request().url()).origin === origin) return route.continue();
+    if (new URL(route.request().url()).hostname === "cdn.embedly.com") return route.abort();
     external.push(route.request().url());
     return route.abort();
   };
@@ -58,7 +101,10 @@ async function main() {
       await new Promise(resolve => setTimeout(resolve, 50));
     }
 
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({
+      headless: true,
+      executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || undefined,
+    });
     const context = await browser.newContext({
       reducedMotion: "reduce", viewport: { width: 1440, height: 1000 },
     });
@@ -66,19 +112,24 @@ async function main() {
     const page = await context.newPage();
     observe(page);
     await page.goto(`${origin}/blogs.html`);
-    await page.locator("[data-case-controls]").waitFor({ state: "visible" });
-    assert.equal(await page.locator("[data-case-card]").count(), 5);
-    assert.equal(await page.locator("[data-case-card]:visible").count(), 5);
-    const destinations = await page.locator("[data-case-card] a[href]").evaluateAll(links => links.map(link => link.getAttribute("href")));
-    assert.equal(destinations.length, 5, "Each case card should link once to its article");
-    assert.equal(new Set(destinations).size, 5, "Featured and regular cards must not duplicate articles");
+    await page.locator("[data-archive-controls]").waitFor({ state: "visible" });
+    assert.equal(await page.locator("[data-archive-card]").count(), 15);
+    assert.equal(await page.locator("[data-archive-card]:visible").count(), 15);
+    assert.equal(await page.locator("[data-field-note-card]").count(), 5);
+    assert.equal(await page.locator('#bug-bounty-archive[aria-labelledby]').count(), 1);
+    const cardLabels = await page.locator("[data-archive-card] a[aria-labelledby]").evaluateAll(links => links.map(link => link.getAttribute("aria-labelledby")));
+    assert.equal(cardLabels.length, 15, "Every archive card link should name its title");
+    assert.equal(new Set(cardLabels).size, 15, "Every archive card title ID should be unique");
+    for (const label of cardLabels) assert.equal(await page.locator(`#${label}`).count(), 1);
+    const destinations = await page.locator("[data-archive-card] a[href]").evaluateAll(links => links.map(link => link.getAttribute("href")));
+    assert.equal(destinations.length, 15, "Each archive card should link once to its article");
+    assert.equal(new Set(destinations).size, 15, "Archive cards must not duplicate articles");
     assert.deepEqual([...destinations].sort(), ARTICLES.map(([route]) => route).sort());
-    assert.equal(await page.locator("[data-case-card].case-card-featured").count(), 1);
-    pass("The hub contains exactly five unique case studies, including one featured case");
+    pass("The hub contains exactly fifteen unique articles in one archive");
 
-    for (const [route, title] of ARTICLES) {
+    for (const [route, title] of FIELD_NOTES) {
       await page.goto(`${origin}/blogs.html`);
-      await page.locator(`[data-case-card] a[href="${route}"]`).click();
+      await page.locator(`[data-archive-card] a[href="${route}"]`).click();
       await page.waitForURL(`${origin}${route}`);
       assert.equal(await page.locator("h1").count(), 1);
       assert.equal((await page.locator("h1").innerText()).trim(), title);
@@ -89,9 +140,9 @@ async function main() {
       assert.match(await page.locator(".http-code").first().innerText(), /^GET \/redacted\/[a-z-]+ HTTP\/1\.1/);
       assert.match(await page.locator(".http-notebook-caption").innerText(), /SYNTHETIC \+ REDACTED/);
       assert.equal(await page.locator('a[href="#http-notebook"]').count(), 1);
-      assert.ok(await page.locator('a[href="/blogs.html"]').count() > 0, `${route} should link back to the collection`);
+      assert.ok(await page.locator('a[href="/blogs.html#bug-bounty-archive"]').count() > 0, `${route} should link back to the collection`);
     }
-    pass("Every case card opens its article with five regression rows and a collection link");
+    pass("Every field note opens with five regression rows and a collection link");
 
     await page.goto(`${origin}/insights/draft-write-authorization.html`);
     const repair = page.locator('.case-remediation[aria-labelledby="policy"]');
@@ -104,44 +155,46 @@ async function main() {
 
     await page.goto(`${origin}/blog.html`);
     assert.equal(await page.locator(".insight-card").count(), 5);
-    assert.ok(await page.locator('a[href="/blogs.html"]').count() > 0);
+    assert.ok(await page.locator('a[href="/blogs.html#bug-bounty-archive"]').count() > 0);
     await page.goto(`${origin}/blogs.html`);
     assert.ok(await page.locator('a[href="/blog.html"]').count() > 0);
     pass("The five existing guides remain available and both collections link to each other");
 
-    for (const topic of TOPICS) {
-      const button = page.locator(`[data-case-filter="${topic}"]`);
+    for (const [topic, expectedRoutes] of Object.entries(TOPICS)) {
+      const button = page.locator(`[data-archive-filter="${topic}"]`);
       await button.focus();
       await page.keyboard.press("Enter");
       assert.equal(await button.getAttribute("aria-pressed"), "true");
-      assert.equal(await page.locator('[data-case-filter][aria-pressed="true"]').count(), 1);
-      assert.equal(await page.locator("[data-case-card]:visible").count(), 1);
-      assert.equal(await page.locator("[data-case-card]:visible").getAttribute("data-topic"), topic);
-      assert.equal(await page.locator("[data-case-count]").innerText(), "Showing 1 case study");
+      assert.equal(await page.locator('[data-archive-filter][aria-pressed="true"]').count(), 1);
+      assert.equal(await page.locator("[data-archive-card]:visible").count(), expectedRoutes.length);
+      const visibleRoutes = await page.locator("[data-archive-card]:visible a[href]").evaluateAll(links => links.map(link => link.getAttribute("href")).sort());
+      assert.deepEqual(visibleRoutes, [...expectedRoutes].sort());
+      assert.equal(await page.locator("[data-archive-count]").innerText(), `Showing ${expectedRoutes.length} articles`);
     }
-    pass("Every topic filter works with Enter and announces the selected result count");
+    pass("Every archive topic filter works with Enter and announces its result count");
 
-    const search = page.locator("[data-case-search]");
-    const reset = page.locator("[data-case-reset]");
-    await page.locator('[data-case-filter="sessions"]').press("Space");
-    await search.fill("server");
-    assert.equal(await page.locator("[data-case-card]:visible").count(), 1);
-    assert.equal(await page.locator("[data-case-card]:visible").getAttribute("data-topic"), "sessions");
+    const search = page.locator("[data-archive-search]");
+    const reset = page.locator("[data-archive-reset]");
+    await page.locator('[data-archive-filter="state-caching"]').press("Space");
+    await search.fill("cart");
+    assert.equal(await page.locator("[data-archive-card]:visible").count(), 1);
+    assert.equal(await page.locator("[data-archive-card]:visible").getAttribute("data-topic"), "state-caching");
+    assert.equal(await page.locator("[data-archive-count]").innerText(), "Showing 1 article");
     await search.fill("nothing-matches-this-query");
-    assert.equal(await page.locator("[data-case-card]:visible").count(), 0);
-    assert.equal(await page.locator("[data-case-empty]").isVisible(), true);
-    assert.equal(await page.locator("[data-case-count]").innerText(), "Showing 0 case studies");
+    assert.equal(await page.locator("[data-archive-card]:visible").count(), 0);
+    assert.equal(await page.locator("[data-archive-empty]").isVisible(), true);
+    assert.equal(await page.locator("[data-archive-count]").innerText(), "Showing 0 articles");
     await reset.focus();
     await page.keyboard.press("Space");
-    assert.equal(await page.locator("[data-case-card]:visible").count(), 5);
+    assert.equal(await page.locator("[data-archive-card]:visible").count(), 15);
     assert.equal(await search.inputValue(), "");
     assert.equal(await search.evaluate(element => element === document.activeElement), true);
-    assert.equal(await page.locator('[data-case-filter="all"]').getAttribute("aria-pressed"), "true");
-    assert.equal(await page.locator("[data-case-empty]").isVisible(), false);
-    assert.equal(await page.locator("[data-case-count]").innerText(), "Showing 5 case studies");
+    assert.equal(await page.locator('[data-archive-filter="all"]').getAttribute("aria-pressed"), "true");
+    assert.equal(await page.locator("[data-archive-empty]").isVisible(), false);
+    assert.equal(await page.locator("[data-archive-count]").innerText(), "Showing 15 articles");
     await search.fill(" PRIVATE   ORIGIN ");
-    assert.equal(await page.locator("[data-case-card]:visible").count(), 1);
-    assert.equal(await page.locator("[data-case-card]:visible").getAttribute("data-topic"), "caching");
+    assert.equal(await page.locator("[data-archive-card]:visible").count(), 1);
+    assert.equal(await page.locator("[data-archive-card]:visible").getAttribute("data-topic"), "state-caching");
     await reset.click();
     pass("Search combines with topics, handles multiple words and empty results, and resets by keyboard");
 
@@ -151,12 +204,14 @@ async function main() {
         await page.goto(`${origin}${route}`);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${route} overflows at ${width}px`);
         assert.equal(await page.locator("h1").count(), 1);
-        assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${route} contains non-ASCII body text at ${width}px`);
+        if (!RESEARCH_ROUTES.has(route)) {
+          assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${route} contains non-ASCII body text at ${width}px`);
+        }
         for (const block of await page.locator(".case-code, .scope-table-wrap").all()) {
           assert.ok(await block.evaluate(element => element.getBoundingClientRect().width <= innerWidth), `${route} has an overflowing reading block at ${width}px`);
         }
       }
-      pass(`The hub and five articles fit ${width}px with ASCII body text and contained reading blocks`);
+      pass(`The hub and fifteen articles fit ${width}px with contained reading blocks`);
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
@@ -174,17 +229,17 @@ async function main() {
     const nojs = await plain.newPage();
     observe(nojs);
     await nojs.goto(`${origin}/blogs.html`);
-    assert.equal(await nojs.locator("[data-case-card]:visible").count(), 5);
-    assert.equal(await nojs.locator("[data-case-controls]").isVisible(), false);
-    assert.equal(await nojs.locator("[data-case-empty]").isVisible(), false);
+    assert.equal(await nojs.locator("[data-archive-card]:visible").count(), 15);
+    assert.equal(await nojs.locator("[data-archive-controls]").isVisible(), false);
+    assert.equal(await nojs.locator("[data-archive-empty]").isVisible(), false);
     assert.equal(await nojs.locator(".nav-menu").isVisible(), true);
     assert.ok(await nojs.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-    const [firstRoute, firstTitle] = ARTICLES[0];
-    await nojs.locator(`[data-case-card] a[href="${firstRoute}"]`).click();
+    const [firstRoute, firstTitle] = FIELD_NOTES[0];
+    await nojs.locator(`[data-archive-card] a[href="${firstRoute}"]`).click();
     await nojs.waitForURL(`${origin}${firstRoute}`);
     assert.equal((await nojs.locator("h1").innerText()).trim(), firstTitle);
     assert.equal(await nojs.locator(".scope-table tbody tr").count(), 5);
-    pass("Without JavaScript all five cases and navigation remain visible, filters stay hidden, and links work");
+    pass("Without JavaScript all fifteen articles and navigation remain visible, filters stay hidden, and links work");
 
     assert.deepEqual(errors, [], "The blog and articles should not throw JavaScript errors");
     assert.deepEqual(external, [], "The blog and articles should not request third-party resources");

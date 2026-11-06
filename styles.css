@@ -2275,6 +2275,8 @@ p {
 }
 
 .research-article-body {
+  min-width: 0;
+  overflow-wrap: anywhere;
   scroll-margin-top: calc(var(--header-height) + 30px);
 }
 

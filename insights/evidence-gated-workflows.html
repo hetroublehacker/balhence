@@ -21,7 +21,7 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Balhence AI-native security, research, and engineering">
   <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-09-22">
+  <meta property="article:modified_time" content="2026-11-06">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Submitted is not the same as verified">
   <meta name="twitter:description" content="A practical case study in evidence-gated state transitions and defensive regression testing.">
@@ -29,7 +29,7 @@
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261005a">
+  <link rel="stylesheet" href="/styles.css?v=20261106a">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/case-studies.css?v=20260923a">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
@@ -40,32 +40,55 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Article",
+      "@type": "Organization",
+      "@id": "https://balhence.com/#organization",
+      "name": "Balhence",
+      "url": "https://balhence.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://balhence.com/logo.png",
+        "width": 512,
+        "height": 512
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://balhence.com/insights/evidence-gated-workflows.html#webpage",
+      "url": "https://balhence.com/insights/evidence-gated-workflows.html",
+      "name": "Submitted is not the same as verified",
+      "description": "An anonymized workflow-integrity case with illustrative remediation and five defensive regression tests.",
+      "datePublished": "2026-09-05",
+      "dateModified": "2026-11-06",
+      "inLanguage": "en",
+      "mainEntity": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#article" },
+      "breadcrumb": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#breadcrumb" }
+    },
+    {
+      "@type": "BlogPosting",
       "@id": "https://balhence.com/insights/evidence-gated-workflows.html#article",
       "headline": "Submitted is not the same as verified",
       "description": "An anonymized workflow-integrity case with illustrative remediation and five defensive regression tests.",
       "url": "https://balhence.com/insights/evidence-gated-workflows.html",
-      "mainEntityOfPage": "https://balhence.com/insights/evidence-gated-workflows.html",
+      "mainEntityOfPage": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#webpage" },
       "datePublished": "2026-09-05",
-      "dateModified": "2026-09-22",
+      "dateModified": "2026-11-06",
       "inLanguage": "en",
       "author": {
-        "@type": "Organization",
         "@id": "https://balhence.com/#organization",
-        "name": "Balhence",
         "url": "https://balhence.com/about.html"
       },
       "publisher": {
         "@id": "https://balhence.com/#organization"
       },
       "image": "https://balhence.com/og-image.png",
-      "articleSection": "Anonymized case studies / Workflows",
+      "articleSection": "Bug bounty field notes",
       "isPartOf": {
-        "@id": "https://balhence.com/blogs.html"
+        "@id": "https://balhence.com/blogs.html#bug-bounty-archive"
       }
     },
     {
       "@type": "BreadcrumbList",
+      "@id": "https://balhence.com/insights/evidence-gated-workflows.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -76,13 +99,13 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Blog",
-          "item": "https://balhence.com/blogs.html"
+          "name": "Bug Bounty Archive",
+          "item": "https://balhence.com/blogs.html#bug-bounty-archive"
         },
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Evidence-gated workflows",
+          "name": "Submitted is not the same as verified",
           "item": "https://balhence.com/insights/evidence-gated-workflows.html"
         }
       ]
@@ -91,7 +114,7 @@
 }
   </script>
 </head>
-<body data-page="insights" class="case-study">
+<body data-page="insights" class="case-study archive-article">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header" data-site-header>
     <nav class="container nav-shell" aria-label="Primary navigation">
@@ -105,18 +128,18 @@
   </header>
   <main id="main-content">
     <article>
-      <header class="article-hero">
-        <div class="container">
-          <nav class="article-byline" aria-label="Breadcrumb"><a href="/blogs.html">Blog</a><span aria-hidden="true">/</span><span aria-current="page">Workflows</span></nav>
-          <p class="case-kicker">Anonymized field report / 05</p>
+      <header class="article-hero archive-article-hero">
+        <div class="container-narrow">
+          <nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Submitted is not the same as verified</span></nav>
+          <span class="eyebrow">Bug bounty archive / Anonymized field note</span>
           <h1>Submitted is not the same as verified</h1>
           <p class="article-deck">The server recorded a submission while required evidence was still missing. That was a broken workflow rule, but it wasn't proof of approval.</p>
-          <div class="article-byline"><span>By <a href="/about.html">Balhence</a></span><span>Written <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-09-22">22 September 2026</time></span><span>6 min read</span></div>
+          <div class="article-byline"><span>By <a href="/about.html">Balhence</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-06">6 November 2026</time></span><span>6 min read</span></div>
         </div>
       </header>
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#observation">The screen said done</a><a href="#http-notebook">The HTTP notebook</a><a href="#boundary">What the next system would believe</a><a href="#design">Check the stored evidence</a><a href="#implementation">The proposed submission gate</a><a href="#regression">Test the state and the event</a><a href="#operations">Look behind the status flag</a><a href="#lesson">Two statuses, two checks</a></nav>
-        <div class="article-content">
+        <div class="article-content archive-article-content">
           <aside class="article-callout case-editorial" aria-label="Redaction and evidence limits"><p><strong>About this account:</strong> Adapted from private research notes. Organizations, products, routes, identifiers, timings, and data have been removed or replaced. Observations have not been independently revalidated for this article. Code and test fixtures are synthetic; the repair is proposed, not claimed to be deployed or retested.</p></aside>
           <dl class="case-facts"><div><dt>Boundary</dt><dd>Evidence before state</dd></div><div><dt>Observed</dt><dd>Incomplete case recorded as submitted</dd></div><div><dt>Not established</dt><dd>A positive decision or downstream access</dd></div></dl>
 
@@ -196,13 +219,14 @@ Content-Length: 91
           <h2 id="lesson">Two statuses, two checks</h2>
           <p>Submission should mean the server checked the required evidence. Approval should mean an authorized review reached a decision. The recorded finding showed the first rule failing; it did not show the second being bypassed. Keeping those claims separate makes both the report and the repair more useful.</p>
           <div class="article-callout"><p><strong>Related case:</strong> <a href="/insights/draft-write-authorization.html">The draft you could change but could not read</a> looks at a different integrity boundary: ensuring that asynchronous writes preserve the authorization checked at the start.</p></div>
-          <section class="article-cta" aria-labelledby="case-cta-title"><h2 id="case-cta-title">Can your application skip a step that matters?</h2><p>Our <a href="/saas-penetration-testing.html">SaaS penetration testing</a> covers business logic, authorization, and critical workflows within the agreed scope. Tell us which process your customers rely on and when you need it tested.</p><a class="btn btn-primary btn-flow" data-track="article_workflow_contact" href="/contact.html?service=web-api&amp;source=evidence-gated-workflows">Request a pentest <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a><p><a href="/blogs.html">All case studies</a> | <a href="/blog.html">Practical guides</a></p></section>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About this research</span><h2 id="archive-author-title">About Balhence field notes</h2><p>Balhence field notes turn anonymized security research into practical engineering lessons. Identifiers are removed or replaced, HTTP examples are synthetic, and proposed repairs are not presented as confirmed deployments.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html">Read our approach</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Browse the Bug Bounty Archive</a></div></aside>
+          <section class="article-cta" aria-labelledby="case-cta-title"><h2 id="case-cta-title">Can your application skip a step that matters?</h2><p>Our <a href="/saas-penetration-testing.html">SaaS penetration testing</a> covers business logic, authorization, and critical workflows within the agreed scope. Tell us which process your customers rely on and when you need it tested.</p><a class="btn btn-primary btn-flow" data-track="article_workflow_contact" href="/contact.html?service=web-api&amp;source=evidence-gated-workflows">Request a pentest <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a><p><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a> | <a href="/blog.html">Practical guides</a></p></section>
         </div>
       </div></div>
     </article>
-      <section class="section section-paper launch-section" aria-labelledby="service-reading-title"><div class="container launch-copy"><h2 id="service-reading-title">Related testing services and reading</h2><ul class="launch-links"><li><a href="/api-penetration-testing.html">API workflow security testing</a></li><li><a href="/ai-llm-penetration-testing.html">Approval boundaries in AI applications</a></li><li><a href="/insights/server-owned-validation-rules.html">Server-owned validation rules</a></li><li><a href="/insights/how-to-plan-llm-security-testing.html">Plan an AI application assessment</a></li></ul><p><a href="/blog.html">All penetration testing guides</a> | <a href="/blogs.html">Research field notes</a></p></div></section>
+      <section class="section section-paper launch-section" aria-labelledby="service-reading-title"><div class="container launch-copy"><h2 id="service-reading-title">Related testing services and reading</h2><ul class="launch-links"><li><a href="/api-penetration-testing.html">API workflow security testing</a></li><li><a href="/ai-llm-penetration-testing.html">Approval boundaries in AI applications</a></li><li><a href="/insights/server-owned-validation-rules.html">Server-owned validation rules</a></li><li><a href="/insights/how-to-plan-llm-security-testing.html">Plan an AI application assessment</a></li></ul><p><a href="/blog.html">All penetration testing guides</a> | <a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></p></div></section>
   </main>
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
   <script src="/config.js?v=20260905c"></script>
   <script src="/app.js?v=20261006a"></script>
   <script src="/motion.js?v=20261001b"></script>

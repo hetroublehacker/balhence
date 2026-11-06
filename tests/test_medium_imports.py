@@ -121,6 +121,24 @@ class ResearchArchiveTests(unittest.TestCase):
                 self.assertNotIn("Medium remains the canonical publication", source)
                 self.assertNotIn("Read on Medium", source)
                 self.assertNotIn("Follow on Medium", source)
+                structured_data = [
+                    json.loads(payload)
+                    for payload in re.findall(
+                        r'<script type="application/ld\+json">\s*(.*?)\s*</script>',
+                        source,
+                        flags=re.DOTALL,
+                    )
+                ]
+                article = next(
+                    node
+                    for payload in structured_data
+                    for node in payload.get("@graph", [])
+                    if node.get("@type") == "BlogPosting"
+                )
+                self.assertEqual(
+                    article["isPartOf"]["@id"],
+                    "https://balhence.com/blogs.html#bug-bounty-archive",
+                )
                 for image in page.images:
                     self.assertRegex(image, r"\A/assets/research/[a-zA-Z0-9.-]+\Z")
                     relative = image.lstrip("/")
@@ -145,7 +163,7 @@ class ResearchArchiveTests(unittest.TestCase):
     def test_hub_and_profile_link_the_complete_archive(self):
         hub = (SOURCE_ROOT / "blogs.html").read_text(encoding="utf-8")
         about = (SOURCE_ROOT / "about.html").read_text(encoding="utf-8")
-        self.assertIn('id="hetroublehacker-writing"', hub)
+        self.assertIn('id="bug-bounty-archive"', hub)
         self.assertIn('"@id": "https://balhence.com/about.html#researcher"', about)
         self.assertIn('id="researcher"', about)
         for item in self.manifest:

@@ -2,13 +2,13 @@
 (function () {
   "use strict";
 
-  const controls = document.querySelector("[data-case-controls]");
-  const search = document.querySelector("[data-case-search]");
-  const count = document.querySelector("[data-case-count]");
-  const empty = document.querySelector("[data-case-empty]");
-  const reset = document.querySelector("[data-case-reset]");
-  const buttons = Array.from(document.querySelectorAll("[data-case-filter]"));
-  const cards = Array.from(document.querySelectorAll("[data-case-card]"));
+  const controls = document.querySelector("[data-archive-controls]");
+  const search = document.querySelector("[data-archive-search]");
+  const count = document.querySelector("[data-archive-count]");
+  const empty = document.querySelector("[data-archive-empty]");
+  const reset = document.querySelector("[data-archive-reset]");
+  const buttons = Array.from(document.querySelectorAll("[data-archive-filter]"));
+  const cards = Array.from(document.querySelectorAll("[data-archive-card]"));
   if (!controls || !search || !count || !empty || !reset || !cards.length) return;
 
   const index = cards.map(function (card) {
@@ -29,15 +29,15 @@
     });
 
     buttons.forEach(function (button) {
-      button.setAttribute("aria-pressed", String(button.dataset.caseFilter === topic));
+      button.setAttribute("aria-pressed", String(button.dataset.archiveFilter === topic));
     });
-    count.textContent = "Showing " + visible + " case " + (visible === 1 ? "study" : "studies");
+    count.textContent = "Showing " + visible + " " + (visible === 1 ? "article" : "articles");
     empty.hidden = visible !== 0;
   }
 
   buttons.forEach(function (button) {
     button.addEventListener("click", function () {
-      topic = button.dataset.caseFilter;
+      topic = button.dataset.archiveFilter;
       update();
     });
   });

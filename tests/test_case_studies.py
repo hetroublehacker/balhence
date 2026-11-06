@@ -17,6 +17,13 @@ STORIES = (
     "insights/server-owned-validation-rules.html",
     "insights/evidence-gated-workflows.html",
 )
+RESEARCH = tuple(
+    item["path"]
+    for item in json.loads(
+        (SOURCE_ROOT / "tests/fixtures/medium-import-manifest.json").read_text(encoding="utf-8")
+    )
+)
+ARCHIVE = STORIES + RESEARCH
 
 
 class EditorialDocument(HTMLParser):
@@ -43,7 +50,7 @@ class EditorialDocument(HTMLParser):
             self.code_blocks += 1
         if tag == "pre" and "http-code" in attrs.get("class", "").split():
             self._http = []
-        if tag == "article" and "data-case-card" in attrs:
+        if tag == "article" and "data-field-note-card" in attrs:
             self.cards += 1
 
     def handle_endtag(self, tag):
@@ -59,13 +66,15 @@ class EditorialDocument(HTMLParser):
 
 
 class CaseStudyPublicationTests(unittest.TestCase):
-    def test_collection_has_five_distinct_published_destinations(self):
+    def test_collection_has_five_field_notes_and_fifteen_distinct_archive_destinations(self):
         page = EditorialDocument((SOURCE_ROOT / "blogs.html").read_text(encoding="utf-8"))
         self.assertEqual(page.cards, 5)
-        for story in STORIES:
-            with self.subTest(story=story):
-                self.assertIn(story, PUBLIC_FILE_SET)
-                self.assertEqual(page.links.count("/" + story), 1)
+        self.assertEqual(len(ARCHIVE), 15)
+        self.assertEqual(len(set(ARCHIVE)), 15)
+        for article in ARCHIVE:
+            with self.subTest(article=article):
+                self.assertIn(article, PUBLIC_FILE_SET)
+                self.assertEqual(page.links.count("/" + article), 1)
         self.assertIn("/blog.html", page.links)
 
     def test_each_story_contains_five_local_regression_cases(self):
@@ -78,7 +87,7 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 self.assertRegex(source.lower(), r"synthetic")
                 self.assertIsNotNone(re.search(r"illustrat(?:ive|es)", source.lower()), "Code must be described as illustrative")
                 self.assertRegex(source.lower(), r"local")
-                self.assertIn("/blogs.html", page.links)
+                self.assertIn("/blogs.html#bug-bounty-archive", page.links)
 
     def test_editorial_disclosure_keeps_evidence_and_fix_status_separate(self):
         for story in STORIES:
