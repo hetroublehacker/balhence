@@ -1,0 +1,347 @@
+[
+  {
+    "path": "insights/medium-dependency-confusion.html",
+    "post_id": "272b46f66907",
+    "title": "How I approached Dependency Confusion!",
+    "canonical": "https://hetroublehacker.medium.com/how-i-approached-dependency-confusion-272b46f66907",
+    "published": "2022-01-31T17:10:25Z",
+    "modified": "2022-01-31T17:10:25Z",
+    "text_sha256": "8b1672b05081d56b7bbd832b8a8c98a42ac26b28dc9a92415042534004fa8785",
+    "images": 11,
+    "image_assets": [
+      {
+        "path": "assets/medium/272b46f66907-01.jpeg",
+        "sha256": "2060aa85a14f7dd99e0e03e4ff240c85c65da4c123a8dc5d61a83c401caadf61",
+        "bytes": 114954
+      },
+      {
+        "path": "assets/medium/272b46f66907-02.png",
+        "sha256": "4e8ecf637884f549a2eb7396991ba0ae678a707b451bc47c1426e3ae546196b2",
+        "bytes": 28541
+      },
+      {
+        "path": "assets/medium/272b46f66907-03.png",
+        "sha256": "08125da50646fa915f0ea9f67b5ab2227be3b8f4a33d534edddea7e633825fd3",
+        "bytes": 19653
+      },
+      {
+        "path": "assets/medium/272b46f66907-04.png",
+        "sha256": "e7420eeace1761edcbf0bea4c88764d7929f555730c8bb710ffe12bf066d7437",
+        "bytes": 39949
+      },
+      {
+        "path": "assets/medium/272b46f66907-05.png",
+        "sha256": "99f1591e86740f99f41a16024f057e18e156103bab3b4f692c7f1ce0bd8c6b27",
+        "bytes": 32421
+      },
+      {
+        "path": "assets/medium/272b46f66907-06.png",
+        "sha256": "6ceeae92db4dfd164b5ebf3929076e0463c4262abd86950f86c7da886bb431d7",
+        "bytes": 119293
+      },
+      {
+        "path": "assets/medium/272b46f66907-07.png",
+        "sha256": "9404767f1fd05223795c753d7c678488acdef0335962da9714693397b37317b8",
+        "bytes": 17209
+      },
+      {
+        "path": "assets/medium/272b46f66907-08.png",
+        "sha256": "b53697e56bce79ab43aa097b2dc999fae3d164d3b385a2243c5991806c85b7ae",
+        "bytes": 127290
+      },
+      {
+        "path": "assets/medium/272b46f66907-09.png",
+        "sha256": "833f11b5d066c1a1c87a0d62c15bcc50d2bd355986ffb04ff6374692f45951a7",
+        "bytes": 16806
+      },
+      {
+        "path": "assets/medium/272b46f66907-10.png",
+        "sha256": "d45b81ace33d0b940d9aae6c84cdca3bd3604e4c76c24898c094104d8b41f11c",
+        "bytes": 61462
+      },
+      {
+        "path": "assets/medium/272b46f66907-11.png",
+        "sha256": "29c8bbf006e498c224b6d1ca0eb0c61dfea650cc8614dd67dbcb4232e54b6784",
+        "bytes": 16682
+      }
+    ],
+    "words": 1096
+  },
+  {
+    "path": "insights/medium-cve-2020-28726.html",
+    "post_id": "1900aeef79f6",
+    "title": "Assigned my First CVE-2020–28726!!",
+    "canonical": "https://hetroublehacker.medium.com/assigned-my-first-cve-2020-28726-1900aeef79f6",
+    "published": "2020-12-09T12:39:26Z",
+    "modified": "2020-12-09T12:39:26Z",
+    "text_sha256": "75d4444f1de04dafd6c2c73da89706e4c917e58456aebc8d88a2c30518370bdb",
+    "images": 2,
+    "image_assets": [
+      {
+        "path": "assets/medium/1900aeef79f6-01.png",
+        "sha256": "14f78d007b0d715d96b496e593164992f375ac67de818d444b156c6ed89a97db",
+        "bytes": 58231
+      },
+      {
+        "path": "assets/medium/1900aeef79f6-02.png",
+        "sha256": "4e213640c6e8a84acd8c4d85668ef8938524fec4a026d55fe57b67ba907e8631",
+        "bytes": 210669
+      }
+    ],
+    "words": 390
+  },
+  {
+    "path": "insights/medium-first-bounty-target.html",
+    "post_id": "b963bffb36cd",
+    "title": "The First Bounty Target (Disclosing Multiple Reports)",
+    "canonical": "https://infosecwriteups.com/the-first-bounty-target-disclosing-multiple-reports-b963bffb36cd",
+    "published": "2020-11-21T22:22:40Z",
+    "modified": "2020-11-21T22:22:40Z",
+    "text_sha256": "c76cbf5268969fe869b706fe37edcc95e65226e0f96ee733b235f5133f10c257",
+    "images": 5,
+    "image_assets": [
+      {
+        "path": "assets/medium/b963bffb36cd-01.png",
+        "sha256": "9f0e1f1be7f2ccbe1dcdb6c33420b50d1eae9d64706079feae3abd513646e210",
+        "bytes": 317299
+      },
+      {
+        "path": "assets/medium/b963bffb36cd-02.png",
+        "sha256": "8fe6285d59813b2b45eed93a0ab1b4669f918691e4bb9f79f37294aac957ea56",
+        "bytes": 29060
+      },
+      {
+        "path": "assets/medium/b963bffb36cd-03.png",
+        "sha256": "9e00bfb404673947b31b9eb0e4f2165cf48bcbdb4f3e2e47fab2bad0ce00360d",
+        "bytes": 72805
+      },
+      {
+        "path": "assets/medium/b963bffb36cd-04.png",
+        "sha256": "7f17194af18a3e912476ee97d2a26561ed51535a89c39c352dd538af72480599",
+        "bytes": 72710
+      },
+      {
+        "path": "assets/medium/b963bffb36cd-05.png",
+        "sha256": "c64f8654545d6240109bb3d50f8b5d4e06fdc50791092e86ae38b9216783e2ce",
+        "bytes": 118498
+      }
+    ],
+    "words": 767
+  },
+  {
+    "path": "insights/medium-first-xss.html",
+    "post_id": "27f622bc47c0",
+    "title": "Tale of my First XSS",
+    "canonical": "https://infosecwriteups.com/tale-of-my-first-xss-27f622bc47c0",
+    "published": "2020-05-26T20:09:06Z",
+    "modified": "2020-05-26T20:09:06Z",
+    "text_sha256": "c920cd6996d3a31091f599799184f6530d13dddad94879e2e5ac5be7852b534f",
+    "images": 1,
+    "image_assets": [
+      {
+        "path": "assets/medium/27f622bc47c0-01.png",
+        "sha256": "0deb6bb55e986db4cebba42336617404ffa4728830118ad0e58963a14c838fc0",
+        "bytes": 154256
+      }
+    ],
+    "words": 405
+  },
+  {
+    "path": "insights/medium-http-request-smuggling.html",
+    "post_id": "7080e48df8b4",
+    "title": "HTTP Request Smuggling in Plain English.",
+    "canonical": "https://medium.com/cyberverse/http-request-smuggling-in-plain-english-7080e48df8b4",
+    "published": "2020-04-13T20:06:28Z",
+    "modified": "2020-04-13T20:06:28Z",
+    "text_sha256": "5dc4f846a943a58310e7eb2e35f62d325dbbadb7e3e2649b873ab086e02c78d7",
+    "images": 6,
+    "image_assets": [
+      {
+        "path": "assets/medium/7080e48df8b4-01.png",
+        "sha256": "01d4e3d0a0dc525927d10659676487ae878c8feed0537b20fbbbf301333e175a",
+        "bytes": 3119015
+      },
+      {
+        "path": "assets/medium/7080e48df8b4-02.png",
+        "sha256": "5313841977f78ce50a75888e9d635ef15bccdd5dfb25f993e406aeb9baf295d1",
+        "bytes": 37867
+      },
+      {
+        "path": "assets/medium/7080e48df8b4-03.png",
+        "sha256": "deac61405dd24e4a44e934faf73f544c5b172508b0db60ec73b4e7841d8915b4",
+        "bytes": 14176
+      },
+      {
+        "path": "assets/medium/7080e48df8b4-04.png",
+        "sha256": "cf3260f18a02c3c583c5e223982d912661f25cbb668f3b6176c3b85ff2267cf8",
+        "bytes": 136906
+      },
+      {
+        "path": "assets/medium/7080e48df8b4-05.png",
+        "sha256": "b897a263d664cb4469c897fd5eb1545e922afd5ff834c43a866f47b1febe9692",
+        "bytes": 39569
+      },
+      {
+        "path": "assets/medium/7080e48df8b4-06.png",
+        "sha256": "744a7a6ad5800f57ab6c0c65d1a89aee9c44eba737fc50a21f621915c366b915",
+        "bytes": 42599
+      }
+    ],
+    "words": 1036
+  },
+  {
+    "path": "insights/medium-inspect-element-bounty.html",
+    "post_id": "58d3a9946225",
+    "title": "How Inspect Element Got me a Bounty",
+    "canonical": "https://infosecwriteups.com/how-inspect-element-got-me-a-bounty-58d3a9946225",
+    "published": "2020-02-06T19:47:28Z",
+    "modified": "2020-04-20T20:44:44Z",
+    "text_sha256": "83c62b83d7d6342de66d4eb6496b14f8c2e56fb113f282bb771174020ad2bd56",
+    "images": 4,
+    "image_assets": [
+      {
+        "path": "assets/medium/58d3a9946225-01.png",
+        "sha256": "2b85136a830f98735437aab8b08638efbcf2ad9a24f9b087a0ce3264f3bf646e",
+        "bytes": 318925
+      },
+      {
+        "path": "assets/medium/58d3a9946225-02.png",
+        "sha256": "19aeaf80050426b9f7498cda42b467e5550c21f3cc6ee7e901d3ad7ca6e35fdb",
+        "bytes": 35728
+      },
+      {
+        "path": "assets/medium/58d3a9946225-03.png",
+        "sha256": "532d2deffc40af4d3bf0000f54545ae92c07bc8aa4f2e7043d777acda0406295",
+        "bytes": 239827
+      },
+      {
+        "path": "assets/medium/58d3a9946225-04.png",
+        "sha256": "6af8c50eb564ab5500b6ecaeca827b2dfa41e4a4323fffb0bc8ffca970d85947",
+        "bytes": 5351
+      }
+    ],
+    "words": 266
+  },
+  {
+    "path": "insights/medium-crlf-injection-playbook.html",
+    "post_id": "472c67f1cb46",
+    "title": "CRLF Injection Playbook",
+    "canonical": "https://medium.com/cyberverse/crlf-injection-playbook-472c67f1cb46",
+    "published": "2020-01-12T10:58:20Z",
+    "modified": "2020-01-12T11:07:45Z",
+    "text_sha256": "42719cbd604846fe970f9f0dee162f3b216933c2540000a5d827c255953fa69a",
+    "images": 5,
+    "image_assets": [
+      {
+        "path": "assets/medium/472c67f1cb46-01.png",
+        "sha256": "ec7e5451b6f06e1c0fb0a9588dca6a331c30c9489c44b85f14eb2e0b3a839716",
+        "bytes": 231519
+      },
+      {
+        "path": "assets/medium/472c67f1cb46-02.png",
+        "sha256": "bd78142fced96f905f34bcf9fe3cca8c8b74d19c0f9b27eb91c2b8ec936f5978",
+        "bytes": 19025
+      },
+      {
+        "path": "assets/medium/472c67f1cb46-03.png",
+        "sha256": "7af016c753e5b2acd5ee013d41cbde522271e6e92d1a682a0785dae8f4430c92",
+        "bytes": 24731
+      },
+      {
+        "path": "assets/medium/472c67f1cb46-04.png",
+        "sha256": "abc669c52f24542837970e1b46eef452ea3bb71d9a456d003aa684634770396b",
+        "bytes": 10368
+      },
+      {
+        "path": "assets/medium/472c67f1cb46-05.png",
+        "sha256": "165e902bc4fb0aef679cd0485f6a53f358034583fb4a7c6f0e1e870d8faed1d8",
+        "bytes": 21022
+      }
+    ],
+    "words": 759
+  },
+  {
+    "path": "insights/medium-bug-bounty-with-bash.html",
+    "post_id": "438596ff72f5",
+    "title": "Bug Bounty with Bash",
+    "canonical": "https://medium.com/cyberverse/bug-bounty-with-bash-438596ff72f5",
+    "published": "2020-01-05T22:16:21Z",
+    "modified": "2020-01-05T22:16:21Z",
+    "text_sha256": "8446fd9dd30f97469ff29a5400e423e4d29ece163631ad13b5223d6352c8c79d",
+    "images": 2,
+    "image_assets": [
+      {
+        "path": "assets/medium/438596ff72f5-01.jpeg",
+        "sha256": "5092390dd2d76e98171d343792f9e2a68b39f76756cef9c3ad43437743d6fe26",
+        "bytes": 53792
+      },
+      {
+        "path": "assets/medium/438596ff72f5-02.png",
+        "sha256": "3bcf15a64fadabbc3bf990f4799837a3a938ad66cbbd4ffd848fb114eb46ee24",
+        "bytes": 233198
+      }
+    ],
+    "words": 715
+  },
+  {
+    "path": "insights/medium-find-secret-api-keys.html",
+    "post_id": "22cdcc829976",
+    "title": "Find Secret API-Keys",
+    "canonical": "https://medium.com/cyberverse/find-secret-api-keys-22cdcc829976",
+    "published": "2019-12-22T11:36:26Z",
+    "modified": "2019-12-22T15:48:34Z",
+    "text_sha256": "d247a26a9d6260710f1bd2ebd38f590f244da1168ebcfa663811f90eb5a7c93b",
+    "images": 1,
+    "image_assets": [
+      {
+        "path": "assets/medium/22cdcc829976-01.jpeg",
+        "sha256": "4726ebb6be3332ae087216e114bb1426b00d7a4f39c8bc1a3efd56af076334ca",
+        "bytes": 208392
+      }
+    ],
+    "words": 614
+  },
+  {
+    "path": "insights/medium-burp-idor-automation.html",
+    "post_id": "2b3dbe9fa0b8",
+    "title": "Automating BURP to find IDORs",
+    "canonical": "https://medium.com/cyberverse/automating-burp-to-find-idors-2b3dbe9fa0b8",
+    "published": "2019-12-12T07:53:36Z",
+    "modified": "2019-12-12T07:53:36Z",
+    "text_sha256": "601959ce056f828ea5ae18b9ce792a82c833470918cf83e3eab915d818dad6cf",
+    "images": 6,
+    "image_assets": [
+      {
+        "path": "assets/medium/2b3dbe9fa0b8-01.jpeg",
+        "sha256": "d29374d73521f8c6bf363198d9a0a9cdc19ee278df6a537923041477be94e54c",
+        "bytes": 250768
+      },
+      {
+        "path": "assets/medium/2b3dbe9fa0b8-02.png",
+        "sha256": "7e057a825a84f7e9993018f9e956b09695283b574734d1708d7479c975f649ec",
+        "bytes": 79290
+      },
+      {
+        "path": "assets/medium/2b3dbe9fa0b8-03.png",
+        "sha256": "d7b75bb264beeb354d5516825593a55649a8e2bb2d51d433413fe0e83ed6a3cc",
+        "bytes": 67677
+      },
+      {
+        "path": "assets/medium/2b3dbe9fa0b8-04.png",
+        "sha256": "ac21ed565dfa2fbb4d6c9a7231d2fd5e8e4d6e91303efb3f8eca203fe8dc1c52",
+        "bytes": 67209
+      },
+      {
+        "path": "assets/medium/2b3dbe9fa0b8-05.png",
+        "sha256": "0202017251f9287e42cc4db110a638d40240651033ddbbb47c75104671be90b3",
+        "bytes": 52451
+      },
+      {
+        "path": "assets/medium/2b3dbe9fa0b8-06.png",
+        "sha256": "e9948a9d498f9ea0e088b9083a6920506eed44252c90851306f575b28566786b",
+        "bytes": 14129
+      }
+    ],
+    "words": 646
+  }
+]

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" class="has-article-flow">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; frame-src https://cdn.embedly.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The First Bounty Target (Disclosing Multiple Reports) | Aditya Soni</title>
+  <meta name="description" content="Preserved reading copy of The First Bounty Target (Disclosing Multiple Reports) by Aditya Soni, originally published on InfoSec Write-ups on 21 November 2020.">
+  <meta name="author" content="Aditya Soni">
+  <meta name="robots" content="noindex,follow,max-image-preview:large">
+  <link rel="canonical" href="https://infosecwriteups.com/the-first-bounty-target-disclosing-multiple-reports-b963bffb36cd">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="The First Bounty Target (Disclosing Multiple Reports)">
+  <meta property="og:description" content="Preserved reading copy of The First Bounty Target (Disclosing Multiple Reports) by Aditya Soni, originally published on InfoSec Write-ups on 21 November 2020.">
+  <meta property="og:url" content="https://balhence.com/insights/medium-first-bounty-target.html">
+  <meta property="og:image" content="https://balhence.com/assets/medium/b963bffb36cd-01.png">
+  <meta property="article:published_time" content="2020-11-21T22:22:40Z">
+  <meta property="article:modified_time" content="2020-11-21T22:22:40Z">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The First Bounty Target (Disclosing Multiple Reports)">
+  <meta name="twitter:description" content="Preserved reading copy of The First Bounty Target (Disclosing Multiple Reports) by Aditya Soni, originally published on InfoSec Write-ups on 21 November 2020.">
+  <meta name="twitter:image" content="https://balhence.com/assets/medium/b963bffb36cd-01.png">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20261106a">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
+  <link rel="stylesheet" href="/flow.css?v=20261001b">
+  <link rel="stylesheet" href="/type-field.css?v=20261001f">
+  <script async src="/type-field.js?v=20261001f"></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://balhence.com/insights/medium-first-bounty-target.html#webpage",
+      "url": "https://balhence.com/insights/medium-first-bounty-target.html",
+      "name": "The First Bounty Target (Disclosing Multiple Reports)",
+      "description": "Preserved reading copy of The First Bounty Target (Disclosing Multiple Reports) by Aditya Soni, originally published on InfoSec Write-ups on 21 November 2020.",
+      "datePublished": "2020-11-21T22:22:40Z",
+      "dateModified": "2020-11-21T22:22:40Z",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://balhence.com/about.html#researcher"
+      },
+      "isBasedOn": {
+        "@id": "https://infosecwriteups.com/the-first-bounty-target-disclosing-multiple-reports-b963bffb36cd#article",
+        "url": "https://infosecwriteups.com/the-first-bounty-target-disclosing-multiple-reports-b963bffb36cd"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://balhence.com/about.html#researcher",
+      "name": "Aditya Soni",
+      "alternateName": "HeTroubleHacker",
+      "url": "https://balhence.com/about.html#researcher",
+      "sameAs": [
+        "https://medium.com/@hetroublehacker"
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body data-page="insights" class="medium-archive-post">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=research-archive" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+
+  <main id="main-content">
+    <article>
+      <header class="article-hero medium-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#hetroublehacker-writing">Research archive</a><span aria-hidden="true">/</span><span aria-current="page">The First Bounty Target (Disclosing Multiple Reports)</span></nav><span class="eyebrow">Original research archive</span><h1>The First Bounty Target (Disclosing Multiple Reports)</h1><p class="article-deck">A preserved reading copy of Aditya Soni's original article from InfoSec Write-ups.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><time datetime="2020-11-21T22:22:40Z">21 November 2020</time><span>4 min read</span></div></div></header>
+
+      <div class="article-body"><div class="container article-layout">
+        <nav class="article-toc" aria-label="Article details"><strong>Article record</strong><a href="#original-article">Original article text</a><a href="https://infosecwriteups.com/the-first-bounty-target-disclosing-multiple-reports-b963bffb36cd">Read on Medium</a><a href="/blogs.html#hetroublehacker-writing">All archived writing</a><a href="/about.html#researcher">About Aditya</a></nav>
+        <div class="article-content medium-article-content">
+          <aside class="medium-origin-note" aria-label="Publication note"><strong>Publication note</strong><p>This reading copy preserves the original wording and publication date. Medium remains the canonical publication while the archive is reviewed for a future migration.</p><a class="text-link" href="https://infosecwriteups.com/the-first-bounty-target-disclosing-multiple-reports-b963bffb36cd">Open the original on Medium</a></aside>
+          <div class="medium-imported-body" id="original-article" data-medium-post-id="b963bffb36cd" data-medium-text-sha256="c76cbf5268969fe869b706fe37edcc95e65226e0f96ee733b235f5133f10c257">
+<p>Hello,</p><p>First of all, sorry for not posting for such a long period of time. I was really busy in this lockdown pushing my HackerOne Reputation &amp; other stuff. <br/>I am writing this blog to talk about my methodology and how without using any tool I found multiple vulnerabilities on one of my First Targets.</p><figure><img alt="Multiple Bug Bounty Reports - The First Bounty Target title card." decoding="async" height="712" loading="lazy" src="/assets/medium/b963bffb36cd-01.png" width="1283"/></figure><p>Anyways, let’s come to our topic, I won’t disclose the company name as it was a private program but will refer to it as <strong>shopping.com</strong> as it was a shopping website.</p><iframe frameborder="0" height="242" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" scrolling="no" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fgiphy.com%2Fembed%2FcoC1T8LaWWjTu6DGZO%2Ftwitter%2Fiframe&amp;display_name=Giphy&amp;url=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2FcoC1T8LaWWjTu6DGZO%2Fgiphy.gif&amp;image=https%3A%2F%2Fi.giphy.com%2Fmedia%2FcoC1T8LaWWjTu6DGZO%2Fgiphy.gif&amp;key=a19fcc184b9711e1b4764040d3dc5c07&amp;type=text%2Fhtml&amp;schema=giphy" title="Giphy media embedded in the original article" width="435">&lt;a href="https://medium.com/media/12f3e1258de52d82d464516a18d2859d/href"&gt;https://medium.com/media/12f3e1258de52d82d464516a18d2859d/href&lt;/a&gt;</iframe><h3>Case Study Index</h3><p>This was my first ever Target from which I received bounty, as the first bounty is always a special one. I continued hacking on the Target to report some more reports and get some more bounties</p><figure><img alt="Table summarizing seven bug reports, severities, bounty amounts, and closure dates." decoding="async" height="241" loading="lazy" src="/assets/medium/b963bffb36cd-02.png" width="1025"/><figcaption>Total 50,000 in Bounty in INR :P</figcaption></figure><h3>Case Study: 1</h3><p>(Registering number without Authentication)</p><p>Here is the blog which I wrote earlier this year about this:</p><p><a href="https://medium.com/bugbountywriteup/how-inspect-element-got-me-a-bounty-58d3a9946225" rel="noopener noreferrer">How Inspect Element Got me a Bounty</a></p><h3>Case Study: 2</h3><p>(Improper Session management after Password Reset)</p><p>In this case scenario, I created an account and Logged it in two browsers. I changed the password of the account in one browser and tried to make edits on the Second browser which went successfully, hence the Improper Session Management flaw, which is obviously a minor severity.</p><h3>Case Study: 3</h3><p>(Open Redirect and CSRF to Account Takeover)</p><p>Here the Case was a bit different, I Observed when I delete something from my Cart a POST request is sent in which there was a <strong>redirect </strong>parameter in the Request body, I quickly changed the Parameter value to my server and it redirected to my server and the Interesting thing was It came with the User Cookies.</p><p>I Converted it into a CSRF POC via Burp suite and made a request with a different account and I was successful to redirect the victim to the attacker's website and stealing their cookies</p><figure><img alt="Redacted HTTP request to delete a cart product, highlighting the redirect parameter in the body." decoding="async" height="420" loading="lazy" src="/assets/medium/b963bffb36cd-03.png" width="1524"/><figcaption>Post Request (case study: 3)</figcaption></figure><h3>Case Study: 4</h3><p>(IDOR in Tracking Order)</p><p>So on this s<strong>hopping.com</strong> website, there was a “Track my Order” Option which is after a successful order is placed, a person can track the order with the order id. So with this feature, an attacker can take out the details of any victim if he knows the phone number of the victim and he doesn’t need to know the order number because with the help of the Burp Suite Intruder (for a better understanding referrer to Screenshot below) he can brute force and find a correct order number and get the details of his order which leaks the Address and other personal information of the Victim</p><figure><img alt="Redacted HTTP request to a track-order endpoint, highlighting mobile number and order ID parameters." decoding="async" height="513" loading="lazy" src="/assets/medium/b963bffb36cd-04.png" width="1590"/><figcaption>Case Study: 4</figcaption></figure><p>Here I bruteforced the id_order parameter with my other account’s mobile number and got all the orders placed by the second account.</p><h3>Case Study: 5</h3><p>(IDOR in Reviewing my Order History)</p><p>On a Special Note: These features were only available to me After made a Purchase on the shopping.com</p><p>Here the Case was pretty simple, I went into my “My Orders” page and when I click on my order it refreshes the page and shows the ordered product, I intercepted the Request and again clicked on the ordered product &amp; to my surprise, there was again an “<strong>intOrderId” </strong>parameter in the Request body, I quickly sent it into Burp intruder and Guess what I have multiple order details leaking PII of their Customer</p><figure><img alt="Redacted HTTP request to an order-history endpoint, highlighting the intOrderId parameter." decoding="async" height="515" loading="lazy" src="/assets/medium/b963bffb36cd-05.png" width="1736"/><figcaption>Case Study: 5</figcaption></figure><h3>Case Study: 6</h3><p>(Password reset link not expiring)</p><p>Well, it was also a minor bug and it was quite simple too. For reference, I’m posting a Hackerone report which will give you an Idea (Also it may vary from program to program)</p><p><a href="https://hackerone.com/reports/898841" rel="noopener noreferrer">Shopify disclosed on HackerOne: Password reset link not expired at...</a></p><h3><strong>Case Study: 7</strong></h3><p>(Leaking customer details after a successful order is placed)</p><p>Again this Issue was also found after making a successful order, Here when I placed an order the URL was something like this <strong>“</strong><a href="https://www.allensolly.com/orderconfirmation?securekey=" rel="noopener noreferrer"><strong>https://www.shopping.com/orderconfirm?secretkey=</strong></a><strong>&lt;some-key&gt;&amp;orderid=&lt;order-id&gt;”<br/></strong>I changed the order in decreasing order and PII starts disclosing which included name, address, phone number, and Mode of payment done.</p><iframe frameborder="0" height="244" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" scrolling="no" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fgiphy.com%2Fembed%2F26xBrTSVVieNFK9qg%2Ftwitter%2Fiframe&amp;display_name=Giphy&amp;url=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2F26xBrTSVVieNFK9qg%2Fgiphy.gif&amp;image=https%3A%2F%2Fi.giphy.com%2Fmedia%2F26xBrTSVVieNFK9qg%2Fgiphy.gif&amp;key=a19fcc184b9711e1b4764040d3dc5c07&amp;type=text%2Fhtml&amp;schema=giphy" title="Giphy media embedded in the original article" width="435">&lt;a href="https://medium.com/media/cd46564fc8bf6d69ebf729c5f482a269/href"&gt;https://medium.com/media/cd46564fc8bf6d69ebf729c5f482a269/href&lt;/a&gt;</iframe><p><strong>Takeaways –</strong></p><p>I would say my takeaway from this experience was to stay at a target and understand it, make yourself feel comfortable, and don’t Rush. If you are eligible to make a purchase DO it!! It will definitely bring something with it.</p><p>That’s all for this blog. Hope you liked it.</p><p>Connect with me on <a href="https://www.linkedin.com/in/adtyasoni" rel="noopener noreferrer">LinkedIn</a>, <a href="https://twitter.com/hetroublemakr" rel="noopener noreferrer">Twitter</a></p><p>If you enjoyed this blog, please click the 👏 button and share it to help others find it.</p>
+          </div>
+          <aside class="medium-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the verified profile</a><a class="btn btn-secondary" href="https://medium.com/@hetroublehacker">Follow on Medium</a></div></aside>
+          <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>From research to a scoped assessment.</h2><p>Explore Current penetration testing guides or browse the current Balhence field notes for evidence-focused testing stories.</p><div class="button-row"><a class="btn btn-primary" href="/blog.html">Current penetration testing guides</a><a class="btn btn-quiet" href="/blogs.html">Research field notes</a></div></div>
+          <p class="medium-topic-line"><strong>Original topics:</strong> pentesting / bug-bounty / infosec / hacking / hetroublemaker</p>
+        </div>
+      </div></div>
+    </article>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/blogs.html#hetroublehacker-writing">Aditya Soni archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+</body>
+</html>

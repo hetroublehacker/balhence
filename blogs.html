@@ -6,14 +6,14 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Penetration Testing Blog &amp; Bug Bounty Stories | Balhence</title>
-  <meta name="description" content="Pentest and bug bounty field notes: what happened, what the evidence proved, and what to check after a fix. Redacted stories with synthetic HTTP examples.">
+  <meta name="description" content="Pentest and bug bounty field notes plus Aditya Soni's original HeTroubleHacker archive on XSS, IDOR, request smuggling, CRLF, CVEs and security research.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://balhence.com/blogs.html">
   <meta name="theme-color" content="#0c0c12">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Balhence">
   <meta property="og:title" content="Penetration Testing Blog &amp; Bug Bounty Stories | Balhence">
-  <meta property="og:description" content="Five security findings, told through the details that mattered. Redacted field notes with synthetic HTTP and practical repair checks.">
+  <meta property="og:description" content="Five evidence-focused field notes and ten original security research articles by Aditya Soni, known online as HeTroubleHacker.">
   <meta property="og:url" content="https://balhence.com/blogs.html">
   <meta property="og:image" content="https://balhence.com/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -22,13 +22,13 @@
   <meta property="og:image:alt" content="Balhence practical security research and engineering lessons">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Penetration Testing Blog &amp; Bug Bounty Stories | Balhence">
-  <meta name="twitter:description" content="Five security findings, told through the details that mattered. Redacted field notes with synthetic HTTP and practical repair checks.">
+  <meta name="twitter:description" content="Five evidence-focused field notes and ten original security research articles by Aditya Soni, known online as HeTroubleHacker.">
   <meta name="twitter:image" content="https://balhence.com/og-image.png">
   <meta name="twitter:image:alt" content="Balhence practical security research and engineering lessons">
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261005a">
+  <link rel="stylesheet" href="/styles.css?v=20261106a">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/case-studies.css?v=20260923a">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
@@ -41,18 +41,59 @@
     "@id": "https://balhence.com/blogs.html#collection",
     "name": "Balhence penetration testing blog and bug bounty stories",
     "url": "https://balhence.com/blogs.html",
-    "description": "Five anonymized bug bounty and pentest stories generalized from private research notes, with synthetic HTTP examples, engineering lessons, and 25 regression checks. Observations have not been independently revalidated; proposed fixes are not claimed to be deployed.",
+    "description": "Five anonymized bug bounty and pentest stories with synthetic HTTP examples, plus ten original security research articles by Aditya Soni in the HeTroubleHacker archive.",
     "datePublished": "2026-09-05",
-    "dateModified": "2026-09-07",
+    "dateModified": "2026-11-06",
     "inLanguage": "en",
     "isPartOf": { "@id": "https://balhence.com/#website" },
     "about": { "@id": "https://balhence.com/#organization" },
+    "mentions": { "@id": "https://balhence.com/about.html#researcher" },
     "hasPart": [
       { "@type": "Article", "headline": "The draft you could change but could not read", "url": "https://balhence.com/insights/draft-write-authorization.html", "articleSection": "Authorization", "datePublished": "2026-09-05" },
       { "@type": "Article", "headline": "When two browsers inherited one cart", "url": "https://balhence.com/insights/session-authority-boundary.html", "articleSection": "Sessions", "datePublished": "2026-09-05" },
       { "@type": "Article", "headline": "When the cache forgot who a response belonged to", "url": "https://balhence.com/insights/private-response-cache-boundary.html", "articleSection": "Caching", "datePublished": "2026-09-05" },
       { "@type": "Article", "headline": "When a validation helper became a data query", "url": "https://balhence.com/insights/server-owned-validation-rules.html", "articleSection": "Validation", "datePublished": "2026-09-05" },
       { "@type": "Article", "headline": "Submitted is not the same as verified", "url": "https://balhence.com/insights/evidence-gated-workflows.html", "articleSection": "Workflows", "datePublished": "2026-09-05" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://balhence.com/about.html#researcher",
+    "name": "Aditya Soni",
+    "alternateName": "HeTroubleHacker",
+    "url": "https://balhence.com/about.html#researcher",
+    "jobTitle": "Product Security Professional and Independent Security Researcher",
+    "sameAs": [
+      "https://medium.com/@hetroublehacker",
+      "https://www.linkedin.com/in/adtyasoni/",
+      "https://x.com/hetroublehacker",
+      "https://hackerone.com/hetroublehacker",
+      "https://app.intigriti.com/profile/hetroublemak3r"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": "https://balhence.com/blogs.html#hetroublehacker-archive",
+    "name": "Original security writing by Aditya Soni / HeTroubleHacker",
+    "numberOfItems": 10,
+    "itemListOrder": "https://schema.org/ItemListOrderDescending",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "item": { "@type": "BlogPosting", "headline": "How I approached Dependency Confusion!", "url": "https://hetroublehacker.medium.com/how-i-approached-dependency-confusion-272b46f66907", "datePublished": "2022-01-31T17:10:25Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 2, "item": { "@type": "BlogPosting", "headline": "Assigned my First CVE-2020-28726!!", "url": "https://hetroublehacker.medium.com/assigned-my-first-cve-2020-28726-1900aeef79f6", "datePublished": "2020-12-09T12:39:26Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 3, "item": { "@type": "BlogPosting", "headline": "The First Bounty Target (Disclosing Multiple Reports)", "url": "https://infosecwriteups.com/the-first-bounty-target-disclosing-multiple-reports-b963bffb36cd", "datePublished": "2020-11-21T22:22:40Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 4, "item": { "@type": "BlogPosting", "headline": "Tale of my First XSS", "url": "https://infosecwriteups.com/tale-of-my-first-xss-27f622bc47c0", "datePublished": "2020-05-26T20:09:06Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 5, "item": { "@type": "BlogPosting", "headline": "HTTP Request Smuggling in Plain English.", "url": "https://medium.com/cyberverse/http-request-smuggling-in-plain-english-7080e48df8b4", "datePublished": "2020-04-13T20:06:28Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 6, "item": { "@type": "BlogPosting", "headline": "How Inspect Element Got me a Bounty", "url": "https://infosecwriteups.com/how-inspect-element-got-me-a-bounty-58d3a9946225", "datePublished": "2020-02-06T19:47:28Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 7, "item": { "@type": "BlogPosting", "headline": "CRLF Injection Playbook", "url": "https://medium.com/cyberverse/crlf-injection-playbook-472c67f1cb46", "datePublished": "2020-01-12T10:58:20Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 8, "item": { "@type": "BlogPosting", "headline": "Bug Bounty with Bash", "url": "https://medium.com/cyberverse/bug-bounty-with-bash-438596ff72f5", "datePublished": "2020-01-05T22:16:21Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 9, "item": { "@type": "BlogPosting", "headline": "Find Secret API-Keys", "url": "https://medium.com/cyberverse/find-secret-api-keys-22cdcc829976", "datePublished": "2019-12-22T11:36:26Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 10, "item": { "@type": "BlogPosting", "headline": "Automating BURP to find IDORs", "url": "https://medium.com/cyberverse/automating-burp-to-find-idors-2b3dbe9fa0b8", "datePublished": "2019-12-12T07:53:36Z", "author": { "@id": "https://balhence.com/about.html#researcher" } } }
     ]
   }
   </script>
@@ -64,11 +105,11 @@
   <main id="main-content">
     <section class="page-hero case-hub-hero" aria-labelledby="case-hub-title">
       <div class="container" data-reveal>
-        <nav class="case-library-nav" aria-label="Reading collections"><a href="/blogs.html" aria-current="page">Field notes</a><a href="/blog.html">Practical guides <span aria-hidden="true">/</span></a></nav>
+        <nav class="case-library-nav" aria-label="Reading collections"><a href="/blogs.html" aria-current="page">Field notes</a><a href="/blog.html">Practical guides</a><a href="#hetroublehacker-writing">HeTroubleHacker archive <span aria-hidden="true">/</span></a></nav>
         <span class="eyebrow">Pentesting / bug bounty</span>
         <h1 id="case-hub-title">Field notes.<br><span>The details matter.</span></h1>
-        <p>What happened, what the evidence actually proved, and what a repair needs to get right. Five findings, with the identifying details taken out.</p>
-        <div class="case-hub-summary"><span><strong>01 - 05</strong> published notes</span><span><strong>HTTP</strong> synthetic examples</span><span>Updated <time datetime="2026-09-07">07 Sep 2026</time></span></div>
+        <p>What happened, what the evidence actually proved, and what a repair needs to get right. Start with five anonymized field notes, then explore ten original articles from Aditya Soni's public research archive.</p>
+        <div class="case-hub-summary"><span><strong>01 - 05</strong> field notes</span><span><strong>10</strong> original articles</span><span>Updated <time datetime="2026-11-06">06 Nov 2026</time></span></div>
       </div>
     </section>
 
@@ -124,10 +165,29 @@
       </div>
     </section>
 
+    <section class="section section-paper" id="hetroublehacker-writing" aria-labelledby="hetroublehacker-writing-title">
+      <div class="container">
+        <div class="section-heading" data-reveal><span class="eyebrow">Original writing / 2019 - 2022</span><h2 id="hetroublehacker-writing-title">The HeTroubleHacker archive</h2><p>Ten articles by <a href="/about.html#researcher">Aditya Soni</a> on bug bounty research, web security, API keys, Burp Suite automation, and vulnerability discovery. Each reading copy preserves the original wording and date. Medium remains the canonical publication during this archive stage.</p><div class="button-row"><a class="btn btn-dark" href="/about.html#researcher">View Aditya's profile</a><a class="btn btn-secondary" href="https://medium.com/@hetroublehacker">Open the Medium profile</a></div></div>
+        <div class="medium-archive-grid">
+          <a class="medium-archive-card" href="/insights/medium-dependency-confusion.html" data-reveal><div class="insight-meta"><span>Dependency confusion</span><span>2022</span></div><h3>How I approached Dependency Confusion!</h3><p>The approach used to identify package names and test a dependency confusion hypothesis.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-cve-2020-28726.html" data-reveal><div class="insight-meta"><span>CVE research</span><span>2020</span></div><h3>Assigned my First CVE-2020-28726!!</h3><p>Aditya's account of the research and disclosure behind CVE-2020-28726.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-first-bounty-target.html" data-reveal><div class="insight-meta"><span>Bug bounty</span><span>2020</span></div><h3>The First Bounty Target (Disclosing Multiple Reports)</h3><p>Seven early bug bounty cases collected into one public research note.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-first-xss.html" data-reveal><div class="insight-meta"><span>Cross-site scripting</span><span>2020</span></div><h3>Tale of my First XSS</h3><p>A first XSS finding, the path to validation, and the lesson taken from it.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-http-request-smuggling.html" data-reveal><div class="insight-meta"><span>HTTP security</span><span>2020</span></div><h3>HTTP Request Smuggling in Plain English.</h3><p>A plain-English exploration of CL.TE, TE.CL, and the protocol details behind them.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-inspect-element-bounty.html" data-reveal><div class="insight-meta"><span>Server-side validation</span><span>2020</span></div><h3>How Inspect Element Got me a Bounty</h3><p>A client-side control bypass that changed a server-side account setting.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-crlf-injection-playbook.html" data-reveal><div class="insight-meta"><span>CRLF injection</span><span>2020</span></div><h3>CRLF Injection Playbook</h3><p>A research playbook assembled from public reports, payloads, and observed behavior.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-bug-bounty-with-bash.html" data-reveal><div class="insight-meta"><span>Automation</span><span>2020</span></div><h3>Bug Bounty with Bash</h3><p>Bash commands and small workflows for reconnaissance and repeatable research.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-find-secret-api-keys.html" data-reveal><div class="insight-meta"><span>API key discovery</span><span>2019</span></div><h3>Find Secret API-Keys</h3><p>Patterns and tools used to identify exposed API keys in public application assets.</p><span class="text-link">Read the original article</span></a>
+          <a class="medium-archive-card" href="/insights/medium-burp-idor-automation.html" data-reveal><div class="insight-meta"><span>Authorization testing</span><span>2019</span></div><h3>Automating BURP to find IDORs</h3><p>A Burp Suite workflow using Autorize and AutoRepeater to compare access decisions.</p><span class="text-link">Read the original article</span></a>
+        </div>
+        <aside class="article-callout" data-reveal><p><strong>Historical context:</strong> These articles reflect tools, links, and techniques as they existed on their publication dates. They are preserved as research history, not presented as current product documentation. Test only systems you are authorized to assess.</p></aside>
+      </div>
+    </section>
+
     <section class="section section-tint"><div class="container"><div class="cta-panel" data-reveal><div><span class="eyebrow">Work with Balhence</span><h2>Let's take a closer<br>look at your product.</h2><p>We test <a href="/web-application-penetration-testing.html">web applications</a>, <a href="/api-penetration-testing.html">APIs</a>, and <a href="/saas-penetration-testing.html">SaaS products</a>, including roles, shared data, and the workflows your customers use. Tell us what you're building and when you need it tested.</p></div><div class="cta-actions"><a class="btn btn-primary btn-flow" data-track="case_studies_contact" href="/contact.html?service=web-api&amp;source=field-notes">Request a pentest <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a><a class="btn btn-quiet" href="/report-viewer.html" data-track="case_studies_sample_report">See a sample report</a></div></div></div></section>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html">Research field notes</a></li><li><a href="/blogs.html#hetroublehacker-writing">Aditya Soni archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
   <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/case-studies.js?v=20260905c"></script>
   <script src="/flow.js?v=20261001b"></script>
 </body>
