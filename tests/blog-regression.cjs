@@ -9,6 +9,9 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 
 const FIELD_NOTES = [
+  ["/insights/password-reset-token-replay.html", "The Password Reset Link That Worked Twice"],
+  ["/insights/async-export-authorization.html", "The Export Job That Crossed a Tenant Boundary"],
+  ["/insights/server-side-url-import.html", "The File Importer That Stored Whatever the URL Returned"],
   ["/insights/draft-write-authorization.html", "The draft you could change but could not read"],
   ["/insights/session-authority-boundary.html", "When two browsers inherited one cart"],
   ["/insights/private-response-cache-boundary.html", "When the cache forgot who a response belonged to"],
@@ -17,7 +20,7 @@ const FIELD_NOTES = [
 ];
 const RESEARCH_ARTICLES = [
   ["/research/dependency-confusion.html", "How I approached Dependency Confusion!"],
-  ["/research/cve-2020-28726.html", "Assigned my First CVE-2020–28726!!"],
+  ["/research/cve-2020-28726.html", "Assigned my First CVE-2020-28726!!"],
   ["/research/first-bounty-target.html", "The First Bounty Target (Disclosing Multiple Reports)"],
   ["/research/tale-of-my-first-xss.html", "Tale of my First XSS"],
   ["/research/http-request-smuggling-plain-english.html", "HTTP Request Smuggling in Plain English."],
@@ -31,11 +34,14 @@ const ARTICLES = [...FIELD_NOTES, ...RESEARCH_ARTICLES];
 const RESEARCH_ROUTES = new Set(RESEARCH_ARTICLES.map(([route]) => route));
 const TOPICS = {
   authorization: [
+    "/insights/password-reset-token-replay.html",
+    "/insights/async-export-authorization.html",
     "/insights/draft-write-authorization.html",
     "/research/first-bounty-target.html",
     "/research/automating-burp-idor.html",
   ],
   "web-attacks": [
+    "/insights/server-side-url-import.html",
     "/research/tale-of-my-first-xss.html",
     "/research/http-request-smuggling-plain-english.html",
     "/research/crlf-injection-playbook.html",
@@ -113,19 +119,19 @@ async function main() {
     observe(page);
     await page.goto(`${origin}/blogs.html`);
     await page.locator("[data-archive-controls]").waitFor({ state: "visible" });
-    assert.equal(await page.locator("[data-archive-card]").count(), 15);
-    assert.equal(await page.locator("[data-archive-card]:visible").count(), 15);
-    assert.equal(await page.locator("[data-field-note-card]").count(), 5);
+    assert.equal(await page.locator("[data-archive-card]").count(), ARTICLES.length);
+    assert.equal(await page.locator("[data-archive-card]:visible").count(), ARTICLES.length);
+    assert.equal(await page.locator("[data-field-note-card]").count(), FIELD_NOTES.length);
     assert.equal(await page.locator('#bug-bounty-archive[aria-labelledby]').count(), 1);
     const cardLabels = await page.locator("[data-archive-card] a[aria-labelledby]").evaluateAll(links => links.map(link => link.getAttribute("aria-labelledby")));
-    assert.equal(cardLabels.length, 15, "Every archive card link should name its title");
-    assert.equal(new Set(cardLabels).size, 15, "Every archive card title ID should be unique");
+    assert.equal(cardLabels.length, ARTICLES.length, "Every archive card link should name its title");
+    assert.equal(new Set(cardLabels).size, ARTICLES.length, "Every archive card title ID should be unique");
     for (const label of cardLabels) assert.equal(await page.locator(`#${label}`).count(), 1);
     const destinations = await page.locator("[data-archive-card] a[href]").evaluateAll(links => links.map(link => link.getAttribute("href")));
-    assert.equal(destinations.length, 15, "Each archive card should link once to its article");
-    assert.equal(new Set(destinations).size, 15, "Archive cards must not duplicate articles");
+    assert.equal(destinations.length, ARTICLES.length, "Each archive card should link once to its article");
+    assert.equal(new Set(destinations).size, ARTICLES.length, "Archive cards must not duplicate articles");
     assert.deepEqual([...destinations].sort(), ARTICLES.map(([route]) => route).sort());
-    pass("The hub contains exactly fifteen unique articles in one archive");
+    pass(`The hub contains exactly ${ARTICLES.length} unique articles in one archive`);
 
     for (const [route, title] of FIELD_NOTES) {
       await page.goto(`${origin}/blogs.html`);
@@ -133,25 +139,17 @@ async function main() {
       await page.waitForURL(`${origin}${route}`);
       assert.equal(await page.locator("h1").count(), 1);
       assert.equal((await page.locator("h1").innerText()).trim(), title);
-      assert.equal(await page.locator(".scope-table").count(), 1, `${route} should have one regression table`);
-      assert.equal(await page.locator(".scope-table tbody tr").count(), 5, `${route} should have five regression cases`);
-      assert.equal(await page.locator(".http-notebook").count(), 1);
-      assert.equal(await page.locator(".http-code").count(), 2);
-      assert.match(await page.locator(".http-code").first().innerText(), /^GET \/redacted\/[a-z-]+ HTTP\/1\.1/);
-      assert.match(await page.locator(".http-notebook-caption").innerText(), /SYNTHETIC \+ REDACTED/);
-      assert.equal(await page.locator('a[href="#http-notebook"]').count(), 1);
+      assert.equal(await page.locator("body.research-archive-post.archive-article").count(), 1);
+      assert.equal(await page.locator(".research-article-body").count(), 1);
+      assert.ok(await page.locator(".research-article-body h3, .research-article-body h4").count() >= 4);
+      assert.ok(await page.locator(".research-article-body pre").count() >= 1);
+      assert.ok(await page.locator(".research-story-figure").count() >= 1);
+      assert.ok(await page.locator(".research-story-figure figcaption").count() >= 1);
+      assert.match(await page.locator(".research-article-body").innerText(), /Publication note:/);
+      assert.ok(await page.locator('a[href="/about.html#researcher"]').count() > 0);
       assert.ok(await page.locator('a[href="/blogs.html#bug-bounty-archive"]').count() > 0, `${route} should link back to the collection`);
     }
-    pass("Every field note opens with five regression rows and a collection link");
-
-    await page.goto(`${origin}/insights/draft-write-authorization.html`);
-    const repair = page.locator('.case-remediation[aria-labelledby="policy"]');
-    assert.equal(await repair.locator("#policy").innerText(), "Closing the authorization gap");
-    assert.equal(await repair.locator("pre").count(), 0, "The repair section should read as prose, not pseudocode");
-    assert.equal(await repair.locator(".case-editorial").isVisible(), true);
-    assert.match(await repair.innerText(), /proposed repair/);
-    assert.match(await repair.innerText(), /Check the saved draft, not just the response/);
-    pass("The draft repair section uses story-led prose and a compact retest note");
+    pass("Every field note uses the first-person research shell with synthetic evidence and archive links");
 
     await page.goto(`${origin}/blog.html`);
     assert.equal(await page.locator(".insight-card").count(), 5);
@@ -186,12 +184,12 @@ async function main() {
     assert.equal(await page.locator("[data-archive-count]").innerText(), "Showing 0 articles");
     await reset.focus();
     await page.keyboard.press("Space");
-    assert.equal(await page.locator("[data-archive-card]:visible").count(), 15);
+    assert.equal(await page.locator("[data-archive-card]:visible").count(), ARTICLES.length);
     assert.equal(await search.inputValue(), "");
     assert.equal(await search.evaluate(element => element === document.activeElement), true);
     assert.equal(await page.locator('[data-archive-filter="all"]').getAttribute("aria-pressed"), "true");
     assert.equal(await page.locator("[data-archive-empty]").isVisible(), false);
-    assert.equal(await page.locator("[data-archive-count]").innerText(), "Showing 15 articles");
+    assert.equal(await page.locator("[data-archive-count]").innerText(), `Showing ${ARTICLES.length} articles`);
     await search.fill(" PRIVATE   ORIGIN ");
     assert.equal(await page.locator("[data-archive-card]:visible").count(), 1);
     assert.equal(await page.locator("[data-archive-card]:visible").getAttribute("data-topic"), "state-caching");
@@ -207,11 +205,11 @@ async function main() {
         if (!RESEARCH_ROUTES.has(route)) {
           assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${route} contains non-ASCII body text at ${width}px`);
         }
-        for (const block of await page.locator(".case-code, .scope-table-wrap").all()) {
+        for (const block of await page.locator(".research-article-body pre, .research-story-figure, .case-code, .scope-table-wrap").all()) {
           assert.ok(await block.evaluate(element => element.getBoundingClientRect().width <= innerWidth), `${route} has an overflowing reading block at ${width}px`);
         }
       }
-      pass(`The hub and fifteen articles fit ${width}px with contained reading blocks`);
+      pass(`The hub and ${ARTICLES.length} articles fit ${width}px with contained reading blocks`);
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
@@ -229,7 +227,7 @@ async function main() {
     const nojs = await plain.newPage();
     observe(nojs);
     await nojs.goto(`${origin}/blogs.html`);
-    assert.equal(await nojs.locator("[data-archive-card]:visible").count(), 15);
+    assert.equal(await nojs.locator("[data-archive-card]:visible").count(), ARTICLES.length);
     assert.equal(await nojs.locator("[data-archive-controls]").isVisible(), false);
     assert.equal(await nojs.locator("[data-archive-empty]").isVisible(), false);
     assert.equal(await nojs.locator(".nav-menu").isVisible(), true);
@@ -238,8 +236,9 @@ async function main() {
     await nojs.locator(`[data-archive-card] a[href="${firstRoute}"]`).click();
     await nojs.waitForURL(`${origin}${firstRoute}`);
     assert.equal((await nojs.locator("h1").innerText()).trim(), firstTitle);
-    assert.equal(await nojs.locator(".scope-table tbody tr").count(), 5);
-    pass("Without JavaScript all fifteen articles and navigation remain visible, filters stay hidden, and links work");
+    assert.equal(await nojs.locator(".research-article-body").count(), 1);
+    assert.ok(await nojs.locator(".research-story-figure").count() >= 1);
+    pass(`Without JavaScript all ${ARTICLES.length} articles and navigation remain visible, filters stay hidden, and links work`);
 
     assert.deepEqual(errors, [], "The blog and articles should not throw JavaScript errors");
     assert.deepEqual(external, [], "The blog and articles should not request third-party resources");

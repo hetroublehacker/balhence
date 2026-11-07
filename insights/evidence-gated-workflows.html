@@ -5,231 +5,173 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Business Logic Flaws: Submitted Is Not Verified | Balhence</title>
-  <meta name="description" content="A workflow recorded submission without required evidence. An anonymized business logic story with proposed state-transition controls and five regression tests.">
-  <meta name="author" content="Balhence">
+  <title>Submitted Is Not the Same as Verified | Balhence</title>
+  <meta name="description" content="A first-person bug bounty story about a workflow that recorded a submission even though its required evidence was still missing.">
+  <meta name="author" content="Aditya Soni">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://balhence.com/insights/evidence-gated-workflows.html">
   <meta name="theme-color" content="#080d1f">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Balhence">
   <meta property="og:title" content="Submitted is not the same as verified">
-  <meta property="og:description" content="When a workflow records completion without the evidence it requires, a status flag stops being a reliable contract.">
+  <meta property="og:description" content="The screen said submitted while the required evidence was missing. Here is how I separated the real workflow failure from impact I could not prove.">
   <meta property="og:url" content="https://balhence.com/insights/evidence-gated-workflows.html">
   <meta property="og:image" content="https://balhence.com/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Balhence AI-native security, research, and engineering">
   <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-11-06">
+  <meta property="article:modified_time" content="2026-11-07">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Submitted is not the same as verified">
-  <meta name="twitter:description" content="A practical case study in evidence-gated state transitions and defensive regression testing.">
+  <meta name="twitter:description" content="How I proved that an incomplete case reached submitted state without claiming it was approved.">
   <meta name="twitter:image" content="https://balhence.com/og-image.png">
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261106a">
+  <link rel="stylesheet" href="/styles.css?v=20261107a">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
-  <link rel="stylesheet" href="/case-studies.css?v=20260923a">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
   <script async src="/type-field.js?v=20261001f"></script>
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://balhence.com/#organization",
-      "name": "Balhence",
-      "url": "https://balhence.com/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://balhence.com/logo.png",
-        "width": 512,
-        "height": 512
-      }
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://balhence.com/insights/evidence-gated-workflows.html#webpage",
-      "url": "https://balhence.com/insights/evidence-gated-workflows.html",
-      "name": "Submitted is not the same as verified",
-      "description": "An anonymized workflow-integrity case with illustrative remediation and five defensive regression tests.",
-      "datePublished": "2026-09-05",
-      "dateModified": "2026-11-06",
-      "inLanguage": "en",
-      "mainEntity": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#article" },
-      "breadcrumb": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#breadcrumb" }
-    },
-    {
-      "@type": "BlogPosting",
-      "@id": "https://balhence.com/insights/evidence-gated-workflows.html#article",
-      "headline": "Submitted is not the same as verified",
-      "description": "An anonymized workflow-integrity case with illustrative remediation and five defensive regression tests.",
-      "url": "https://balhence.com/insights/evidence-gated-workflows.html",
-      "mainEntityOfPage": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#webpage" },
-      "datePublished": "2026-09-05",
-      "dateModified": "2026-11-06",
-      "inLanguage": "en",
-      "author": {
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://balhence.com/insights/evidence-gated-workflows.html#webpage",
+        "url": "https://balhence.com/insights/evidence-gated-workflows.html",
+        "name": "Submitted is not the same as verified",
+        "description": "A first-person, anonymized bug bounty story about a workflow that recorded a submission without its required evidence.",
+        "datePublished": "2026-09-05",
+        "dateModified": "2026-11-07",
+        "inLanguage": "en",
+        "mainEntity": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#article" },
+        "breadcrumb": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#breadcrumb" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://balhence.com/insights/evidence-gated-workflows.html#article",
+        "url": "https://balhence.com/insights/evidence-gated-workflows.html",
+        "mainEntityOfPage": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#webpage" },
+        "headline": "Submitted is not the same as verified",
+        "description": "A first-person, anonymized bug bounty story about a workflow that recorded a submission without its required evidence.",
+        "datePublished": "2026-09-05",
+        "dateModified": "2026-11-07",
+        "inLanguage": "en",
+        "image": "https://balhence.com/og-image.png",
+        "keywords": ["bug bounty", "business logic", "workflow security", "evidence validation"],
+        "articleSection": "Anonymized bug bounty field notes",
+        "author": { "@id": "https://balhence.com/about.html#researcher" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "isPartOf": { "@id": "https://balhence.com/blogs.html#bug-bounty-archive" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/evidence-gated-workflows.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Bug Bounty Archive", "item": "https://balhence.com/blogs.html#bug-bounty-archive" },
+          { "@type": "ListItem", "position": 3, "name": "Submitted is not the same as verified", "item": "https://balhence.com/insights/evidence-gated-workflows.html" }
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://balhence.com/about.html#researcher",
+        "name": "Aditya Soni",
+        "alternateName": "HeTroubleHacker",
+        "url": "https://balhence.com/about.html#researcher"
+      },
+      {
+        "@type": "Organization",
         "@id": "https://balhence.com/#organization",
-        "url": "https://balhence.com/about.html"
-      },
-      "publisher": {
-        "@id": "https://balhence.com/#organization"
-      },
-      "image": "https://balhence.com/og-image.png",
-      "articleSection": "Bug bounty field notes",
-      "isPartOf": {
-        "@id": "https://balhence.com/blogs.html#bug-bounty-archive"
+        "name": "Balhence",
+        "url": "https://balhence.com/",
+        "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.png" }
       }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://balhence.com/insights/evidence-gated-workflows.html#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://balhence.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Bug Bounty Archive",
-          "item": "https://balhence.com/blogs.html#bug-bounty-archive"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Submitted is not the same as verified",
-          "item": "https://balhence.com/insights/evidence-gated-workflows.html"
-        }
-      ]
-    }
-  ]
-}
+    ]
+  }
   </script>
 </head>
-<body data-page="insights" class="case-study archive-article">
+<body data-page="insights" class="research-archive-post archive-article">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header" data-site-header>
-    <nav class="container nav-shell" aria-label="Primary navigation">
-      <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
-      <div class="nav-menu" id="primary-menu" data-menu>
-        <ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul>
-        <a class="btn btn-primary" href="/scope-builder.html" data-nav="scope">Build your scope</a>
-      </div>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
-    </nav>
-  </header>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=evidence-gated-workflows" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero">
-        <div class="container-narrow">
-          <nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Submitted is not the same as verified</span></nav>
-          <span class="eyebrow">Bug bounty archive / Anonymized field note</span>
-          <h1>Submitted is not the same as verified</h1>
-          <p class="article-deck">The server recorded a submission while required evidence was still missing. That was a broken workflow rule, but it wasn't proof of approval.</p>
-          <div class="article-byline"><span>By <a href="/about.html">Balhence</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-06">6 November 2026</time></span><span>6 min read</span></div>
-        </div>
-      </header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Submitted is not the same as verified</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>Submitted is not the same as verified</h1><p class="article-deck">The screen said submitted while the required evidence was still missing. The important part was proving the state change without claiming approval.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-09-05">05 September 2026</time></span><span>Updated <time datetime="2026-11-07">07 November 2026</time></span><span>5 min read</span></div></div></header>
+
       <div class="article-body"><div class="container article-layout">
-        <nav class="article-toc" aria-label="On this page"><strong>On this page</strong><a href="#observation">The screen said done</a><a href="#http-notebook">The HTTP notebook</a><a href="#boundary">What the next system would believe</a><a href="#design">Check the stored evidence</a><a href="#implementation">The proposed submission gate</a><a href="#regression">Test the state and the event</a><a href="#operations">Look behind the status flag</a><a href="#lesson">Two statuses, two checks</a></nav>
-        <div class="article-content archive-article-content">
-          <aside class="article-callout case-editorial" aria-label="Redaction and evidence limits"><p><strong>About this account:</strong> Adapted from private research notes. Organizations, products, routes, identifiers, timings, and data have been removed or replaced. Observations have not been independently revalidated for this article. Code and test fixtures are synthetic; the repair is proposed, not claimed to be deployed or retested.</p></aside>
-          <dl class="case-facts"><div><dt>Boundary</dt><dd>Evidence before state</dd></div><div><dt>Observed</dt><dd>Incomplete case recorded as submitted</dd></div><div><dt>Not established</dt><dd>A positive decision or downstream access</dd></div></dl>
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the story</a><a href="#proof">How I proved it</a><a href="#takeaway">Takeaway</a><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></nav>
+        <div class="article-content archive-article-content research-article-content">
+          <div class="research-article-body" id="research-article">
+            <p>Hi people,</p>
+            <p>This story started with a workflow that looked very familiar: complete a few steps, attach the required evidence, and submit the case for review.</p>
+            <p>I was testing the process with my own controlled record. One required item was still missing, so I expected the final action to fail. Instead, the interface showed a completion message and moved the record into a submitted state.</p>
+            <p>At first I did not know whether this was only a front-end issue. A friendly success banner is not enough to prove a security finding. I needed to check what the server had actually stored.</p>
+            <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The company, product, routes, identifiers, dates, and UI labels were removed or replaced. The examples are synthetic. I am not claiming that a fix was deployed or that a completed retest occurred.</p></blockquote>
 
-          <h2 id="observation">The screen said done. The record disagreed.</h2>
-          <p>A controlled case reached the ordinary completion screen without all of its required supporting artifacts. On its own, that could have been a display bug: the interface saying "done" while the server still considered the case incomplete.</p>
-          <p>The server responses said submitted as well. That is the comparison the source notes recorded: the interface and stored status agreed, but the required evidence was missing. The application had advanced the case without enforcing its submission prerequisites.</p>
-          <p>The distinction from approval matters. Nothing here establishes a favorable review decision, access to a downstream service, or an effect on somebody else's account. The invalid submission state is the finding. Calling it a successful verification would overstate the result.</p>
+            <h3>What I expected the workflow to do</h3>
+            <p>The rule seemed straightforward. The record could remain in a collecting state while evidence was incomplete. Only after every required item existed, belonged to that record, and finished processing should the server mark it ready for review.</p>
+            <p>The user interface appeared to follow this rule. It showed the missing requirement and encouraged the user to complete it. But interfaces are suggestions. The real security decision happens when the server receives the final transition request.</p>
 
-          <section id="http-notebook" aria-labelledby="http-notebook-title">
-              <h2 id="http-notebook-title">The HTTP notebook</h2>
-              <p>A read-only status check is where the inconsistency becomes easy to explain. This compact reconstruction puts the conflicting facts next to one another. The JSON names are invented editorial labels, not fields from the original system.</p>
-              <figure class="http-notebook">
-                <figcaption class="http-notebook-caption"><span class="http-notebook-label">Observation sketch / HTTP/1.1</span><span class="http-notebook-badge">SYNTHETIC + REDACTED</span></figcaption>
-                <div class="http-exchange">
-                  <div class="http-message"><h3>Read-only request</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic redacted HTTP request"><code>GET /redacted/review-status HTTP/1.1
-Host: research.example
-Cookie: session=[REDACTED]
+            <figure class="research-story-figure">
+              <div class="story-flow" role="img" aria-label="A record with missing evidence moves to submitted state while its review decision remains unset">
+                <div class="story-step"><span>01</span><strong>Evidence missing</strong><small>One required item is absent</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>02</span><strong>Submit action</strong><small>The server accepts the transition</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>03</span><strong>Submitted record</strong><small>Review decision is still not set</small></div>
+              </div>
+              <figcaption>Reconstructed state flow. The labels are generic and do not reproduce the original product.</figcaption>
+            </figure>
+
+            <h3 id="proof">How I proved it was more than a message</h3>
+            <p>After the completion screen appeared, I reopened the record and checked its status through a separate read path. The server returned the submitted state even though the required evidence was still absent. I repeated the flow from a clean starting point and observed the same result.</p>
+            <p>The evidence I needed was the contradiction itself: the authoritative record said submitted, while the authoritative evidence set said incomplete. A synthetic version of that comparison looks like this:</p>
+            <pre aria-label="Synthetic workflow status response"><code>GET /cases/[CASE]/status HTTP/1.1
+Host: workflow.example
+Authorization: Bearer [REDACTED]
 Accept: application/json
 
-</code></pre></div>
-                  <div class="http-message"><h3>Illustrative status summary</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic illustrative HTTP response"><code>HTTP/1.1 200 OK
+HTTP/1.1 200 OK
 Content-Type: application/json
-Cache-Control: private, no-store
-Content-Length: 91
 
-{"submission":"recorded","required_evidence":"missing","review_decision":"not_established"}</code></pre></div>
-                </div>
-                <p class="http-notebook-note">Reconstructed for this article, not an original wire capture. The host uses the reserved .example namespace; paths, headers, and data are invented or redacted. Display only: no requests are sent.</p>
-              </figure>
-              <p>The response summarizes the documented inconsistency; it is not a verbatim capture. Requests that advanced the workflow are omitted. Nothing here establishes a positive review decision.</p>
-            </section>
+{"state":"submitted","required_evidence":"missing","decision":"not_set"}</code></pre>
+            <p>This is not an original response. The host, route, fields, and values were created for the article. It represents the three facts that mattered during the controlled test.</p>
 
-            <h2 id="boundary">What the next system would believe</h2>
-          <p>A review queue or notification worker may read "submitted" as confirmation that required capture has finished. A partner integration might make the same assumption. These are possible consumers to check during a repair review, not downstream effects established by the notes.</p>
-          <p>For the status to be trustworthy, every required artifact must exist, belong to this case, be finalized, and satisfy the configured capture rules. An upload can have succeeded while processing is still pending. A valid artifact reference can point to the wrong case. Neither should count as completed evidence.</p>
-          <p>Keep <em>ready for review</em> separate from <em>review passed</em>. Completing capture is not a favorable decision. Approval needs its own authorized process, inputs, and audit trail.</p>
+            <h3>The claim I did not make</h3>
+            <p>This is where careful wording matters. I proved that the record reached submitted state without all required evidence. I did not prove that a reviewer approved it, that a downstream service granted access, or that another person's data was affected.</p>
+            <p>Submitted and approved are different security states. The first says the collection phase is complete. The second says an authorized decision was made. A broken submission gate can be important without pretending that the approval gate was also bypassed.</p>
+            <p>Keeping that line clear made the report stronger. The finding did not depend on a dramatic guess about what might happen later. It depended on a reproducible server-side state that should have been impossible.</p>
 
-          <h2 id="design">Check the stored evidence</h2>
-          <p>The client should request submission. The server should decide whether it is allowed, using a server-owned workflow version and evidence from the authoritative store. A client's claim that a step is complete is not evidence of completion.</p>
-          <p>Evaluate the final transition against one consistent snapshot and record its evidence revision with the submission. Also decide what happens if an artifact is later removed, replaced, or invalidated. Without that rule, a valid submission can become inconsistent after the fact.</p>
-          <p>Commit the submission and its event record together. A transactional outbox is one way to do that: the transaction stores both, then a worker publishes the event. Consumers still need to handle repeated delivery without repeating the logical action. Publishing first risks announcing a submission that never commits.</p>
+            <h3>Why this kind of bug appears</h3>
+            <p>Multi-step workflows often trust a flag produced earlier in the process. The interface may set a step to complete, an upload service may return an object ID, or a background worker may still be processing an artifact. If the final transition trusts those client-visible signals instead of reading the current stored evidence, the workflow can move forward with an incomplete snapshot.</p>
+            <p>There is also a timing problem. Evidence can change between the check and the state update. A safer design evaluates the server-owned policy and the finalized evidence in one consistent transaction, records the evidence revision used for the decision, and writes the submission event with the same commit.</p>
 
-          <h2 id="implementation">The proposed submission gate</h2>
-          <p>This illustrative sketch describes the proposed control, not the affected code. All names are invented. In a real implementation, the lock, evidence reads, state update, and outbox insertion need matching consistency guarantees.</p>
-          <pre class="case-code" tabindex="0" aria-label="Illustrative defensive pseudocode"><code>function submit_for_review(actor, case_id, expected_revision):
-    transaction:
-        case = load_case_for_update(case_id)
-        require permitted(actor, "submit", case)
-        require case.revision == expected_revision
-        require case.state == "collecting"
-        policy = load_server_owned_policy(case.policy_version)
-        evidence = load_finalized_evidence(case.id)
-        require every_requirement_satisfied(policy, evidence)
-        require every_item_belongs_to(case.id, evidence)
-        save_submission(case, evidence.revision)
-        outbox.record_once(case.id, "ready_for_review")
-    return submission_receipt(case.id)
+            <h3>How I would repair the boundary</h3>
+            <p>The client should request submission, not declare that submission is valid. The server should load the current record, verify the actor can submit it, load the correct policy version, and confirm every required artifact is finalized and belongs to the same record.</p>
+            <p>Retries need a rule too. Repeating a completed request should return the existing receipt or a documented conflict. It should not create a second logical submission. If the evidence revision changed, the server should reject the stale request or evaluate the new snapshot deliberately.</p>
 
-# A review decision is made by a separate authorized process.
-# This operation does not set a positive decision.</code></pre>
-          <p>Define retries before shipping this. A repeated completed request should return its existing receipt or a documented conflict, not create another submission. A stale request must not silently submit a newer evidence set.</p>
+            <h3 id="takeaway">Takeaway</h3>
+            <ul>
+              <li>Do not trust a client-side completed flag as evidence.</li>
+              <li>Validate stored prerequisites again at the final state transition.</li>
+              <li>Bind every artifact to the correct record and require processing to be final.</li>
+              <li>Keep submitted, verified, and approved as separate states with separate authorization rules.</li>
+              <li>When reporting, prove the state you reached and avoid claiming the state you did not.</li>
+            </ul>
+            <p>The lesson I kept from this test was simple: a workflow status is a promise to every system that reads it. The server should only make that promise after it has checked the facts behind it.</p>
+            <p>That is all for this write-up. Hope you found it useful. The related story <a href="/insights/draft-write-authorization.html">the draft you could change but could not read</a> shows another place where a stored state carried more truth than the response message. You can also browse the complete <a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a>.</p>
+          </div>
 
-          <h2 id="regression">Test the state and the event</h2>
-          <p>Use local service fixtures, a test database, and a stub for event delivery. These five checks describe the proposed repair, not a remote testing sequence. For every rejection, compare the case, evidence links, and outbox before and after.</p>
-          <div class="scope-table-wrap" role="region" tabindex="0" aria-labelledby="case-tests-caption"><table class="scope-table"><caption id="case-tests-caption">Evidence-gate regression cases using synthetic fixtures</caption><thead><tr><th>Case</th><th>Fixture and action</th><th>Required assertion</th></tr></thead><tbody>
-            <tr><td>W01 / Missing evidence</td><td>Create a local case with one required artifact absent. Call the submission service as its authorized owner.</td><td>Validation fails. State, submission records, and outbound events remain unchanged.</td></tr>
-            <tr><td>W02 / Invalid attachment</td><td>Supply a fixture with a foreign-owned or still-processing artifact in the evidence set.</td><td>Neither variant satisfies the requirement. No submission receipt is created.</td></tr>
-            <tr><td>W03 / Valid capture</td><td>Finalize all required local artifacts and submit their current revision.</td><td>Exactly one submission records that revision. The review decision remains unset.</td></tr>
-            <tr><td>W04 / Duplicate delivery</td><td>Repeat the completed service operation in the test harness.</td><td>The documented retry result is returned. No duplicate submission or logical notification appears.</td></tr>
-            <tr><td>W05 / Stale revision</td><td>Use a deterministic fixture that changes evidence between preparation and commit.</td><td>The stale transition conflicts or reevaluates safely. It cannot certify an obsolete evidence snapshot.</td></tr>
-          </tbody></table></div>
-
-          <h2 id="operations">Look behind the status flag</h2>
-          <p>A repaired submission gate won't explain older records. An authorized internal consistency check can flag submitted cases that lack their required evidence revision. Review them before drawing conclusions: retention rules, failed processing, or migrations can also account for missing artifacts.</p>
-          <p>Log case references, policy versions, rejection reasons, and event identifiers where needed. Keep supporting files and personal data out of routine logs. Separate failed prerequisites from ordinary retries so a dropped connection doesn't look like an integrity incident.</p>
-
-          <h2 id="lesson">Two statuses, two checks</h2>
-          <p>Submission should mean the server checked the required evidence. Approval should mean an authorized review reached a decision. The recorded finding showed the first rule failing; it did not show the second being bypassed. Keeping those claims separate makes both the report and the repair more useful.</p>
-          <div class="article-callout"><p><strong>Related case:</strong> <a href="/insights/draft-write-authorization.html">The draft you could change but could not read</a> looks at a different integrity boundary: ensuring that asynchronous writes preserve the authorization checked at the start.</p></div>
-          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About this research</span><h2 id="archive-author-title">About Balhence field notes</h2><p>Balhence field notes turn anonymized security research into practical engineering lessons. Identifiers are removed or replaced, HTTP examples are synthetic, and proposed repairs are not presented as confirmed deployments.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html">Read our approach</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Browse the Bug Bounty Archive</a></div></aside>
-          <section class="article-cta" aria-labelledby="case-cta-title"><h2 id="case-cta-title">Can your application skip a step that matters?</h2><p>Our <a href="/saas-penetration-testing.html">SaaS penetration testing</a> covers business logic, authorization, and critical workflows within the agreed scope. Tell us which process your customers rely on and when you need it tested.</p><a class="btn btn-primary btn-flow" data-track="article_workflow_contact" href="/contact.html?service=web-api&amp;source=evidence-gated-workflows">Request a pentest <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a><p><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a> | <a href="/blog.html">Practical guides</a></p></section>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>Test the workflow, not only the screen.</h2><p>Explore our SaaS penetration testing service or continue through the Bug Bounty Archive for more first-person security research.</p><div class="button-row"><a class="btn btn-primary" href="/saas-penetration-testing.html">SaaS penetration testing</a><a class="btn btn-quiet" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></div>
+          <p class="research-topic-line"><strong>Research topics:</strong> bug bounty / business logic / workflow security / evidence validation</p>
         </div>
       </div></div>
     </article>
-      <section class="section section-paper launch-section" aria-labelledby="service-reading-title"><div class="container launch-copy"><h2 id="service-reading-title">Related testing services and reading</h2><ul class="launch-links"><li><a href="/api-penetration-testing.html">API workflow security testing</a></li><li><a href="/ai-llm-penetration-testing.html">Approval boundaries in AI applications</a></li><li><a href="/insights/server-owned-validation-rules.html">Server-owned validation rules</a></li><li><a href="/insights/how-to-plan-llm-security-testing.html">Plan an AI application assessment</a></li></ul><p><a href="/blog.html">All penetration testing guides</a> | <a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></p></div></section>
   </main>
+
   <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script>
-  <script src="/app.js?v=20261006a"></script>
-  <script src="/motion.js?v=20261001b"></script>
-  <script src="/flow.js?v=20261001b"></script>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
 </body>
 </html>

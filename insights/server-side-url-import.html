@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en" class="has-article-flow">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Server-Side URL Import with Response Readback | Balhence</title>
+  <meta name="description" content="An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.">
+  <meta name="author" content="Aditya Soni">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/server-side-url-import.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="The File Importer That Stored Whatever the URL Returned">
+  <meta property="og:description" content="A first-person field note about proving server-side fetching and harmless response-byte readback through a file import flow.">
+  <meta property="og:url" content="https://balhence.com/insights/server-side-url-import.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="article:published_time" content="2026-11-07">
+  <meta property="article:modified_time" content="2026-11-07">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The File Importer That Stored Whatever the URL Returned">
+  <meta name="twitter:description" content="A first-person field note about proving server-side fetching and harmless response-byte readback through a file import flow.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20261107a">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
+  <link rel="stylesheet" href="/flow.css?v=20261001b">
+  <link rel="stylesheet" href="/type-field.css?v=20261001f">
+  <script async src="/type-field.js?v=20261001f"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://balhence.com/insights/server-side-url-import.html#webpage",
+        "url": "https://balhence.com/insights/server-side-url-import.html",
+        "name": "The File Importer That Stored Whatever the URL Returned",
+        "description": "An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.",
+        "datePublished": "2026-11-07",
+        "dateModified": "2026-11-07",
+        "inLanguage": "en",
+        "mainEntity": { "@id": "https://balhence.com/insights/server-side-url-import.html#article" },
+        "breadcrumb": { "@id": "https://balhence.com/insights/server-side-url-import.html#breadcrumb" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://balhence.com/insights/server-side-url-import.html#article",
+        "url": "https://balhence.com/insights/server-side-url-import.html",
+        "mainEntityOfPage": { "@id": "https://balhence.com/insights/server-side-url-import.html#webpage" },
+        "headline": "The File Importer That Stored Whatever the URL Returned",
+        "description": "An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.",
+        "datePublished": "2026-11-07",
+        "dateModified": "2026-11-07",
+        "inLanguage": "en",
+        "image": "https://balhence.com/og-image.png",
+        "articleSection": "Anonymized bug bounty field notes",
+        "keywords": ["SSRF", "URL import", "server-side fetch", "response readback"],
+        "author": { "@id": "https://balhence.com/about.html#researcher" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "isPartOf": { "@id": "https://balhence.com/blogs.html#bug-bounty-archive" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/server-side-url-import.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Bug Bounty Archive", "item": "https://balhence.com/blogs.html#bug-bounty-archive" },
+          { "@type": "ListItem", "position": 3, "name": "The File Importer That Stored Whatever the URL Returned", "item": "https://balhence.com/insights/server-side-url-import.html" }
+        ]
+      },
+      { "@type": "Person", "@id": "https://balhence.com/about.html#researcher", "name": "Aditya Soni", "alternateName": "HeTroubleHacker", "url": "https://balhence.com/about.html#researcher" },
+      { "@type": "Organization", "@id": "https://balhence.com/#organization", "name": "Balhence", "url": "https://balhence.com/", "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.png" } }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights" class="research-archive-post archive-article">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=server-side-url-import" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+
+  <main id="main-content">
+    <article>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The File Importer That Stored Whatever the URL Returned</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The File Importer That Stored Whatever the URL Returned</h1><p class="article-deck">A normal upload flow hid a server-side fetcher, and the stored file returned my harmless marker byte for byte.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">07 November 2026</time></span><span>6 min read</span></div></div></header>
+
+      <div class="article-body"><div class="container article-layout">
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Behind the upload</a><a href="#callback">The callback</a><a href="#readback">Response readback</a><a href="#takeaway">Takeaway</a></nav>
+        <div class="article-content archive-article-content research-article-content">
+          <div class="research-article-body" id="research-article">
+            <p>Hi people,</p>
+            <p>File import features are some of my favorite places to slow down and inspect the request. The interface may show an upload box, but the API sometimes receives a URL and asks a backend worker to collect the file later.</p>
+            <p>That difference matters. A browser fetching a URL uses my network position. A server fetching it uses the application's network position and may return content I could not otherwise reach.</p>
+            <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The organization, product, routes, identifiers, dates, and UI labels were removed or replaced. Every example below is synthetic. I am not claiming a deployed fix, completed retest, or program acceptance.</p></blockquote>
+
+            <h3>Looking behind the upload control</h3>
+            <p>I was using a privileged controlled role in a document-import workflow. The normal interface first uploaded files and then passed their locations to the application. When I inspected the API request, I saw that those locations were still ordinary HTTPS strings.</p>
+            <p>So I replaced them with unique paths on a listener I controlled. Each path returned a tiny harmless HTML marker instead of a document. I did not use loopback, private addresses, link-local ranges, metadata services, internal hostnames, or third-party systems.</p>
+
+            <figure class="research-story-figure">
+              <div class="story-flow story-flow-four" role="img" aria-label="A server-side importer fetches a researcher-controlled URL and stores the returned bytes">
+                <div class="story-step"><span>01</span><strong>Import request</strong><small>Controlled HTTPS URL supplied</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>02</span><strong>Backend worker</strong><small>Fetches the selected path</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>03</span><strong>Stored asset</strong><small>Response bytes persisted</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>04</span><strong>Readback</strong><small>Exact marker returned</small></div>
+              </div>
+              <figcaption>Reconstructed server-side fetch flow. All names, routes, fields, and values are generic placeholders.</figcaption>
+            </figure>
+
+            <h3 id="callback">The callback proved who made the request</h3>
+            <p>My listener received requests for the exact unique paths I had supplied. Because those paths had never appeared anywhere else, the callbacks linked directly to the import action.</p>
+            <p>A callback alone would prove server-side interaction, but it would not show whether I could read the response. Blind server-side requests and response-readable requests have very different impact, so I kept following the workflow.</p>
+
+            <pre aria-label="Synthetic URL import and controlled callback"><code>POST /imports HTTP/1.1
+Host: app.research.example
+Authorization: Bearer [REDACTED]
+Content-Type: application/json
+
+{"source":"https://listener.research.example/[UNIQUE_PATH]"}
+
+GET /[UNIQUE_PATH] HTTP/1.1
+Host: listener.research.example
+
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+SAFE-RESEARCH-MARKER</code></pre>
+
+            <p>The exchange above is illustrative. It is not an original endpoint, schema, listener, header set, or response body.</p>
+
+            <h3 id="readback">The stored object returned my marker</h3>
+            <p>The import response created an object containing a download location. I opened that location through the same controlled workflow and received the exact marker bytes served by my listener.</p>
+            <p>The content type was not the expected document type, yet the application had fetched and stored it. Matching the body and length showed more than a DNS callback: the worker had persisted the response and made it available to the authorized caller.</p>
+            <p>I also tested the role boundary. A lower-privileged controlled identity received a denial on the import operation, and an unauthenticated request was rejected. That kept the conclusion narrow. I had demonstrated a privileged response-readable URL fetcher, not an anonymous or zero-permission primitive.</p>
+
+            <h3>What I could safely claim</h3>
+            <p>I could prove that the backend fetched a researcher-owned HTTPS resource, stored arbitrary harmless bytes, and returned them through the import object. I did not probe internal services and I did not retrieve secrets.</p>
+            <p>That boundary is important. The possibility of internal reachability is a reason to fix the design, but it is not evidence that internal access already happened. A strong report separates the observed primitive from the larger impact that safe testing deliberately leaves untested.</p>
+
+            <h3 id="takeaway">Takeaway</h3>
+            <p>The cleanest repair is to avoid accepting arbitrary absolute URLs. A server-issued upload identifier gives the backend something it can resolve without becoming a general-purpose fetcher.</p>
+            <p>If remote retrieval is truly required, I would expect several layers:</p>
+            <ul>
+              <li>Allowlist approved source hosts and schemes.</li>
+              <li>Resolve and reject loopback, private, link-local, reserved, and internal ranges.</li>
+              <li>Repeat validation after every redirect and DNS resolution.</li>
+              <li>Verify file type, signature, size, and upload ownership before storage.</li>
+              <li>Keep the existing role check and test it at both request and worker time.</li>
+            </ul>
+            <p>Redirects deserve their own test. A permitted public URL can redirect to a forbidden address after the first validation step, so the destination must be checked again on every hop rather than only before the initial request.</p>
+            <p>The lesson for me was to treat every import URL as a network boundary, even when the UI makes it look like an ordinary file upload.</p>
+            <p>That is all for this write-up. Hope it gives you another place to look when an application says, "import from file."</p>
+            <p>For a different server-owned-input lesson, read <a href="/insights/server-owned-validation-rules.html">When a validation helper became a data query</a>, or browse the full <a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a>.</p>
+          </div>
+
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <div class="article-cta"><span class="eyebrow">Follow every input</span><h2>Test what the server fetches, stores, and returns.</h2><p>Balhence tests API inputs, worker behavior, cloud boundaries, and the evidence needed to prove impact safely.</p><div class="button-row"><a class="btn btn-primary" href="/api-penetration-testing.html">API penetration testing</a><a class="btn btn-quiet" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></div>
+          <p class="research-topic-line"><strong>Research topics:</strong> SSRF / URL import / server-side fetch / response readback</p>
+        </div>
+      </div></div>
+    </article>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+</body>
+</html>

@@ -1,265 +1,68 @@
 <!doctype html>
 <html lang="en" class="has-article-flow">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Web Cache Data Exposure: A Private Response Story | Balhence</title>
-  <meta name="description" content="A private account response crossed a shared cache boundary. Follow the anonymized finding, its evidence limits, and five proposed cache privacy regression checks.">
-  <meta name="author" content="Balhence">
-  <meta name="robots" content="index,follow,max-image-preview:large">
-  <link rel="canonical" href="https://balhence.com/insights/private-response-cache-boundary.html">
-  <meta name="theme-color" content="#080d1f">
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Balhence">
-  <meta property="og:title" content="When the cache forgot who a response belonged to">
-  <meta property="og:description" content="A private origin response became public at an intermediary. A defensive look at cache policy, identity boundaries, and local regression coverage.">
-  <meta property="og:url" content="https://balhence.com/insights/private-response-cache-boundary.html">
-  <meta property="og:image" content="https://balhence.com/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:alt" content="Balhence security engineering case studies">
-  <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-11-06">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="When the cache forgot who a response belonged to">
-  <meta name="twitter:description" content="A defensive case study in preserving account privacy across shared caches.">
-  <meta name="twitter:image" content="https://balhence.com/og-image.png">
-  <meta name="twitter:image:alt" content="Balhence security engineering case studies">
-  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261106a">
-  <link rel="stylesheet" href="/motion.css?v=20260930b">
-  <link rel="stylesheet" href="/case-studies.css?v=20260923a">
-  <link rel="stylesheet" href="/flow.css?v=20261001b">
-  <link rel="stylesheet" href="/type-field.css?v=20261001f">
-  <script async src="/type-field.js?v=20261001f"></script>
+  <meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Web Cache Data Exposure: A Private Response Story | Balhence</title><meta name="description" content="A first-person bug bounty story about a private account response that a shared cache returned to a fresh unauthenticated client."><meta name="author" content="Aditya Soni"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://balhence.com/insights/private-response-cache-boundary.html"><meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article"><meta property="og:site_name" content="Balhence"><meta property="og:title" content="When the cache forgot who a response belonged to"><meta property="og:description" content="The origin denied an anonymous request. A shared delivery layer returned the private response anyway."><meta property="og:url" content="https://balhence.com/insights/private-response-cache-boundary.html"><meta property="og:image" content="https://balhence.com/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/png"><meta property="og:image:alt" content="Balhence bug bounty research archive"><meta property="article:published_time" content="2026-09-05"><meta property="article:modified_time" content="2026-11-07">
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="When the cache forgot who a response belonged to"><meta name="twitter:description" content="A first-person web cache story about private content crossing an authentication boundary."><meta name="twitter:image" content="https://balhence.com/og-image.png"><meta name="twitter:image:alt" content="Balhence bug bounty research archive">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96"><link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180"><link rel="manifest" href="../site.webmanifest"><link rel="stylesheet" href="/styles.css?v=20261107a"><link rel="stylesheet" href="/motion.css?v=20260930b"><link rel="stylesheet" href="/flow.css?v=20261001b"><link rel="stylesheet" href="/type-field.css?v=20261001f"><script async src="/type-field.js?v=20261001f"></script>
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://balhence.com/#organization",
-      "name": "Balhence",
-      "url": "https://balhence.com/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://balhence.com/logo.png",
-        "width": 512,
-        "height": 512
-      }
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://balhence.com/insights/private-response-cache-boundary.html#webpage",
-      "url": "https://balhence.com/insights/private-response-cache-boundary.html",
-      "name": "When the cache forgot who a response belonged to",
-      "description": "An anonymized engineering case study of private account content crossing a shared cache boundary, with proposed policy repairs and five local regression checks.",
-      "datePublished": "2026-09-05",
-      "dateModified": "2026-11-06",
-      "inLanguage": "en",
-      "mainEntity": { "@id": "https://balhence.com/insights/private-response-cache-boundary.html#article" },
-      "breadcrumb": { "@id": "https://balhence.com/insights/private-response-cache-boundary.html#breadcrumb" }
-    },
-    {
-      "@type": "BlogPosting",
-      "@id": "https://balhence.com/insights/private-response-cache-boundary.html#article",
-      "headline": "When the cache forgot who a response belonged to",
-      "description": "An anonymized engineering case study of private account content crossing a shared cache boundary, with proposed policy repairs and five local regression checks.",
-      "url": "https://balhence.com/insights/private-response-cache-boundary.html",
-      "mainEntityOfPage": { "@id": "https://balhence.com/insights/private-response-cache-boundary.html#webpage" },
-      "datePublished": "2026-09-05",
-      "dateModified": "2026-11-06",
-      "inLanguage": "en",
-      "author": {
-        "@id": "https://balhence.com/#organization",
-        "url": "https://balhence.com/about.html"
-      },
-      "publisher": {
-        "@id": "https://balhence.com/#organization"
-      },
-      "image": "https://balhence.com/og-image.png",
-      "articleSection": "Bug bounty field notes",
-      "isPartOf": { "@id": "https://balhence.com/blogs.html#bug-bounty-archive" }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://balhence.com/insights/private-response-cache-boundary.html#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://balhence.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Bug Bounty Archive",
-          "item": "https://balhence.com/blogs.html#bug-bounty-archive"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "When the cache forgot who a response belonged to",
-          "item": "https://balhence.com/insights/private-response-cache-boundary.html"
-        }
-      ]
-    }
-  ]
-}
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"Organization","@id":"https://balhence.com/#organization","name":"Balhence","url":"https://balhence.com/","logo":{"@type":"ImageObject","url":"https://balhence.com/logo.png","width":512,"height":512}},
+    {"@type":"Person","@id":"https://balhence.com/about.html#researcher","name":"Aditya Soni","alternateName":"HeTroubleHacker","url":"https://balhence.com/about.html#researcher"},
+    {"@type":"WebPage","@id":"https://balhence.com/insights/private-response-cache-boundary.html#webpage","url":"https://balhence.com/insights/private-response-cache-boundary.html","name":"When the cache forgot who a response belonged to","description":"A first-person web cache data exposure story about private content returned to a fresh unauthenticated client.","datePublished":"2026-09-05","dateModified":"2026-11-07","inLanguage":"en","mainEntity":{"@id":"https://balhence.com/insights/private-response-cache-boundary.html#article"},"breadcrumb":{"@id":"https://balhence.com/insights/private-response-cache-boundary.html#breadcrumb"}},
+    {"@type":"BlogPosting","@id":"https://balhence.com/insights/private-response-cache-boundary.html#article","url":"https://balhence.com/insights/private-response-cache-boundary.html","mainEntityOfPage":{"@id":"https://balhence.com/insights/private-response-cache-boundary.html#webpage"},"headline":"When the cache forgot who a response belonged to","description":"A first-person web cache data exposure story about private content returned to a fresh unauthenticated client.","datePublished":"2026-09-05","dateModified":"2026-11-07","inLanguage":"en","image":"https://balhence.com/og-image.png","keywords":["web cache","private response","data exposure","bug bounty"],"articleSection":"Anonymized bug bounty field notes","author":{"@id":"https://balhence.com/about.html#researcher"},"publisher":{"@id":"https://balhence.com/#organization"},"isPartOf":{"@id":"https://balhence.com/blogs.html#bug-bounty-archive"}},
+    {"@type":"BreadcrumbList","@id":"https://balhence.com/insights/private-response-cache-boundary.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://balhence.com/"},{"@type":"ListItem","position":2,"name":"Bug Bounty Archive","item":"https://balhence.com/blogs.html#bug-bounty-archive"},{"@type":"ListItem","position":3,"name":"When the cache forgot who a response belonged to","item":"https://balhence.com/insights/private-response-cache-boundary.html"}]}
+  ]}
   </script>
 </head>
-<body data-page="insights" class="case-study archive-article">
+<body data-page="insights" class="research-archive-post archive-article">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header" data-site-header>
-    <nav class="container nav-shell" aria-label="Primary navigation">
-      <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
-      <div class="nav-menu" id="primary-menu" data-menu>
-        <ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul>
-        <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=private-response-cache-boundary" data-track="nav_pentest">Request a pentest</a>
-      </div>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
-    </nav>
-  </header>
-
-  <main id="main-content">
-    <article>
-      <header class="article-hero archive-article-hero">
-        <div class="container-narrow">
-          <nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">When the cache forgot who a response belonged to</span></nav>
-          <span class="eyebrow">Bug bounty archive / Anonymized field note</span>
-          <h1>When the cache forgot who a response belonged to</h1>
-          <p class="article-deck">The application required a login and marked the response private. A shared cache still delivered the account's content to a client with no session.</p>
-          <div class="article-byline"><span>By <a href="/about.html">Balhence</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-06">6 November 2026</time></span><span>6 min read</span></div>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=private-response-cache-boundary" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+  <main id="main-content"><article>
+    <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">When the cache forgot who a response belonged to</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>When the cache forgot who a response belonged to</h1><p class="article-deck">The application denied the anonymous request. The shared cache returned the private page anyway.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-07">7 November 2026</time></span><span>6 min read</span></div></div></header>
+    <div class="article-body"><div class="container article-layout">
+      <nav class="article-toc" aria-label="In this article"><strong>In this article</strong><a href="#baseline">The private baseline</a><a href="#fresh-client">A fresh client saw too much</a><a href="#layers">Two layers, two decisions</a><a href="#limits">Keeping the claim bounded</a><a href="#takeaway">The takeaway</a></nav>
+      <div class="article-content archive-article-content research-article-content">
+        <div class="research-article-body">
+          <p>Hi people,</p>
+          <p>Cache testing can feel confusing because the response in front of you may not come from the application you are testing. It may come from a delivery layer that made its own decision earlier.</p>
+          <p>In this case, the origin understood the authentication boundary. The cache did not.</p>
+          <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The company, product, routes, identifiers, dates, and UI labels were removed or replaced. The examples are synthetic, and I am not claiming a deployed fix or completed retest.</p></blockquote>
+          <h3 id="baseline">The private baseline</h3>
+          <p>I started with a controlled account page containing a unique harmless marker. While authenticated, I requested the page and confirmed that the response belonged to my account. The origin included a private cache directive, which looked encouraging.</p>
+          <p>Next, I repeated the request without a session. The direct application path refused it. That was the expected control: an anonymous visitor should not receive the account page.</p>
+          <p>I saved only the minimum comparison needed for the test: the response status, the controlled marker, and whether authentication was present. Keeping the evidence small made the boundary easier to explain without carrying unrelated account content into the write-up.</p>
+          <pre aria-label="Synthetic origin controls"><code>Authenticated request -> 200 -> marker: OWNER-ALPHA
+Anonymous origin request -> 401 -> no account content</code></pre>
+          <p>If I had tested only the origin behavior, I would have concluded that the page was protected. But the public route also passed through a shared delivery layer, so I changed clients and tested the complete path.</p>
+          <h3 id="fresh-client">A fresh client saw too much</h3>
+          <p>I opened a clean client with no cookies, no local storage, and no earlier connection to the controlled account. Then I requested the same public URL through the normal edge path.</p>
+          <p>The response was <code>200</code>, and the body contained my unique account marker. It was not a generic shell or a login page. The private response previously created for the authenticated session had crossed into an unauthenticated request.</p>
+          <p>I repeated the comparison carefully because cache findings are easy to overstate. The marker made the response easy to identify, and the clean client made the missing session clear. The important proof was the body, not simply a cache-looking header.</p>
+          <figure class="research-story-figure"><div class="story-flow" role="img" aria-label="An authenticated owner response enters a shared cache and is later returned to a fresh unauthenticated client"><div class="story-step"><span>01</span><strong>Owner request</strong><small>Origin returns private marker</small></div><span class="story-arrow" aria-hidden="true">-&gt;</span><div class="story-step"><span>02</span><strong>Shared cache</strong><small>Response loses user separation</small></div><span class="story-arrow" aria-hidden="true">-&gt;</span><div class="story-step"><span>03</span><strong>Fresh client</strong><small>Anonymous request receives marker</small></div></div><figcaption>Reconstructed delivery path. The host, route, account data, cache identifiers, and response values are placeholders.</figcaption></figure>
+          <h3 id="layers">Two layers made two different decisions</h3>
+          <p>This was not a simple missing-login check. The application did perform the check when it handled the anonymous request directly. The failure appeared because another layer could answer before the origin had a chance to enforce that decision.</p>
+          <p>A response marked <code>private</code> expresses an intent, but every cache in the path must honor that intent. Cache keys must also separate representations whenever cookies, authorization headers, tenant context, language, or other request state changes the body.</p>
+          <p>One dangerous pattern is letting an authenticated response populate a key that an unauthenticated request can later match. Another is stripping the very request state that should have divided the cache entries. I could observe the boundary failure, but I could not see the private configuration that caused it, so I did not guess at the exact internal rule.</p>
+          <h3 id="limits">Keeping the claim bounded</h3>
+          <p>The evidence showed content from my controlled account returned to my clean unauthenticated client. I did not test real customer accounts, and I did not claim that every account page or every edge location behaved the same way.</p>
+          <p>I also avoided treating a single cache header as proof. Headers can be inconsistent, diagnostic, or rewritten. The controlled marker crossing the session boundary was the finding.</p>
+          <p>That framing made the report stronger. It described exactly what an independent retest could reproduce without turning one controlled response into a claim about the entire customer base.</p>
+          <h3 id="takeaway">The takeaway</h3>
+          <p>For private responses, the origin and the delivery layer are one security boundary. Authentication at the application is not enough if an intermediary can replay the resulting body to someone else.</p>
+          <p>A useful retest needs at least three controls: an authenticated request with a unique marker, an anonymous request that reaches the origin, and a fresh anonymous request through the ordinary cached path. The last request must never receive the marker.</p>
+          <p>The defensive goal is not simply adding more <code>Cache-Control</code> text. Private responses should be uncacheable by shared systems or keyed on every relevant identity dimension, and authenticated pages should fail closed when those guarantees are uncertain.</p>
+          <p>That is all for this write-up. Whenever a private page looks protected, I now ask a second question: protected by which layer?</p>
+          <p>For another state-boundary story, read <a href="/insights/session-authority-boundary.html">When two browsers inherited one cart</a>, or browse the complete <a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a>.</p>
         </div>
-      </header>
-
-      <div class="article-body">
-        <div class="container article-layout">
-          <nav class="article-toc" aria-label="On this page">
-            <strong>On this page</strong>
-            <a href="#observation">The login check worked</a>
-            <a href="#http-notebook">The HTTP notebook</a><a href="#boundary">Following the disagreement</a>
-            <a href="#limits">What the shared body proved</a>
-            <a href="#repair">Where the repair belongs</a>
-            <a href="#regression">Check lookup and storage separately</a>
-            <a href="#review">The remaining question</a>
-          </nav>
-
-          <div class="article-content archive-article-content">
-            <aside class="article-callout" aria-label="Anonymization and evidence limits">
-              <p><strong>What this article covers:</strong> An account-content disclosure documented in private research notes. Organizations, products, identifiers, routes, and data have been removed or replaced. Examples are synthetic and source observations have not been independently revalidated. The repair is proposed; fixes are not confirmed deployed.</p>
-            </aside>
-
-            <h2 id="observation">The login check worked</h2>
-            <p>At the application, the account page behaved as expected. A signed-in client received information from a controlled account. An anonymous client was denied on the canonical route. The private response also carried a restrictive caching instruction.</p>
-            <p>Yet the same account body later reached a fresh client with no session. An intermediary had treated another representation as public and stored it. The application's privacy instruction had not survived the delivery path.</p>
-            <p>That explains why the successful login check wasn't the end of the investigation. The handler could refuse anonymous requests and private content could still escape through a layer in front of it. Both observations were true.</p>
-
-            <section id="http-notebook" aria-labelledby="http-notebook-title">
-              <h2 id="http-notebook-title">The HTTP notebook</h2>
-              <p>The striking part was the absence of an authenticated context on the later read. The notes described private controlled-account content returning anyway. This rebuilt exchange illustrates that observation without the route variation or cache-priming sequence.</p>
-              <figure class="http-notebook">
-                <figcaption class="http-notebook-caption"><span class="http-notebook-label">Observation sketch / HTTP/1.1</span><span class="http-notebook-badge">SYNTHETIC + REDACTED</span></figcaption>
-                <div class="http-exchange">
-                  <div class="http-message"><h3>Read-only request</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic redacted HTTP request"><code>GET /redacted/observation HTTP/1.1
-Host: research.example
-Accept: application/json
-
-</code></pre></div>
-                  <div class="http-message"><h3>Illustrative anonymous observation</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic illustrative HTTP response"><code>HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: private, no-store
-Content-Length: 61
-
-{"account":"[REDACTED]","content":"synthetic-private-marker"}</code></pre></div>
-                </div>
-                <p class="http-notebook-note">Reconstructed for this article, not an original wire capture. The host uses the reserved .example namespace; paths, headers, and data are invented or redacted. Display only: no requests are sent.</p>
-              </figure>
-              <p>The request has no session cookie. The body uses a made-up marker, not personal data. A successful response would only matter here if the content were independently established as private.</p>
-            </section>
-
-            <h2 id="boundary">The disagreement sat between the handler and the client</h2>
-            <p>The origin and the intermediary disagreed about what they were handling. One saw an account operation. The other applied a public caching classification, overriding the privacy instruction. Reviewing just the application code or just the cache configuration would miss the relationship between those decisions.</p>
-            <p>A shared cache can answer without running the handler at all. If it already holds private content as a public object, the login check may never get a chance to reject the request.</p>
-            <p>The repair therefore needs two separate checks: may this request use shared storage, and may this response enter it? Blocking new writes is not enough when old objects remain available. Lookup, storage, and route classification need to agree.</p>
-
-            <h2 id="limits">The same account body was the important evidence</h2>
-            <p>A 200 response could be a public page or a sign-in screen. The useful evidence was the body: it matched private content from the controlled account and was delivered without a session. Together with the canonical route's denial, that supports an authentication-boundary disclosure.</p>
-            <p>It does not tell us how many accounts were affected, how long a cached object lived, or whether anyone accessed one before the research. Those require separate evidence. There is no basis here for claiming a historical breach or exposure across every private feature.</p>
-            <p>In a local regression suite, use independent client contexts and a harmless marker in a synthetic account. Compare that marker or a fingerprint of the fixture. The test doesn't need real account bodies or credentials in its output.</p>
-
-            <h2 id="repair">Make every cache layer respect the same rule</h2>
-            <p>Start the proposed repair with a clear list of resources that are actually public. Use strict canonical routing and trusted route metadata shared with the intermediary. Private handlers bypass shared lookup and storage. If the classification is unknown or the layers disagree, bypass rather than guess.</p>
-            <p>The illustrative policy below checks before lookup and again before storage. The application owns the route registry and response classification; they are not claims accepted from the client. Each intermediary needs an equivalent rule.</p>
-
-            <pre class="case-code" tabindex="0" aria-label="Illustrative defensive pseudocode"><code># Synthetic policy for the repaired application.
-lookup_policy(request, trusted_route):
-    if not trusted_route.is_canonical:
-        return BYPASS
-    if request.has_authentication_context:
-        return BYPASS
-    if trusted_route.kind != PUBLIC_STATIC_RESOURCE:
-        return BYPASS
-    return ALLOW_PUBLIC_LOOKUP
-
-storage_policy(lookup_decision, response):
-    if lookup_decision != ALLOW_PUBLIC_LOOKUP:
-        return DO_NOT_STORE
-    if response.depends_on_identity:
-        return DO_NOT_STORE
-    if response.is_authentication_result:
-        return DO_NOT_STORE
-    if not response.explicitly_public:
-        return DO_NOT_STORE
-    return STORE_PUBLIC_RESOURCE</code></pre>
-
-            <p>Then deal with what is already stored. Invalidate objects associated with private content and check the effective configuration, not just the header the application emits. Document how a routing change reaches each cache layer; otherwise, a later deployment can bring the disagreement back.</p>
-
-            <h2 id="regression">Check lookup and storage separately</h2>
-            <p>Run these five local cases with in-process handlers, synthetic identities, and fake cache adapters. Assert which cache reads and writes happened, as well as what the caller received. No remote requests are needed.</p>
-
-            <div class="scope-table-wrap" role="region" tabindex="0" aria-labelledby="case-tests-caption">
-              <table class="scope-table">
-                <caption id="case-tests-caption">Local fixtures, actions, and expected state</caption>
-                <thead><tr><th scope="col">Case</th><th scope="col">Fixture and local action</th><th scope="col">Expected state</th></tr></thead>
-                <tbody>
-                  <tr><th scope="row">1. Every hop agrees</th><td>Connect fake intermediary adapters to a private handler. Evaluate a synthetic authenticated call through the repaired pipeline.</td><td>Every adapter bypasses shared lookup and storage; no account body enters a shared store.</td></tr>
-                  <tr><th scope="row">2. Anonymous isolation</th><td>Place a harmless synthetic account object in a fake legacy cache. Evaluate the private handler with an independent anonymous context.</td><td>The object is never read or returned. The handler denies access and migration cleanup removes the obsolete entry.</td></tr>
-                  <tr><th scope="row">3. Representation consistency</th><td>Give the resolver a synthetic noncanonical route descriptor for a private handler.</td><td>The descriptor is rejected or remains private. It cannot receive a public caching classification.</td></tr>
-                  <tr><th scope="row">4. Authentication results</th><td>Evaluate synthetic sign-in, access-denial, and session-dependent response objects against the storage policy.</td><td>Each returns do-not-store, including when a surrounding fixture proposes public storage.</td></tr>
-                  <tr><th scope="row">5. Public resource control</th><td>Evaluate an allowlisted, identity-independent static fixture with an anonymous context.</td><td>Public lookup and storage work as intended; the body contains only the public fixture.</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-            <h2 id="review">The handler was only part of the answer</h2>
-            <p>The application team and the infrastructure team need to be able to answer the same questions: what is public, what bypasses shared caching, and what happens to old objects when the policy changes? A header in the source code doesn't answer those questions for a deployed system. A verified repair would need evidence from that system; these notes do not establish one.</p>
-            <p><a href="/insights/server-owned-validation-rules.html">When a validation helper became a data query</a> follows a different disagreement between layers: a small public form sitting in front of a much broader internal helper.</p>
-
-            <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About this research</span><h2 id="archive-author-title">About Balhence field notes</h2><p>Balhence field notes turn anonymized security research into practical engineering lessons. Identifiers are removed or replaced, HTTP examples are synthetic, and proposed repairs are not presented as confirmed deployments.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html">Read our approach</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Browse the Bug Bounty Archive</a></div></aside>
-            <section class="article-cta" aria-labelledby="article-cta-title">
-              <h2 id="article-cta-title">Does private content stay private at every layer?</h2>
-              <p>Our <a href="/web-application-penetration-testing.html">web application penetration testing</a> considers the delivery layers in your agreed scope, not just the application handler. Tell us about your application, CDN or cache setup, and target date.</p>
-              <a class="btn btn-primary btn-flow" data-track="article_cache_contact" href="/contact.html?service=web-api&amp;source=private-response-cache-boundary">Request a pentest <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a>
-            </section>
-          </div>
-        </div>
+        <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
+        <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>Test the path that actually serves the response.</h2><p>Explore <a href="/web-application-penetration-testing.html">web application penetration testing</a> for authentication, caching, and data-exposure review, or continue through the archive.</p><div class="button-row"><a class="btn btn-primary" href="/web-application-penetration-testing.html">Web application testing</a><a class="btn btn-quiet" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></div>
+        <p class="research-topic-line"><strong>Research topics:</strong> web cache / private responses / data exposure / authentication boundaries</p>
       </div>
-    </article>
-      <section class="section section-paper launch-section" aria-labelledby="service-reading-title"><div class="container launch-copy"><h2 id="service-reading-title">Related testing services and reading</h2><ul class="launch-links"><li><a href="/saas-penetration-testing.html">SaaS data isolation testing</a></li><li><a href="/insights/session-authority-boundary.html">Session ownership boundaries</a></li><li><a href="/insights/saas-vapt-readiness-checklist.html">Prepare SaaS testing</a></li></ul><p><a href="/blog.html">All penetration testing guides</a> | <a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></p></div></section>
-  </main>
-
+    </div></div>
+  </article></main>
   <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-
-  <script src="/config.js?v=20260905c"></script>
-  <script src="/app.js?v=20261006a"></script>
-  <script src="/motion.js?v=20261001b"></script>
-  <script src="/flow.js?v=20261001b"></script>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
 </body>
 </html>

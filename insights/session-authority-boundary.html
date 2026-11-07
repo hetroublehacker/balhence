@@ -1,259 +1,68 @@
 <!doctype html>
 <html lang="en" class="has-article-flow">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Session Isolation Failure: A Shared Cart Story | Balhence</title>
-  <meta name="description" content="Two browsers, one unexpected cart. An anonymized session security story with synthetic HTTP context, proposed server-side repairs, and five isolation checks.">
-  <meta name="author" content="Balhence">
-  <meta name="robots" content="index,follow,max-image-preview:large">
-  <link rel="canonical" href="https://balhence.com/insights/session-authority-boundary.html">
-  <meta name="theme-color" content="#080d1f">
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Balhence">
-  <meta property="og:title" content="When two browsers inherited one cart">
-  <meta property="og:description" content="Two independent anonymous browsers shared cart state after navigation context became session authority. A case study in trust boundaries and session design.">
-  <meta property="og:url" content="https://balhence.com/insights/session-authority-boundary.html">
-  <meta property="og:image" content="https://balhence.com/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:alt" content="Balhence application security case study">
-  <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-11-06">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="When two browsers inherited one cart">
-  <meta name="twitter:description" content="An anonymized session authority failure, illustrative secure design, and five local regression checks.">
-  <meta name="twitter:image" content="https://balhence.com/og-image.png">
-  <meta name="twitter:image:alt" content="Balhence application security case study">
-  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
-  <link rel="manifest" href="../site.webmanifest">
-  <link rel="stylesheet" href="../styles.css?v=20261106a">
-  <link rel="stylesheet" href="/motion.css?v=20260930b">
-  <link rel="stylesheet" href="/case-studies.css?v=20260923a">
-  <link rel="stylesheet" href="/flow.css?v=20261001b">
-  <link rel="stylesheet" href="/type-field.css?v=20261001f">
-  <script async src="/type-field.js?v=20261001f"></script>
+  <meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Session Isolation Failure: A Shared Cart Story | Balhence</title><meta name="description" content="A first-person bug bounty story about two clean browser sessions that unexpectedly began changing the same anonymous cart."><meta name="author" content="Aditya Soni"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://balhence.com/insights/session-authority-boundary.html"><meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article"><meta property="og:site_name" content="Balhence"><meta property="og:title" content="When two browsers inherited one cart"><meta property="og:description" content="I opened two clean browser sessions expecting two clean carts. A navigation value quietly made both sessions act on the same one."><meta property="og:url" content="https://balhence.com/insights/session-authority-boundary.html"><meta property="og:image" content="https://balhence.com/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/png"><meta property="og:image:alt" content="Balhence bug bounty research archive"><meta property="article:published_time" content="2026-09-05"><meta property="article:modified_time" content="2026-11-07">
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="When two browsers inherited one cart"><meta name="twitter:description" content="A first-person story about anonymous session isolation and a browser-supplied cart reference."><meta name="twitter:image" content="https://balhence.com/og-image.png"><meta name="twitter:image:alt" content="Balhence bug bounty research archive">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96"><link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180"><link rel="manifest" href="../site.webmanifest"><link rel="stylesheet" href="/styles.css?v=20261107a"><link rel="stylesheet" href="/motion.css?v=20260930b"><link rel="stylesheet" href="/flow.css?v=20261001b"><link rel="stylesheet" href="/type-field.css?v=20261001f"><script async src="/type-field.js?v=20261001f"></script>
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://balhence.com/#organization",
-      "name": "Balhence",
-      "url": "https://balhence.com/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://balhence.com/logo.png",
-        "width": 512,
-        "height": 512
-      }
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://balhence.com/insights/session-authority-boundary.html#webpage",
-      "url": "https://balhence.com/insights/session-authority-boundary.html",
-      "name": "When two browsers inherited one cart",
-      "description": "A redacted session isolation story with a proposed authority model and five defensive tests.",
-      "datePublished": "2026-09-05",
-      "dateModified": "2026-11-06",
-      "inLanguage": "en",
-      "mainEntity": { "@id": "https://balhence.com/insights/session-authority-boundary.html#article" },
-      "breadcrumb": { "@id": "https://balhence.com/insights/session-authority-boundary.html#breadcrumb" }
-    },
-    {
-      "@type": "BlogPosting",
-      "@id": "https://balhence.com/insights/session-authority-boundary.html#article",
-      "headline": "When two browsers inherited one cart",
-      "description": "A redacted story about two browsers sharing a cart, with proposed session controls and five defensive tests.",
-      "url": "https://balhence.com/insights/session-authority-boundary.html",
-      "mainEntityOfPage": { "@id": "https://balhence.com/insights/session-authority-boundary.html#webpage" },
-      "datePublished": "2026-09-05",
-      "dateModified": "2026-11-06",
-      "inLanguage": "en",
-      "author": {
-        "@id": "https://balhence.com/#organization",
-        "url": "https://balhence.com/about.html"
-      },
-      "publisher": {
-        "@id": "https://balhence.com/#organization"
-      },
-      "image": "https://balhence.com/og-image.png",
-      "articleSection": "Bug bounty field notes",
-      "isPartOf": { "@id": "https://balhence.com/blogs.html#bug-bounty-archive" }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://balhence.com/insights/session-authority-boundary.html#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://balhence.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Bug Bounty Archive",
-          "item": "https://balhence.com/blogs.html#bug-bounty-archive"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "When two browsers inherited one cart",
-          "item": "https://balhence.com/insights/session-authority-boundary.html"
-        }
-      ]
-    }
-  ]
-}
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"Organization","@id":"https://balhence.com/#organization","name":"Balhence","url":"https://balhence.com/","logo":{"@type":"ImageObject","url":"https://balhence.com/logo.png","width":512,"height":512}},
+    {"@type":"Person","@id":"https://balhence.com/about.html#researcher","name":"Aditya Soni","alternateName":"HeTroubleHacker","url":"https://balhence.com/about.html#researcher"},
+    {"@type":"WebPage","@id":"https://balhence.com/insights/session-authority-boundary.html#webpage","url":"https://balhence.com/insights/session-authority-boundary.html","name":"When two browsers inherited one cart","description":"A first-person anonymous session isolation story about two browsers unexpectedly acting on the same cart.","datePublished":"2026-09-05","dateModified":"2026-11-07","inLanguage":"en","mainEntity":{"@id":"https://balhence.com/insights/session-authority-boundary.html#article"},"breadcrumb":{"@id":"https://balhence.com/insights/session-authority-boundary.html#breadcrumb"}},
+    {"@type":"BlogPosting","@id":"https://balhence.com/insights/session-authority-boundary.html#article","url":"https://balhence.com/insights/session-authority-boundary.html","mainEntityOfPage":{"@id":"https://balhence.com/insights/session-authority-boundary.html#webpage"},"headline":"When two browsers inherited one cart","description":"A first-person anonymous session isolation story about two browsers unexpectedly acting on the same cart.","datePublished":"2026-09-05","dateModified":"2026-11-07","inLanguage":"en","image":"https://balhence.com/og-image.png","keywords":["session isolation","cart security","business logic testing","bug bounty"],"articleSection":"Anonymized bug bounty field notes","author":{"@id":"https://balhence.com/about.html#researcher"},"publisher":{"@id":"https://balhence.com/#organization"},"isPartOf":{"@id":"https://balhence.com/blogs.html#bug-bounty-archive"}},
+    {"@type":"BreadcrumbList","@id":"https://balhence.com/insights/session-authority-boundary.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://balhence.com/"},{"@type":"ListItem","position":2,"name":"Bug Bounty Archive","item":"https://balhence.com/blogs.html#bug-bounty-archive"},{"@type":"ListItem","position":3,"name":"When two browsers inherited one cart","item":"https://balhence.com/insights/session-authority-boundary.html"}]}
+  ]}
   </script>
 </head>
-<body data-page="insights" class="case-study archive-article">
+<body data-page="insights" class="research-archive-post archive-article">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header" data-site-header>
-    <nav class="container nav-shell" aria-label="Primary navigation">
-      <a class="brand" href="../" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
-      <div class="nav-menu" id="primary-menu" data-menu>
-        <ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul>
-        <a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=session-authority-boundary" data-track="nav_pentest">Request a pentest</a>
-      </div>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
-    </nav>
-  </header>
-  <main id="main-content">
-    <article>
-      <header class="article-hero archive-article-hero">
-        <div class="container-narrow">
-          <nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">When two browsers inherited one cart</span></nav>
-          <span class="eyebrow">Bug bounty archive / Anonymized field note</span>
-          <h1>When two browsers inherited one cart</h1>
-          <p class="article-deck">Neither browser was signed in. They should still have had separate carts. An edit in one appeared in the other.</p>
-          <div class="article-byline"><span>By <a href="/about.html">Balhence</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-06">6 November 2026</time></span><span>6 min read</span><span>Session isolation</span></div>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=session-authority-boundary" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+  <main id="main-content"><article>
+    <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">When two browsers inherited one cart</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>When two browsers inherited one cart</h1><p class="article-deck">I opened two clean browser sessions expecting two clean carts. A navigation value quietly made them act on the same one.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-07">7 November 2026</time></span><span>6 min read</span></div></div></header>
+    <div class="article-body"><div class="container article-layout">
+      <nav class="article-toc" aria-label="In this article"><strong>In this article</strong><a href="#two-browsers">Two clean browsers</a><a href="#navigation">The navigation clue</a><a href="#proof">Proving shared state</a><a href="#boundary">Where authority belonged</a><a href="#takeaway">The takeaway</a></nav>
+      <div class="article-content archive-article-content research-article-content">
+        <div class="research-article-body">
+          <p>Hi people,</p>
+          <p>This story began with a very simple test: open the same shopping flow in two clean browsers and make sure they stay separate. No accounts, no shared cookies, and no copied storage. I expected two anonymous sessions and two independent carts.</p>
+          <p>That is exactly what I saw at first. Then one navigation value changed the result.</p>
+          <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The company, product, routes, identifiers, dates, and UI labels were removed or replaced. The examples are synthetic, and I am not claiming a deployed fix or completed retest.</p></blockquote>
+          <h3 id="two-browsers">Two clean browsers, two clean carts</h3>
+          <p>I started Browser A with a fresh profile and added a harmless item to its anonymous cart. Browser B used a different fresh profile and added a different item. Their cookies and local storage did not overlap.</p>
+          <p>I refreshed both sides, changed quantities, and checked the cart summaries. Everything behaved normally. That control mattered because it showed the application was capable of creating separate state for separate visitors.</p>
+          <p>I also recorded the harmless contents on both sides before changing anything. That gave me a clean before-and-after view and stopped an ordinary refresh, duplicate item, or stale interface from looking like a cross-session result.</p>
+          <pre aria-label="Synthetic isolated cart baseline"><code>Browser A -> session_alpha -> cart_alpha -> item RED
+Browser B -> session_beta  -> cart_beta  -> item BLUE</code></pre>
+          <p>At this point there was no finding. Two carts existing at the same time is not enough; I needed to understand how the application selected the active cart during each action.</p>
+          <h3 id="navigation">The clue was in navigation state</h3>
+          <p>While moving between pages, I noticed a cart reference travelling through a browser-controlled navigation value. It looked like ordinary state used to keep a visitor on the right step of the flow.</p>
+          <p>I copied only that placeholder value from Browser A into Browser B and repeated a normal cart edit. Browser B still had its own session cookie, but the change appeared in Browser A's cart.</p>
+          <p>This was the important twist: the server appeared to have two possible answers for "which cart is this request about?" One answer came from the session. The other came from navigation state supplied by the browser. In the tested path, the second answer won.</p>
+          <figure class="research-story-figure"><div class="story-flow" role="img" aria-label="Two isolated browser sessions become connected when Browser B presents Browser A's cart navigation reference"><div class="story-step"><span>01</span><strong>Separate sessions</strong><small>Each browser creates its own cart</small></div><span class="story-arrow" aria-hidden="true">-&gt;</span><div class="story-step"><span>02</span><strong>Reference copied</strong><small>Browser B presents cart_alpha</small></div><span class="story-arrow" aria-hidden="true">-&gt;</span><div class="story-step"><span>03</span><strong>State crosses</strong><small>Browser A sees Browser B's edit</small></div></div><figcaption>Reconstructed state flow with placeholder names. No original session, cart identifier, route, or product label is shown.</figcaption></figure>
+          <h3 id="proof">How I proved it was not a display bug</h3>
+          <p>A strange cart screen can come from stale HTML, client caching, or a front-end mix-up. So I did not rely on what Browser B displayed after the request.</p>
+          <p>I returned to Browser A and loaded the cart through its original session. The quantity and marker changed by Browser B were present. I then made another controlled change from Browser A and observed it from the path using the copied reference.</p>
+          <p>That two-way observation established shared server-side state. The browser that should have remained tied to cart_beta had been allowed to act on cart_alpha.</p>
+          <p>I kept the impact narrow. This did not prove account takeover, payment access, or a way to discover unknown cart references. The result demonstrated an anonymous session-isolation failure with a known controlled reference.</p>
+          <h3 id="boundary">Where authority should have lived</h3>
+          <p>Navigation values are useful for continuity, but they should not become authority. The server already had a session-bound cart. A client-supplied reference could be checked as context, but it should not silently replace the cart selected by the authenticated or anonymous session.</p>
+          <p>There are several safe designs. The server can ignore the client reference and derive the cart from the session. It can bind a reference to the same session and reject mismatches. If carts are intentionally shareable, it can use a separate, explicit capability with a clear lifetime and scope.</p>
+          <p>The dangerous middle ground is treating a routine identifier as if possession automatically grants control.</p>
+          <h3 id="takeaway">The takeaway</h3>
+          <p>When testing stateful workflows, I like using two clean browsers because they make authority visible. Cookies, local storage, and navigation values can all point at different objects. The question is which one the server trusts when they disagree.</p>
+          <p>A good retest would begin with two isolated carts, deliberately introduce a foreign reference, and verify that the request is rejected without changing either cart. It should also confirm that normal refreshes and valid sharing still work.</p>
+          <p>That is all for this write-up. The small testing habit I kept from it is to make browser state disagree on purpose. Interesting boundaries often appear in the disagreement.</p>
+          <p>For another authorization story, read <a href="/insights/draft-write-authorization.html">The draft you could change but could not read</a>, or browse the complete <a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a>.</p>
         </div>
-      </header>
-      <div class="article-body">
-        <div class="container article-layout">
-          <nav class="article-toc" aria-label="On this page">
-            <strong>On this page</strong>
-            <a href="#evidence">One browser's edit appeared in the other</a>
-            <a href="#http-notebook">The HTTP notebook</a><a href="#authority">The input that chose the session</a>
-            <a href="#design">Give navigation a narrower job</a>
-            <a href="#transitions">Keep the boundary through sign-in</a>
-            <a href="#regression">Test the carts, not just the cookies</a>
-            <a href="#closure">The question for a retest</a>
-          </nav>
-          <div class="article-content archive-article-content">
-            <aside class="article-callout" aria-label="Redaction and evidence limits">
-              <p><strong>About the evidence:</strong> Adapted from private research notes. Organizations, products, identifiers, routes, and data have been removed or replaced. Examples are synthetic; the code sketches a proposed repair. Source observations have not been independently revalidated, and fixes are not confirmed deployed.</p>
-            </aside>
-            <dl class="case-facts">
-              <div><dt>Boundary</dt><dd>Browser to anonymous session</dd></div>
-              <div><dt>Observed effect</dt><dd>Shared cart state</dd></div>
-              <div><dt>Engineering focus</dt><dd>Session authority precedence</dd></div>
-            </dl>
-
-            <h2 id="evidence">One browser's edit appeared in the other</h2>
-            <p>The two browser contexts started separately. Both were controlled for the research, both were anonymous, and each should have kept its own cart. Then an edit made in one appeared in the other.</p>
-            <p>A login isn't what makes a cart private to a session. The application already remembers an unsigned-in browser's choices as it moves between pages. That remembered state still needs an owner, even when the owner is an anonymous session rather than an account.</p>
-            <p>The notes traced the crossover to a precedence decision: client-provided navigation state took priority over a server-issued session that was already present. The contexts then shared cart state. Changes persisted and appeared in the other context, which ruled out the narrower explanation of one misleading page render.</p>
-            <p>This was an anonymous-session finding. The notes do not show guessed identifiers, access to an unknown user's session, or account takeover. They also establish no checkout, payment, order, or customer identity disclosure. The shared cart was the result, not evidence for everything that might sit beyond it.</p>
-
-            <section id="http-notebook" aria-labelledby="http-notebook-title">
-              <h2 id="http-notebook-title">The HTTP notebook</h2>
-              <p>A cart read is ordinary traffic. What mattered in the notes was whose state appeared in independent browser contexts. This sketch shows the shape of a harmless cart snapshot, with the session and cart identity removed.</p>
-              <figure class="http-notebook">
-                <figcaption class="http-notebook-caption"><span class="http-notebook-label">Observation sketch / HTTP/1.1</span><span class="http-notebook-badge">SYNTHETIC + REDACTED</span></figcaption>
-                <div class="http-exchange">
-                  <div class="http-message"><h3>Read-only request</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic redacted HTTP request"><code>GET /redacted/cart HTTP/1.1
-Host: research.example
-Cookie: session=[REDACTED]
-Accept: application/json
-
-</code></pre></div>
-                  <div class="http-message"><h3>Illustrative cart snapshot</h3><pre class="case-code http-code" tabindex="0" aria-label="Synthetic illustrative HTTP response"><code>HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: private, no-store
-Content-Length: 72
-
-{"cart":"[REDACTED]","items":[{"marker":"synthetic-item","quantity":1}]}</code></pre></div>
-                </div>
-                <p class="http-notebook-note">Reconstructed for this article, not an original wire capture. The host uses the reserved .example namespace; paths, headers, and data are invented or redacted. Display only: no requests are sent.</p>
-              </figure>
-              <p>Seeing one cart response would not establish session fixation. The reported evidence was the loss of separation between two controlled contexts; the session-changing navigation and its parameters are not reproduced here.</p>
-            </section>
-
-            <h2 id="authority">The input that chose the session</h2>
-            <p>Navigation state and session identity have different jobs. One helps the browser continue a journey. The other decides whose stored data the server will use. In this case, a value meant for the first job was allowed to do the second.</p>
-            <p>Longer, less predictable session identifiers wouldn't settle that problem. No credential guessing was established. The server accepted a competing source of identity despite already having a session.</p>
-            <p>The implementation review would start where the application chooses its effective session. Which inputs can affect that choice? Which one wins when they disagree? The notes establish the wrong result, but they don't reveal the middleware order or storage model behind it.</p>
-
-            <h2 id="design">Give navigation a narrower job</h2>
-            <p>The proposed repair makes the choice explicit. A validated, server-issued cookie identifies the anonymous session. Navigation data cannot replace it. If there is no valid cookie, create a fresh session instead of adopting an identity supplied by the client.</p>
-            <p>A product may still need a link that resumes a workflow. Give that link a separate token with a narrow purpose, an expiry, and one permitted use. Continuing a cart operation should not grant all the authority of a different browser's session.</p>
-            <p>Decide who can redeem the token, too. It may need to be tied to the current session or an independently verified recipient. A valid signature says the token was issued intact; it doesn't say that the browser holding it is entitled to use it.</p>
-            <p>This illustrative sketch is proposed server logic, not code from the assessed application.</p>
-            <pre class="case-code" tabindex="0" aria-label="Illustrative defensive pseudocode"><code>session = validate_server_issued_cookie(request)
-if session is absent:
-    session = create_fresh_anonymous_session()
-
-if intended_workflow_is_requested:
-    grant = validate_purpose_and_expiry(workflow_token)
-    require grant.permits(current_context, intended_action)
-    atomically:
-        consume_once(grant)
-        apply_permitted_workflow(session, grant)
-
-persist_cookie_for(session)</code></pre>
-            <p>Consuming the grant and applying its operation should commit together. Otherwise, a failure could leave a usable token after the change has succeeded, or spend the token without completing the change.</p>
-
-            <h2 id="transitions">Keep the boundary through sign-in</h2>
-            <p>Keep the usual cookie protections. HttpOnly limits script access, and Secure limits transmission to secure connections. Neither can correct a server that lets navigation data choose the session.</p>
-            <p>Use deliberate cookie scope, handle competing cookie variants, and reject invalid session references. Log the reason for a session change without logging reusable credentials. That gives maintainers a useful record without creating another copy of a session secret.</p>
-            <p>Sign-in deserves a separate review. Rotate the identifier when an anonymous session becomes authenticated, invalidate the old one, and apply an explicit policy for any cart migration. Moving selected items forward must not accidentally preserve the old session's authority or merge another browser's state.</p>
-            <p>This is preventive guidance, not another observed failure. The recorded test stopped at anonymous carts.</p>
-
-            <h2 id="regression">Test the carts, not just the cookies</h2>
-            <p>Use synthetic sessions and an isolated application test harness for these checks. Assert the effective server-side session and cart contents as well as the cookie response.</p>
-            <div class="scope-table-wrap" role="region" aria-labelledby="session-tests-caption" tabindex="0">
-              <table class="scope-table">
-                <caption id="session-tests-caption">Local regression checks for the proposed session policy</caption>
-                <thead><tr><th scope="col">Fixture</th><th scope="col">Local action</th><th scope="col">Required assertions</th></tr></thead>
-                <tbody>
-                  <tr><td>Valid anonymous cookie with unrelated navigation context</td><td>Resolve the request through the corrected session middleware.</td><td>The existing session remains authoritative; unrelated state does not replace the cookie.</td></tr>
-                  <tr><td>Two independent anonymous sessions with distinct carts</td><td>Edit one cart through its normal application service.</td><td>Only its cart changes; the other session and cart remain distinct.</td></tr>
-                  <tr><td>Browser context without a valid session cookie</td><td>Initialize a cart with synthetic navigation context present.</td><td>A fresh server-issued session is created; no existing session is adopted.</td></tr>
-                  <tr><td>Anonymous fixture undergoing an approved trust transition</td><td>Complete the local transition and resolve both session references.</td><td>A new identifier is issued; the old identifier no longer authorizes access.</td></tr>
-                  <tr><td>Current session with a valid, intended workflow grant</td><td>Complete the permitted cart operation in the local harness.</td><td>The intended result occurs once; replay is rejected and session authority remains correct.</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-            <h2 id="closure">The question for a retest</h2>
-            <p>Do the carts stay separate through normal navigation, legitimate continuation flows, and sign-in? A retest needs to answer that on a corrected build. A new cookie attribute alone would not address what happened here, and no completed retest is claimed in these notes.</p>
-            <p>For the code review, keep coming back to one question: which input gets to decide whose cart this is?</p>
-            <div class="article-callout"><p><strong>Related case:</strong> <a href="/insights/draft-write-authorization.html">The draft you could change but could not read</a> examines authority at the point of mutation. For engagement preparation and reporting, browse the <a href="/blog.html">Guides</a>.</p></div>
-            <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About this research</span><h2 id="archive-author-title">About Balhence field notes</h2><p>Balhence field notes turn anonymized security research into practical engineering lessons. Identifiers are removed or replaced, HTTP examples are synthetic, and proposed repairs are not presented as confirmed deployments.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html">Read our approach</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Browse the Bug Bounty Archive</a></div></aside>
-            <section class="article-cta" aria-labelledby="article-cta-title">
-              <h2 id="article-cta-title">Does each session stay in its own lane?</h2>
-              <p>A <a href="/web-application-penetration-testing.html">web application penetration test</a> can examine anonymous sessions, sign-in transitions, and the state carried between workflows. Tell us how your product handles these journeys and when you need an assessment.</p>
-              <a class="btn btn-primary btn-flow" data-track="article_session_boundary_contact" href="/contact.html?service=web-api&amp;source=session-authority-boundary">Request a pentest <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a>
-            </section>
-          </div>
-        </div>
+        <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
+        <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>Follow state across the whole workflow.</h2><p>Explore <a href="/web-application-penetration-testing.html">web application penetration testing</a> for session and business-logic testing, or continue through the archive.</p><div class="button-row"><a class="btn btn-primary" href="/web-application-penetration-testing.html">Web application testing</a><a class="btn btn-quiet" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></div>
+        <p class="research-topic-line"><strong>Research topics:</strong> session isolation / cart security / state precedence / business logic</p>
       </div>
-    </article>
-      <section class="section section-paper launch-section" aria-labelledby="service-reading-title"><div class="container launch-copy"><h2 id="service-reading-title">Related testing services and reading</h2><ul class="launch-links"><li><a href="/web-application-penetration-testing.html">Web application and session testing</a></li><li><a href="/insights/private-response-cache-boundary.html">Private responses and shared caches</a></li><li><a href="/insights/draft-write-authorization.html">Read and write authorization boundaries</a></li></ul><p><a href="/blog.html">All penetration testing guides</a> | <a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></p></div></section>
-  </main>
+    </div></div>
+  </article></main>
   <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="../config.js?v=20260905c"></script>
-  <script src="../app.js?v=20261006a"></script>
-  <script src="/motion.js?v=20261001b"></script>
-  <script src="/flow.js?v=20261001b"></script>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
 </body>
 </html>

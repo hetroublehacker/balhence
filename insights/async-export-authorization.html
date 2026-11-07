@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" class="has-article-flow">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Async Export Authorization Across Tenant Boundaries | Balhence</title>
+  <meta name="description" content="An anonymized bug bounty story about a direct read that was denied while a background export packaged the same foreign object.">
+  <meta name="author" content="Aditya Soni">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/async-export-authorization.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="The Export Job That Crossed a Tenant Boundary">
+  <meta property="og:description" content="A first-person field note about authorization disappearing between an API request and its background worker.">
+  <meta property="og:url" content="https://balhence.com/insights/async-export-authorization.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="article:published_time" content="2026-11-07">
+  <meta property="article:modified_time" content="2026-11-07">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Export Job That Crossed a Tenant Boundary">
+  <meta name="twitter:description" content="A first-person field note about authorization disappearing between an API request and its background worker.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20261107a">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
+  <link rel="stylesheet" href="/flow.css?v=20261001b">
+  <link rel="stylesheet" href="/type-field.css?v=20261001f">
+  <script async src="/type-field.js?v=20261001f"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://balhence.com/insights/async-export-authorization.html#webpage",
+        "url": "https://balhence.com/insights/async-export-authorization.html",
+        "name": "The Export Job That Crossed a Tenant Boundary",
+        "description": "An anonymized bug bounty story about a direct read that was denied while a background export packaged the same foreign object.",
+        "datePublished": "2026-11-07",
+        "dateModified": "2026-11-07",
+        "inLanguage": "en",
+        "mainEntity": { "@id": "https://balhence.com/insights/async-export-authorization.html#article" },
+        "breadcrumb": { "@id": "https://balhence.com/insights/async-export-authorization.html#breadcrumb" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://balhence.com/insights/async-export-authorization.html#article",
+        "url": "https://balhence.com/insights/async-export-authorization.html",
+        "mainEntityOfPage": { "@id": "https://balhence.com/insights/async-export-authorization.html#webpage" },
+        "headline": "The Export Job That Crossed a Tenant Boundary",
+        "description": "An anonymized bug bounty story about a direct read that was denied while a background export packaged the same foreign object.",
+        "datePublished": "2026-11-07",
+        "dateModified": "2026-11-07",
+        "inLanguage": "en",
+        "image": "https://balhence.com/og-image.png",
+        "articleSection": "Anonymized bug bounty field notes",
+        "keywords": ["broken access control", "multi-tenant security", "background jobs", "IDOR"],
+        "author": { "@id": "https://balhence.com/about.html#researcher" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "isPartOf": { "@id": "https://balhence.com/blogs.html#bug-bounty-archive" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/async-export-authorization.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Bug Bounty Archive", "item": "https://balhence.com/blogs.html#bug-bounty-archive" },
+          { "@type": "ListItem", "position": 3, "name": "The Export Job That Crossed a Tenant Boundary", "item": "https://balhence.com/insights/async-export-authorization.html" }
+        ]
+      },
+      { "@type": "Person", "@id": "https://balhence.com/about.html#researcher", "name": "Aditya Soni", "alternateName": "HeTroubleHacker", "url": "https://balhence.com/about.html#researcher" },
+      { "@type": "Organization", "@id": "https://balhence.com/#organization", "name": "Balhence", "url": "https://balhence.com/", "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.png" } }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights" class="research-archive-post archive-article">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=async-export-authorization" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+
+  <main id="main-content">
+    <article>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The Export Job That Crossed a Tenant Boundary</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The Export Job That Crossed a Tenant Boundary</h1><p class="article-deck">The normal API refused a foreign object. A background export worker quietly packaged it anyway.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">07 November 2026</time></span><span>7 min read</span></div></div></header>
+
+      <div class="article-body"><div class="container article-layout">
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Two clean tenants</a><a href="#worker">The worker path</a><a href="#proof">The proof</a><a href="#takeaway">Takeaway</a></nav>
+        <div class="article-content archive-article-content research-article-content">
+          <div class="research-article-body" id="research-article">
+            <p>Hi people,</p>
+            <p>This story started with a feature that looked harmless: select some private files and ask the application to prepare a downloadable archive.</p>
+            <p>I had two completely separate controlled tenants. Tenant B owned one synthetic image. Tenant A had no membership, role, or shared object in Tenant B. That setup gave me a clean question: would every path enforce the same tenant boundary?</p>
+            <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The organization, product, routes, identifiers, dates, and UI labels were removed or replaced. Every example below is synthetic. I am not claiming a deployed fix, completed retest, or program acceptance.</p></blockquote>
+
+            <h3>First, I proved the boundary worked</h3>
+            <p>As Tenant B, I uploaded a small image containing a unique marker and exported it through the normal interface. That owner-positive archive gave me the expected filename, byte length, and SHA-256 hash.</p>
+            <p>Then I switched to Tenant A and requested Tenant B's object through the direct read endpoint. The server denied it. That was good. It also gave me a strong baseline: the application knew Tenant A did not own the object.</p>
+            <p>If I had stopped there, the authorization would have looked correct.</p>
+
+            <figure class="research-story-figure">
+              <div class="story-flow story-flow-four" role="img" aria-label="The direct route denies a foreign object while an export worker packages it">
+                <div class="story-step"><span>01</span><strong>Tenant A</strong><small>Requests Tenant B object</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>02</span><strong>Direct read</strong><small>Ownership check denies</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>03</span><strong>Export queue</strong><small>Foreign reference accepted</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>04</span><strong>Worker</strong><small>Private file packaged</small></div>
+              </div>
+              <figcaption>The reconstructed control matrix: one principal and one foreign object, with different authorization decisions on two paths.</figcaption>
+            </figure>
+
+            <h3 id="worker">The interesting path was asynchronous</h3>
+            <p>The export endpoint did not return the files immediately. It accepted object references, queued a job, and later exposed a completed archive. That split is exactly where I like to test again.</p>
+            <p>Using Tenant A's session, I submitted the synthetic reference owned by Tenant B. Instead of rejecting the request, the API created an export job. When the worker finished, Tenant A could download an archive.</p>
+
+            <pre aria-label="Synthetic direct-read and export comparison"><code>GET /objects/[TENANT_B_OBJECT] HTTP/1.1
+Host: app.research.example
+Authorization: Bearer [REDACTED]
+
+HTTP/1.1 403 Forbidden
+
+POST /exports HTTP/1.1
+Host: app.research.example
+Authorization: Bearer [REDACTED]
+Content-Type: application/json
+
+{"objects":["[TENANT_B_OBJECT]"]}
+
+HTTP/1.1 202 Accepted
+{"job":"[SYNTHETIC_JOB]"}</code></pre>
+
+            <p>This is a synthetic comparison. The host, paths, status body, field names, and identifiers are placeholders rather than the original traffic.</p>
+
+            <h3 id="proof">A ZIP response was not enough proof</h3>
+            <p>An archive with a plausible filename could still be empty, transformed, or unrelated. I extracted the file and compared it with Tenant B's owner-positive export.</p>
+            <p>The content length matched. More importantly, the SHA-256 hashes matched byte for byte. The marker inside the synthetic image was also the one I had created as Tenant B. The worker had not produced a generic preview; it had packaged the foreign tenant's original controlled content.</p>
+            <p>I stopped after that single file. I did not enumerate identifiers or request anyone else's data. The direct denial, the foreign export, and the hash comparison were enough to establish the boundary failure.</p>
+
+            <h3>How authorization disappeared</h3>
+            <p>The request handler appeared to treat the submitted reference as a valid global storage key. The background worker later resolved that key without carrying Tenant A's authorized object set into the job.</p>
+            <p>This pattern shows up in exports, report generation, document conversion, notifications, and scheduled actions. The front door can perform a correct check while the worker runs with broad service authority and trusts whatever identifiers were placed on the queue.</p>
+            <p>A mixed batch is especially useful during testing. Put one owned reference beside one foreign reference and check whether the application rejects the complete job, silently drops the foreign object, or packages both. Partial success can hide the same missing check.</p>
+            <p>Replacing sequential identifiers with random ones may make guessing harder, but it does not repair the missing authorization decision. A reference is not proof that the caller may use the object.</p>
+
+            <h3 id="takeaway">Takeaway</h3>
+            <p>The repair belongs in both halves of the workflow:</p>
+            <ul>
+              <li>Resolve every requested object through a tenant-scoped authorization query.</li>
+              <li>Reject mixed batches if even one object is outside the caller's access set.</li>
+              <li>Record the initiating principal and authorized objects on the job.</li>
+              <li>Revalidate authorization when the worker reads the files.</li>
+              <li>Bind completed downloads to the requesting user and a short lifetime.</li>
+            </ul>
+            <p>My biggest lesson was simple: do not test only the API route that displays an object. Follow the same identifier into exports, workers, previews, and every delayed path that touches the data later.</p>
+            <p>That is all for this write-up. Hope you found the worker-side angle useful.</p>
+            <p>For another story about authorization on a different operation, read <a href="/insights/draft-write-authorization.html">The draft you could change but could not read</a>, or browse the full <a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a>.</p>
+          </div>
+
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <div class="article-cta"><span class="eyebrow">Test beyond the request</span><h2>Authorization must survive the queue.</h2><p>Balhence follows object references through APIs, workers, exports, and tenant boundaries.</p><div class="button-row"><a class="btn btn-primary" href="/api-penetration-testing.html">API penetration testing</a><a class="btn btn-quiet" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></div>
+          <p class="research-topic-line"><strong>Research topics:</strong> broken access control / multi-tenant security / background jobs / exports</p>
+        </div>
+      </div></div>
+    </article>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+</body>
+</html>

@@ -16,9 +16,9 @@ This directory is the main website. The existing nested `website/`, `website-too
 
 - Five-section homepage: a short introduction, application services, compliance/AI/ongoing testing, two field notes, and a direct enquiry. An illustrative security map connects applications, cloud, AI, data, identity, and code through an access-and-trust review. Animated route traces and pointer highlighting add motion without live scanning or invented results. The dark hero, logo, lavender buttons, and footer use the shared site styling.
 - Self-hosted Bricolage Grotesque throughout the shared site, paired with Newsreader for article prose and editorial accents. Code and HTTP remain monospace. Font licenses ship with the assets; the separate CTF keeps its terminal styling.
-- Conversational service copy and fourteen articles. Research stories preserve their observation limits, redactions, synthetic HTTP and defensive test cases; guides focus on practical decisions.
+- Conversational service copy and a growing article library. Research stories preserve their observation limits and redactions; guides focus on practical decisions.
 - Twelve security capability areas, with cross-disciplinary and specialist enquiries routed to a tailored scope review. AI-native positioning retains human ownership, agreed data use, and explicit project boundaries.
-- A dedicated Blog at `/blogs.html` with five anonymized research case studies, local search/topic filters, and 25 illustrative defensive regression cases. Existing preparation and procurement guides remain at `/blog.html`.
+- A dedicated Bug Bounty Archive at `/blogs.html` with first-person anonymized field notes, ten preserved historical articles, and local search/topic filters. Existing preparation and procurement guides remain at `/blog.html`.
 - Animation stops while the map is offscreen or the tab is hidden, draws at a maximum of 30fps, and caps pixel density. A saved pause control, reduced-motion/slow-device/save-data preferences, and a matching static SVG fallback keep the experience optional. No information depends on motion or pointer input.
 - Security project routing plus a six-step web/API scope planner with local draft resume, PDF export, and a reviewed handoff to the contact form. The estimator does not price or estimate specialist work.
 - Interactive synthetic report with executive, technical, remediation, and re-test views.
@@ -38,7 +38,7 @@ The homepage uses Canvas 2D, CSS and the Web Animations API, without an animatio
 | `report-viewer.html`, `report-explorer.*` | Sample report explorer |
 | `contact.html`, `contact-brief.*` | Enquiries and scope handoff |
 | `services.html`, service pages, `insights/` | Service coverage and buyer guides |
-| `blogs.html`, `case-studies.*`, case-study articles in `insights/` | Redacted stories, progressive filtering, and defensive test ideas |
+| `blogs.html`, `case-studies.*`, field-note articles in `insights/` | First-person redacted stories, progressive filtering, and defensive lessons |
 | `build_public.py`, `serve.py`, `verify_site.py` | Publication boundary and validation |
 | `favicon.svg`, `logo.svg`, `scripts/build-brand-icons.py` | Vector brand mark and PNG/ICO icon generation |
 | `../website-tools/toolkit.py` | Local PDF and editable client-kit generation |
