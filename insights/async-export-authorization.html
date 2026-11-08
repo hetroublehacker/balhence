@@ -93,7 +93,7 @@
       <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The Export Job That Crossed a Tenant Boundary</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The Export Job That Crossed a Tenant Boundary</h1><p class="article-deck">The normal API refused a foreign object. A background export worker quietly packaged it anyway.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>7 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
-        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Two clean tenants</a><a href="#worker">The worker path</a><a href="#proof">The proof</a><a href="#takeaway">Takeaway</a></nav>
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Two clean tenants</a><a href="#worker">The worker path</a><a href="#proof">The proof</a><a href="#open-source-tool">Open-source tool</a><a href="#takeaway">Takeaway</a></nav>
         <div class="article-content archive-article-content research-article-content">
           <div class="research-article-body" id="research-article">
             <p>Hi people,</p>
@@ -101,7 +101,7 @@
             <p>I had two completely separate controlled tenants. Tenant B owned one synthetic image. Tenant A had no membership, role, or shared object in Tenant B. That setup gave me a clean question: would every path enforce the same tenant boundary?</p>
             <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The organization, product, routes, identifiers, dates, and UI labels were removed or replaced. Every example below is synthetic. I am not claiming a deployed fix, completed retest, or program acceptance.</p></blockquote>
 
-            <figure class="research-cover-figure"><img src="/assets/research/field-note-async-export-authorization.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A background conveyor carrying a document across an otherwise blocked tenant boundary."><figcaption>Original editorial illustration for this anonymized field note.</figcaption></figure>
+            <figure class="research-cover-figure"><img src="/assets/research/field-note-async-export-authorization.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A background conveyor carrying a document across an otherwise blocked tenant boundary."><figcaption>Original manga-style editorial illustration for this anonymized field note.</figcaption></figure>
 
             <h3>First, I proved the boundary worked</h3>
             <p>As Tenant B, I uploaded a small image containing a unique marker and exported it through the normal interface. That owner-positive archive gave me the expected filename, byte length, and SHA-256 hash.</p>
@@ -153,6 +153,9 @@ HTTP/1.1 202 Accepted
             <p>This pattern shows up in exports, report generation, document conversion, notifications, and scheduled actions. The front door can perform a correct check while the worker runs with broad service authority and trusts whatever identifiers were placed on the queue.</p>
             <p>A mixed batch is especially useful during testing. Put one owned reference beside one foreign reference and check whether the application rejects the complete job, silently drops the foreign object, or packages both. Partial success can hide the same missing check.</p>
             <p>Replacing sequential identifiers with random ones may make guessing harder, but it does not repair the missing authorization decision. A reference is not proof that the caller may use the object.</p>
+
+            <h3 id="open-source-tool">Open-source workflow companion: AuthMatrix</h3>
+            <p>A useful open-source companion for this test is <a href="https://github.com/caido-community/authmatrix" rel="noopener noreferrer">Caido AuthMatrix</a>. It lays requests out against multiple controlled users and roles, which makes inconsistent authorization decisions easier to see as a grid instead of a pile of tabs. I would configure one identity for each test tenant, add both the ordinary object read and export-creation request, then follow the resulting job with the same controlled sessions. The important manual step remains opening the finished archive and matching its harmless marker to the owner-controlled source object; a successful response code alone is not evidence. The matrix helps reveal where the synchronous path and worker path disagree. This is a workflow recommendation for authorized testing, not a claim that AuthMatrix was used in the original private submission.</p>
 
             <h3 id="takeaway">Takeaway</h3>
             <p>The repair belongs in both halves of the workflow:</p>

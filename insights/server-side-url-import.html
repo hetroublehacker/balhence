@@ -93,7 +93,7 @@
       <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The File Importer That Stored Whatever the URL Returned</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The File Importer That Stored Whatever the URL Returned</h1><p class="article-deck">A normal upload flow hid a server-side fetcher, and the stored file returned my harmless marker byte for byte.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>6 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
-        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Behind the upload</a><a href="#callback">The callback</a><a href="#readback">Response readback</a><a href="#takeaway">Takeaway</a></nav>
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Behind the upload</a><a href="#callback">The callback</a><a href="#readback">Response readback</a><a href="#open-source-tool">Open-source tool</a><a href="#takeaway">Takeaway</a></nav>
         <div class="article-content archive-article-content research-article-content">
           <div class="research-article-body" id="research-article">
             <p>Hi people,</p>
@@ -101,7 +101,7 @@
             <p>That difference matters. A browser fetching a URL uses my network position. A server fetching it uses the application's network position and may return content I could not otherwise reach.</p>
             <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The organization, product, routes, identifiers, dates, and UI labels were removed or replaced. Every example below is synthetic. I am not claiming a deployed fix, completed retest, or program acceptance.</p></blockquote>
 
-            <figure class="research-cover-figure"><img src="/assets/research/field-note-server-side-url-import.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A backend importer fetching a remote marker and storing its returned contents."><figcaption>Original editorial illustration for this anonymized field note.</figcaption></figure>
+            <figure class="research-cover-figure"><img src="/assets/research/field-note-server-side-url-import.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A backend importer fetching a remote marker and storing its returned contents."><figcaption>Original risograph editorial illustration for this anonymized field note.</figcaption></figure>
 
             <h3>Looking behind the upload control</h3>
             <p>I was using a privileged controlled role in a document-import workflow. The normal interface first uploaded files and then passed their locations to the application. When I inspected the API request, I saw that those locations were still ordinary HTTPS strings.</p>
@@ -149,6 +149,9 @@ SAFE-RESEARCH-MARKER</code></pre>
             <h3>What I could safely claim</h3>
             <p>I could prove that the backend fetched a researcher-owned HTTPS resource, stored arbitrary harmless bytes, and returned them through the import object. I did not probe internal services and I did not retrieve secrets.</p>
             <p>That boundary is important. The possibility of internal reachability is a reason to fix the design, but it is not evidence that internal access already happened. A strong report separates the observed primitive from the larger impact that safe testing deliberately leaves untested.</p>
+
+            <h3 id="open-source-tool">Open-source workflow companion: Interactsh</h3>
+            <p>For a URL-fetching workflow, the open-source tool I would reach for is <a href="https://github.com/projectdiscovery/interactsh" rel="noopener noreferrer">ProjectDiscovery Interactsh</a>. It issues unique out-of-band addresses and records DNS and HTTP interactions, so each import attempt can have its own correlation point. I would place one unique address in the approved URL field, record the callback, and then pair that evidence with a separate controlled marker response to show whether the application only connected or also consumed and stored the returned bytes. Those are different claims, and the evidence should keep them separate. I would self-host when an assessment needs tighter control over logs and retention. This is a workflow recommendation for an authorized lab, not a claim that Interactsh was used in the original private submission.</p>
 
             <h3 id="takeaway">Takeaway</h3>
             <p>The cleanest repair is to avoid accepting arbitrary absolute URLs. A server-issued upload identifier gives the backend something it can resolve without becoming a general-purpose fetcher.</p>

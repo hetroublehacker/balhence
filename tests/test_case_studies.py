@@ -26,35 +26,77 @@ STORY_IMAGES = {
     "insights/ai-agent-mcp-root-rce.html": {
         "asset": "assets/research/field-note-ai-agent-mcp-root-rce.jpg",
         "alt": "A draft AI agent launching a local MCP tool inside a privileged server runtime.",
+        "caption": "Original 3D glass-and-chrome editorial illustration for this anonymized Critical/P1 field note.",
     },
     "insights/async-export-authorization.html": {
         "asset": "assets/research/field-note-async-export-authorization.jpg",
         "alt": "A background conveyor carrying a document across an otherwise blocked tenant boundary.",
+        "caption": "Original manga-style editorial illustration for this anonymized field note.",
     },
     "insights/server-side-url-import.html": {
         "asset": "assets/research/field-note-server-side-url-import.jpg",
         "alt": "A backend importer fetching a remote marker and storing its returned contents.",
+        "caption": "Original risograph editorial illustration for this anonymized field note.",
     },
     "insights/draft-write-authorization.html": {
         "asset": "assets/research/field-note-draft-write-authorization.jpg",
         "alt": "A protected document that cannot be viewed but can still be changed through another path.",
+        "caption": "Original Swiss-modernist typographic illustration for this anonymized field note.",
     },
     "insights/session-authority-boundary.html": {
         "asset": "assets/research/field-note-session-authority-boundary.jpg",
         "alt": "Two isolated browser sessions converging on the same shopping cart.",
+        "caption": "Original gouache and colored-pencil editorial illustration for this anonymized field note.",
     },
     "insights/private-response-cache-boundary.html": {
         "asset": "assets/research/field-note-private-response-cache-boundary.jpg",
         "alt": "A private response being copied through a shared cache to another client.",
+        "caption": "Original retro-futurist airbrush illustration for this anonymized field note.",
     },
     "insights/server-owned-validation-rules.html": {
         "asset": "assets/research/field-note-server-owned-validation-rules.jpg",
         "alt": "A public validation control illuminating information inside a hidden data archive.",
+        "caption": "Original cyanotype blueprint illustration for this anonymized field note.",
     },
     "insights/evidence-gated-workflows.html": {
         "asset": "assets/research/field-note-evidence-gated-workflows.jpg",
         "alt": "A submission passing its workflow gate while a required evidence piece remains missing.",
+        "caption": "Original handcrafted paper-and-clay diorama for this anonymized field note.",
     },
+}
+STORY_TOOLS = {
+    "insights/ai-agent-mcp-root-rce.html": (
+        "Agent Scan",
+        "https://github.com/snyk/agent-scan",
+    ),
+    "insights/async-export-authorization.html": (
+        "AuthMatrix",
+        "https://github.com/caido-community/authmatrix",
+    ),
+    "insights/server-side-url-import.html": (
+        "Interactsh",
+        "https://github.com/projectdiscovery/interactsh",
+    ),
+    "insights/draft-write-authorization.html": (
+        "Autorize",
+        "https://github.com/caido-community/autorize",
+    ),
+    "insights/session-authority-boundary.html": (
+        "Turbo Intruder",
+        "https://github.com/PortSwigger/turbo-intruder",
+    ),
+    "insights/private-response-cache-boundary.html": (
+        "Param Miner",
+        "https://github.com/PortSwigger/param-miner",
+    ),
+    "insights/server-owned-validation-rules.html": (
+        "ffuf",
+        "https://github.com/ffuf/ffuf",
+    ),
+    "insights/evidence-gated-workflows.html": (
+        "Nuclei",
+        "https://github.com/projectdiscovery/nuclei",
+    ),
 }
 RESEARCH = tuple(
     item["path"]
@@ -214,6 +256,19 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 self.assertEqual(article["dateModified"], "2026-11-08")
 
     def test_story_images_match_body_social_metadata_and_schema(self):
+        self.assertEqual(
+            len({expected["caption"] for expected in STORY_IMAGES.values()}),
+            len(ANONYMIZED_STORIES),
+        )
+        self.assertEqual(
+            len(
+                {
+                    (SOURCE_ROOT / expected["asset"]).read_bytes()
+                    for expected in STORY_IMAGES.values()
+                }
+            ),
+            len(ANONYMIZED_STORIES),
+        )
         for story, expected in STORY_IMAGES.items():
             with self.subTest(story=story):
                 source = (SOURCE_ROOT / story).read_text(encoding="utf-8")
@@ -255,6 +310,25 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 self.assertTrue(image_path.is_file())
                 self.assertTrue(image_path.read_bytes().startswith(b"\xff\xd8\xff"))
                 self.assertLessEqual(image_path.stat().st_size, 250_000)
+                self.assertIn(f"<figcaption>{expected['caption']}</figcaption>", source)
+
+    def test_each_field_note_recommends_one_distinct_open_source_tool(self):
+        self.assertEqual(set(STORY_TOOLS), set(ANONYMIZED_STORIES))
+        self.assertEqual(
+            len({link for _, link in STORY_TOOLS.values()}),
+            len(ANONYMIZED_STORIES),
+        )
+        for story, (tool_name, tool_link) in STORY_TOOLS.items():
+            with self.subTest(story=story):
+                source = (SOURCE_ROOT / story).read_text(encoding="utf-8")
+                page = EditorialDocument(source)
+                self.assertIn('<h3 id="open-source-tool">', source)
+                self.assertIn('<a href="#open-source-tool">Open-source tool</a>', source)
+                self.assertEqual(page.links.count(tool_link), 1)
+                self.assertIn(
+                    f"not a claim that {tool_name} was used in the original private submission",
+                    source,
+                )
 
     def test_private_sources_targets_and_credentials_are_not_published(self):
         forbidden = re.compile(
@@ -286,14 +360,15 @@ class CaseStudyPublicationTests(unittest.TestCase):
                         r"^(?:Cookie: session=\[REDACTED\]|Authorization: Bearer \[REDACTED\])$",
                     )
 
-    def test_story_links_do_not_disclose_external_targets(self):
+    def test_story_links_only_include_the_verified_tool_repository(self):
         for story in ANONYMIZED_STORIES:
             with self.subTest(story=story):
                 page = EditorialDocument((SOURCE_ROOT / story).read_text(encoding="utf-8"))
+                expected_tool_link = STORY_TOOLS[story][1]
                 for link in page.links:
                     parsed = urlsplit(link)
                     if parsed.netloc:
-                        self.assertEqual(parsed.netloc, "balhence.com")
+                        self.assertEqual(link, expected_tool_link)
                     if parsed.scheme == "mailto":
                         self.assertEqual(parsed.path, "contact@balhence.com")
 
