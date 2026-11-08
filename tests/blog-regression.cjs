@@ -145,6 +145,22 @@ async function main() {
       assert.ok(await page.locator(".research-article-body pre").count() >= 1);
       assert.ok(await page.locator(".research-story-figure").count() >= 1);
       assert.ok(await page.locator(".research-story-figure figcaption").count() >= 1);
+      assert.equal(await page.locator(".research-cover-figure").count(), 1);
+      assert.equal(await page.locator(".research-cover-figure figcaption").count(), 1);
+      const cover = page.locator(".research-cover-figure img");
+      assert.equal(await cover.getAttribute("width"), "1200");
+      assert.equal(await cover.getAttribute("height"), "630");
+      assert.equal(await cover.getAttribute("loading"), "lazy");
+      assert.equal(await cover.getAttribute("decoding"), "async");
+      assert.ok((await cover.getAttribute("alt")).trim().length >= 30);
+      assert.deepEqual(
+        await cover.evaluate(image => ({
+          complete: image.complete,
+          naturalWidth: image.naturalWidth,
+          naturalHeight: image.naturalHeight,
+        })),
+        { complete: true, naturalWidth: 1200, naturalHeight: 630 },
+      );
       assert.match(await page.locator(".research-article-body").innerText(), /Publication note:/);
       assert.ok(await page.locator('a[href="/about.html#researcher"]').count() > 0);
       assert.ok(await page.locator('a[href="/blogs.html#bug-bounty-archive"]').count() > 0, `${route} should link back to the collection`);
@@ -205,7 +221,7 @@ async function main() {
         if (!RESEARCH_ROUTES.has(route)) {
           assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${route} contains non-ASCII body text at ${width}px`);
         }
-        for (const block of await page.locator(".research-article-body pre, .research-story-figure, .case-code, .scope-table-wrap").all()) {
+        for (const block of await page.locator(".research-article-body pre, .research-story-figure, .research-cover-figure, .case-code, .scope-table-wrap").all()) {
           assert.ok(await block.evaluate(element => element.getBoundingClientRect().width <= innerWidth), `${route} has an overflowing reading block at ${width}px`);
         }
       }
@@ -238,6 +254,7 @@ async function main() {
     assert.equal((await nojs.locator("h1").innerText()).trim(), firstTitle);
     assert.equal(await nojs.locator(".research-article-body").count(), 1);
     assert.ok(await nojs.locator(".research-story-figure").count() >= 1);
+    assert.equal(await nojs.locator(".research-cover-figure img").count(), 1);
     pass(`Without JavaScript all ${ARTICLES.length} articles and navigation remain visible, filters stay hidden, and links work`);
 
     assert.deepEqual(errors, [], "The blog and articles should not throw JavaScript errors");

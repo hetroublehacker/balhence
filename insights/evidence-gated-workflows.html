@@ -16,17 +16,22 @@
   <meta property="og:title" content="Submitted is not the same as verified">
   <meta property="og:description" content="The screen said submitted while the required evidence was missing. Here is how I separated the real workflow failure from impact I could not prove.">
   <meta property="og:url" content="https://balhence.com/insights/evidence-gated-workflows.html">
-  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image" content="https://balhence.com/assets/research/field-note-evidence-gated-workflows.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="A submission passing its workflow gate while a required evidence piece remains missing.">
   <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-11-07">
+  <meta property="article:modified_time" content="2026-11-08">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Submitted is not the same as verified">
   <meta name="twitter:description" content="How I proved that an incomplete case reached submitted state without claiming it was approved.">
-  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image" content="https://balhence.com/assets/research/field-note-evidence-gated-workflows.jpg">
+  <meta name="twitter:image:alt" content="A submission passing its workflow gate while a required evidence piece remains missing.">
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261107a">
+  <link rel="stylesheet" href="/styles.css?v=20261108a">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -42,7 +47,7 @@
         "name": "Submitted is not the same as verified",
         "description": "A first-person, anonymized bug bounty story about a workflow that recorded a submission without its required evidence.",
         "datePublished": "2026-09-05",
-        "dateModified": "2026-11-07",
+        "dateModified": "2026-11-08",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/evidence-gated-workflows.html#breadcrumb" }
@@ -55,9 +60,9 @@
         "headline": "Submitted is not the same as verified",
         "description": "A first-person, anonymized bug bounty story about a workflow that recorded a submission without its required evidence.",
         "datePublished": "2026-09-05",
-        "dateModified": "2026-11-07",
+        "dateModified": "2026-11-08",
         "inLanguage": "en",
-        "image": "https://balhence.com/og-image.png",
+        "image": "https://balhence.com/assets/research/field-note-evidence-gated-workflows.jpg",
         "keywords": ["bug bounty", "business logic", "workflow security", "evidence validation"],
         "articleSection": "Anonymized bug bounty field notes",
         "author": { "@id": "https://balhence.com/about.html#researcher" },
@@ -97,7 +102,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Submitted is not the same as verified</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>Submitted is not the same as verified</h1><p class="article-deck">The screen said submitted while the required evidence was still missing. The important part was proving the state change without claiming approval.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-09-05">05 September 2026</time></span><span>Updated <time datetime="2026-11-07">07 November 2026</time></span><span>5 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Submitted is not the same as verified</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>Submitted is not the same as verified</h1><p class="article-deck">The screen said submitted while the required evidence was still missing. The important part was proving the state change without claiming approval.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>5 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the story</a><a href="#proof">How I proved it</a><a href="#takeaway">Takeaway</a><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></nav>
@@ -108,6 +113,7 @@
             <p>I was testing the process with my own controlled record. One required item was still missing, so I expected the final action to fail. Instead, the interface showed a completion message and moved the record into a submitted state.</p>
             <p>At first I did not know whether this was only a front-end issue. A friendly success banner is not enough to prove a security finding. I needed to check what the server had actually stored.</p>
             <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The company, product, routes, identifiers, dates, and UI labels were removed or replaced. The examples are synthetic. I am not claiming that a fix was deployed or that a completed retest occurred.</p></blockquote>
+            <figure class="research-cover-figure"><img src="/assets/research/field-note-evidence-gated-workflows.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A submission passing its workflow gate while a required evidence piece remains missing."><figcaption>Original editorial illustration for this anonymized field note.</figcaption></figure>
 
             <h3>What I expected the workflow to do</h3>
             <p>The rule seemed straightforward. The record could remain in a collecting state while evidence was incomplete. Only after every required item existed, belonged to that record, and finished processing should the server mark it ready for review.</p>

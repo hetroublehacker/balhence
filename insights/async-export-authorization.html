@@ -16,17 +16,22 @@
   <meta property="og:title" content="The Export Job That Crossed a Tenant Boundary">
   <meta property="og:description" content="A first-person field note about authorization disappearing between an API request and its background worker.">
   <meta property="og:url" content="https://balhence.com/insights/async-export-authorization.html">
-  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image" content="https://balhence.com/assets/research/field-note-async-export-authorization.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="A background conveyor carrying a document across an otherwise blocked tenant boundary.">
   <meta property="article:published_time" content="2026-11-07">
-  <meta property="article:modified_time" content="2026-11-07">
+  <meta property="article:modified_time" content="2026-11-08">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The Export Job That Crossed a Tenant Boundary">
   <meta name="twitter:description" content="A first-person field note about authorization disappearing between an API request and its background worker.">
-  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image" content="https://balhence.com/assets/research/field-note-async-export-authorization.jpg">
+  <meta name="twitter:image:alt" content="A background conveyor carrying a document across an otherwise blocked tenant boundary.">
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261107a">
+  <link rel="stylesheet" href="/styles.css?v=20261108a">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -42,7 +47,7 @@
         "name": "The Export Job That Crossed a Tenant Boundary",
         "description": "An anonymized bug bounty story about a direct read that was denied while a background export packaged the same foreign object.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-07",
+        "dateModified": "2026-11-08",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/async-export-authorization.html#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/async-export-authorization.html#breadcrumb" }
@@ -55,9 +60,9 @@
         "headline": "The Export Job That Crossed a Tenant Boundary",
         "description": "An anonymized bug bounty story about a direct read that was denied while a background export packaged the same foreign object.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-07",
+        "dateModified": "2026-11-08",
         "inLanguage": "en",
-        "image": "https://balhence.com/og-image.png",
+        "image": "https://balhence.com/assets/research/field-note-async-export-authorization.jpg",
         "articleSection": "Anonymized bug bounty field notes",
         "keywords": ["broken access control", "multi-tenant security", "background jobs", "IDOR"],
         "author": { "@id": "https://balhence.com/about.html#researcher" },
@@ -85,7 +90,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The Export Job That Crossed a Tenant Boundary</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The Export Job That Crossed a Tenant Boundary</h1><p class="article-deck">The normal API refused a foreign object. A background export worker quietly packaged it anyway.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">07 November 2026</time></span><span>7 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The Export Job That Crossed a Tenant Boundary</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The Export Job That Crossed a Tenant Boundary</h1><p class="article-deck">The normal API refused a foreign object. A background export worker quietly packaged it anyway.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>7 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Two clean tenants</a><a href="#worker">The worker path</a><a href="#proof">The proof</a><a href="#takeaway">Takeaway</a></nav>
@@ -95,6 +100,8 @@
             <p>This story started with a feature that looked harmless: select some private files and ask the application to prepare a downloadable archive.</p>
             <p>I had two completely separate controlled tenants. Tenant B owned one synthetic image. Tenant A had no membership, role, or shared object in Tenant B. That setup gave me a clean question: would every path enforce the same tenant boundary?</p>
             <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The organization, product, routes, identifiers, dates, and UI labels were removed or replaced. Every example below is synthetic. I am not claiming a deployed fix, completed retest, or program acceptance.</p></blockquote>
+
+            <figure class="research-cover-figure"><img src="/assets/research/field-note-async-export-authorization.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A background conveyor carrying a document across an otherwise blocked tenant boundary."><figcaption>Original editorial illustration for this anonymized field note.</figcaption></figure>
 
             <h3>First, I proved the boundary worked</h3>
             <p>As Tenant B, I uploaded a small image containing a unique marker and exported it through the normal interface. That owner-positive archive gave me the expected filename, byte length, and SHA-256 hash.</p>

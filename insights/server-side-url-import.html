@@ -16,17 +16,22 @@
   <meta property="og:title" content="The File Importer That Stored Whatever the URL Returned">
   <meta property="og:description" content="A first-person field note about proving server-side fetching and harmless response-byte readback through a file import flow.">
   <meta property="og:url" content="https://balhence.com/insights/server-side-url-import.html">
-  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image" content="https://balhence.com/assets/research/field-note-server-side-url-import.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="A backend importer fetching a remote marker and storing its returned contents.">
   <meta property="article:published_time" content="2026-11-07">
-  <meta property="article:modified_time" content="2026-11-07">
+  <meta property="article:modified_time" content="2026-11-08">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The File Importer That Stored Whatever the URL Returned">
   <meta name="twitter:description" content="A first-person field note about proving server-side fetching and harmless response-byte readback through a file import flow.">
-  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image" content="https://balhence.com/assets/research/field-note-server-side-url-import.jpg">
+  <meta name="twitter:image:alt" content="A backend importer fetching a remote marker and storing its returned contents.">
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261107a">
+  <link rel="stylesheet" href="/styles.css?v=20261108a">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -42,7 +47,7 @@
         "name": "The File Importer That Stored Whatever the URL Returned",
         "description": "An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-07",
+        "dateModified": "2026-11-08",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/server-side-url-import.html#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/server-side-url-import.html#breadcrumb" }
@@ -55,9 +60,9 @@
         "headline": "The File Importer That Stored Whatever the URL Returned",
         "description": "An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-07",
+        "dateModified": "2026-11-08",
         "inLanguage": "en",
-        "image": "https://balhence.com/og-image.png",
+        "image": "https://balhence.com/assets/research/field-note-server-side-url-import.jpg",
         "articleSection": "Anonymized bug bounty field notes",
         "keywords": ["SSRF", "URL import", "server-side fetch", "response readback"],
         "author": { "@id": "https://balhence.com/about.html#researcher" },
@@ -85,7 +90,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The File Importer That Stored Whatever the URL Returned</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The File Importer That Stored Whatever the URL Returned</h1><p class="article-deck">A normal upload flow hid a server-side fetcher, and the stored file returned my harmless marker byte for byte.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">07 November 2026</time></span><span>6 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The File Importer That Stored Whatever the URL Returned</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The File Importer That Stored Whatever the URL Returned</h1><p class="article-deck">A normal upload flow hid a server-side fetcher, and the stored file returned my harmless marker byte for byte.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>6 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Behind the upload</a><a href="#callback">The callback</a><a href="#readback">Response readback</a><a href="#takeaway">Takeaway</a></nav>
@@ -95,6 +100,8 @@
             <p>File import features are some of my favorite places to slow down and inspect the request. The interface may show an upload box, but the API sometimes receives a URL and asks a backend worker to collect the file later.</p>
             <p>That difference matters. A browser fetching a URL uses my network position. A server fetching it uses the application's network position and may return content I could not otherwise reach.</p>
             <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The organization, product, routes, identifiers, dates, and UI labels were removed or replaced. Every example below is synthetic. I am not claiming a deployed fix, completed retest, or program acceptance.</p></blockquote>
+
+            <figure class="research-cover-figure"><img src="/assets/research/field-note-server-side-url-import.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A backend importer fetching a remote marker and storing its returned contents."><figcaption>Original editorial illustration for this anonymized field note.</figcaption></figure>
 
             <h3>Looking behind the upload control</h3>
             <p>I was using a privileged controlled role in a document-import workflow. The normal interface first uploaded files and then passed their locations to the application. When I inspected the API request, I saw that those locations were still ordinary HTTPS strings.</p>

@@ -22,6 +22,40 @@ ANONYMIZED_STORIES = (
     "insights/server-owned-validation-rules.html",
     "insights/evidence-gated-workflows.html",
 )
+STORY_IMAGES = {
+    "insights/password-reset-token-replay.html": {
+        "asset": "assets/research/field-note-password-reset-token-replay.jpg",
+        "alt": "Two illustrated passes of a recovery token loop through matching security gates.",
+    },
+    "insights/async-export-authorization.html": {
+        "asset": "assets/research/field-note-async-export-authorization.jpg",
+        "alt": "A background conveyor carrying a document across an otherwise blocked tenant boundary.",
+    },
+    "insights/server-side-url-import.html": {
+        "asset": "assets/research/field-note-server-side-url-import.jpg",
+        "alt": "A backend importer fetching a remote marker and storing its returned contents.",
+    },
+    "insights/draft-write-authorization.html": {
+        "asset": "assets/research/field-note-draft-write-authorization.jpg",
+        "alt": "A protected document that cannot be viewed but can still be changed through another path.",
+    },
+    "insights/session-authority-boundary.html": {
+        "asset": "assets/research/field-note-session-authority-boundary.jpg",
+        "alt": "Two isolated browser sessions converging on the same shopping cart.",
+    },
+    "insights/private-response-cache-boundary.html": {
+        "asset": "assets/research/field-note-private-response-cache-boundary.jpg",
+        "alt": "A private response being copied through a shared cache to another client.",
+    },
+    "insights/server-owned-validation-rules.html": {
+        "asset": "assets/research/field-note-server-owned-validation-rules.jpg",
+        "alt": "A public validation control illuminating information inside a hidden data archive.",
+    },
+    "insights/evidence-gated-workflows.html": {
+        "asset": "assets/research/field-note-evidence-gated-workflows.jpg",
+        "alt": "A submission passing its workflow gate while a required evidence piece remains missing.",
+    },
+}
 RESEARCH = tuple(
     item["path"]
     for item in json.loads(
@@ -48,12 +82,28 @@ class EditorialDocument(HTMLParser):
         self.story_figures = 0
         self.story_captions = 0
         self.story_pre = 0
+        self.cover_depth = 0
+        self.cover_images: list[dict[str, str]] = []
+        self.cover_captions = 0
+        self.meta: dict[str, str] = {}
         self.feed(source)
         self.close()
 
     def handle_starttag(self, tag, attributes):
         attrs = dict(attributes)
         classes = set(attrs.get("class", "").split())
+        if tag == "meta" and attrs.get("content"):
+            key = attrs.get("property") or attrs.get("name")
+            if key:
+                self.meta[key] = attrs["content"]
+        if tag == "figure" and "research-cover-figure" in classes:
+            self.cover_depth = 1
+        elif self.cover_depth and tag not in VOID_ELEMENTS:
+            self.cover_depth += 1
+        if tag == "img" and self.cover_depth:
+            self.cover_images.append(attrs)
+        if tag == "figcaption" and self.cover_depth:
+            self.cover_captions += 1
         if tag == "body":
             self.body_classes = classes
         if tag == "a" and attrs.get("href"):
@@ -79,6 +129,8 @@ class EditorialDocument(HTMLParser):
             self.story_pre += 1
 
     def handle_endtag(self, tag):
+        if self.cover_depth and tag not in VOID_ELEMENTS:
+            self.cover_depth -= 1
         if self.story_depth and tag not in VOID_ELEMENTS:
             self.story_depth -= 1
 
@@ -159,7 +211,50 @@ class CaseStudyPublicationTests(unittest.TestCase):
                     article["isPartOf"]["@id"],
                     "https://balhence.com/blogs.html#bug-bounty-archive",
                 )
-                self.assertEqual(article["dateModified"], "2026-11-07")
+                self.assertEqual(article["dateModified"], "2026-11-08")
+
+    def test_story_images_match_body_social_metadata_and_schema(self):
+        for story, expected in STORY_IMAGES.items():
+            with self.subTest(story=story):
+                source = (SOURCE_ROOT / story).read_text(encoding="utf-8")
+                page = EditorialDocument(source)
+                asset = expected["asset"]
+                relative_url = "/" + asset
+                absolute_url = "https://balhence.com/" + asset
+                self.assertEqual(len(page.cover_images), 1)
+                self.assertEqual(page.cover_captions, 1)
+                image = page.cover_images[0]
+                self.assertEqual(image["src"], relative_url)
+                self.assertEqual(image["alt"], expected["alt"])
+                self.assertEqual(image["width"], "1200")
+                self.assertEqual(image["height"], "630")
+                self.assertEqual(image["loading"], "lazy")
+                self.assertEqual(image["decoding"], "async")
+                self.assertEqual(page.meta["og:image"], absolute_url)
+                self.assertEqual(page.meta["og:image:width"], "1200")
+                self.assertEqual(page.meta["og:image:height"], "630")
+                self.assertEqual(page.meta["og:image:type"], "image/jpeg")
+                self.assertEqual(page.meta["og:image:alt"], expected["alt"])
+                self.assertEqual(page.meta["twitter:image"], absolute_url)
+                self.assertEqual(page.meta["twitter:image:alt"], expected["alt"])
+                article = next(
+                    node for node in structured_nodes(source) if node.get("@type") == "BlogPosting"
+                )
+                webpage = next(
+                    node for node in structured_nodes(source) if node.get("@type") == "WebPage"
+                )
+                self.assertEqual(article["image"], absolute_url)
+                self.assertEqual(article["dateModified"], "2026-11-08")
+                self.assertEqual(webpage["dateModified"], "2026-11-08")
+                self.assertIn(
+                    'Updated <time datetime="2026-11-08">8 November 2026</time>',
+                    source,
+                )
+                self.assertIn(asset, PUBLIC_FILE_SET)
+                image_path = SOURCE_ROOT / asset
+                self.assertTrue(image_path.is_file())
+                self.assertTrue(image_path.read_bytes().startswith(b"\xff\xd8\xff"))
+                self.assertLessEqual(image_path.stat().st_size, 250_000)
 
     def test_private_sources_targets_and_credentials_are_not_published(self):
         forbidden = re.compile(
