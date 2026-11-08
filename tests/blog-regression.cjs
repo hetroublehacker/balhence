@@ -9,7 +9,7 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 
 const FIELD_NOTES = [
-  ["/insights/password-reset-token-replay.html", "The Password Reset Link That Worked Twice"],
+  ["/insights/ai-agent-mcp-root-rce.html", "The AI Agent That Ran My MCP Tool as Root"],
   ["/insights/async-export-authorization.html", "The Export Job That Crossed a Tenant Boundary"],
   ["/insights/server-side-url-import.html", "The File Importer That Stored Whatever the URL Returned"],
   ["/insights/draft-write-authorization.html", "The draft you could change but could not read"],
@@ -34,13 +34,13 @@ const ARTICLES = [...FIELD_NOTES, ...RESEARCH_ARTICLES];
 const RESEARCH_ROUTES = new Set(RESEARCH_ARTICLES.map(([route]) => route));
 const TOPICS = {
   authorization: [
-    "/insights/password-reset-token-replay.html",
     "/insights/async-export-authorization.html",
     "/insights/draft-write-authorization.html",
     "/research/first-bounty-target.html",
     "/research/automating-burp-idor.html",
   ],
   "web-attacks": [
+    "/insights/ai-agent-mcp-root-rce.html",
     "/insights/server-side-url-import.html",
     "/research/tale-of-my-first-xss.html",
     "/research/http-request-smuggling-plain-english.html",

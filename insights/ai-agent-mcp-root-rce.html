@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" class="has-article-flow">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Agent MCP Command Injection to Root RCE | Balhence</title>
+  <meta name="description" content="An anonymized Critical/P1 submission showing how a draft AI agent accepted local MCP configuration and launched a controlled server-side process as root.">
+  <meta name="author" content="Aditya Soni">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/ai-agent-mcp-root-rce.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="The AI Agent That Ran My MCP Tool as Root">
+  <meta property="og:description" content="A draft AI agent accepted a local process-backed MCP configuration, started it automatically, and returned a root process identity.">
+  <meta property="og:url" content="https://balhence.com/insights/ai-agent-mcp-root-rce.html">
+  <meta property="og:image" content="https://balhence.com/assets/research/field-note-ai-agent-mcp-root-rce.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="A draft AI agent launching a local MCP tool inside a privileged server runtime.">
+  <meta property="article:published_time" content="2026-11-08">
+  <meta property="article:modified_time" content="2026-11-08">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The AI Agent That Ran My MCP Tool as Root">
+  <meta name="twitter:description" content="A field note reconstructed from a Critical/P1 submission about a draft AI agent launching a controlled local MCP tool in a root server process.">
+  <meta name="twitter:image" content="https://balhence.com/assets/research/field-note-ai-agent-mcp-root-rce.jpg">
+  <meta name="twitter:image:alt" content="A draft AI agent launching a local MCP tool inside a privileged server runtime.">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20261108a">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
+  <link rel="stylesheet" href="/flow.css?v=20261001b">
+  <link rel="stylesheet" href="/type-field.css?v=20261001f">
+  <script async src="/type-field.js?v=20261001f"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://balhence.com/insights/ai-agent-mcp-root-rce.html#webpage",
+        "url": "https://balhence.com/insights/ai-agent-mcp-root-rce.html",
+        "name": "The AI Agent That Ran My MCP Tool as Root",
+        "description": "An anonymized Critical/P1 submission showing how a draft AI agent accepted local MCP configuration and launched a controlled server-side process as root.",
+        "datePublished": "2026-11-08",
+        "dateModified": "2026-11-08",
+        "inLanguage": "en",
+        "mainEntity": { "@id": "https://balhence.com/insights/ai-agent-mcp-root-rce.html#article" },
+        "breadcrumb": { "@id": "https://balhence.com/insights/ai-agent-mcp-root-rce.html#breadcrumb" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://balhence.com/insights/ai-agent-mcp-root-rce.html#article",
+        "url": "https://balhence.com/insights/ai-agent-mcp-root-rce.html",
+        "mainEntityOfPage": { "@id": "https://balhence.com/insights/ai-agent-mcp-root-rce.html#webpage" },
+        "headline": "The AI Agent That Ran My MCP Tool as Root",
+        "description": "An anonymized Critical/P1 submission showing how a draft AI agent accepted local MCP configuration and launched a controlled server-side process as root.",
+        "datePublished": "2026-11-08",
+        "dateModified": "2026-11-08",
+        "inLanguage": "en",
+        "image": "https://balhence.com/assets/research/field-note-ai-agent-mcp-root-rce.jpg",
+        "articleSection": "AI agent and MCP security",
+        "keywords": ["AI agent security", "MCP security", "command injection", "remote code execution", "AI penetration testing"],
+        "author": { "@id": "https://balhence.com/about.html#researcher" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "isPartOf": { "@id": "https://balhence.com/blogs.html#bug-bounty-archive" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/ai-agent-mcp-root-rce.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Bug Bounty Archive", "item": "https://balhence.com/blogs.html#bug-bounty-archive" },
+          { "@type": "ListItem", "position": 3, "name": "The AI Agent That Ran My MCP Tool as Root", "item": "https://balhence.com/insights/ai-agent-mcp-root-rce.html" }
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://balhence.com/about.html#researcher",
+        "name": "Aditya Soni",
+        "alternateName": "HeTroubleHacker",
+        "url": "https://balhence.com/about.html#researcher"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://balhence.com/#organization",
+        "name": "Balhence",
+        "url": "https://balhence.com/",
+        "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.png" }
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights" class="research-archive-post archive-article">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=ai-llm&amp;source=ai-agent-mcp-root-rce" data-track="nav_pentest">Request an AI security test</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+
+  <main id="main-content">
+    <article>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The AI Agent That Ran My MCP Tool as Root</span></nav><span class="eyebrow">Bug bounty archive / AI security / Submitted Critical/P1</span><h1>The AI Agent That Ran My MCP Tool as Root</h1><p class="article-deck">One tool-import path rejected local processes. A draft-agent path stored the same class of configuration, started it automatically, and returned a root process identity.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-08">8 November 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>7 min read</span></div></div></header>
+
+      <div class="article-body"><div class="container article-layout">
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#safe-path">The safe path</a><a href="#draft-agent">The draft agent</a><a href="#root-evidence">The root evidence</a><a href="#critical-severity">Why Critical/P1</a><a href="#takeaway">Takeaway</a></nav>
+        <div class="article-content archive-article-content research-article-content">
+          <div class="research-article-body" id="research-article">
+            <p>Hi people,</p>
+            <p>AI agents become much more interesting when they can use tools.</p>
+            <p>A model that only generates text is one security boundary. An agent that can retrieve data, connect to services, and perform actions is a different system entirely. The model may decide what to do, but the surrounding application decides which tools exist, how they start, and what privileges they receive.</p>
+            <p>That surrounding application was where I found this issue.</p>
+            <p>I was testing a custom-agent workflow inside a researcher-controlled organization. The platform supported Model Context Protocol tools, and its normal connection flow appeared to understand an important rule: customer configuration should not be allowed to start an arbitrary local process on the provider's infrastructure.</p>
+            <p>Then I found another path that did not enforce the same rule.</p>
+            <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The organization, product, routes, schema names, dates, identifiers, commands, runtime versions, and implementation details were removed or replaced. Every example below is synthetic. "Critical/P1" describes the submitted severity, not a final program decision. I am not claiming a deployed fix, completed retest, or program acceptance.</p></blockquote>
+
+            <figure class="research-cover-figure"><img src="/assets/research/field-note-ai-agent-mcp-root-rce.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A draft AI agent launching a local MCP tool inside a privileged server runtime."><figcaption>Original editorial illustration for this anonymized field note from a Critical/P1 submission.</figcaption></figure>
+
+            <h3 id="safe-path">The safe path said no</h3>
+            <p>I started with the platform's ordinary tool-import workflow. I supplied a harmless synthetic configuration representing a process-backed MCP tool. The importer rejected it because that workflow supported remote connections, not local processes. That was the behavior I expected.</p>
+            <p>I also checked a more direct configuration path. That request was denied as well.</p>
+            <p>These were useful controls. One path explicitly rejected local process-backed tools. A separate direct-override path was access-controlled. In both cases, my test input did not reach execution.</p>
+            <p>At that point, the result looked reassuring. But a control protects only the paths that actually use it.</p>
+
+            <h3 id="draft-agent">The draft agent accepted what the importer rejected</h3>
+            <p>The application also allowed organization administrators to create custom AI agents. A custom agent could contain instructions, procedures, and tool definitions.</p>
+            <p>I created an empty draft agent in my controlled organization. It was never published or shared with another user. I then updated that draft with one synthetic MCP tool. The tool was deliberately minimal: it could complete a protocol handshake, announce one harmless function, and return the identity of its own process.</p>
+            <p>The server accepted the tool configuration and returned it as part of the stored draft. This was different from the public importer, but persistence alone did not prove execution. The object could still have been inert data.</p>
+            <p>The next question was simple: would a draft agent actually run it?</p>
+
+            <figure class="research-story-figure">
+              <div class="story-flow story-flow-four" role="img" aria-label="A rejected local MCP tool reaches privileged execution through a draft AI agent">
+                <div class="story-step"><span>01</span><strong>Import blocked</strong><small>Local tool rejected</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>02</span><strong>Draft stores</strong><small>Another path accepts it</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>03</span><strong>Thread starts</strong><small>Tool launches automatically</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>04</span><strong>Root returns</strong><small>Runtime identity confirmed</small></div>
+              </div>
+              <figcaption>Reconstructed evidence flow using placeholders. No original route, field, command, account, or runtime detail is shown.</figcaption>
+            </figure>
+
+            <h3>A draft was not dormant</h3>
+            <p>I started a new conversation with the draft agent. Creating the conversation caused the agent runtime to initialize its configured tools automatically. I did not need another user to open the agent, approve a tool, or interact with a malicious prompt. The ordinary start action was enough.</p>
+            <p>The completed state contained the full evidence chain: the run started, the configured tool initialized, the agent called it, the tool returned its process identity, and the run completed successfully.</p>
+
+            <pre aria-label="Synthetic AI agent and MCP execution sequence"><code>PUBLIC IMPORTER  -&gt; local process tool rejected
+DIRECT OVERRIDE  -&gt; forbidden
+DRAFT AGENT      -&gt; synthetic tool stored
+THREAD START     -&gt; tool launched automatically
+TOOL RESULT      -&gt; PRIVILEGED_RUNTIME_IDENTITY
+RUN STATUS       -&gt; completed</code></pre>
+
+            <p>Those lines are descriptive placeholders, not original requests, fields, commands, or responses.</p>
+
+            <h3 id="root-evidence">The result that changed the severity</h3>
+            <p>The returned marker showed that the process was running with the operating system's root identity.</p>
+            <p>That result mattered for two reasons. First, it came from inside the MCP process itself. It was not a user-controlled string reflected by an API. The tool derived the marker from its own runtime and returned it through a completed MCP exchange.</p>
+            <p>Second, the process had been selected through tenant-controlled configuration. A normal customer-organization administrator had crossed the boundary from configuring an AI agent to launching a chosen process inside the provider-managed agent infrastructure.</p>
+            <p>This was no longer a prompt-quality problem. It was server-side code execution through an agent-tool configuration path.</p>
+
+            <h3>Why the controls made the report stronger</h3>
+            <p>It would have been easy to show only the successful agent run. The rejected paths made the conclusion much stronger.</p>
+            <p>The public importer rejected local process-backed tools. A direct override was forbidden. The draft-agent editor accepted the same dangerous class of configuration. That contrast isolated the problem as a validation mismatch between server-side entry points.</p>
+            <p>The system already knew the configuration was unsafe in one workflow. It simply failed to apply that policy everywhere an equivalent process-launch configuration could enter.</p>
+            <p>I keep seeing this pattern in complex products. A security rule lives inside one controller, importer, or interface instead of being enforced at the final trust boundary. A second feature later accepts the same data through a draft editor, clone operation, or internal workflow. The dangerous object reaches execution because every layer assumes another layer already validated it.</p>
+
+            <h3>What I deliberately did not test</h3>
+            <p>Root process execution creates many follow-on questions. Could the runtime read application files? Did it hold service credentials? Could it reach internal services? Was another tenant accessible? Could the process escape its isolation boundary?</p>
+            <p>I did not test any of them.</p>
+            <p>The proof ran once, completed the MCP handshake, returned its own identity, and stopped. It did not:</p>
+            <ul>
+              <li>Start a shell or child process.</li>
+              <li>Read files, environment variables, secrets, or credentials.</li>
+              <li>Make internal, external, or metadata-service network requests.</li>
+              <li>Access another tenant.</li>
+              <li>Attempt persistence, container escape, or host access.</li>
+            </ul>
+            <p>After collecting the minimum evidence, I removed the tool configuration, archived my controlled agent and session, and verified that no test connection state remained.</p>
+            <p>That restraint did not weaken the finding. A researcher-selected process launched with a root identity was already the security boundary I needed to prove.</p>
+
+            <h3 id="critical-severity">Why I submitted it as Critical/P1</h3>
+            <p>The required access was an authenticated administrator of a normal customer organization. It did not require provider staff access, infrastructure credentials, an unauthenticated entry point, or interaction from a victim.</p>
+            <p>From that tenant-level position, the demonstrated behavior crossed into the provider-managed agent runtime and started a researcher-selected process as root.</p>
+            <p>The proof established that primitive directly. Filesystem visibility, service credentials, internal-network reachability, workload manipulation, and cross-tenant impact were potential consequences of the primitive, not actions I claimed to have performed.</p>
+            <p>I submitted it as Critical/P1 because tenant-controlled configuration caused a privileged server-side process launch, not because I inflated untested follow-on scenarios.</p>
+
+            <h3>The real fix belongs at the execution boundary</h3>
+            <p>Blocking one field or hiding the local-tool option in the interface would not solve this class of issue.</p>
+            <p>Local process transports and process-launch fields should be rejected at every server-side configuration boundary: create, update, import, clone, draft, publish, and run. The normalized object should then be checked again immediately before execution.</p>
+            <p>Tenant data should select from provider-owned tool types instead of carrying an arbitrary executable and its arguments. Agent tools should run in short-lived, non-root sandboxes with a read-only filesystem, strict resource limits, no inherited application credentials, and no unnecessary internal-network access. Draft agents need the same checks as published agents before they can start.</p>
+
+            <h3 id="takeaway">Takeaway</h3>
+            <p>The most important lesson was not that MCP is inherently unsafe. It was that tool configuration is executable input.</p>
+            <p>When an AI product lets customers attach tools, connectors, functions, or agents, I now trace the complete path:</p>
+            <ul>
+              <li>Who can define the tool?</li>
+              <li>Where is the configuration validated?</li>
+              <li>Can another endpoint store the same object?</li>
+              <li>Can drafts execute?</li>
+              <li>What starts the runtime?</li>
+              <li>Which identity runs it?</li>
+              <li>What can that runtime reach?</li>
+            </ul>
+            <p>The model was not the vulnerability here. The failure lived in the orchestration layer around it: one path rejected a dangerous tool, another stored it, and the runtime trusted what reached the end.</p>
+            <p>That is all for this write-up. I hope it gives you a useful place to look when an AI feature says, "add your own tool."</p>
+            <p>For more on securing agent tools, retrieval systems, and model-connected workflows, see <a href="/ai-llm-penetration-testing.html">AI and LLM penetration testing</a>. For another server-side trust-boundary story, read <a href="/insights/server-side-url-import.html">The File Importer That Stored Whatever the URL Returned</a>, or browse the complete <a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a>.</p>
+          </div>
+
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web, API, and AI security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <div class="article-cta"><span class="eyebrow">Test the orchestration layer</span><h2>AI agent security extends beyond the prompt.</h2><p>Balhence tests tool permissions, MCP integrations, agent workflows, retrieval boundaries, and the infrastructure controls around them.</p><div class="button-row"><a class="btn btn-primary" href="/ai-llm-penetration-testing.html">AI and LLM penetration testing</a><a class="btn btn-quiet" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></div>
+          <p class="research-topic-line"><strong>Research topics:</strong> AI agent security / MCP security / command injection / remote code execution</p>
+        </div>
+      </div></div>
+    </article>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+</body>
+</html>

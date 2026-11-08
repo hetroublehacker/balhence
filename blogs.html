@@ -6,7 +6,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bug Bounty Archive: Research &amp; Field Notes | Balhence</title>
-  <meta name="description" content="Explore 18 first-person bug bounty and penetration testing articles covering authorization, password reset, SSRF, IDOR, caching, workflows, XSS, and automation.">
+  <meta name="description" content="Explore 18 first-person bug bounty and penetration testing articles covering AI agent security, MCP, authorization, SSRF, IDOR, caching, XSS, and automation.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://balhence.com/blogs.html">
   <meta name="theme-color" content="#0c0c12">
@@ -43,14 +43,14 @@
     "url": "https://balhence.com/blogs.html",
     "description": "A unified archive of eight anonymized bug bounty field notes and ten original security research articles covering practical vulnerability discovery, validation, and remediation.",
     "datePublished": "2026-09-05",
-    "dateModified": "2026-11-07",
+    "dateModified": "2026-11-08",
     "inLanguage": "en",
     "isPartOf": { "@id": "https://balhence.com/#website" },
     "about": { "@id": "https://balhence.com/#organization" },
     "mentions": { "@id": "https://balhence.com/about.html#researcher" },
     "mainEntity": { "@id": "https://balhence.com/blogs.html#bug-bounty-archive" },
     "hasPart": [
-      { "@type": "BlogPosting", "headline": "The Password Reset Link That Worked Twice", "url": "https://balhence.com/insights/password-reset-token-replay.html", "articleSection": "Password reset", "datePublished": "2026-11-07" },
+      { "@type": "BlogPosting", "headline": "The AI Agent That Ran My MCP Tool as Root", "url": "https://balhence.com/insights/ai-agent-mcp-root-rce.html", "articleSection": "AI agent and MCP security", "datePublished": "2026-11-08" },
       { "@type": "BlogPosting", "headline": "The Export Job That Crossed a Tenant Boundary", "url": "https://balhence.com/insights/async-export-authorization.html", "articleSection": "Authorization", "datePublished": "2026-11-07" },
       { "@type": "BlogPosting", "headline": "The File Importer That Stored Whatever the URL Returned", "url": "https://balhence.com/insights/server-side-url-import.html", "articleSection": "Server-side request forgery", "datePublished": "2026-11-07" },
       { "@type": "BlogPosting", "headline": "The draft you could change but could not read", "url": "https://balhence.com/insights/draft-write-authorization.html", "articleSection": "Authorization", "datePublished": "2026-09-05" },
@@ -97,7 +97,7 @@
     "numberOfItems": 18,
     "itemListOrder": "https://schema.org/ItemListOrderDescending",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "item": { "@type": "BlogPosting", "headline": "The Password Reset Link That Worked Twice", "url": "https://balhence.com/insights/password-reset-token-replay.html", "datePublished": "2026-11-07", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
+      { "@type": "ListItem", "position": 1, "item": { "@type": "BlogPosting", "headline": "The AI Agent That Ran My MCP Tool as Root", "url": "https://balhence.com/insights/ai-agent-mcp-root-rce.html", "datePublished": "2026-11-08", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
       { "@type": "ListItem", "position": 2, "item": { "@type": "BlogPosting", "headline": "The Export Job That Crossed a Tenant Boundary", "url": "https://balhence.com/insights/async-export-authorization.html", "datePublished": "2026-11-07", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
       { "@type": "ListItem", "position": 3, "item": { "@type": "BlogPosting", "headline": "The File Importer That Stored Whatever the URL Returned", "url": "https://balhence.com/insights/server-side-url-import.html", "datePublished": "2026-11-07", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
       { "@type": "ListItem", "position": 4, "item": { "@type": "BlogPosting", "headline": "The draft you could change but could not read", "url": "https://balhence.com/insights/draft-write-authorization.html", "datePublished": "2026-09-05", "author": { "@id": "https://balhence.com/about.html#researcher" } } },
@@ -130,7 +130,7 @@
         <span class="eyebrow">Security research / bug bounty</span>
         <h1 id="case-hub-title">Bug bounty archive.<br><span>Evidence over assumptions.</span></h1>
         <p>Eighteen articles on finding, validating, explaining, and repairing security failures: eight anonymized field notes and ten original research pieces in one archive.</p>
-        <div class="case-hub-summary"><span><strong>18</strong> articles</span><span><strong>2019 - 2026</strong> research timeline</span><span>Updated <time datetime="2026-11-07">07 Nov 2026</time></span></div>
+        <div class="case-hub-summary"><span><strong>18</strong> articles</span><span><strong>2019 - 2026</strong> research timeline</span><span>Updated <time datetime="2026-11-08">08 Nov 2026</time></span></div>
       </div>
     </section>
 
@@ -158,7 +158,7 @@
         </div>
 
         <div class="case-grid" id="archive-grid">
-          <article class="case-card" data-archive-card data-field-note-card data-topic="authorization"><a class="case-card-link" href="/insights/password-reset-token-replay.html" aria-labelledby="archive-title-01"><div class="case-card-meta"><span class="case-topic"><span class="case-file">01 /</span> Password reset</span><span>Field note / 2026</span></div><h3 id="archive-title-01">The Password Reset Link That Worked Twice</h3><p>A controlled reset link changed the password once, stayed valid, and changed it again. The second login proved the replay was real.</p><div class="case-card-bottom"><span class="text-link">Read the article</span><span>6 min read</span></div></a></article>
+          <article class="case-card" data-archive-card data-field-note-card data-topic="web-attacks"><a class="case-card-link" href="/insights/ai-agent-mcp-root-rce.html" aria-labelledby="archive-title-01"><div class="case-card-meta"><span class="case-topic"><span class="case-file">01 /</span> AI agent / MCP</span><span>Submitted Critical/P1 / 2026</span></div><h3 id="archive-title-01">The AI Agent That Ran My MCP Tool as Root</h3><p>A draft AI agent accepted a local process-backed MCP configuration and returned a controlled runtime marker from a server-side root process.</p><div class="case-card-bottom"><span class="text-link">Read the article</span><span>7 min read</span></div></a></article>
           <article class="case-card" data-archive-card data-field-note-card data-topic="authorization"><a class="case-card-link" href="/insights/async-export-authorization.html" aria-labelledby="archive-title-02"><div class="case-card-meta"><span class="case-topic"><span class="case-file">02 /</span> Async authorization</span><span>Field note / 2026</span></div><h3 id="archive-title-02">The Export Job That Crossed a Tenant Boundary</h3><p>A direct foreign read was denied, but the background export accepted the same object and returned the controlled file.</p><div class="case-card-bottom"><span class="text-link">Read the article</span><span>7 min read</span></div></a></article>
           <article class="case-card" data-archive-card data-field-note-card data-topic="web-attacks"><a class="case-card-link" href="/insights/server-side-url-import.html" aria-labelledby="archive-title-03"><div class="case-card-meta"><span class="case-topic"><span class="case-file">03 /</span> Server-side URL fetch</span><span>Field note / 2026</span></div><h3 id="archive-title-03">The File Importer That Stored Whatever the URL Returned</h3><p>A file-import workflow fetched a researcher-controlled URL and returned the exact harmless response bytes as a stored asset.</p><div class="case-card-bottom"><span class="text-link">Read the article</span><span>6 min read</span></div></a></article>
           <article class="case-card" data-archive-card data-field-note-card data-topic="authorization"><a class="case-card-link" href="/insights/draft-write-authorization.html" aria-labelledby="archive-title-04"><div class="case-card-meta"><span class="case-topic"><span class="case-file">04 /</span> Authorization</span><span>Field note / 2026</span></div><h3 id="archive-title-04">The draft you could change but could not read</h3><p>An unrelated account could not open a draft, yet its edits still appeared in the owner's view. The stored change established the finding.</p><div class="case-card-bottom"><span class="text-link">Read the article</span><span>6 min read</span></div></a></article>

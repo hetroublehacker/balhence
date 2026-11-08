@@ -13,7 +13,7 @@ from build_public import PUBLIC_FILE_SET, SOURCE_ROOT
 
 
 ANONYMIZED_STORIES = (
-    "insights/password-reset-token-replay.html",
+    "insights/ai-agent-mcp-root-rce.html",
     "insights/async-export-authorization.html",
     "insights/server-side-url-import.html",
     "insights/draft-write-authorization.html",
@@ -23,9 +23,9 @@ ANONYMIZED_STORIES = (
     "insights/evidence-gated-workflows.html",
 )
 STORY_IMAGES = {
-    "insights/password-reset-token-replay.html": {
-        "asset": "assets/research/field-note-password-reset-token-replay.jpg",
-        "alt": "Two illustrated passes of a recovery token loop through matching security gates.",
+    "insights/ai-agent-mcp-root-rce.html": {
+        "asset": "assets/research/field-note-ai-agent-mcp-root-rce.jpg",
+        "alt": "A draft AI agent launching a local MCP tool inside a privileged server runtime.",
     },
     "insights/async-export-authorization.html": {
         "asset": "assets/research/field-note-async-export-authorization.jpg",
@@ -260,6 +260,13 @@ class CaseStudyPublicationTests(unittest.TestCase):
         forbidden = re.compile(
             r"(?:/home/|/users/|bbscope/|recon/reports/|finding-\d+|bugcrowd|"
             r"cultbeauty|myvitamins|mankind|plannthat|linktree|rippling|"
+            r"amplitude|createcustomagent|updatecustomagent|agentcreatethread|"
+            r"agentgetthread|agentgetsession|archivecustomagent|"
+            r"mcpimportconnectionconfig|mcplistconnections|flowconfigoverride|"
+            r"agenttooldescriptor|customagentinput|customagentupdateinput|"
+            r"stdioconfig|cursor_mcp_json|forbiddenerror|notfounderror|"
+            r"process\.getuid|process\.getgid|process\.stdin|/usr/bin/node|"
+            r"bbqa|callhtm|mail\.tm|red-wildflower|web-library\.net|"
             r"-----BEGIN [A-Z ]*PRIVATE KEY-----|oast\.online|bulk_media_download|"
             r"bank_statements|operationName=Reset)",
             re.I,
