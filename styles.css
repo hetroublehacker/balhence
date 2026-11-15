@@ -2949,41 +2949,46 @@ p {
     display: block;
   }
 
-  html:not(.js) .site-header {
-    position: static;
-    height: auto;
-    background: var(--night);
-  }
+  /* Use the browser's scripting capability for the native fallback. This
+     prevents a long document from painting the expanded no-JS menu before
+     the end-of-body application script adds the .js class. */
+  @media (scripting: none) {
+    .site-header {
+      position: static;
+      height: auto;
+      background: var(--night);
+    }
 
-  html:not(.js) .nav-shell {
-    min-height: var(--header-height);
-    padding: 14px 0;
-    flex-wrap: wrap;
-  }
+    .nav-shell {
+      min-height: var(--header-height);
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
 
-  html:not(.js) .nav-menu {
-    position: static;
-    z-index: auto;
-    width: 100%;
-    height: auto;
-    padding: 18px 0 0;
-    flex-basis: 100%;
-    opacity: 1;
-    pointer-events: auto;
-    transform: none;
-    visibility: visible;
-  }
+    .nav-menu {
+      position: static;
+      z-index: auto;
+      width: 100%;
+      height: auto;
+      padding: 18px 0 0;
+      flex-basis: 100%;
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+      visibility: visible;
+    }
 
-  html:not(.js) .menu-toggle {
-    display: none;
-  }
+    .menu-toggle {
+      display: none;
+    }
 
-  html:not(.js) .hero,
-  html:not(.js) .page-hero,
-  html:not(.js) .article-hero,
-  html:not(.js) .legal-page,
-  html:not(.js) .viewer-shell {
-    padding-top: 64px;
+    .hero,
+    .page-hero,
+    .article-hero,
+    .legal-page,
+    .viewer-shell {
+      padding-top: 64px;
+    }
   }
 
   .hero {

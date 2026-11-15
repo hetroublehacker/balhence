@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:alt" content="A background conveyor carrying a document across an otherwise blocked tenant boundary.">
   <meta property="article:published_time" content="2026-11-07">
-  <meta property="article:modified_time" content="2026-11-08">
+  <meta property="article:modified_time" content="2026-11-15">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The Export Job That Crossed a Tenant Boundary">
   <meta name="twitter:description" content="A first-person field note about authorization disappearing between an API request and its background worker.">
@@ -31,7 +31,7 @@
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261108a">
+  <link rel="stylesheet" href="/styles.css?v=20261115b">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -47,7 +47,7 @@
         "name": "The Export Job That Crossed a Tenant Boundary",
         "description": "An anonymized bug bounty story about a direct read that was denied while a background export packaged the same foreign object.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-08",
+        "dateModified": "2026-11-15",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/async-export-authorization.html#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/async-export-authorization.html#breadcrumb" }
@@ -60,7 +60,7 @@
         "headline": "The Export Job That Crossed a Tenant Boundary",
         "description": "An anonymized bug bounty story about a direct read that was denied while a background export packaged the same foreign object.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-08",
+        "dateModified": "2026-11-15",
         "inLanguage": "en",
         "image": "https://balhence.com/assets/research/field-note-async-export-authorization.jpg",
         "articleSection": "Anonymized bug bounty field notes",
@@ -90,7 +90,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The Export Job That Crossed a Tenant Boundary</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The Export Job That Crossed a Tenant Boundary</h1><p class="article-deck">The normal API refused a foreign object. A background export worker quietly packaged it anyway.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>7 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The Export Job That Crossed a Tenant Boundary</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The Export Job That Crossed a Tenant Boundary</h1><p class="article-deck">The normal API refused a foreign object. A background export worker quietly packaged it anyway.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-15">15 November 2026</time></span><span>7 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Two clean tenants</a><a href="#worker">The worker path</a><a href="#proof">The proof</a><a href="#open-source-tool">Open-source tool</a><a href="#takeaway">Takeaway</a></nav>
@@ -103,7 +103,7 @@
 
             <figure class="research-cover-figure"><img src="/assets/research/field-note-async-export-authorization.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A background conveyor carrying a document across an otherwise blocked tenant boundary."><figcaption>Original manga-style editorial illustration for this anonymized field note.</figcaption></figure>
 
-            <h3>First, I proved the boundary worked</h3>
+            <h2>First, I proved the boundary worked</h2>
             <p>As Tenant B, I uploaded a small image containing a unique marker and exported it through the normal interface. That owner-positive archive gave me the expected filename, byte length, and SHA-256 hash.</p>
             <p>Then I switched to Tenant A and requested Tenant B's object through the direct read endpoint. The server denied it. That was good. It also gave me a strong baseline: the application knew Tenant A did not own the object.</p>
             <p>If I had stopped there, the authorization would have looked correct.</p>
@@ -121,7 +121,7 @@
               <figcaption>The reconstructed control matrix: one principal and one foreign object, with different authorization decisions on two paths.</figcaption>
             </figure>
 
-            <h3 id="worker">The interesting path was asynchronous</h3>
+            <h2 id="worker">The interesting path was asynchronous</h2>
             <p>The export endpoint did not return the files immediately. It accepted object references, queued a job, and later exposed a completed archive. That split is exactly where I like to test again.</p>
             <p>Using Tenant A's session, I submitted the synthetic reference owned by Tenant B. Instead of rejecting the request, the API created an export job. When the worker finished, Tenant A could download an archive.</p>
 
@@ -143,21 +143,21 @@ HTTP/1.1 202 Accepted
 
             <p>This is a synthetic comparison. The host, paths, status body, field names, and identifiers are placeholders rather than the original traffic.</p>
 
-            <h3 id="proof">A ZIP response was not enough proof</h3>
+            <h2 id="proof">A ZIP response was not enough proof</h2>
             <p>An archive with a plausible filename could still be empty, transformed, or unrelated. I extracted the file and compared it with Tenant B's owner-positive export.</p>
             <p>The content length matched. More importantly, the SHA-256 hashes matched byte for byte. The marker inside the synthetic image was also the one I had created as Tenant B. The worker had not produced a generic preview; it had packaged the foreign tenant's original controlled content.</p>
             <p>I stopped after that single file. I did not enumerate identifiers or request anyone else's data. The direct denial, the foreign export, and the hash comparison were enough to establish the boundary failure.</p>
 
-            <h3>How authorization disappeared</h3>
+            <h2>How authorization disappeared</h2>
             <p>The request handler appeared to treat the submitted reference as a valid global storage key. The background worker later resolved that key without carrying Tenant A's authorized object set into the job.</p>
             <p>This pattern shows up in exports, report generation, document conversion, notifications, and scheduled actions. The front door can perform a correct check while the worker runs with broad service authority and trusts whatever identifiers were placed on the queue.</p>
             <p>A mixed batch is especially useful during testing. Put one owned reference beside one foreign reference and check whether the application rejects the complete job, silently drops the foreign object, or packages both. Partial success can hide the same missing check.</p>
             <p>Replacing sequential identifiers with random ones may make guessing harder, but it does not repair the missing authorization decision. A reference is not proof that the caller may use the object.</p>
 
-            <h3 id="open-source-tool">Open-source workflow companion: AuthMatrix</h3>
+            <h2 id="open-source-tool">Open-source workflow companion: AuthMatrix</h2>
             <p>A useful open-source companion for this test is <a href="https://github.com/caido-community/authmatrix" rel="noopener noreferrer">Caido AuthMatrix</a>. It lays requests out against multiple controlled users and roles, which makes inconsistent authorization decisions easier to see as a grid instead of a pile of tabs. I would configure one identity for each test tenant, add both the ordinary object read and export-creation request, then follow the resulting job with the same controlled sessions. The important manual step remains opening the finished archive and matching its harmless marker to the owner-controlled source object; a successful response code alone is not evidence. The matrix helps reveal where the synchronous path and worker path disagree. This is a workflow recommendation for authorized testing, not a claim that AuthMatrix was used in the original private submission.</p>
 
-            <h3 id="takeaway">Takeaway</h3>
+            <h2 id="takeaway">Takeaway</h2>
             <p>The repair belongs in both halves of the workflow:</p>
             <ul>
               <li>Resolve every requested object through a tenant-scoped authorization query.</li>

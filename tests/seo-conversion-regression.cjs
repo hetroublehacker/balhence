@@ -22,6 +22,7 @@ const BUYER_ROUTES = [
   ["/penetration-testing-as-a-service.html", "ptaas-pentest", "ptaas"],
   ["/cloud-penetration-testing.html", "cloud-pentest", "cloud"],
   ["/network-penetration-testing.html", "network-pentest", "infrastructure"],
+  ["/insights/pci-dss-network-segmentation-testing.html", "pci-segmentation-guide", "pci"],
 
   ["/", "home-hero"],
   ["/penetration-testing-india.html", "india-pentest"],
@@ -41,6 +42,7 @@ const SOURCES = [
   "network-pentest",
   "does-soc-2-require-penetration-testing",
   "how-to-plan-llm-security-testing",
+  "pci-segmentation-guide",
   "ptaas-vs-annual-penetration-test",
 
   "home-nav", "home-hero", "home-faq", "home-closing",

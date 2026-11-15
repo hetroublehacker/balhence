@@ -121,6 +121,7 @@ class EditorialDocument(HTMLParser):
         self.story_depth = 0
         self.story_parts: list[str] = []
         self.story_headings = 0
+        self.story_heading_levels: list[int] = []
         self.story_figures = 0
         self.story_captions = 0
         self.story_pre = 0
@@ -161,8 +162,9 @@ class EditorialDocument(HTMLParser):
             return
         if tag not in VOID_ELEMENTS:
             self.story_depth += 1
-        if tag in {"h3", "h4"}:
+        if tag in {"h2", "h3", "h4"}:
             self.story_headings += 1
+            self.story_heading_levels.append(int(tag[1]))
         if tag == "figure" and "research-story-figure" in classes:
             self.story_figures += 1
         if tag == "figcaption":
@@ -218,6 +220,14 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 words = re.findall(r"\b[\w'-]+\b", " ".join(page.story_parts))
                 self.assertGreaterEqual(len(words), 650)
                 self.assertGreaterEqual(page.story_headings, 4)
+                self.assertEqual(page.story_heading_levels[0], 2)
+                self.assertTrue(all(
+                    current <= previous + 1
+                    for previous, current in zip(
+                        page.story_heading_levels,
+                        page.story_heading_levels[1:],
+                    )
+                ))
                 self.assertGreaterEqual(page.story_figures, 1)
                 self.assertGreaterEqual(page.story_captions, 1)
                 self.assertGreaterEqual(page.story_pre, 1)
@@ -253,7 +263,7 @@ class CaseStudyPublicationTests(unittest.TestCase):
                     article["isPartOf"]["@id"],
                     "https://balhence.com/blogs.html#bug-bounty-archive",
                 )
-                self.assertEqual(article["dateModified"], "2026-11-08")
+                self.assertEqual(article["dateModified"], "2026-11-15")
 
     def test_story_images_match_body_social_metadata_and_schema(self):
         self.assertEqual(
@@ -299,10 +309,10 @@ class CaseStudyPublicationTests(unittest.TestCase):
                     node for node in structured_nodes(source) if node.get("@type") == "WebPage"
                 )
                 self.assertEqual(article["image"], absolute_url)
-                self.assertEqual(article["dateModified"], "2026-11-08")
-                self.assertEqual(webpage["dateModified"], "2026-11-08")
+                self.assertEqual(article["dateModified"], "2026-11-15")
+                self.assertEqual(webpage["dateModified"], "2026-11-15")
                 self.assertIn(
-                    'Updated <time datetime="2026-11-08">8 November 2026</time>',
+                    'Updated <time datetime="2026-11-15">15 November 2026</time>',
                     source,
                 )
                 self.assertIn(asset, PUBLIC_FILE_SET)
@@ -322,7 +332,7 @@ class CaseStudyPublicationTests(unittest.TestCase):
             with self.subTest(story=story):
                 source = (SOURCE_ROOT / story).read_text(encoding="utf-8")
                 page = EditorialDocument(source)
-                self.assertIn('<h3 id="open-source-tool">', source)
+                self.assertIn('<h2 id="open-source-tool">', source)
                 self.assertIn('<a href="#open-source-tool">Open-source tool</a>', source)
                 self.assertEqual(page.links.count(tool_link), 1)
                 self.assertIn(

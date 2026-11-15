@@ -7,7 +7,7 @@
   <url><loc>https://balhence.com/api-penetration-testing.html</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://balhence.com/saas-penetration-testing.html</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://balhence.com/about.html</loc><lastmod>2026-11-08</lastmod></url>
-  <url><loc>https://balhence.com/blog.html</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://balhence.com/blog.html</loc><lastmod>2026-11-15</lastmod></url>
   <url><loc>https://balhence.com/blogs.html</loc><lastmod>2026-11-08</lastmod></url>
   <url><loc>https://balhence.com/research/dependency-confusion.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/research/cve-2020-28726.html</loc><lastmod>2026-11-06</lastmod></url>
@@ -19,14 +19,14 @@
   <url><loc>https://balhence.com/research/bug-bounty-with-bash.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/research/find-secret-api-keys.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/research/automating-burp-idor.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://balhence.com/insights/ai-agent-mcp-root-rce.html</loc><lastmod>2026-11-08</lastmod></url>
-  <url><loc>https://balhence.com/insights/async-export-authorization.html</loc><lastmod>2026-11-08</lastmod></url>
-  <url><loc>https://balhence.com/insights/server-side-url-import.html</loc><lastmod>2026-11-08</lastmod></url>
-  <url><loc>https://balhence.com/insights/draft-write-authorization.html</loc><lastmod>2026-11-08</lastmod></url>
-  <url><loc>https://balhence.com/insights/session-authority-boundary.html</loc><lastmod>2026-11-08</lastmod></url>
-  <url><loc>https://balhence.com/insights/private-response-cache-boundary.html</loc><lastmod>2026-11-08</lastmod></url>
-  <url><loc>https://balhence.com/insights/server-owned-validation-rules.html</loc><lastmod>2026-11-08</lastmod></url>
-  <url><loc>https://balhence.com/insights/evidence-gated-workflows.html</loc><lastmod>2026-11-08</lastmod></url>
+  <url><loc>https://balhence.com/insights/ai-agent-mcp-root-rce.html</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://balhence.com/insights/async-export-authorization.html</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://balhence.com/insights/server-side-url-import.html</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://balhence.com/insights/draft-write-authorization.html</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://balhence.com/insights/session-authority-boundary.html</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://balhence.com/insights/private-response-cache-boundary.html</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://balhence.com/insights/server-owned-validation-rules.html</loc><lastmod>2026-11-15</lastmod></url>
+  <url><loc>https://balhence.com/insights/evidence-gated-workflows.html</loc><lastmod>2026-11-15</lastmod></url>
   <url><loc>https://balhence.com/scope-builder.html</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://balhence.com/report-viewer.html</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://balhence.com/insights/how-to-scope-web-api-pentest.html</loc><lastmod>2026-09-22</lastmod></url>
@@ -37,10 +37,11 @@
   <url><loc>https://balhence.com/contact.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://balhence.com/privacy.html</loc><lastmod>2026-10-01</lastmod></url>
   <url><loc>https://balhence.com/ai-llm-penetration-testing.html</loc><lastmod>2026-10-06</lastmod></url>
-  <url><loc>https://balhence.com/compliance-penetration-testing.html</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://balhence.com/compliance-penetration-testing.html</loc><lastmod>2026-11-15</lastmod></url>
   <url><loc>https://balhence.com/hipaa-penetration-testing.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://balhence.com/insights/does-soc-2-require-penetration-testing.html</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://balhence.com/insights/how-to-plan-llm-security-testing.html</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://balhence.com/insights/pci-dss-network-segmentation-testing.html</loc><lastmod>2026-11-15</lastmod></url>
   <url><loc>https://balhence.com/insights/ptaas-vs-annual-penetration-test.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://balhence.com/pci-dss-penetration-testing.html</loc><lastmod>2026-11-15</lastmod></url>
   <url><loc>https://balhence.com/penetration-testing-as-a-service.html</loc><lastmod>2026-09-30</lastmod></url>
@@ -48,5 +49,5 @@
   <url><loc>https://balhence.com/soc-2-penetration-testing.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://balhence.com/insights/vulnerability-assessment-vs-penetration-testing.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://balhence.com/cloud-penetration-testing.html</loc><lastmod>2026-10-06</lastmod></url>
-  <url><loc>https://balhence.com/network-penetration-testing.html</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://balhence.com/network-penetration-testing.html</loc><lastmod>2026-11-15</lastmod></url>
 </urlset>

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en-US" class="has-article-flow">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PCI DSS Network Segmentation Testing (11.4.5) | Balhence</title>
+  <meta name="description" content="Learn when PCI DSS segmentation testing applies, how 11.4.5 differs from service-provider 11.4.6, what to scope, and what evidence to retain.">
+  <meta name="author" content="Balhence">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/pci-dss-network-segmentation-testing.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="PCI DSS Network Segmentation Testing (11.4.5) | Balhence">
+  <meta property="og:description" content="When PCI DSS 11.4.5 and 11.4.6 apply, how to define the segmentation test boundary, and what evidence to retain.">
+  <meta property="og:url" content="https://balhence.com/insights/pci-dss-network-segmentation-testing.html">
+  <meta property="og:image" content="https://balhence.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="PCI DSS network segmentation testing guide by Balhence">
+  <meta property="article:published_time" content="2026-11-15">
+  <meta property="article:modified_time" content="2026-11-15">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PCI DSS Network Segmentation Testing (11.4.5)">
+  <meta name="twitter:description" content="A practical guide to PCI DSS segmentation test scope, cadence, evidence, and the difference between 11.4.5 and 11.4.6.">
+  <meta name="twitter:image" content="https://balhence.com/og-image.png">
+  <meta name="twitter:image:alt" content="PCI DSS network segmentation testing guide by Balhence">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20261115b">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
+  <link rel="stylesheet" href="/flow.css?v=20261001b">
+  <link rel="stylesheet" href="/type-field.css?v=20261001f">
+  <script async src="/type-field.js?v=20261115a"></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://balhence.com/#organization",
+      "name": "Balhence",
+      "url": "https://balhence.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://balhence.com/logo.png",
+        "width": 512,
+        "height": 512
+      }
+    },
+    {
+      "@type": "Article",
+      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html#article",
+      "url": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html",
+      "mainEntityOfPage": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html",
+      "headline": "PCI DSS network segmentation testing: 11.4.5 and 11.4.6",
+      "description": "Learn when PCI DSS segmentation testing applies, how 11.4.5 differs from service-provider 11.4.6, what to scope, and what evidence to retain.",
+      "image": "https://balhence.com/og-image.png",
+      "datePublished": "2026-11-15",
+      "dateModified": "2026-11-15",
+      "inLanguage": "en-US",
+      "articleSection": "PCI DSS penetration testing",
+      "author": {
+        "@id": "https://balhence.com/#organization",
+        "url": "https://balhence.com/about.html"
+      },
+      "publisher": {
+        "@id": "https://balhence.com/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://balhence.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://balhence.com/blog.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "PCI DSS network segmentation testing",
+          "item": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is network segmentation required by PCI DSS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. PCI SSC guidance says network segmentation is not itself a universal PCI DSS requirement. It may reduce assessment scope. When it is used to isolate the CDE from other networks, the applicable segmentation-testing requirements must be addressed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How often must segmentation controls be tested?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Requirement 11.4.5 specifies at least once every 12 months and after changes to segmentation controls or methods. Requirement 11.4.6 is additional for service providers and specifies at least once every six months and after those changes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does requirement 11.4.6 replace 11.4.5 for service providers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. PCI DSS describes 11.4.6 as an additional requirement for service providers. Confirm how the applicable cadence and evidence will be assessed with your assessor or compliance owner."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the segmentation tester need to be a QSA or ASV?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The requirements allow a qualified internal resource or qualified external third party with organizational independence. QSA or ASV status is not required for the tester."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is a firewall-rule review enough?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Requirement 11.4.5 calls for penetration testing of segmentation controls according to the entity's defined methodology. Configuration review can inform the work, but review alone does not replace the required penetration test."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does a successful segmentation test prove PCI DSS compliance?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It supplies technical evidence about the agreed segmentation scope at a point in time. Compliance and validation decisions remain with the entity and its assessor or applicable validation process."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body data-page="insights">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header>
+    <nav class="container nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
+      <div class="nav-menu" id="primary-menu" data-menu>
+        <ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; ongoing testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">Approach</a></li><li><a href="/blogs.html" data-nav="insights">Blog</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul>
+        <a class="btn btn-primary" href="/contact.html?service=pci&amp;source=pci-segmentation-guide" data-track="nav_pentest">Request a pentest</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <article>
+      <header class="article-hero">
+        <div class="container-narrow">
+          <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Guides</a><span aria-hidden="true">/</span><span aria-current="page">PCI DSS segmentation testing</span></nav>
+          <span class="eyebrow">PCI DSS v4.0.1 guide</span>
+          <h1>PCI DSS network segmentation testing: 11.4.5 and 11.4.6</h1>
+          <p class="article-deck">Define the CDE boundary, test every segmentation method relied upon, and retain evidence that an assessor can review.</p>
+          <div class="article-byline"><span>By <a href="/about.html">Balhence</a></span><span>Published <time datetime="2026-11-15">15 November 2026</time></span><span>9 min read</span></div>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <div class="container article-layout">
+          <nav class="article-toc" aria-label="On this page">
+            <strong>On this page</strong>
+            <a href="#when-it-applies">When testing applies</a>
+            <a href="#requirements">11.4.5 vs 11.4.6</a>
+            <a href="#coverage">What the test covers</a>
+            <a href="#scope">Prepare the scope</a>
+            <a href="#evidence">Evidence and remediation</a>
+            <a href="#modern-networks">Modern architectures</a>
+            <a href="#faq">Frequently asked questions</a>
+          </nav>
+
+          <div class="article-content">
+            <p>PCI DSS does not require every entity to use network segmentation. When segmentation is used to isolate the cardholder data environment (CDE) from other networks, requirement 11.4.5 calls for penetration testing of those controls at least once every 12 months and after changes to the segmentation controls or methods.</p>
+
+            <p>Requirement 11.4.6 is an additional requirement for service providers. It calls for testing at least once every six months and after those changes. Confirm applicability, timing, and evidence expectations with your assessor or compliance owner before scheduling the work.</p>
+
+            <div class="article-callout">
+              <p><strong>Short answer:</strong> the test must cover every segmentation control or method relied upon to isolate the CDE, follow the entity's defined penetration-testing methodology, and confirm the controls are operational and effective. A network diagram or firewall review is useful input, but it is not the whole test.</p>
+            </div>
+
+            <h2 id="when-it-applies">When PCI DSS segmentation testing applies</h2>
+
+            <p>The PCI SSC <a href="https://www.pcisecuritystandards.org/glossary/segmentation/">defines segmentation</a> as isolating systems that store, process, or transmit cardholder data from systems that do not. Effective segmentation may reduce PCI DSS scope. Without adequate isolation, connected systems may remain in scope.</p>
+
+            <p>Start with three groups: the CDE, systems connected to or able to affect the security of the CDE, and systems the entity intends to treat as out of scope. The segmentation test asks whether the controls relied upon actually prevent unintended paths from the last group into the CDE. Merely assigning different subnets, accounts, or labels does not demonstrate that outcome.</p>
+
+            <p>Segmentation is one part of the wider <a href="/pci-dss-penetration-testing.html">PCI DSS penetration testing</a> plan. Internal and external testing, application-layer coverage, remediation, and re-testing may also apply under requirement 11.4.</p>
+
+            <h2 id="requirements">Requirement 11.4.5 versus 11.4.6</h2>
+
+            <div class="scope-table-wrap">
+              <table class="scope-table">
+                <caption>Compare the two PCI DSS segmentation-testing requirements</caption>
+                <thead><tr><th scope="col">Point</th><th scope="col">Requirement 11.4.5</th><th scope="col">Requirement 11.4.6</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Applicability</th><td>Where segmentation is used to isolate the CDE from other networks.</td><td>An additional requirement for service providers only.</td></tr>
+                  <tr><th scope="row">Minimum cadence</th><td>At least once every 12 months.</td><td>At least once every six months.</td></tr>
+                  <tr><th scope="row">Change trigger</th><td>After any changes to segmentation controls or methods.</td><td>After any changes to segmentation controls or methods.</td></tr>
+                  <tr><th scope="row">Coverage</th><td>All segmentation controls and methods in use.</td><td>All segmentation controls and methods in use.</td></tr>
+                  <tr><th scope="row">Method and outcome</th><td>Follow the entity's defined penetration-testing methodology and confirm controls are operational and effective and isolate the CDE from all out-of-scope systems.</td><td>The same core coverage and outcome, at the service-provider cadence.</td></tr>
+                  <tr><th scope="row">Tester</th><td>Qualified internal resource or qualified external third party with organizational independence. QSA or ASV status is not required.</td><td>The same qualification and independence conditions.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Requirement 11.4.6 is additional for service providers; it is not a replacement for 11.4.5 and does not make 11.4.5 merchant-only. Use PCI SSC's <a href="https://blog.pcisecuritystandards.org/pci-dss-v4-0-resource-hub">PCI DSS v4.x Resource Hub</a> to find supporting material, while the <a href="https://www.pcisecuritystandards.org/document_library/">current standard and applicability notes</a> remain the controlling reference for an assessment.</p>
+
+            <h2 id="coverage">What the segmentation test needs to cover</h2>
+
+            <p>The test boundary should be specific enough to show how the CDE is isolated and broad enough to include every control or method the scope decision depends upon. Depending on the architecture, that may include physical or virtual network controls, cloud network policy, host controls, identity-aware access paths, proxies, service-mesh policy, or microsegmentation.</p>
+
+            <ul class="check-list">
+              <li><strong>The documented CDE boundary:</strong> systems that store, process, or transmit account data and the relevant flows between them.</li>
+              <li><strong>Connected and security-impacting systems:</strong> management, authentication, logging, deployment, and other paths that can affect the CDE.</li>
+              <li><strong>Every segmentation method relied upon:</strong> not just the easiest firewall or one representative network segment.</li>
+              <li><strong>Relevant out-of-scope perspectives:</strong> the systems and zones from which isolation needs to be established.</li>
+              <li><strong>Different security levels:</strong> where isolation is used to separate systems with different security levels, include the applicable paths in the plan.</li>
+              <li><strong>The defined methodology:</strong> record the intended perspectives, validation approach, safety limits, evidence, and handling of findings.</li>
+            </ul>
+
+            <p>A port list, automated scan, or configuration review may contribute evidence. None should be presented as a universal substitute for testing whether the boundary can be crossed. A scoped <a href="/network-penetration-testing.html">network penetration test and segmentation assessment</a> should combine architecture review with controlled technical validation.</p>
+
+            <h2 id="scope">Prepare the segmentation test scope</h2>
+
+            <p>Good preparation prevents a clean report from being based on the wrong starting position. Give the tester enough context to trace each claimed boundary from the diagram to an available test perspective.</p>
+
+            <div class="scope-table-wrap">
+              <table class="scope-table">
+                <caption>Practical inputs for a defensible segmentation test</caption>
+                <thead><tr><th scope="col">Input</th><th scope="col">What to record</th><th scope="col">Why it matters</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Diagrams and flows</th><td>Current network, cloud, and account-data flow diagrams.</td><td>Connects the assessed boundary to the systems and paths that implement it.</td></tr>
+                  <tr><th scope="row">Asset groups</th><td>CDE, connected, security-impacting, and intended out-of-scope inventories.</td><td>Makes the scope decision and omitted systems visible.</td></tr>
+                  <tr><th scope="row">Control inventory</th><td>Firewalls, network policy, security groups, proxies, host controls, identity rules, and other segmentation methods.</td><td>Helps establish that all methods relied upon are included.</td></tr>
+                  <tr><th scope="row">Test perspectives</th><td>Available source zones, identities, locations, and destination groups.</td><td>Shows which potential paths can actually be validated.</td></tr>
+                  <tr><th scope="row">Recent changes</th><td>Changes to topology, rules, cloud accounts, orchestration, identity, or methods since the last test.</td><td>Supports the change-triggered testing decision and focuses review.</td></tr>
+                  <tr><th scope="row">Operating limits</th><td>Approved windows, request limits, fragile systems, contacts, and stop conditions.</td><td>Lets the tester validate safely and state limitations honestly.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Do not hide an inaccessible zone or unavailable perspective. Record it as a limitation so the entity and assessor can decide whether additional access or testing is needed.</p>
+
+            <h2 id="evidence">Document results, limitations, and remediation</h2>
+
+            <p>The report should let the entity and its assessor understand the agreed boundary, testing dates, methodology, controls and methods covered, results, findings, and material limitations. It should distinguish a corrected finding from a proposed correction. Requirement 11.4.4 addresses correcting exploitable vulnerabilities and security weaknesses found during penetration testing and repeating testing to verify the corrections.</p>
+
+            <p>For each failed boundary, keep the relevant source and destination context, the expected policy, controlled evidence of the observed path, impact, and recommended correction. The follow-up record should identify the environment and date, what was checked, and whether the issue was fixed, partially fixed, not fixed, or could not be verified.</p>
+
+            <p>Use the <a href="/insights/what-good-pentest-report-includes.html">pentest report checklist</a> to review the evidence, or inspect the <a href="/report-viewer.html">Balhence sample report</a> before agreeing deliverables.</p>
+
+            <div class="article-callout">
+              <p><strong>Evidence boundary:</strong> a Balhence report records technical testing within the agreed scope. It does not certify PCI DSS compliance or guarantee that every weakness has been identified. Your assessor determines how the evidence applies to the wider assessment.</p>
+            </div>
+
+            <h2 id="modern-networks">Segmentation in cloud and modern network architectures</h2>
+
+            <p>Multi-cloud networks, short-lived workloads, service meshes, software-defined networking, zero-trust designs, and identity-aware proxies can make the boundary dynamic. Architecture changes how isolation is implemented and evidenced; it does not remove the entity's responsibility to define scope and verify the controls relied upon.</p>
+
+            <p>For dynamic environments, record how assets and policy are discovered, which identities or tags drive decisions, how representative test targets are selected, and what change events trigger another review. PCI SSC's discussion of <a href="https://blog.pcisecuritystandards.org/coffee-with-the-council-podcast-scoping-and-segmentation-navigating-modern-network-architecture-and-pci-dss-v-4-x">scoping and segmentation in modern network architecture</a> highlights multi-cloud, microsegmentation, asset inventory, and verification as connected problems.</p>
+
+            <aside class="article-callout" aria-label="Primary PCI DSS sources">
+              <p><strong>Primary sources:</strong> check the <a href="https://www.pcisecuritystandards.org/document_library/">PCI SSC Document Library</a> for the current PCI DSS version and applicability notes. PCI SSC also provides a <a href="https://www.pcisecuritystandards.org/glossary/segmentation/">segmentation glossary entry</a> and an <a href="https://www.pcisecuritystandards.org/faqs/1115/">FAQ explaining how adequate segmentation affects scope</a>. This guide summarizes those materials and is not a substitute for the standard or assessor guidance.</p>
+            </aside>
+
+            <h2 id="faq">PCI DSS segmentation testing FAQ</h2>
+
+            <div class="faq-list">
+              <details class="faq-item"><summary>Is network segmentation required by PCI DSS?</summary><p>No. PCI SSC guidance says network segmentation is not itself a universal PCI DSS requirement. It may reduce assessment scope. When it is used to isolate the CDE from other networks, the applicable segmentation-testing requirements must be addressed.</p></details>
+              <details class="faq-item"><summary>How often must segmentation controls be tested?</summary><p>Requirement 11.4.5 specifies at least once every 12 months and after changes to segmentation controls or methods. Requirement 11.4.6 is additional for service providers and specifies at least once every six months and after those changes.</p></details>
+              <details class="faq-item"><summary>Does requirement 11.4.6 replace 11.4.5 for service providers?</summary><p>No. PCI DSS describes 11.4.6 as an additional requirement for service providers. Confirm how the applicable cadence and evidence will be assessed with your assessor or compliance owner.</p></details>
+              <details class="faq-item"><summary>Does the segmentation tester need to be a QSA or ASV?</summary><p>No. The requirements allow a qualified internal resource or qualified external third party with organizational independence. QSA or ASV status is not required for the tester.</p></details>
+              <details class="faq-item"><summary>Is a firewall-rule review enough?</summary><p>Requirement 11.4.5 calls for penetration testing of segmentation controls according to the entity's defined methodology. Configuration review can inform the work, but review alone does not replace the required penetration test.</p></details>
+              <details class="faq-item"><summary>Does a successful segmentation test prove PCI DSS compliance?</summary><p>No. It supplies technical evidence about the agreed segmentation scope at a point in time. Compliance and validation decisions remain with the entity and its assessor or applicable validation process.</p></details>
+            </div>
+
+            <section class="article-cta" aria-labelledby="article-cta-title">
+              <h2 id="article-cta-title">Define the boundary before testing</h2>
+              <p>Share the CDE, segmentation methods, available test perspectives, recent changes, and assessment deadline. Balhence can confirm whether the requested technical scope fits its <a href="/network-penetration-testing.html">network</a> and <a href="/pci-dss-penetration-testing.html">PCI penetration-testing</a> services; your assessor remains responsible for compliance determinations.</p>
+              <a class="btn btn-primary btn-flow" data-track="article_pci_segmentation_contact" href="/contact.html?service=pci&amp;source=pci-segmentation-guide">Discuss PCI penetration testing <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a>
+              <a class="btn btn-secondary" href="/compliance-penetration-testing.html">Review compliance testing</a>
+            </section>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+</body>
+</html>

@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:alt" content="A public validation control illuminating information inside a hidden data archive.">
   <meta property="article:published_time" content="2026-09-05">
-  <meta property="article:modified_time" content="2026-11-08">
+  <meta property="article:modified_time" content="2026-11-15">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="When a validation helper became a data query">
   <meta name="twitter:description" content="How I turned a small public form check into a controlled data-presence test, and why the server must choose the validation rule.">
@@ -31,7 +31,7 @@
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261108a">
+  <link rel="stylesheet" href="/styles.css?v=20261115b">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -47,7 +47,7 @@
         "name": "When a validation helper became a data query",
         "description": "A first-person, anonymized bug bounty story about a public form helper that exposed facts about stored data.",
         "datePublished": "2026-09-05",
-        "dateModified": "2026-11-08",
+        "dateModified": "2026-11-15",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/server-owned-validation-rules.html#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/server-owned-validation-rules.html#breadcrumb" }
@@ -60,7 +60,7 @@
         "headline": "When a validation helper became a data query",
         "description": "A first-person, anonymized bug bounty story about a public form helper that exposed facts about stored data.",
         "datePublished": "2026-09-05",
-        "dateModified": "2026-11-08",
+        "dateModified": "2026-11-15",
         "inLanguage": "en",
         "image": "https://balhence.com/assets/research/field-note-server-owned-validation-rules.jpg",
         "keywords": ["bug bounty", "server-side validation", "data exposure", "web security"],
@@ -102,7 +102,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">When a validation helper became a data query</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>When a validation helper became a data query</h1><p class="article-deck">The form looked ordinary until I realized the visitor could influence the question its validator asked.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>5 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">When a validation helper became a data query</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>When a validation helper became a data query</h1><p class="article-deck">The form looked ordinary until I realized the visitor could influence the question its validator asked.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-09-05">5 September 2026</time></span><span>Updated <time datetime="2026-11-15">15 November 2026</time></span><span>5 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the story</a><a href="#how-i-tested">How I tested it</a><a href="#open-source-tool">Open-source tool</a><a href="#takeaway">Takeaway</a><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></nav>
@@ -114,7 +114,7 @@
             <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The company, product, routes, identifiers, dates, and UI labels were removed or replaced. The examples are synthetic. I am not claiming that a fix was deployed or that a completed retest occurred.</p></blockquote>
             <figure class="research-cover-figure"><img src="/assets/research/field-note-server-owned-validation-rules.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A public validation control illuminating information inside a hidden data archive."><figcaption>Original cyanotype blueprint illustration for this anonymized field note.</figcaption></figure>
 
-            <h3>Why the request caught my attention</h3>
+            <h2>Why the request caught my attention</h2>
             <p>When I test a form, I like to separate two things: the value a visitor is allowed to supply and the rule the application should own. The visitor can choose an email address, username, reference, or coupon code. The visitor should not be able to choose an internal database rule and ask the server to run it.</p>
             <p>That was the boundary I wanted to test. I captured the ordinary request, changed only the caller-controlled action and validation fields, and kept the rest of the flow untouched. The first few changes produced ordinary errors. Then one combination returned a meaningful yes-or-no answer about a value that the public form did not need to know.</p>
 
@@ -129,7 +129,7 @@
               <figcaption>Reconstructed flow using generic labels. No original route, field name, or response is shown.</figcaption>
             </figure>
 
-            <h3 id="how-i-tested">How I tested the difference</h3>
+            <h2 id="how-i-tested">How I tested the difference</h2>
             <p>I used values belonging only to my controlled test setup. First I sent a value that I knew existed. Then I sent a random value that I knew did not exist. I repeated both requests and changed one input at a time. The answer changed consistently with the stored state, not with timing or a front-end message.</p>
             <p>The simplified shape looked like this:</p>
             <pre aria-label="Synthetic validation request and response"><code>POST /forms/check HTTP/1.1
@@ -144,19 +144,19 @@ Content-Type: application/json
 {"result":"known"}</code></pre>
             <p>This is not an original request. The route, names, values, and response were invented for the article. What mattered in the actual test was the stable difference between a controlled present value and a controlled absent value.</p>
 
-            <h3>This is where it became interesting</h3>
+            <h2>This is where it became interesting</h2>
             <p>A boolean answer can look harmless. It is only one bit. But one bit can still cross a security boundary when the question is sensitive. An anonymous availability check may be expected. A check that confirms whether a private account, invitation, or internal record exists may not be.</p>
             <p>I also saw diagnostic behavior that exposed more structure when the helper failed. I treated that separately. Removing a stack detail or internal name would improve the error response, but it would not remove the data oracle. The server still needed to decide which questions a public caller was allowed to ask.</p>
             <p>I did not prove direct database access, bulk extraction, or account takeover. The finding was narrower: a public caller could influence server-side validation and learn a fact about a candidate value that the intended form did not need to reveal.</p>
 
-            <h3>Why hiding the button would not fix it</h3>
+            <h2>Why hiding the button would not fix it</h2>
             <p>The problem lived behind the interface. Removing a field from the page or disabling a button would not change the callable server behavior. Even an action allowlist would be incomplete if an allowed action still accepted its validation policy from the request.</p>
             <p>The cleaner design is simple: register every public action explicitly, give it a fixed server-owned schema, accept only values from the visitor, and build a deliberate public response. Privileged presence checks should sit behind a different operation with an authorization check before any lookup happens.</p>
 
-            <h3 id="open-source-tool">Open-source workflow companion: ffuf</h3>
+            <h2 id="open-source-tool">Open-source workflow companion: ffuf</h2>
             <p>For this kind of validation oracle, <a href="https://github.com/ffuf/ffuf" rel="noopener noreferrer">ffuf</a> is a useful open-source companion. It can place its <code>FUZZ</code> keyword in a URL, header, or request body, then match or filter responses by status, size, words, or a regular expression. I would start from a sanitized raw request, use a short approved list of candidate validation modes, and compare only controlled present and absent values. That removes manual drift and makes a stable response difference easier to spot. A match is still only a lead; I would manually replay the matched pair before reporting it. This is a current workflow recommendation, not a claim that ffuf was used in the original private submission. Use conservative rates and never test real customer identifiers.</p>
 
-            <h3 id="takeaway">Takeaway</h3>
+            <h2 id="takeaway">Takeaway</h2>
             <ul>
               <li>Let the visitor provide the value, not the validation rule.</li>
               <li>Map public actions explicitly instead of exposing a generic helper dispatcher.</li>

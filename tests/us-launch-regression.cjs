@@ -9,6 +9,7 @@ const { chromium } = require("playwright");
 const GUIDES = [
   "does-soc-2-require-penetration-testing",
   "how-to-plan-llm-security-testing",
+  "pci-dss-network-segmentation-testing",
   "ptaas-vs-annual-penetration-test",
 ];
 (async () => {

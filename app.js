@@ -17,7 +17,7 @@
     "soc2-pentest", "pci-pentest", "hipaa-pentest", "compliance-pentest",
     "ai-pentest", "ptaas-pentest", "usa-pentest",
     "does-soc-2-require-penetration-testing", "how-to-plan-llm-security-testing",
-    "ptaas-vs-annual-penetration-test",
+    "pci-segmentation-guide", "ptaas-vs-annual-penetration-test",
   ]);
 
   document.documentElement.classList.add("js");

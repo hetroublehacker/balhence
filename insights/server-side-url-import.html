@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:alt" content="A backend importer fetching a remote marker and storing its returned contents.">
   <meta property="article:published_time" content="2026-11-07">
-  <meta property="article:modified_time" content="2026-11-08">
+  <meta property="article:modified_time" content="2026-11-15">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The File Importer That Stored Whatever the URL Returned">
   <meta name="twitter:description" content="A first-person field note about proving server-side fetching and harmless response-byte readback through a file import flow.">
@@ -31,7 +31,7 @@
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261108a">
+  <link rel="stylesheet" href="/styles.css?v=20261115b">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -47,7 +47,7 @@
         "name": "The File Importer That Stored Whatever the URL Returned",
         "description": "An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-08",
+        "dateModified": "2026-11-15",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/server-side-url-import.html#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/server-side-url-import.html#breadcrumb" }
@@ -60,7 +60,7 @@
         "headline": "The File Importer That Stored Whatever the URL Returned",
         "description": "An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-08",
+        "dateModified": "2026-11-15",
         "inLanguage": "en",
         "image": "https://balhence.com/assets/research/field-note-server-side-url-import.jpg",
         "articleSection": "Anonymized bug bounty field notes",
@@ -90,7 +90,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The File Importer That Stored Whatever the URL Returned</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The File Importer That Stored Whatever the URL Returned</h1><p class="article-deck">A normal upload flow hid a server-side fetcher, and the stored file returned my harmless marker byte for byte.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-08">8 November 2026</time></span><span>6 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The File Importer That Stored Whatever the URL Returned</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The File Importer That Stored Whatever the URL Returned</h1><p class="article-deck">A normal upload flow hid a server-side fetcher, and the stored file returned my harmless marker byte for byte.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-15">15 November 2026</time></span><span>6 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Behind the upload</a><a href="#callback">The callback</a><a href="#readback">Response readback</a><a href="#open-source-tool">Open-source tool</a><a href="#takeaway">Takeaway</a></nav>
@@ -103,7 +103,7 @@
 
             <figure class="research-cover-figure"><img src="/assets/research/field-note-server-side-url-import.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A backend importer fetching a remote marker and storing its returned contents."><figcaption>Original risograph editorial illustration for this anonymized field note.</figcaption></figure>
 
-            <h3>Looking behind the upload control</h3>
+            <h2>Looking behind the upload control</h2>
             <p>I was using a privileged controlled role in a document-import workflow. The normal interface first uploaded files and then passed their locations to the application. When I inspected the API request, I saw that those locations were still ordinary HTTPS strings.</p>
             <p>So I replaced them with unique paths on a listener I controlled. Each path returned a tiny harmless HTML marker instead of a document. I did not use loopback, private addresses, link-local ranges, metadata services, internal hostnames, or third-party systems.</p>
 
@@ -120,7 +120,7 @@
               <figcaption>Reconstructed server-side fetch flow. All names, routes, fields, and values are generic placeholders.</figcaption>
             </figure>
 
-            <h3 id="callback">The callback proved who made the request</h3>
+            <h2 id="callback">The callback proved who made the request</h2>
             <p>My listener received requests for the exact unique paths I had supplied. Because those paths had never appeared anywhere else, the callbacks linked directly to the import action.</p>
             <p>A callback alone would prove server-side interaction, but it would not show whether I could read the response. Blind server-side requests and response-readable requests have very different impact, so I kept following the workflow.</p>
 
@@ -141,19 +141,19 @@ SAFE-RESEARCH-MARKER</code></pre>
 
             <p>The exchange above is illustrative. It is not an original endpoint, schema, listener, header set, or response body.</p>
 
-            <h3 id="readback">The stored object returned my marker</h3>
+            <h2 id="readback">The stored object returned my marker</h2>
             <p>The import response created an object containing a download location. I opened that location through the same controlled workflow and received the exact marker bytes served by my listener.</p>
             <p>The content type was not the expected document type, yet the application had fetched and stored it. Matching the body and length showed more than a DNS callback: the worker had persisted the response and made it available to the authorized caller.</p>
             <p>I also tested the role boundary. A lower-privileged controlled identity received a denial on the import operation, and an unauthenticated request was rejected. That kept the conclusion narrow. I had demonstrated a privileged response-readable URL fetcher, not an anonymous or zero-permission primitive.</p>
 
-            <h3>What I could safely claim</h3>
+            <h2>What I could safely claim</h2>
             <p>I could prove that the backend fetched a researcher-owned HTTPS resource, stored arbitrary harmless bytes, and returned them through the import object. I did not probe internal services and I did not retrieve secrets.</p>
             <p>That boundary is important. The possibility of internal reachability is a reason to fix the design, but it is not evidence that internal access already happened. A strong report separates the observed primitive from the larger impact that safe testing deliberately leaves untested.</p>
 
-            <h3 id="open-source-tool">Open-source workflow companion: Interactsh</h3>
+            <h2 id="open-source-tool">Open-source workflow companion: Interactsh</h2>
             <p>For a URL-fetching workflow, the open-source tool I would reach for is <a href="https://github.com/projectdiscovery/interactsh" rel="noopener noreferrer">ProjectDiscovery Interactsh</a>. It issues unique out-of-band addresses and records DNS and HTTP interactions, so each import attempt can have its own correlation point. I would place one unique address in the approved URL field, record the callback, and then pair that evidence with a separate controlled marker response to show whether the application only connected or also consumed and stored the returned bytes. Those are different claims, and the evidence should keep them separate. I would self-host when an assessment needs tighter control over logs and retention. This is a workflow recommendation for an authorized lab, not a claim that Interactsh was used in the original private submission.</p>
 
-            <h3 id="takeaway">Takeaway</h3>
+            <h2 id="takeaway">Takeaway</h2>
             <p>The cleanest repair is to avoid accepting arbitrary absolute URLs. A server-issued upload identifier gives the backend something it can resolve without becoming a general-purpose fetcher.</p>
             <p>If remote retrieval is truly required, I would expect several layers:</p>
             <ul>

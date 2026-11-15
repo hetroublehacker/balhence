@@ -309,9 +309,56 @@ class SearchAndConversionTests(unittest.TestCase):
         self.assertGreaterEqual(len(anchors), 2)
         self.assertTrue(any("segmentation" in normalized(anchor.text) for anchor in anchors))
 
+    def test_pci_segmentation_guide_is_published_and_contextually_linked(self):
+        relative = "insights/pci-dss-network-segmentation-testing.html"
+        canonical = f"{ORIGIN}/{relative}"
+        self.assertIn(relative, PUBLIC_FILE_SET)
+        self.assertTrue(self.documents[relative].indexable)
+        self.assertEqual(self.documents[relative].canonicals, [canonical])
+        self.assertEqual(self.documents[relative].value("og:url"), canonical)
+        self.assertEqual(self.sitemap.get(canonical), "2026-11-15")
+
+        articles = [
+            node for node in schema_nodes(self.documents[relative])
+            if schema_types(node) & ARTICLE_TYPES and node.get("url") == canonical
+        ]
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(
+            normalized(articles[0].get("headline", "")),
+            normalized("PCI DSS network segmentation testing: 11.4.5 and 11.4.6"),
+        )
+
+        incoming = {
+            source for source in (
+                "blog.html",
+                "compliance-penetration-testing.html",
+                "network-penetration-testing.html",
+                "pci-dss-penetration-testing.html",
+            )
+            if any(
+                anchor.in_main and linked_path(source, anchor) == relative
+                for anchor in self.documents[source].anchors
+            )
+        }
+        self.assertEqual(len(incoming), 4)
+
+        destinations = {
+            linked_path(relative, anchor)
+            for anchor in self.documents[relative].anchors
+            if anchor.in_main and normalized(anchor.text)
+        }
+        self.assertTrue({
+            "pci-dss-penetration-testing.html",
+            "network-penetration-testing.html",
+            "compliance-penetration-testing.html",
+            "insights/what-good-pentest-report-includes.html",
+            "report-viewer.html",
+            "contact.html",
+        }.issubset(destinations))
+
     def test_faq_schema_matches_visible_questions_and_answers(self):
         for relative, document in self.documents.items():
-            rendered = LaunchMarkup((SOURCE_ROOT / relative).read_text()).faqs
+            rendered = LaunchMarkup((SOURCE_ROOT / relative).read_text(encoding="utf-8")).faqs
             if not rendered:
                 continue
             with self.subTest(page=relative):
@@ -329,7 +376,7 @@ class SearchAndConversionTests(unittest.TestCase):
             "en-IN": f"{ORIGIN}/penetration-testing-india.html",
         }
         for relative, document in self.documents.items():
-            alternates = LaunchMarkup((SOURCE_ROOT / relative).read_text()).alternates
+            alternates = LaunchMarkup((SOURCE_ROOT / relative).read_text(encoding="utf-8")).alternates
             if relative not in ("penetration-testing-services-usa.html", "penetration-testing-india.html"):
                 self.assertEqual(alternates, {}, relative)
                 continue
@@ -349,6 +396,31 @@ class SearchAndConversionTests(unittest.TestCase):
         }
         self.assertTrue(set(COMMERCIAL_PAGES).issubset(destinations))
         self.assertIn("services.html", destinations, "Keep the broader security service route")
+
+    def test_homepage_navigation_schema_matches_visible_primary_routes(self):
+        nodes = schema_nodes(self.documents["index.html"])
+        navigation = [node for node in nodes if "SiteNavigationElement" in schema_types(node)]
+        self.assertEqual(len(navigation), 1)
+        names = navigation[0].get("name", [])
+        urls = navigation[0].get("url", [])
+        self.assertEqual(len(names), len(urls))
+        expected = {
+            "services.html",
+            "compliance-penetration-testing.html",
+            "soc-2-penetration-testing.html",
+            "pci-dss-penetration-testing.html",
+            "hipaa-penetration-testing.html",
+            "ai-llm-penetration-testing.html",
+            "cloud-penetration-testing.html",
+            "network-penetration-testing.html",
+            "penetration-testing-as-a-service.html",
+            "penetration-testing-india.html",
+            "penetration-testing-services-usa.html",
+            "about.html",
+            "blogs.html",
+            "contact.html",
+        }
+        self.assertEqual({urlsplit(url).path.lstrip("/") for url in urls}, expected)
 
     def test_sitemap_lastmod_dates_are_iso_dates_and_not_in_the_future(self):
         today = datetime.now(timezone.utc).date()

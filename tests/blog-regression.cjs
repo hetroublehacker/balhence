@@ -147,7 +147,7 @@ async function main() {
       assert.equal((await page.locator("h1").innerText()).trim(), title);
       assert.equal(await page.locator("body.research-archive-post.archive-article").count(), 1);
       assert.equal(await page.locator(".research-article-body").count(), 1);
-      assert.ok(await page.locator(".research-article-body h3, .research-article-body h4").count() >= 4);
+      assert.ok(await page.locator(".research-article-body h2, .research-article-body h3, .research-article-body h4").count() >= 4);
       assert.ok(await page.locator(".research-article-body pre").count() >= 1);
       assert.ok(await page.locator(".research-story-figure").count() >= 1);
       assert.ok(await page.locator(".research-story-figure figcaption").count() >= 1);
@@ -175,10 +175,18 @@ async function main() {
 
     await page.goto(`${origin}/blog.html`);
     assert.equal(await page.locator(".insight-card").count(), 5);
+    const pciGuide = page.locator('main a[href="/insights/pci-dss-network-segmentation-testing.html"]');
+    assert.equal(await pciGuide.count(), 1);
+    await pciGuide.click();
+    await page.waitForURL(`${origin}/insights/pci-dss-network-segmentation-testing.html`);
+    assert.equal((await page.locator("h1").innerText()).trim(), "PCI DSS network segmentation testing: 11.4.5 and 11.4.6");
+    assert.equal(await page.locator(".faq-item").count(), 6);
+    assert.equal(await page.locator(".scope-table").count(), 2);
+    await page.goto(`${origin}/blog.html`);
     assert.ok(await page.locator('a[href="/blogs.html#bug-bounty-archive"]').count() > 0);
     await page.goto(`${origin}/blogs.html`);
     assert.ok(await page.locator('a[href="/blog.html"]').count() > 0);
-    pass("The five existing guides remain available and both collections link to each other");
+    pass("The guide hub links to the PCI segmentation guide and both collections link to each other");
 
     for (const [topic, expectedRoutes] of Object.entries(TOPICS)) {
       const button = page.locator(`[data-archive-filter="${topic}"]`);
