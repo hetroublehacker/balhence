@@ -14,7 +14,12 @@ const hashes = {
 };
 for (const [file, expected] of Object.entries(hashes)) {
   const bytes = await readFile(path.join(vendor, file));
-  if (createHash("sha256").update(bytes).digest("hex") !== expected) {
+  // Git may materialize text sources with CRLF on Windows. Hash their
+  // canonical LF form while keeping the vendored font byte-exact.
+  const integrityBytes = file.endsWith(".woff2")
+    ? bytes
+    : Buffer.from(bytes.toString("utf8").replace(/\r\n/g, "\n"));
+  if (createHash("sha256").update(integrityBytes).digest("hex") !== expected) {
     throw new Error(`ThreeUI source integrity mismatch: ${file}`);
   }
   if (file.endsWith(".woff2") && bytes.length !== 15176) throw new Error("Incorrect font size");

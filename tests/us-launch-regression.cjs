@@ -17,14 +17,20 @@ const GUIDES = [
   const port = probe.address().port;
   await new Promise(resolve => probe.close(resolve));
   const origin = `http://127.0.0.1:${port}`;
-  const server = spawn("python3", ["serve.py", "--port", String(port)], { cwd: path.resolve(__dirname, ".."), stdio: "ignore" });
+  const server = spawn(process.platform === "win32" ? "python" : "python3", ["serve.py", "--port", String(port)], { cwd: path.resolve(__dirname, ".."), stdio: "ignore" });
   let browser;
   const errors = [], external = [], missing = [];
   let checks = 0;
   const pass = message => { checks++; console.log(`PASS ${message}`); };
   try {
     for (let attempt = 0; attempt < 40; attempt++) {
-      try { if ((await fetch(origin)).ok) break; } catch { /* Starting preview. */ }
+      try {
+        await new Promise((resolve, reject) => {
+          const socket = net.connect(port, "127.0.0.1", () => { socket.end(); resolve(); });
+          socket.once("error", reject);
+        });
+        break;
+      } catch { /* Starting preview. */ }
       if (attempt === 39) throw new Error("Preview did not start");
       await new Promise(resolve => setTimeout(resolve, 50));
     }

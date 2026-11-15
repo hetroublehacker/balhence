@@ -255,7 +255,7 @@ def verify_site(root: Path, *, artifact: bool = False) -> Result:
     if artifact:
         expected_paths = set(PUBLIC_FILE_SET)
         for relative in PUBLIC_FILES:
-            expected_paths.update(str(parent) for parent in Path(relative).parents if str(parent) != ".")
+            expected_paths.update(parent.as_posix() for parent in Path(relative).parents if parent.as_posix() != ".")
         actual_paths = {path.relative_to(root).as_posix() for path in root.rglob("*")}
         for extra in sorted(actual_paths - expected_paths):
             result.errors.append(f"artifact contains an unapproved path: {extra}")

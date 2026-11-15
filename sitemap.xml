@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://balhence.com/</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://balhence.com/</loc><lastmod>2026-11-15</lastmod></url>
   <url><loc>https://balhence.com/services.html</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://balhence.com/penetration-testing-india.html</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://balhence.com/web-application-penetration-testing.html</loc><lastmod>2026-10-06</lastmod></url>
@@ -14,7 +14,7 @@
   <url><loc>https://balhence.com/research/first-bounty-target.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/research/tale-of-my-first-xss.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/research/http-request-smuggling-plain-english.html</loc><lastmod>2026-11-06</lastmod></url>
-  <url><loc>https://balhence.com/research/inspect-element-bounty.html</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://balhence.com/research/inspect-element-bounty.html</loc><lastmod>2026-11-15</lastmod></url>
   <url><loc>https://balhence.com/research/crlf-injection-playbook.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/research/bug-bounty-with-bash.html</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://balhence.com/research/find-secret-api-keys.html</loc><lastmod>2026-11-06</lastmod></url>
@@ -42,7 +42,7 @@
   <url><loc>https://balhence.com/insights/does-soc-2-require-penetration-testing.html</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://balhence.com/insights/how-to-plan-llm-security-testing.html</loc><lastmod>2026-09-22</lastmod></url>
   <url><loc>https://balhence.com/insights/ptaas-vs-annual-penetration-test.html</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://balhence.com/pci-dss-penetration-testing.html</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://balhence.com/pci-dss-penetration-testing.html</loc><lastmod>2026-11-15</lastmod></url>
   <url><loc>https://balhence.com/penetration-testing-as-a-service.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://balhence.com/penetration-testing-services-usa.html</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://balhence.com/soc-2-penetration-testing.html</loc><lastmod>2026-09-30</lastmod></url>

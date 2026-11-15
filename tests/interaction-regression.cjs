@@ -25,13 +25,19 @@ async function availablePort() {
 async function main() {
   const port = await availablePort();
   const origin = `http://127.0.0.1:${port}`;
-  const server = spawn("python3", ["serve.py", "--port", String(port)], { cwd: ROOT, stdio: "ignore" });
+  const server = spawn(process.platform === "win32" ? "python" : "python3", ["serve.py", "--port", String(port)], { cwd: ROOT, stdio: "ignore" });
   let browser;
   let checks = 0;
   const pass = (message) => { checks += 1; console.log(`PASS ${message}`); };
   try {
     for (let attempt = 0; attempt < 40; attempt += 1) {
-      try { if ((await fetch(origin)).ok) break; } catch { /* Wait for the preview. */ }
+      try {
+        await new Promise((resolve, reject) => {
+          const socket = net.connect(port, "127.0.0.1", () => { socket.end(); resolve(); });
+          socket.once("error", reject);
+        });
+        break;
+      } catch { /* Wait for the preview. */ }
       if (attempt === 39) throw new Error("Preview did not start");
       await new Promise((resolve) => setTimeout(resolve, 50));
     }

@@ -222,7 +222,7 @@ ALT_TEXT = {
         6: "TE.CL request-smuggling diagram showing conflicting headers and leftover junk data.",
     },
     "58d3a9946225": {
-        1: "",
+        1: "Two people celebrating beside a laptop.",
         2: "Account details form showing the mobile number and email fields disabled.",
         3: "Browser developer tools showing the disabled attribute removed from the mobile number field.",
         4: "Confirmation banner reading Updated Successfully.",

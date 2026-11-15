@@ -254,7 +254,7 @@ def build(output: Path) -> None:
         for relative in PUBLIC_FILES:
             public_source(staging, relative)
         actual = frozenset(
-            str(path.relative_to(staging))
+            path.relative_to(staging).as_posix()
             for path in staging.rglob("*")
             if path.is_file()
         )

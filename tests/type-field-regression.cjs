@@ -100,7 +100,7 @@ async function localInk(page, point) {
 async function main() {
   const port = await availablePort();
   const origin = `http://127.0.0.1:${port}`;
-  const server = spawn("python3", ["serve.py", "--port", String(port)], { cwd: ROOT, stdio: "ignore" });
+  const server = spawn(process.platform === "win32" ? "python" : "python3", ["serve.py", "--port", String(port)], { cwd: ROOT, stdio: "ignore" });
   let serverError;
   server.on("error", error => { serverError = error; });
   let browser;
@@ -114,7 +114,13 @@ async function main() {
   try {
     for (let attempt = 0; attempt < 40; attempt++) {
       if (serverError) throw serverError;
-      try { if ((await fetch(origin)).ok) break; } catch { /* Preview is starting. */ }
+      try {
+        await new Promise((resolve, reject) => {
+          const socket = net.connect(port, "127.0.0.1", () => { socket.end(); resolve(); });
+          socket.once("error", reject);
+        });
+        break;
+      } catch { /* Preview is starting. */ }
       if (attempt === 39) throw new Error("Preview did not start");
       await new Promise(resolve => setTimeout(resolve, 50));
     }
@@ -253,6 +259,16 @@ async function main() {
       }, preference));
     }
 
+    await check("Small viewports use the stable CSS fallback and remount when widened", { viewport: { width: 390, height: 844 } }, async page => {
+      await open(page, "/", "static");
+      await expectFallback(page);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      await page.setViewportSize({ width: 720, height: 844 });
+      await expectMoving(page);
+      await page.setViewportSize({ width: 390, height: 844 });
+      await expectFallback(page);
+    });
+
     await check("Forced colors keeps the content usable without a decorative canvas", { forcedColors: "active" }, async page => {
       await open(page, "/services.html", "static");
       await expectFallback(page);
@@ -340,7 +356,7 @@ async function main() {
       };
     }));
 
-    for (const width of [390, 1440]) {
+    for (const width of [1440]) {
       await check(`The local field remains decorative and contained across hero families at ${width}px`, { viewport: { width, height: 1000 } }, async page => {
         for (const pathname of ["/", "/services.html", "/insights/ptaas-vs-annual-penetration-test.html", "/report-viewer.html", "/scope-builder.html", "/privacy.html", "/404.html", "/ctf.html"]) {
           await open(page, pathname);
@@ -388,7 +404,7 @@ async function main() {
     }
 
     await check("Every published page loads one shared local field with no motion controls", {}, async page => {
-      const pages = JSON.parse(execFileSync("python3", ["-c", "import json; from build_public import PUBLIC_FILES; print(json.dumps([p for p in PUBLIC_FILES if p.endswith('.html')]))"], { cwd: ROOT, encoding: "utf8" }));
+      const pages = JSON.parse(execFileSync(process.platform === "win32" ? "python" : "python3", ["-c", "import json; from build_public import PUBLIC_FILES; print(json.dumps([p for p in PUBLIC_FILES if p.endswith('.html')]))"], { cwd: ROOT, encoding: "utf8" }));
       assert.ok(pages.length >= 36, "The coverage list should include every public HTML page");
       for (const file of pages) {
         const source = readFileSync(path.join(ROOT, file), "utf8");

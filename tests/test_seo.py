@@ -285,6 +285,30 @@ class SearchAndConversionTests(unittest.TestCase):
                     for anchor in self.documents[relative].anchors
                 ))
 
+    def test_shared_solutions_menu_surfaces_cloud_and_network_testing(self):
+        expected = {
+            "/cloud-penetration-testing.html": "Cloud penetration testing",
+            "/network-penetration-testing.html": "Network penetration testing",
+        }
+        checked = 0
+        for relative in self.documents:
+            source = (SOURCE_ROOT / relative).read_text(encoding="utf-8")
+            if "data-solutions-menu" not in source:
+                continue
+            checked += 1
+            for href, label in expected.items():
+                with self.subTest(page=relative, href=href):
+                    self.assertIn(f'<a href="{href}">{label}</a>', source)
+        self.assertGreaterEqual(checked, 45)
+
+    def test_pci_page_links_directly_to_network_segmentation_scope(self):
+        anchors = [
+            anchor for anchor in self.documents["pci-dss-penetration-testing.html"].anchors
+            if anchor.in_main and linked_path("pci-dss-penetration-testing.html", anchor) == "network-penetration-testing.html"
+        ]
+        self.assertGreaterEqual(len(anchors), 2)
+        self.assertTrue(any("segmentation" in normalized(anchor.text) for anchor in anchors))
+
     def test_faq_schema_matches_visible_questions_and_answers(self):
         for relative, document in self.documents.items():
             rendered = LaunchMarkup((SOURCE_ROOT / relative).read_text()).faqs

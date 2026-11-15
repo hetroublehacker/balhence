@@ -21,6 +21,10 @@ function initialize(hero: HTMLElement) {
   const preferences = [
     matchMedia("(prefers-reduced-motion: reduce)"),
     matchMedia("(update: slow)"),
+    // The field is decorative and expensive to redraw across a tall,
+    // single-column hero. Keep mobile layouts stable and responsive while
+    // preserving the interactive treatment on wider screens.
+    matchMedia("(max-width: 600px)"),
     matchMedia("(forced-colors: active)"),
     matchMedia("print"),
   ];

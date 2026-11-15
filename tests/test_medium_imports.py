@@ -111,11 +111,7 @@ class ResearchArchiveTests(unittest.TestCase):
                 self.assertEqual(body_hash, item["text_sha256"])
                 self.assertEqual(len(page.images), item["images"])
                 self.assertEqual(len(page.image_alts), item["images"])
-                if item["post_id"] == "58d3a9946225":
-                    self.assertEqual(page.image_alts[0], "")
-                    self.assertTrue(all(page.image_alts[1:]))
-                else:
-                    self.assertTrue(all(page.image_alts))
+                self.assertTrue(all(page.image_alts))
                 self.assertNotIn("medium.com/_/stat", source)
                 self.assertNotIn("where people are continuing the conversation by highlighting", source)
                 self.assertNotIn("Medium remains the canonical publication", source)
