@@ -72,7 +72,7 @@ const GUIDES = [
 
     for (const width of [320, 390, 768, 900, 1440]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const file of ["/", "/services.html", "/blog.html", ...GUIDES.map(slug => `/insights/${slug}.html`)]) {
+      for (const file of ["/", "/services", "/blog", ...GUIDES.map(slug => `/insights/${slug}`)]) {
         await page.goto(origin + file);
         assert.equal(await page.locator("h1").count(), 1);
         await page.evaluate(() => document.fonts.ready);
@@ -82,7 +82,7 @@ const GUIDES = [
       pass(`Launch guides and service hubs fit ${width}px`);
     }
     await page.setViewportSize({ width: 900, height: 1000 });
-    await page.goto(`${origin}/services.html`);
+    await page.goto(`${origin}/services`);
     assert.equal(await page.locator("[data-menu-toggle]").isVisible(), true);
     assert.equal(await page.locator("[data-menu]").isVisible(), false);
     await page.locator("[data-menu-toggle]").click();
@@ -90,7 +90,7 @@ const GUIDES = [
     await page.locator("[data-menu-toggle]").click();
     pass("The expanded primary navigation switches to its collision-free menu before narrow desktop widths");
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`${origin}/soc-2-penetration-testing.html`);
+    await page.goto(`${origin}/soc-2-penetration-testing`);
     const toggle = page.locator("[data-menu-toggle]");
     await toggle.click();
     await summary.click();
@@ -103,12 +103,13 @@ const GUIDES = [
     assert.equal(await page.locator("main").evaluate(node => node.inert), false);
     await toggle.click();
     await summary.click();
-    await menu.locator('a[href="/ai-llm-penetration-testing.html"]').click();
-    await page.waitForURL("**/ai-llm-penetration-testing.html");
+    await menu.locator('a[href="/ai-llm-penetration-testing"]').click();
+    await page.waitForURL("**/ai-llm-penetration-testing");
     assert.equal(await toggle.getAttribute("aria-expanded"), "false");
     const navCta = page.locator(".nav-menu > .btn-primary");
-    assert.match(await navCta.getAttribute("href"), /service=ai&source=ai-pentest/);
-    pass("Mobile nested Escape closes one menu at a time and service navigation retains correct intake");
+    assert.equal(await navCta.getAttribute("href"), "/book-a-call?source=nav-call");
+    assert.equal(await navCta.getAttribute("data-track"), "nav_book_call");
+    pass("Mobile nested Escape closes one menu at a time and service navigation retains the global call CTA");
 
     // An open mobile menu must never tab into collapsed submenu links or background content.
     await toggle.click();
@@ -132,10 +133,10 @@ const GUIDES = [
     for (const reducedMotion of ["reduce", "no-preference"]) {
     const nojs = await contextFor({ javaScriptEnabled: false, reducedMotion, viewport: { width: 390, height: 844 } });
     const nativePage = await nojs.newPage();
-    await nativePage.goto(`${origin}/compliance-penetration-testing.html`);
+    await nativePage.goto(`${origin}/compliance-penetration-testing`);
     await nativePage.locator("[data-solutions-menu] summary").click();
-    await nativePage.locator('[data-solutions-menu] a[href="/hipaa-penetration-testing.html"]').click();
-    await nativePage.waitForURL("**/hipaa-penetration-testing.html");
+    await nativePage.locator('[data-solutions-menu] a[href="/hipaa-penetration-testing"]').click();
+    await nativePage.waitForURL("**/hipaa-penetration-testing");
     await nativePage.evaluate(() => document.fonts.ready);
     assert.equal(await nativePage.locator("h1").innerText(), "HIPAA penetration testing");
     await nativePage.locator(".faq-item summary").first().click();
@@ -147,14 +148,14 @@ const GUIDES = [
 
     // Retain a few representative renders for a manual visual review.
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto(`${origin}/soc-2-penetration-testing.html`);
+    await page.goto(`${origin}/soc-2-penetration-testing`);
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: "/tmp/balhence-us-soc2-desktop.png" });
     await page.goto(origin);
     await page.locator(".home-solutions").scrollIntoViewIfNeeded();
     await page.screenshot({ path: "/tmp/balhence-us-home-content.png" });
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`${origin}/ai-llm-penetration-testing.html`);
+    await page.goto(`${origin}/ai-llm-penetration-testing`);
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: "/tmp/balhence-us-ai-mobile.png" });
     await context.close();

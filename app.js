@@ -3,6 +3,8 @@
 
   const config = window.BALHENCE_CONFIG || {};
   let analyticsEnabled = false;
+
+  normalizeLegacyAddress();
   // Fixed editorial labels, not arbitrary query text or visitor identifiers.
   const enquirySources = new Set([
     "home-nav", "home-hero", "home-faq", "home-closing", "pricing",
@@ -18,7 +20,7 @@
     "ai-pentest", "ptaas-pentest", "usa-pentest",
     "does-soc-2-require-penetration-testing", "how-to-plan-llm-security-testing",
     "pci-segmentation-guide", "ptaas-vs-annual-penetration-test",
-    "about-hero", "about-bottom", "attack-path-pilot", "trust-standards",
+    "about-hero", "about-bottom", "attack-path-pilot", "trust-standards", "contact-page", "nav-call",
     "async-export-authorization", "server-side-url-import",
     "ai-agent-mcp-root-rce", "mixed-batch-authorization", "research-archive",
   ]);
@@ -38,6 +40,13 @@
     initArticleSharing();
     initTrackedLinks();
   });
+
+  function normalizeLegacyAddress() {
+    const path = window.location.pathname;
+    if (!path.endsWith(".html")) return;
+    const cleanPath = path === "/index.html" ? "/" : path.slice(0, -5);
+    window.history.replaceState(window.history.state, "", `${cleanPath}${window.location.search}${window.location.hash}`);
+  }
 
   function setCurrentYear() {
     document.querySelectorAll("[data-current-year]").forEach((node) => {
@@ -345,7 +354,8 @@
           form.reset();
           if (status) {
             status.classList.add("is-success");
-            status.textContent = "Thank you. Your request has been sent. We'll get back to you by email to talk through the project.";
+            const defaultMessage = "Thank you. Your request has been sent. We'll get back to you by email to talk through the project.";
+            status.textContent = boundedText(form.dataset.successMessage || defaultMessage, 360).trim() || defaultMessage;
             status.focus();
           }
           trackEvent("generate_lead", { form_name: form.dataset.leadForm });
@@ -423,7 +433,7 @@
       const current = choice === "accepted" ? "Currently accepted. " : choice === "declined" ? "Currently declined. " : "";
       message.append(document.createTextNode(`${current}Optional analytics helps us improve the site. Accept or decline at any time. `));
       const privacyLink = document.createElement("a");
-      privacyLink.href = "/privacy.html";
+      privacyLink.href = "/privacy";
       privacyLink.textContent = "Privacy details";
       message.append(privacyLink, document.createTextNode("."));
 
@@ -696,7 +706,7 @@
       element.addEventListener("click", () => {
         const destination = element.href ? new URL(element.href, window.location.href) : null;
         const requestsContact = destination && destination.origin === window.location.origin
-          && destination.pathname === "/contact.html";
+          && (destination.pathname === "/contact" || destination.pathname === "/book-a-call");
         trackEvent(requestsContact ? "contact_intent" : "select_content", {
           content_type: "cta",
           content_id: element.dataset.track,

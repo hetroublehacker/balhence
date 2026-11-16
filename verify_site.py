@@ -25,7 +25,14 @@ from http.server import ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urljoin, urlsplit
 
-from build_public import PUBLIC_FILES, PUBLIC_FILE_SET, SOURCE_ROOT, validate_sources
+from build_public import (
+    PUBLIC_FILES,
+    PUBLIC_FILE_SET,
+    SOURCE_ROOT,
+    public_file_for_path,
+    public_path,
+    validate_sources,
+)
 from serve import PreviewHandler
 
 
@@ -233,15 +240,17 @@ def local_target(source: str, url: str) -> tuple[str, str] | None:
     parsed = urlsplit(url.strip())
     if parsed.scheme.lower() == "javascript":
         raise ValueError("javascript URLs are not permitted")
-    absolute = urlsplit(urljoin(f"{ORIGIN}/{source}", url.strip()))
+    absolute = urlsplit(urljoin(f"{ORIGIN}{public_path(source)}", url.strip()))
     if (absolute.scheme, absolute.netloc) != ("https", "balhence.com"):
         return None
     path = unquote(absolute.path, errors="strict")
     if "\\" in path or "\x00" in path:
         raise ValueError("invalid local URL path")
-    if path == "/":
-        path = "/index.html"
-    return path.lstrip("/"), unquote(absolute.fragment, errors="strict")
+    return public_file_for_path(path), unquote(absolute.fragment, errors="strict")
+
+
+def canonical_url(relative: str) -> str:
+    return f"{ORIGIN}{public_path(relative)}"
 
 
 def verify_site(root: Path, *, artifact: bool = False) -> Result:
@@ -288,6 +297,9 @@ def verify_site(root: Path, *, artifact: bool = False) -> Result:
         if target is None:
             return
         path, fragment = target
+        absolute = urlsplit(urljoin(f"{ORIGIN}{public_path(source)}", url.strip()))
+        if absolute.path.endswith(".html") and path.endswith(".html"):
+            result.errors.append(f"{location}: internal page URL must use its clean route ({public_path(path)})")
         if path not in PUBLIC_FILE_SET:
             result.errors.append(f"{location}: target is not a published asset ({path})")
         elif fragment and path in documents:
@@ -321,7 +333,7 @@ def verify_site(root: Path, *, artifact: bool = False) -> Result:
         for attribute, url, line in document.references:
             reference(relative, attribute, url, line)
         if document.indexable:
-            canonical = f"{ORIGIN}/" + ("" if relative == "index.html" else relative)
+            canonical = canonical_url(relative)
             indexable_urls.add(canonical)
             if document.canonicals != [canonical]:
                 problem(f"expected exactly one canonical URL: {canonical}")
@@ -392,7 +404,14 @@ def verify_preview(root: Path) -> list[str]:
     errors = []
     connection = http.client.HTTPConnection("127.0.0.1", server.server_port, timeout=5)
     try:
-        requests = [("GET", "/", 200)] + [("GET", f"/{relative}", 200) for relative in PUBLIC_FILES]
+        served_assets = {"/": "index.html"}
+        served_assets.update({f"/{relative}": relative for relative in PUBLIC_FILES})
+        served_assets.update({
+            public_path(relative): relative
+            for relative in PUBLIC_FILES
+            if relative.endswith(".html")
+        })
+        requests = [("GET", path, 200) for path in served_assets]
         requests += [("HEAD", "/index.html", 200), ("HEAD", "/missing-page", 404)]
         requests += [("GET", path, 404) for path in (
             "/.git/config", "/.env", "/build_public.py", "/serve.py", "/verify_site.py",
@@ -402,6 +421,11 @@ def verify_preview(root: Path) -> list[str]:
             "/vendor/../index.html", "/%2egit/config", "/index.html%00", "/%5cindex.html",
             "http://example.invalid/index.html", "http://[invalid/index.html",
         )]
+        requests += [
+            ("GET", f"{public_path(relative)}/", 404)
+            for relative in PUBLIC_FILES
+            if relative.endswith(".html") and relative != "index.html"
+        ]
         for method, path, expected in requests:
             # Supply Host explicitly so malformed absolute request targets are
             # sent to the loopback handler, rather than rejected by the client.
@@ -420,7 +444,7 @@ def verify_preview(root: Path) -> list[str]:
             if method == "HEAD" and body:
                 errors.append(f"preview HEAD {path}: response must not include a body")
             if method == "GET" and expected == 200:
-                asset = root / ("index.html" if path == "/" else path.lstrip("/"))
+                asset = root / served_assets[path]
                 if body != asset.read_bytes():
                     errors.append(f"preview {path}: response differs from the public asset")
                 expected_type = mimetypes.guess_type(str(asset))[0]

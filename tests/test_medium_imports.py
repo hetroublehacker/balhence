@@ -9,7 +9,8 @@ import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
-from build_public import PUBLIC_FILE_SET, SOURCE_ROOT
+from build_public import PUBLIC_FILE_SET, SOURCE_ROOT, public_path
+from scripts import import_medium_archive
 
 
 MANIFEST = SOURCE_ROOT / "tests" / "fixtures" / "medium-import-manifest.json"
@@ -44,7 +45,7 @@ class ArchivePage(HTMLParser):
             self.canonical = values.get("href", "")
         if tag == "meta" and values.get("name", "").lower() == "robots":
             self.robots = values.get("content", "")
-        if tag == "a" and values.get("href") == "/about.html#researcher":
+        if tag == "a" and values.get("href") == "/about#researcher":
             self.author_profile_link = True
         if tag == "h1":
             self.in_h1 = True
@@ -94,8 +95,12 @@ class ResearchArchiveTests(unittest.TestCase):
         self.assertEqual(len({item["path"] for item in self.manifest}), 10)
         self.assertEqual(len({item["post_id"] for item in self.manifest}), 10)
         self.assertEqual(len({item["source_url"] for item in self.manifest}), 10)
+        self.assertEqual(len({item["source_text_sha256"] for item in self.manifest}), 10)
+        for item in self.manifest:
+            self.assertRegex(item["source_text_sha256"], r"\A[a-f0-9]{64}\Z")
+            self.assertNotEqual(item["source_text_sha256"], item["text_sha256"])
 
-    def test_archive_pages_preserve_text_images_and_publication_record(self):
+    def test_archive_pages_preserve_reviewed_copy_images_and_publication_record(self):
         for item in self.manifest:
             with self.subTest(path=item["path"]):
                 self.assertIn(item["path"], PUBLIC_FILE_SET)
@@ -103,7 +108,7 @@ class ResearchArchiveTests(unittest.TestCase):
                 page = ArchivePage(source)
                 self.assertNotIn("noindex", page.robots.lower())
                 self.assertIn("index", page.robots.lower())
-                self.assertEqual(page.canonical, f'https://balhence.com/{item["path"]}')
+                self.assertEqual(page.canonical, f'https://balhence.com{public_path(item["path"])}')
                 self.assertEqual(normalized(page.h1_parts), item["title"])
                 self.assertTrue(page.author_profile_link)
                 self.assertEqual(page.import_hash, item["text_sha256"])
@@ -117,6 +122,7 @@ class ResearchArchiveTests(unittest.TestCase):
                 self.assertNotIn("Medium remains the canonical publication", source)
                 self.assertNotIn("Read on Medium", source)
                 self.assertNotIn("Follow on Medium", source)
+                self.assertNotIn("please click the 👏 button", normalized(page.body_parts))
                 structured_data = [
                     json.loads(payload)
                     for payload in re.findall(
@@ -133,7 +139,7 @@ class ResearchArchiveTests(unittest.TestCase):
                 )
                 self.assertEqual(
                     article["isPartOf"]["@id"],
-                    "https://balhence.com/blogs.html#bug-bounty-archive",
+                    "https://balhence.com/blogs#bug-bounty-archive",
                 )
                 for image in page.images:
                     self.assertRegex(image, r"\A/assets/research/[a-zA-Z0-9.-]+\Z")
@@ -156,14 +162,116 @@ class ResearchArchiveTests(unittest.TestCase):
                     self.assertEqual(len(payload), asset["bytes"])
                     self.assertEqual(hashlib.sha256(payload).hexdigest(), asset["sha256"])
 
+    def test_each_archive_article_uses_its_reviewed_cover_everywhere(self):
+        hub = import_medium_archive.BeautifulSoup(
+            (SOURCE_ROOT / "blogs.html").read_text(encoding="utf-8"),
+            "html.parser",
+        )
+        for item in self.manifest:
+            with self.subTest(path=item["path"]):
+                cover_path, cover_alt, cover_caption = import_medium_archive.ARCHIVE_COVERS[item["post_id"]]
+                relative_cover = cover_path.lstrip("/")
+                self.assertIn(relative_cover, PUBLIC_FILE_SET)
+                with import_medium_archive.Image.open(SOURCE_ROOT / relative_cover) as image:
+                    self.assertEqual(image.size, (1200, 630))
+
+                document = import_medium_archive.BeautifulSoup(
+                    (SOURCE_ROOT / item["path"]).read_text(encoding="utf-8"),
+                    "html.parser",
+                )
+                figure = document.select_one("figure[data-archive-cover]")
+                self.assertIsNotNone(figure)
+                image = figure.select_one("img")
+                self.assertEqual(image["src"], cover_path)
+                self.assertEqual(image["width"], "1200")
+                self.assertEqual(image["height"], "630")
+                self.assertEqual(image["alt"], cover_alt)
+                self.assertEqual(figure.select_one("figcaption").get_text(" ", strip=True), cover_caption)
+
+                absolute_cover = f"https://balhence.com{cover_path}"
+                self.assertEqual(document.select_one('meta[property="og:image"]')["content"], absolute_cover)
+                self.assertEqual(document.select_one('meta[property="og:image:width"]')["content"], "1200")
+                self.assertEqual(document.select_one('meta[property="og:image:height"]')["content"], "630")
+                self.assertEqual(document.select_one('meta[property="og:image:type"]')["content"], "image/jpeg")
+                self.assertEqual(document.select_one('meta[property="og:image:alt"]')["content"], cover_alt)
+                self.assertEqual(document.select_one('meta[name="twitter:image"]')["content"], absolute_cover)
+                self.assertEqual(document.select_one('meta[name="twitter:image:alt"]')["content"], cover_alt)
+                article_schema = next(
+                    node
+                    for node in json.loads(document.select_one('script[type="application/ld+json"]').string)["@graph"]
+                    if node.get("@type") == "BlogPosting"
+                )
+                self.assertEqual(article_schema["image"], absolute_cover)
+
+                card = hub.select_one(f'a.case-card-link[href="{public_path(item["path"])}"]')
+                self.assertIsNotNone(card)
+                card_image = card.select_one(".case-card-media img")
+                self.assertEqual(card_image["src"], cover_path)
+                self.assertEqual(card_image["width"], "1200")
+                self.assertEqual(card_image["height"], "630")
+                self.assertEqual(card_image["alt"], cover_alt)
+
     def test_hub_and_profile_link_the_complete_archive(self):
         hub = (SOURCE_ROOT / "blogs.html").read_text(encoding="utf-8")
         about = (SOURCE_ROOT / "about.html").read_text(encoding="utf-8")
         self.assertIn('id="bug-bounty-archive"', hub)
-        self.assertIn('"@id": "https://balhence.com/about.html#researcher"', about)
+        self.assertIn('"@id": "https://balhence.com/about#researcher"', about)
         self.assertIn('id="researcher"', about)
         for item in self.manifest:
-            self.assertEqual(hub.count(f'href="/{item["path"]}"'), 1)
+            self.assertEqual(hub.count(f'href="{public_path(item["path"])}"'), 1)
+
+    def test_importer_template_keeps_clean_urls_and_the_current_research_shell(self):
+        post = import_medium_archive.POSTS[0]
+        body = import_medium_archive.BeautifulSoup("<p>Template body.</p>", "html.parser")
+        generated = import_medium_archive.page_html(
+            post,
+            "Template title",
+            "Aditya Soni",
+            ["template"],
+            body,
+            "0" * 64,
+            1,
+        )
+        generated_page = import_medium_archive.BeautifulSoup(generated, "html.parser")
+        current_page = import_medium_archive.BeautifulSoup(
+            (SOURCE_ROOT / post.output).read_text(encoding="utf-8"),
+            "html.parser",
+        )
+
+        self.assertEqual(
+            generated_page.select_one('link[rel="canonical"]')["href"],
+            f"https://balhence.com{post.public_path}",
+        )
+        self.assertNotRegex(generated, r'https://balhence\.com/[A-Za-z0-9_./-]+\.html')
+        self.assertNotRegex(generated, r'(?:href|action)="/[A-Za-z0-9_./-]+\.html')
+        self.assertEqual(
+            str(generated_page.select_one("body > header.site-header")),
+            str(current_page.select_one("body > header.site-header")),
+        )
+        self.assertEqual(
+            str(generated_page.select_one("body > footer.site-footer")),
+            str(current_page.select_one("body > footer.site-footer")),
+        )
+        self.assertEqual(
+            generated_page.select_one('meta[http-equiv="Content-Security-Policy"]')["content"],
+            current_page.select_one('meta[http-equiv="Content-Security-Policy"]')["content"],
+        )
+        for selector, attribute in (('link[rel="stylesheet"]', "href"), ('script[src]', "src")):
+            self.assertEqual(
+                [node[attribute] for node in generated_page.select(selector)],
+                [node[attribute] for node in current_page.select(selector)],
+            )
+
+    def test_copy_refresh_can_isolate_every_reviewed_body_byte_for_byte(self):
+        for post in import_medium_archive.POSTS:
+            with self.subTest(path=post.output):
+                source = (SOURCE_ROOT / post.output).read_text(encoding="utf-8")
+                document = import_medium_archive.BeautifulSoup(source, "html5lib")
+                body = document.select_one(
+                    f'.research-article-body[data-research-post-id="{post.post_id}"]'
+                )
+                self.assertIsNotNone(body)
+                self.assertEqual(source.count(body.decode_contents()), 1)
 
 
 if __name__ == "__main__":

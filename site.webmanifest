@@ -31,13 +31,19 @@
       "name": "Plan a security project",
       "short_name": "Scope planner",
       "description": "Choose a security discipline or create a private web and API test brief.",
-      "url": "/scope-builder.html"
+      "url": "/scope-builder"
     },
     {
       "name": "Explore a sample report",
       "short_name": "Sample report",
       "description": "Inspect a synthetic pentest evidence trail and report structure.",
-      "url": "/report-viewer.html"
+      "url": "/report-viewer"
+    },
+    {
+      "name": "Request a security scoping call",
+      "short_name": "Book a call",
+      "description": "Share preferred times for a security scoping call confirmed by email.",
+      "url": "/book-a-call"
     }
   ]
 }

@@ -2,36 +2,36 @@
 <html lang="en" class="has-article-flow">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; frame-src https://cdn.embedly.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://giscus.app; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; frame-src https://cdn.embedly.com https://giscus.app; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My First XSS Bug Bounty Finding | Balhence</title>
   <meta name="description" content="A first-hand XSS bug bounty story covering parameter discovery, fuzzing, validation, and lessons learned from an established program.">
   <meta name="author" content="Aditya Soni">
   <meta name="robots" content="index,follow,max-image-preview:large">
-  <link rel="canonical" href="https://balhence.com/research/tale-of-my-first-xss.html">
+  <link rel="canonical" href="https://balhence.com/research/tale-of-my-first-xss">
   <meta name="theme-color" content="#080d1f">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Balhence">
   <meta property="og:title" content="Tale of my First XSS">
   <meta property="og:description" content="A first-hand XSS bug bounty story covering parameter discovery, fuzzing, validation, and lessons learned from an established program.">
-  <meta property="og:url" content="https://balhence.com/research/tale-of-my-first-xss.html">
-  <meta property="og:image" content="https://balhence.com/assets/research/27f622bc47c0-01.png">
-  <meta property="og:image:width" content="1080">
-  <meta property="og:image:height" content="492">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:alt" content="Browser alert dialog showing the text YourFriendlyNeighbourhoodHacker on the tested page.">
+  <meta property="og:url" content="https://balhence.com/research/tale-of-my-first-xss">
+  <meta property="og:image" content="https://balhence.com/assets/research/archive-first-xss-v2.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="A manga-style browser scene revealing a controlled script execution path.">
   <meta property="article:published_time" content="2020-05-26T20:09:06Z">
-  <meta property="article:modified_time" content="2026-11-06">
+  <meta property="article:modified_time" content="2026-11-16">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Tale of my First XSS">
   <meta name="twitter:description" content="A first-hand XSS bug bounty story covering parameter discovery, fuzzing, validation, and lessons learned from an established program.">
-  <meta name="twitter:image" content="https://balhence.com/assets/research/27f622bc47c0-01.png">
-  <meta name="twitter:image:alt" content="Browser alert dialog showing the text YourFriendlyNeighbourhoodHacker on the tested page.">
+  <meta name="twitter:image" content="https://balhence.com/assets/research/archive-first-xss-v2.jpg">
+  <meta name="twitter:image:alt" content="A manga-style browser scene revealing a controlled script execution path.">
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261116b">
+  <link rel="stylesheet" href="/styles.css?v=20261116c">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -42,33 +42,33 @@
   "@graph": [
     {
       "@type": "WebPage",
-      "@id": "https://balhence.com/research/tale-of-my-first-xss.html#webpage",
-      "url": "https://balhence.com/research/tale-of-my-first-xss.html",
+      "@id": "https://balhence.com/research/tale-of-my-first-xss#webpage",
+      "url": "https://balhence.com/research/tale-of-my-first-xss",
       "name": "Tale of my First XSS",
       "description": "A first-hand XSS bug bounty story covering parameter discovery, fuzzing, validation, and lessons learned from an established program.",
       "datePublished": "2020-05-26T20:09:06Z",
-      "dateModified": "2026-11-06",
+      "dateModified": "2026-11-16",
       "inLanguage": "en",
       "mainEntity": {
-        "@id": "https://balhence.com/research/tale-of-my-first-xss.html#article"
+        "@id": "https://balhence.com/research/tale-of-my-first-xss#article"
       },
       "breadcrumb": {
-        "@id": "https://balhence.com/research/tale-of-my-first-xss.html#breadcrumb"
+        "@id": "https://balhence.com/research/tale-of-my-first-xss#breadcrumb"
       }
     },
     {
       "@type": "BlogPosting",
-      "@id": "https://balhence.com/research/tale-of-my-first-xss.html#article",
-      "url": "https://balhence.com/research/tale-of-my-first-xss.html",
+      "@id": "https://balhence.com/research/tale-of-my-first-xss#article",
+      "url": "https://balhence.com/research/tale-of-my-first-xss",
       "mainEntityOfPage": {
-        "@id": "https://balhence.com/research/tale-of-my-first-xss.html#webpage"
+        "@id": "https://balhence.com/research/tale-of-my-first-xss#webpage"
       },
       "headline": "Tale of my First XSS",
       "description": "A first-hand XSS bug bounty story covering parameter discovery, fuzzing, validation, and lessons learned from an established program.",
       "datePublished": "2020-05-26T20:09:06Z",
-      "dateModified": "2026-11-06",
+      "dateModified": "2026-11-16",
       "inLanguage": "en",
-      "image": "https://balhence.com/assets/research/27f622bc47c0-01.png",
+      "image": "https://balhence.com/assets/research/archive-first-xss-v2.jpg",
       "keywords": [
         "security",
         "hetorublemakr",
@@ -77,18 +77,18 @@
         "hacking"
       ],
       "author": {
-        "@id": "https://balhence.com/about.html#researcher"
+        "@id": "https://balhence.com/about#researcher"
       },
       "publisher": {
         "@id": "https://balhence.com/#organization"
       },
       "isPartOf": {
-        "@id": "https://balhence.com/blogs.html#bug-bounty-archive"
+        "@id": "https://balhence.com/blogs#bug-bounty-archive"
       }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://balhence.com/research/tale-of-my-first-xss.html#breadcrumb",
+      "@id": "https://balhence.com/research/tale-of-my-first-xss#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -100,22 +100,22 @@
           "@type": "ListItem",
           "position": 2,
           "name": "Bug Bounty Archive",
-          "item": "https://balhence.com/blogs.html#bug-bounty-archive"
+          "item": "https://balhence.com/blogs#bug-bounty-archive"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Tale of my First XSS",
-          "item": "https://balhence.com/research/tale-of-my-first-xss.html"
+          "item": "https://balhence.com/research/tale-of-my-first-xss"
         }
       ]
     },
     {
       "@type": "Person",
-      "@id": "https://balhence.com/about.html#researcher",
+      "@id": "https://balhence.com/about#researcher",
       "name": "Aditya Soni",
       "alternateName": "HeTroubleHacker",
-      "url": "https://balhence.com/about.html#researcher",
+      "url": "https://balhence.com/about#researcher",
       "sameAs": [
         "https://www.linkedin.com/in/adtyasoni/",
         "https://hackerone.com/hetroublehacker",
@@ -139,27 +139,29 @@
 </head>
 <body data-page="insights" class="research-archive-post archive-article">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/attack-path-validation.html">Recurring attack validation</a></li><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; scheduled testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">About</a></li><li><a href="/pricing.html" data-nav="pricing">Pricing</a></li><li><a href="/blogs.html" data-nav="insights">Research</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=research-archive" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/attack-path-validation">Recurring attack validation</a></li><li><a href="/compliance-penetration-testing">Compliance testing</a></li><li><a href="/soc-2-penetration-testing">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing">Cloud penetration testing</a></li><li><a href="/network-penetration-testing">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service">PTaaS &amp; scheduled testing</a></li><li><a href="/penetration-testing-india">Services for India teams</a></li><li><a href="/penetration-testing-services-usa">Services for US teams</a></li></ul></details></li><li><a href="/about" data-nav="about">About</a></li><li><a href="/pricing" data-nav="pricing">Pricing</a></li><li><a href="/blogs" data-nav="insights">Research</a></li><li><a href="/contact" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/book-a-call?source=nav-call" data-nav="book-call" data-track="nav_book_call">Book a call</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Tale of my First XSS</span></nav><span class="eyebrow">Bug bounty archive / Original research</span><h1>Tale of my First XSS</h1><p class="article-deck">Practical security research by Aditya Soni / HeTroubleHacker.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2020-05-26T20:09:06Z">26 May 2020</time></span><span>2 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Tale of my First XSS</span></nav><span class="eyebrow">Bug bounty archive / Original research</span><h1>Tale of my First XSS</h1><p class="article-deck">Practical security research by Aditya Soni / HeTroubleHacker.</p><div class="article-byline"><span>By <a href="/about#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2020-05-26T20:09:06Z">26 May 2020</time></span><span>2 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
-        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the research</a><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a><a href="/about.html#researcher">About Aditya</a></nav>
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the research</a><a href="/blogs#bug-bounty-archive">Bug bounty archive</a><a href="/about#researcher">About Aditya</a></nav>
         <div class="article-content archive-article-content research-article-content">
-          <div class="research-article-body" id="research-article" data-research-post-id="27f622bc47c0" data-research-text-sha256="c920cd6996d3a31091f599799184f6530d13dddad94879e2e5ac5be7852b534f">
-<p>Hi guys, So I would like to start this blog with a question, What was the first vulnerability you learnt when you began into Cyber Security??</p><iframe frameborder="0" height="244" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" scrolling="no" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fgiphy.com%2Fembed%2F3oEduFYRfaeS6KViN2%2Ftwitter%2Fiframe&amp;display_name=Giphy&amp;url=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2F3oEduFYRfaeS6KViN2%2Fgiphy.gif&amp;image=https%3A%2F%2Fi.giphy.com%2Fmedia%2F3oEduFYRfaeS6KViN2%2Fgiphy.gif&amp;key=a19fcc184b9711e1b4764040d3dc5c07&amp;type=text%2Fhtml&amp;schema=giphy" title="Giphy media embedded in the original article" width="435"></iframe><p>Mine was XSS, though it took pretty long for me to find it but yeah! I finally found it ¯\_(ツ)_/¯</p><h3>Case Study</h3><p>I got an invitation to a private program on HackerOne. It almost had more than 600+ reports already reported with just 4 assets. Damn will I find anythin’?? <br/>I still began with my normal reconnaissance and started playing with the application. No luck here!</p><p>Now, I then started mining the parameters. <strong>HOW?</strong> here you go</p><p><a href="https://github.com/devanshbatham/ParamSpider" rel="noopener noreferrer">GitHub - devanshbatham/ParamSpider: Mining URLs from dark corners of Web Archives for bug hunting/fuzzing/further probing</a></p><h3>Cihan Mehmet DOĞAN (CMD) on Twitter</h3><p>@marcolivermunz @hahwul you can use it as below. gospider -S tageturls.txt -c 10 -d 5 --blacklist ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|txt)" --other-source | grep -e "code-200" | awk '{print $5}'|grep "=" | qsreplace -a | dalfox pipe -o result.txt</p><ul><li><a href="https://github.com/s0md3v/Arjun" rel="noopener noreferrer">GitHub - s0md3v/Arjun: HTTP parameter discovery suite.</a></li><li><a href="https://github.com/hakluke/hakrawler" rel="noopener noreferrer">GitHub - hakluke/hakrawler: Simple, fast web crawler designed for easy, quick discovery of endpoints and assets within a web application</a></li></ul><p>also you can use “Waybackurls | gau” to find parameters. These are some great tips I have used soo far and the results were amazing ¯\_(ツ)_/¯</p><p>With all the list of Parameters, I started fuzzing and fuzzing with a thought, I’ll get something interesting <em>(Positive Vibes)</em> and Voila!! I found one parameter which did not have many filters. First I sent it to some XSS scanner tools because It’s the first time I running for an XSS.</p><ul><li><a href="https://github.com/s0md3v/XSStrike" rel="noopener noreferrer">GitHub - s0md3v/XSStrike: Most advanced XSS scanner.</a></li><li><a href="https://github.com/hahwul/dalfox" rel="noopener noreferrer">GitHub - hahwul/dalfox: 🌙🦊 Dalfox is a powerful open-source XSS scanner and utility focused on automation.</a></li></ul><p>And I got positive results, I found csrfToken lying out there for me lol :P</p><pre>https://sub.example.com/?csrfToken=htmhunter</pre><p>So I started exploring how to get the POP-UP</p><iframe frameborder="0" height="326" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" scrolling="no" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fgiphy.com%2Fembed%2Fl2JedjCkIJxQvRZmM%2Ftwitter%2Fiframe&amp;display_name=Giphy&amp;url=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2Fl2JedjCkIJxQvRZmM%2Fgiphy.gif&amp;image=https%3A%2F%2Fi.giphy.com%2Fmedia%2Fl2JedjCkIJxQvRZmM%2Fgiphy.gif&amp;key=a19fcc184b9711e1b4764040d3dc5c07&amp;type=text%2Fhtml&amp;schema=giphy" title="Giphy media embedded in the original article" width="435"></iframe><p>And later that day. I reported my First XSS on HackerOne.</p><figure><img alt="Browser alert dialog showing the text YourFriendlyNeighbourhoodHacker on the tested page." decoding="async" height="492" loading="lazy" src="/assets/research/27f622bc47c0-01.png" width="1080"/></figure><p><strong>Takeaways –</strong></p><p>“Old program, many reports, and many such things” don’t let it bother you. Always try to find more and more parameters and Fuzz them ALL :D</p><p>That’s all for this blog. Hope you liked it.</p><p>Connect with me on <a href="https://www.linkedin.com/in/adtyasoni" rel="noopener noreferrer">LinkedIn</a>, <a href="https://twitter.com/hetroublemakr" rel="noopener noreferrer">Twitter</a></p><p>If you enjoyed this blog, please click the 👏 button and share it to help others find it.</p>
+          <figure class="research-cover-figure" data-archive-cover><img src="/assets/research/archive-first-xss-v2.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A manga-style browser scene revealing a controlled script execution path."><figcaption>Original anime and manga editorial illustration created for this archive edition.</figcaption></figure>
+          <div class="research-article-body" id="research-article" data-research-post-id="27f622bc47c0" data-research-text-sha256="20b6a74a4147c14bc4fffa71b39c722fb9e633e29403e857137a9c96dd6a86ba">
+<p>Hi everyone. I’d like to start with a question: what was the first vulnerability you learned about when you began studying cybersecurity?</p><iframe frameborder="0" height="244" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" scrolling="no" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fgiphy.com%2Fembed%2F3oEduFYRfaeS6KViN2%2Ftwitter%2Fiframe&amp;display_name=Giphy&amp;url=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2F3oEduFYRfaeS6KViN2%2Fgiphy.gif&amp;image=https%3A%2F%2Fi.giphy.com%2Fmedia%2F3oEduFYRfaeS6KViN2%2Fgiphy.gif&amp;key=a19fcc184b9711e1b4764040d3dc5c07&amp;type=text%2Fhtml&amp;schema=giphy" title="Giphy media embedded in the original article" width="435"></iframe><p>Mine was XSS. It took me quite a while to find one, but I finally did. ¯\_(ツ)_/¯</p><h3>Case Study</h3><p>I received an invitation to a private HackerOne program that already had more than 600 reports across only four assets. I wondered whether I would find anything. <br/>I still began with my usual reconnaissance and started testing the application. At first, I had no luck.</p><p>Next, I started mining parameters. <strong>Here is the workflow:</strong> these were the tools and techniques I used.</p><p><a href="https://github.com/devanshbatham/ParamSpider" rel="noopener noreferrer">GitHub - devanshbatham/ParamSpider: Mining URLs from dark corners of Web Archives for bug hunting/fuzzing/further probing</a></p><h3>Cihan Mehmet DOĞAN (CMD) on Twitter</h3><p>@marcolivermunz @hahwul you can use it as below. gospider -S tageturls.txt -c 10 -d 5 --blacklist ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|txt)" --other-source | grep -e "code-200" | awk '{print $5}'|grep "=" | qsreplace -a | dalfox pipe -o result.txt</p><ul><li><a href="https://github.com/s0md3v/Arjun" rel="noopener noreferrer">GitHub - s0md3v/Arjun: HTTP parameter discovery suite.</a></li><li><a href="https://github.com/hakluke/hakrawler" rel="noopener noreferrer">GitHub - hakluke/hakrawler: Simple, fast web crawler designed for easy, quick discovery of endpoints and assets within a web application</a></li></ul><p>You can also use “Waybackurls | gau” to find parameters. These were useful techniques in my workflow, and the results were strong. ¯\_(ツ)_/¯</p><p>With the parameter list ready, I began fuzzing in the hope of finding something interesting <em>(Positive Vibes)</em> and found a parameter with few filters. Because this was my first time testing for XSS, I sent it to a couple of XSS scanners first.</p><ul><li><a href="https://github.com/s0md3v/XSStrike" rel="noopener noreferrer">GitHub - s0md3v/XSStrike: Most advanced XSS scanner.</a></li><li><a href="https://github.com/hahwul/dalfox" rel="noopener noreferrer">GitHub - hahwul/dalfox: 🌙🦊 Dalfox is a powerful open-source XSS scanner and utility focused on automation.</a></li></ul><p>The tools returned positive results, and I found a csrfToken exposed there. :P</p><pre>https://sub.example.com/?csrfToken=htmhunter</pre><p>I then explored how to trigger the alert.</p><iframe frameborder="0" height="326" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" scrolling="no" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fgiphy.com%2Fembed%2Fl2JedjCkIJxQvRZmM%2Ftwitter%2Fiframe&amp;display_name=Giphy&amp;url=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2Fl2JedjCkIJxQvRZmM%2Fgiphy.gif&amp;image=https%3A%2F%2Fi.giphy.com%2Fmedia%2Fl2JedjCkIJxQvRZmM%2Fgiphy.gif&amp;key=a19fcc184b9711e1b4764040d3dc5c07&amp;type=text%2Fhtml&amp;schema=giphy" title="Giphy media embedded in the original article" width="435"></iframe><p>Later that day, I reported my first XSS on HackerOne.</p><figure><img alt="Browser alert dialog showing the text YourFriendlyNeighbourhoodHacker on the tested page." decoding="async" height="492" loading="lazy" src="/assets/research/27f622bc47c0-01.png" width="1080"/></figure><p><strong>Takeaways –</strong></p><p>Don’t let an old program or a high report count discourage you. Keep discovering parameters and test them methodically. :D</p><p>That’s all for this blog. Hope you liked it.</p><p>Connect with me on <a href="https://www.linkedin.com/in/adtyasoni" rel="noopener noreferrer">LinkedIn</a>, <a href="https://twitter.com/hetroublemakr" rel="noopener noreferrer">Twitter</a></p><p>If this article helped, share it with another researcher who might find it useful.</p>
           </div>
-          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
-          <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>From research to a scoped assessment.</h2><p>Explore Web application penetration testing or browse the full Bug Bounty Archive for more evidence-focused research.</p><div class="button-row"><a class="btn btn-primary" href="/web-application-penetration-testing.html">Web application penetration testing</a><a class="btn btn-quiet" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></div>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>From research to a scoped assessment.</h2><p>Explore Web application penetration testing or browse the full Bug Bounty Archive for more evidence-focused research.</p><div class="button-row"><a class="btn btn-primary" href="/web-application-penetration-testing">Web application penetration testing</a><a class="btn btn-quiet" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></div>
           <p class="research-topic-line"><strong>Research topics:</strong> security / hetorublemakr / bug-bounty / xs / hacking</p>
         </div>
       </div></div>
     </article>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Researcher-led testing. Human-validated evidence.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/attack-path-validation.html">Attack-path validation</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">About</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Proof &amp; trust</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/trust.html">Trust &amp; data handling</a></li><li><a href="/blog.html">Practical guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261116b"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Researcher-led testing. Human-validated evidence.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services">Services</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/attack-path-validation">Attack-path validation</a></li><li><a href="/soc-2-penetration-testing">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing">Cloud penetration testing</a></li><li><a href="/network-penetration-testing">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service">PTaaS</a></li><li><a href="/penetration-testing-india">India services</a></li><li><a href="/penetration-testing-services-usa">US services</a></li><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li></ul></div><div class="footer-column"><h2>Proof &amp; trust</h2><ul class="footer-links"><li><a href="/scope-builder">Scope planner</a></li><li><a href="/report-viewer">Sample report</a></li><li><a href="/trust">Trust &amp; data handling</a></li><li><a href="/blog">Practical guides</a></li><li><a href="/blogs#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="/book-a-call">Book a security scoping call</a></li><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20261116d"></script><script src="/app.js?v=20261116d"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+  <script src="/article-engagement.js?v=20261116a"></script>
 </body>
 </html>

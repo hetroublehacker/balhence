@@ -120,7 +120,7 @@ async function waitForMotionState(page, expected) {
     const homeHeader = await headerStyleTokens(page);
     const styleContext = await createContext({ reducedMotion: "reduce" });
     const stylePage = await styleContext.newPage();
-    await stylePage.goto(`${origin}/services.html`);
+    await stylePage.goto(`${origin}/services`);
     await stylePage.evaluate(() => document.fonts.ready);
     assert.deepEqual(homeHeader, await headerStyleTokens(stylePage), "Homepage branding and primary header CTA must match the service-page design");
     await styleContext.close();
@@ -234,7 +234,7 @@ async function waitForMotionState(page, expected) {
     pass("The homepage, enquiry link, and bounded canvas fit mobile, tablet, and desktop widths");
 
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto(`${origin}/report-viewer.html`);
+    await page.goto(`${origin}/report-viewer`);
     await page.locator('[data-report-tab="executive"]').focus();
     await page.keyboard.press("End");
     assert.equal(await page.locator('[data-report-panel="retest"]').isVisible(), true);
@@ -243,7 +243,7 @@ async function waitForMotionState(page, expected) {
     assert.equal((await sample.body()).subarray(0, 5).toString(), "%PDF-");
     pass("Report explorer supports keyboard navigation and serves a valid PDF");
 
-    await page.goto(`${origin}/scope-builder.html`);
+    await page.goto(`${origin}/scope-builder`);
     await page.locator("[data-step]:visible [data-next]").click();
     assert.equal(await page.locator("[data-form-error]").isVisible(), true);
     await page.evaluate(() => {
@@ -278,12 +278,12 @@ async function waitForMotionState(page, expected) {
     await assertSystemLabels(nojs.locator(SECURITY_MAP));
     assert.equal(await nojs.locator(CANVAS).isVisible(), false);
     assert.equal(await nojs.locator(MOTION_CONTROLS).count(), 0);
-    assert.equal(await nojs.locator('.service-row[href="/web-application-penetration-testing.html"]').isVisible(), true);
-    assert.equal(await nojs.locator('.service-row[href="/api-penetration-testing.html"]').isVisible(), true);
-    assert.equal(await nojs.locator('.service-row[href="/saas-penetration-testing.html"]').isVisible(), true);
+    assert.equal(await nojs.locator('.service-row[href="/web-application-penetration-testing"]').isVisible(), true);
+    assert.equal(await nojs.locator('.service-row[href="/api-penetration-testing"]').isVisible(), true);
+    assert.equal(await nojs.locator('.service-row[href="/saas-penetration-testing"]').isVisible(), true);
     assert.ok(await nojs.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     await nojs.locator('main a.btn-primary[href*="source=home-hero"]').click();
-    await nojs.waitForURL("**/contact.html?**");
+    await nojs.waitForURL("**/contact?**");
     assert.equal(await nojs.locator("form[data-lead-form]").isVisible(), true);
     pass("Without JavaScript the SVG, mobile navigation, five sections, and enquiry route remain usable");
     assert.deepEqual(errors, []);

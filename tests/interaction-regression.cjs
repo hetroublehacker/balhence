@@ -50,7 +50,11 @@ async function main() {
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
 
-    await page.goto(`${origin}/scope-builder.html`);
+    await page.goto(`${origin}/privacy.html`);
+    assert.equal(new URL(page.url()).pathname, "/privacy");
+    pass("Legacy HTML page URLs remain reachable and normalize to the clean address");
+
+    await page.goto(`${origin}/scope-builder`);
     await page.evaluate(() => {
       const setItem = Storage.prototype.setItem;
       Storage.prototype.setItem = function (key, value) {
@@ -72,12 +76,12 @@ async function main() {
     await page.locator("[data-reset]").click();
     await page.clock.runFor(300);
     assert.equal(await page.evaluate((key) => localStorage.getItem(key), DRAFT), null);
-    await page.goto(`${origin}/privacy.html`);
+    await page.goto(`${origin}/privacy`);
     assert.equal(await page.evaluate((key) => localStorage.getItem(key), DRAFT), null);
     await page.clock.resume();
     pass("Reset cancels pending autosave and remains cleared after page exit");
 
-    await page.goto(`${origin}/scope-builder.html`);
+    await page.goto(`${origin}/scope-builder`);
     await page.evaluate(() => {
       const form = document.querySelector("#scope-planner-form");
       for (const radio of form.querySelectorAll("input[type=radio][required]")) radio.checked = true;
@@ -91,12 +95,12 @@ async function main() {
     await page.locator("[data-build-brief]").click();
     assert.ok(await page.evaluate((key) => sessionStorage.getItem(key), BRIEF));
     await page.locator("[data-contact-cta]").click();
-    await page.waitForURL("**/contact.html?**");
+    await page.waitForURL("**/contact?**");
     assert.equal(await page.locator("[data-scope-brief-handoff]").isVisible(), true);
     assert.match(await page.locator('input[name="generated_scope_brief"]').inputValue(), /DRAFT/i);
     pass("Completed scope transfers to the contact form with the brief attached");
 
-    await page.goto(`${origin}/scope-builder.html`);
+    await page.goto(`${origin}/scope-builder`);
     await page.locator('[data-step-jump="0"]').click();
     await page.locator('[name="business_trigger"][value="release"]').check();
     assert.equal(await page.evaluate((key) => sessionStorage.getItem(key), BRIEF), null);
@@ -111,12 +115,12 @@ async function main() {
       };
     });
     await page.locator("[data-contact-cta]").click();
-    assert.equal(new URL(page.url()).pathname, "/scope-builder.html");
+    assert.equal(new URL(page.url()).pathname, "/scope-builder");
     assert.match(await page.locator("[data-live-message]").textContent(), /could not transfer/);
     assert.equal(await page.locator("[data-download]").isEnabled(), true);
     pass("Failed session transfer preserves the planner and download recovery");
 
-    await page.goto(`${origin}/services.html`);
+    await page.goto(`${origin}/services`);
     assert.equal(await page.locator("script[data-balhence-analytics]").count(), 0);
     await page.locator("[data-consent-accept]").click();
     assert.equal(await page.locator("script[data-balhence-analytics]").count(), 1);
@@ -141,14 +145,14 @@ async function main() {
     pass("Analytics can be accepted again after revocation");
 
     const second = await context.newPage();
-    await second.goto(`${origin}/privacy.html`);
+    await second.goto(`${origin}/privacy`);
     await second.locator("article [data-analytics-preferences]").click();
     await second.locator("[data-consent-decline]").click();
     await page.waitForFunction(() => document.querySelectorAll("script[data-balhence-analytics]").length === 0);
     assert.equal(await second.locator("script[data-balhence-analytics]").count(), 0);
     pass("Privacy controls synchronize revocation across tabs without loading analytics");
     await second.close();
-    for (const route of ["scope-builder.html", "contact.html", "privacy.html"]) {
+    for (const route of ["scope-builder", "contact", "privacy"]) {
       await page.evaluate((key) => localStorage.setItem(key, "accepted"), CONSENT);
       await page.goto(`${origin}/${route}`);
       assert.equal(await page.locator("script[data-balhence-analytics]").count(), 0);
@@ -156,7 +160,7 @@ async function main() {
     pass("Planner, contact, and privacy pages remain analytics-free after acceptance");
 
     await page.setViewportSize({ width: 812, height: 375 });
-    await page.goto(`${origin}/services.html`);
+    await page.goto(`${origin}/services`);
     await page.locator("[data-menu-toggle]").click();
     assert.equal(await page.locator("main").evaluate((node) => node.inert), true);
     await page.waitForFunction(() => document.querySelector("[data-menu] a") === document.activeElement);
@@ -172,7 +176,7 @@ async function main() {
 
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.evaluate((key) => sessionStorage.removeItem(key), BRIEF);
-    await page.goto(`${origin}/contact.html`);
+    await page.goto(`${origin}/contact`);
     await page.route("https://formspree.io/**", () => { /* Hold locally; never send a request. */ });
     await page.locator("#name").fill("Local regression test");
     await page.locator("#email").fill("test@example.invalid");

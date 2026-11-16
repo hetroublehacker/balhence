@@ -18,15 +18,15 @@ This directory is the main website. The existing nested `website/`, `website-too
 - Self-hosted Bricolage Grotesque throughout the shared site, paired with Newsreader for article prose and editorial accents. Code and HTTP remain monospace. Font licenses ship with the assets; the separate CTF keeps its terminal styling.
 - Conversational service copy and a growing article library. Research stories preserve their observation limits and redactions; guides focus on practical decisions.
 - Twelve security capability areas, with cross-disciplinary and specialist enquiries routed to a tailored scope review. AI-native positioning retains human ownership, agreed data use, and explicit project boundaries.
-- A dedicated Bug Bounty Archive at `/blogs.html` with first-person anonymized field notes, ten preserved historical articles, and local search/topic filters. Existing preparation and procurement guides remain at `/blog.html`.
-- Animation stops while the map is offscreen or the tab is hidden, draws at a maximum of 30fps, and caps pixel density. A saved pause control, reduced-motion/slow-device/save-data preferences, and a matching static SVG fallback keep the experience optional. No information depends on motion or pointer input.
+- A dedicated Bug Bounty Archive at `/blogs` with first-person anonymized field notes, ten reviewed historical articles, distinct editorial covers, and local search/topic filters. Existing preparation and procurement guides remain at `/blog`.
+- Animation stops while the map is offscreen or the tab is hidden, draws at a maximum of 30fps, and caps pixel density. Reduced-motion, slow-device, save-data, and static fallback paths keep the experience optional. No information depends on motion or pointer input.
 - Security project routing plus a six-step web/API scope planner with local draft resume, PDF export, and a reviewed handoff to the contact form. The estimator does not price or estimate specialist work.
 - Interactive synthetic report with executive, technical, remediation, and re-test views.
 - Accessible mobile navigation, editable analytics preferences, and enquiry timeout/retry handling.
 - Seven US launch pages cover SOC 2, compliance, PCI DSS, HIPAA, AI/LLM testing, PTaaS, and remote services for US companies. A keyboard-accessible Solutions disclosure, contextual links, service-specific intake, and reciprocal US/India language links connect the pages.
 - Search-focused web, API, and SaaS service pages with direct proposal requests, contextual research links, and a lower-friction enquiry form. The broader AI-native capability map remains available.
 
-The homepage uses Canvas 2D, CSS and the Web Animations API, without an animation library. Font files are served locally; no third-party resources load until eligible analytics consent. Supporting pages retain the existing progressive motion layer.
+The homepage uses Canvas 2D, CSS and the Web Animations API, without an animation library. Font files are served locally; third-party runtime resources load only after eligible analytics consent, an explicit discussion opt-in, a form submission, or—depending on the browser—when a historical media embed loads or approaches the viewport. Supporting pages retain the existing progressive motion layer.
 
 ## Main files
 
@@ -37,6 +37,8 @@ The homepage uses Canvas 2D, CSS and the Web Animations API, without an animatio
 | `scope-builder.*`, `scope-pdf.js` | Local planning and PDF export |
 | `report-viewer.html`, `report-explorer.*` | Sample report explorer |
 | `contact.html`, `contact-brief.*` | Enquiries and scope handoff |
+| `book-a-call.html`, `book-a-call.js` | Email-confirmed security scoping call requests |
+| `article-engagement.js` | Consent-gated GitHub Discussions reactions/comments |
 | `services.html`, service pages, `insights/` | Service coverage and buyer guides |
 | `blogs.html`, `case-studies.*`, field-note articles in `insights/` | First-person redacted stories, progressive filtering, and defensive lessons |
 | `build_public.py`, `serve.py`, `verify_site.py` | Publication boundary and validation |
@@ -52,7 +54,7 @@ favicon URL stable when updating its artwork so search crawlers can refresh it.
 
 ## Data and configuration
 
-Public company information, the Formspree endpoint, and analytics ID live in `config.js`. Never place secrets in the browser bundle.
+Public company information, the Formspree endpoint, optional calendar URL, article-engagement settings, and analytics ID live in `config.js`. Never place secrets in the browser bundle.
 
 Planner answers are stored under `balhence_scope_builder_v1`. A completed brief uses `balhence_scope_brief_v1` in session storage, expires after two hours, and is submitted only with the contact form. Failed storage or handoff is reported with copy/PDF recovery; resetting the planner clears saved drafts.
 
@@ -60,9 +62,11 @@ Explicit service links preselect the matching enquiry category. Selecting a diff
 
 Enquiry links can carry a fixed `source` label. Only allowlisted labels become the submitted `enquiry_source`; unknown values become `unlabelled`. This creates no tracking cookie or stored browsing history. On eligible pages, consented `contact_intent` events count tracked enquiry-link clicks, not submitted forms. Contact remains analytics-free; measure received and qualified leads in Formspree, the inbox, and your lead log.
 
-Analytics stays off until acceptance and never loads on the planner, contact, or privacy pages. Visitors can change the choice through the footer. Decorative motion follows device preferences without storing a separate animation setting.
+Analytics stays off until acceptance and never loads on the planner, contact, call-request, or privacy pages. Visitors can change the choice through the footer. Decorative motion follows device preferences without storing a separate animation setting.
 
-Form submissions require Formspree connectivity. Live form delivery has not been exercised during this upgrade; automated tests intercept submissions.
+Enquiry and call-request submissions require Formspree connectivity. A call request supplies preferred times and is not a confirmed booking until Balhence replies by email. Live form delivery has not been exercised during this upgrade; automated tests intercept submissions.
+
+Article reactions and comments are provider-ready through Giscus, but production configuration intentionally remains incomplete until GitHub Discussions is enabled and the Giscus app is installed for `hetroublehacker/balhence`. After setup, add the public category name and category ID to `config.js`. Until then, the integration renders nothing and sends no Giscus request. Once configured, visitors must explicitly choose to load the discussion before any third-party resource is requested; the canonical clean pathname prevents `.html` and extensionless URLs from creating duplicate threads.
 
 ## Verify and build
 
@@ -89,6 +93,7 @@ node tests/interaction-regression.cjs
 node tests/experience-regression.cjs
 node tests/capability-regression.cjs
 node tests/blog-regression.cjs
+node tests/engagement-booking-regression.cjs
 node tests/seo-conversion-regression.cjs
 node tests/us-launch-regression.cjs
 ```
@@ -99,7 +104,7 @@ The Python suite also checks search metadata uniqueness, ordinary-link reachabil
 
 ### Refreshing the first-party research archive
 
-The ten `research/*.html` first-party articles and their 43 local images are generated from Aditya Soni's public RSS feed. Install the maintainer-only parser dependencies, then run the importer against a reviewed feed capture:
+The ten `research/*.html` first-party articles and their 43 preserved source images are generated from Aditya Soni's public RSS feed. Ten separate 1200x630 editorial covers are kept under deterministic importer configuration. Install the maintainer-only parser dependencies, then run the importer against a reviewed feed capture:
 
 ```bash
 python3 -m pip install -r requirements-maintainer.txt
@@ -126,15 +131,15 @@ Native links, navigation, tables and forms work without JavaScript. `tests/flow-
 
 All public pages load `type-field.css` and `type-field.js`. The native canvas adapter in `src/animation/mount.ts` uses the verified local [ThreeUI Typography Vortex](https://threeui.com/text-animation/typography-vortex) renderer. The rotating phrase names Balhence, penetration testing, web and API security, SaaS, cloud, identity, and AI/LLM security. Viewports up to 600px use the static CSS treatment to avoid decorative canvas work and layout instability on mobile. Source hashes and MIT provenance are recorded in `vendor/threeui/SOURCE.txt` and checked during every animation build.
 
-The background stays behind hero content and never intercepts links or native scrolling. Pointer input dissolves nearby typography into dust; clicking produces the renderer's suction effect. There are no pause or play controls. The unchanged renderer caches ring bitmaps, draws at the display's animation cadence, caps pixel ratio at 2, and suspends offscreen or in hidden documents. The adapter removes the canvas for reduced motion, slow updates, forced colors, data saving or print, retaining the static CSS surface. Page content remains available without JavaScript or Canvas 2D.
+The background stays behind hero content and never intercepts links or native scrolling. It is deliberately passive: pointer movement cannot dissolve or displace the field, and clicking cannot trigger suction. There are no pause or play controls. The renderer caches ring bitmaps, draws at the display's animation cadence, caps pixel ratio at 2, and suspends offscreen or in hidden documents. The adapter removes the canvas for reduced motion, slow updates, forced colors, data saving or print, retaining the static CSS surface. Page content remains available without JavaScript or Canvas 2D.
 
 The startup update removes the React runtime, shared stylesheet import and animation font download. The 11 KB script loads asynchronously from the page head and mounts as soon as the hero is parsed, using system monospace text without waiting for fonts or footer scripts. Its previous React bundle was 235 KB. All animation resources are local; the original component/CSS/font remain in the repository for provenance, while only the renderer and its MIT notice are deployed. Other site typography continues to use its existing local fonts.
 
-Run `npm ci --ignore-scripts --no-audit --no-fund`, then `npm run build:animation` after editing the native adapter. Commit the generated `type-field.js`; CI uses `npm run check:animation` to verify its source and 16 KB size limit. Run `node tests/type-field-regression.cjs` for actual rendered motion, pointer response, font-independent startup, device preferences, responsive layout and all-page checks. The public build contains 87 files. No new external runtime requests or analytics are introduced.
+Run `npm ci --ignore-scripts --no-audit --no-fund`, then `npm run build:animation` after editing the native adapter. Commit the generated `type-field.js`; CI uses `npm run check:animation` to verify its source and 16 KB size limit. Run `node tests/type-field-regression.cjs` for actual rendered motion, absence of retired pointer/click paths, font-independent startup, device preferences, responsive layout, and all-page checks.
 
 Initial 1 October verification: 45 Python checks and 44 browser checks passed (12 typography, 10 page-flow, 11 homepage/report/planner, 11 interaction checks). Every public page initializes the same background; eight layout families were checked at 390px and 1440px. Source and artifact validation cover 2,398 URL references. The CTF keyboard handler is scoped to the answer field.
 
-After removing controls and adding mouse response, 34 targeted browser checks passed (13 typography, 10 page-flow, 11 homepage/report/planner), including all-page control absence and rendered-pixel pointer checks with autonomous animation time frozen.
+After removing visible controls and pointer/click effects, targeted browser checks cover all-page control absence, passive-canvas behavior, and rendered animation with time frozen.
 
 ## Publishing
 
@@ -144,4 +149,4 @@ Use HTTPS and appropriate response headers in production. The preview demonstrat
 
 GitHub Pages alone cannot configure the full response-header policy. Use a suitable host or reverse proxy for a response-header CSP, `frame-ancestors 'none'`, and `X-Frame-Options: DENY` on HTML. Allow same-origin framing for `sample-vapt-report.pdf`, which the report viewer embeds. Add HSTS only after HTTPS is stable, plus `X-Content-Type-Options: nosniff`, a restrictive `Permissions-Policy`, and an appropriate `Referrer-Policy`.
 
-The original tracked website is recoverable from `/home/dollar/tools/balhence-upgrade-backup-TlLnHb/original-website.tar`. The pre-existing nested worktree, including its modified PDF, was left intact. The migrated sample PDF uses that worktree's committed version.
+Recovery material and pre-existing worktrees remain outside the public artifact. The migrated sample PDF uses the reviewed committed version.

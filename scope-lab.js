@@ -56,7 +56,7 @@
     description.textContent = scenario.description;
     emphasis.forEach((item, index) => { item.textContent = scenario.emphasis[index]; });
     pathLabels.forEach((item, index) => { item.textContent = scenario.path[index]; });
-    link.href = `/scope-builder.html?trigger=${encodeURIComponent(trigger)}`;
+    link.href = `/scope-builder?trigger=${encodeURIComponent(trigger)}`;
     link.dataset.track = `scope_lab_${trigger}`;
 
     if (!reducedMotion) {

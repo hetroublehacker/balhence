@@ -13,24 +13,24 @@ const { chromium } = require("playwright");
 const ROOT = path.resolve(__dirname, "..");
 const CONSENT = "balhence_analytics_consent";
 const BUYER_ROUTES = [
-  ["/soc-2-penetration-testing.html", "soc2-pentest", "soc2"],
-  ["/ai-llm-penetration-testing.html", "ai-pentest", "ai"],
-  ["/penetration-testing-services-usa.html", "usa-pentest", "web-api"],
-  ["/compliance-penetration-testing.html", "compliance-pentest", "compliance"],
-  ["/pci-dss-penetration-testing.html", "pci-pentest", "pci"],
-  ["/hipaa-penetration-testing.html", "hipaa-pentest", "hipaa"],
-  ["/penetration-testing-as-a-service.html", "ptaas-pentest", "ptaas"],
-  ["/cloud-penetration-testing.html", "cloud-pentest", "cloud"],
-  ["/network-penetration-testing.html", "network-pentest", "infrastructure"],
-  ["/insights/pci-dss-network-segmentation-testing.html", "pci-segmentation-guide", "pci"],
-  ["/attack-path-validation.html", "attack-path-pilot", "attack-path"],
-  ["/pricing.html", "pricing"],
+  ["/soc-2-penetration-testing", "soc2-pentest", "soc2"],
+  ["/ai-llm-penetration-testing", "ai-pentest", "ai"],
+  ["/penetration-testing-services-usa", "usa-pentest", "web-api"],
+  ["/compliance-penetration-testing", "compliance-pentest", "compliance"],
+  ["/pci-dss-penetration-testing", "pci-pentest", "pci"],
+  ["/hipaa-penetration-testing", "hipaa-pentest", "hipaa"],
+  ["/penetration-testing-as-a-service", "ptaas-pentest", "ptaas"],
+  ["/cloud-penetration-testing", "cloud-pentest", "cloud"],
+  ["/network-penetration-testing", "network-pentest", "infrastructure"],
+  ["/insights/pci-dss-network-segmentation-testing", "pci-segmentation-guide", "pci"],
+  ["/attack-path-validation", "attack-path-pilot", "attack-path"],
+  ["/pricing", "pricing"],
 
   ["/", "home-hero"],
-  ["/penetration-testing-india.html", "india-pentest"],
-  ["/web-application-penetration-testing.html", "web-pentest"],
-  ["/api-penetration-testing.html", "api-pentest"],
-  ["/saas-penetration-testing.html", "saas-pentest"],
+  ["/penetration-testing-india", "india-pentest"],
+  ["/web-application-penetration-testing", "web-pentest"],
+  ["/api-penetration-testing", "api-pentest"],
+  ["/saas-penetration-testing", "saas-pentest"],
 ];
 const SOURCES = [
   "soc2-pentest",
@@ -162,7 +162,7 @@ async function main() {
         assert.equal(response.status(), 200);
         assert.equal(await page.locator("h1").count(), 1);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${pathname} should fit ${width}px`);
-        const cta = page.locator('main a.btn-primary[href^="/contact.html?"]').first();
+        const cta = page.locator('main a.btn-primary[href^="/contact?"]').first();
         assert.equal(await cta.isVisible(), true);
         // The homepage uses conversational copy; every route still leads to
         // the same explicit pentest intake with its own attribution label.
@@ -171,7 +171,7 @@ async function main() {
         assert.equal(destination.searchParams.get("service"), service);
         assert.equal(destination.searchParams.get("source"), source);
         await cta.click();
-        await page.waitForURL(url => url.pathname === "/contact.html");
+        await page.waitForURL(url => url.pathname === "/contact");
         assert.equal(await page.locator("#service").inputValue(), service);
         assert.equal(await page.locator('input[name="enquiry_source"]').inputValue(), source);
         assert.equal(await page.locator("script[data-balhence-analytics]").count(), 0);
@@ -180,27 +180,27 @@ async function main() {
     }
 
     for (const source of SOURCES) {
-      await page.goto(`${origin}/contact.html?service=web-api&source=${source}`);
+      await page.goto(`${origin}/contact?service=web-api&source=${source}`);
       assert.equal(await page.locator('input[name="enquiry_source"]').count(), 1);
       assert.equal(await page.locator('input[name="enquiry_source"]').inputValue(), source);
     }
     pass("Every fixed editorial source label reaches the enquiry form exactly once");
 
     for (const query of ["", "?source=arbitrary-visitor-value", "?source=%3Cscript%3E", "?source=HOME-HERO", "?utm_source=untrusted-campaign"]) {
-      await page.goto(`${origin}/contact.html${query}`);
+      await page.goto(`${origin}/contact${query}`);
       assert.equal(await page.locator('input[name="enquiry_source"]').inputValue(), "unlabelled");
     }
     for (const query of ["?utm_source=scope-builder", "?source=unknown&utm_source=scope-builder"]) {
-      await page.goto(`${origin}/contact.html${query}`);
+      await page.goto(`${origin}/contact${query}`);
       assert.equal(await page.locator('input[name="enquiry_source"]').inputValue(), "scope-planner");
     }
-    await page.goto(`${origin}/contact.html?source=api-pentest&utm_source=scope-builder`);
+    await page.goto(`${origin}/contact?source=api-pentest&utm_source=scope-builder`);
     assert.equal(await page.locator('input[name="enquiry_source"]').inputValue(), "api-pentest");
     pass("Missing or unknown sources stay unlabelled; legacy planner attribution works without overriding a known source");
 
     await page.evaluate(key => localStorage.setItem(key, "accepted"), CONSENT);
     const analyticsBeforeContact = analyticsScripts.length;
-    for (const pathname of ["/contact.html", "/scope-builder.html", "/privacy.html"]) {
+    for (const pathname of ["/contact", "/scope-builder", "/privacy"]) {
       await page.goto(`${origin}${pathname}?source=home-hero&private_marker=synthetic#private-fragment`);
       assert.equal(await page.locator("script[data-balhence-analytics]").count(), 0);
       assert.deepEqual(await queuedCalls(page), []);
@@ -208,7 +208,7 @@ async function main() {
     assert.equal(analyticsScripts.length, analyticsBeforeContact);
     pass("Contact, scope planner, and privacy pages remain analytics-free even with stored acceptance");
 
-    await page.goto(`${origin}/contact.html?service=web-api&source=home-hero`);
+    await page.goto(`${origin}/contact?service=web-api&source=home-hero`);
     await page.locator("#name").fill("Local minimal enquiry");
     await page.locator("#email").fill("minimal@example.invalid");
     await page.locator("#privacy-consent").check();
@@ -301,13 +301,13 @@ async function main() {
     assert.doesNotMatch(JSON.stringify(calls), /external\.example|private_marker/);
     pass("Report links and external contact-shaped links are content selections, never same-origin enquiry intent");
 
-    await analyticsPage.goto(`${origin}/services.html?private_marker=second#private-fragment`, {
-      referer: `${origin}/blogs.html?private_marker=referrer#private-fragment`,
+    await analyticsPage.goto(`${origin}/services?private_marker=second#private-fragment`, {
+      referer: `${origin}/blogs?private_marker=referrer#private-fragment`,
     });
     calls = await queuedCalls(analyticsPage);
     const nextConfiguration = calls.find(entry => entry[0] === "config")[2];
-    assert.equal(nextConfiguration.page_location, `${origin}/services.html`);
-    assert.equal(nextConfiguration.page_referrer, `${origin}/blogs.html`);
+    assert.equal(nextConfiguration.page_location, `${origin}/services`);
+    assert.equal(nextConfiguration.page_referrer, `${origin}/blogs`);
     assert.doesNotMatch(JSON.stringify(calls), /private_marker|private-fragment/);
     await analyticsPage.locator(".footer-bottom [data-analytics-preferences]").click();
     await analyticsPage.locator("[data-consent-decline]").click();
@@ -325,10 +325,10 @@ async function main() {
     const nojs = await nojsContext.newPage();
     for (const [pathname] of BUYER_ROUTES) {
       await nojs.goto(`${origin}${pathname}`);
-      const link = nojs.locator('main a.btn-primary[href^="/contact.html?"]').first();
+      const link = nojs.locator('main a.btn-primary[href^="/contact?"]').first();
       assert.equal(await link.isVisible(), true);
       await link.click();
-      await nojs.waitForURL(url => url.pathname === "/contact.html");
+      await nojs.waitForURL(url => url.pathname === "/contact");
       assert.equal(await nojs.locator("form[data-lead-form]").isVisible(), true);
       assert.equal(await nojs.locator('form[data-lead-form]').getAttribute("method"), "post");
       assert.match(await nojs.locator('form[data-lead-form]').getAttribute("action"), /^https:\/\/formspree\.io\/f\/[a-z0-9]+$/);

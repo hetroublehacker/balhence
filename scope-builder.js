@@ -6,7 +6,7 @@
   const SCHEMA_VERSION = 1;
   const STEP_NAMES = ["Business outcome", "Target surfaces", "Trust model", "Critical workflows", "Environment & readiness", "Evidence & timing"];
   const ARRAY_FIELDS = ["surfaces", "auth_methods", "workflows", "readiness", "deliverables"];
-  const CONTACT_URL = "/contact.html?service=web-api&utm_source=scope-builder&utm_medium=website&utm_campaign=scope-planner";
+  const CONTACT_URL = "/contact?service=web-api&utm_source=scope-builder&utm_medium=website&utm_campaign=scope-planner";
   const FIXED_EXCLUSIONS = Object.freeze([
     "Denial of service, destructive testing, or data destruction",
     "Social engineering or physical security testing",

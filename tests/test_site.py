@@ -16,7 +16,7 @@ import verify_site
 
 
 def page(title: str, path: str, content: str = "", *, noindex: bool = False) -> str:
-    canonical = f"https://balhence.com/{path}"
+    canonical = verify_site.canonical_url(path)
     return f"""<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title><meta name="robots" content="{'noindex,follow' if noindex else 'index,follow'}">
@@ -37,7 +37,7 @@ class SiteFixture(unittest.TestCase):
         self.root = self.workspace / "source"
         self.root.mkdir()
         self.assets = {
-            "index.html": page("Home", "", '<a href="docs.html#details">Docs</a>'),
+            "index.html": page("Home", "", '<a href="/docs#details">Docs</a>'),
             "docs.html": page("Documentation", "docs.html", '<section id="details"><a href="/#main">Home</a></section>'),
             "404.html": page("Not found", "404.html", noindex=True),
             "styles.css": 'body { background-image: url("/logo.svg?v=1"); }',
@@ -45,8 +45,8 @@ class SiteFixture(unittest.TestCase):
             "logo.svg": '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
             "CNAME": "balhence.com\n",
             "robots.txt": "User-agent: *\nAllow: /\nSitemap: https://balhence.com/sitemap.xml\n",
-            "sitemap.xml": '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://balhence.com/</loc></url><url><loc>https://balhence.com/docs.html</loc></url></urlset>',
-            "site.webmanifest": json.dumps({"name": "Example", "start_url": "/", "icons": [{"src": "/logo.svg"}], "shortcuts": [{"url": "/docs.html"}]}),
+            "sitemap.xml": '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://balhence.com/</loc></url><url><loc>https://balhence.com/docs</loc></url></urlset>',
+            "site.webmanifest": json.dumps({"name": "Example", "start_url": "/", "icons": [{"src": "/logo.svg"}], "shortcuts": [{"url": "/docs"}]}),
             ".well-known/security.txt": "Contact: mailto:contact@balhence.com\n",
         }
         for relative, content in self.assets.items():
@@ -71,6 +71,17 @@ class SiteFixture(unittest.TestCase):
 
 
 class BuildTests(SiteFixture):
+    def test_public_paths_are_clean_and_resolve_to_physical_files(self):
+        files = frozenset(self.assets)
+        self.assertEqual(build_public.public_path("index.html"), "/")
+        self.assertEqual(build_public.public_path("docs.html"), "/docs")
+        self.assertEqual(build_public.public_path("styles.css"), "/styles.css")
+        self.assertEqual(build_public.public_file_for_path("/", files), "index.html")
+        self.assertEqual(build_public.public_file_for_path("/index.html", files), "index.html")
+        self.assertEqual(build_public.public_file_for_path("/index", files), "index")
+        self.assertEqual(build_public.public_file_for_path("/docs", files), "docs.html")
+        self.assertEqual(build_public.public_file_for_path("/docs.html", files), "docs.html")
+
     def test_build_contains_only_runtime_allowlist_and_preserves_sources(self):
         private = self.root / "website-tools" / "private.md"
         private.parent.mkdir()
@@ -231,16 +242,20 @@ class ValidatorTests(SiteFixture):
 
     def test_link_to_existing_private_file_is_rejected(self):
         (self.root / "private.md").write_text("Not for deployment", encoding="utf-8")
-        self.rewrite("index.html", "docs.html#details", "private.md")
+        self.rewrite("index.html", "/docs#details", "private.md")
         self.assert_issue("target is not a published asset")
 
     def test_missing_cross_page_anchor_is_rejected(self):
-        self.rewrite("index.html", "docs.html#details", "docs.html#missing")
+        self.rewrite("index.html", "/docs#details", "/docs#missing")
         self.assert_issue("missing anchor #missing")
 
     def test_encoded_anchor_and_query_string_are_supported(self):
-        self.rewrite("index.html", "docs.html#details", "docs.html?v=3#%64etails")
+        self.rewrite("index.html", "/docs#details", "/docs?v=3#%64etails")
         self.assertEqual(verify_site.verify_site(self.root).errors, [])
+
+    def test_internal_html_file_urls_are_rejected_but_resolve_as_legacy_aliases(self):
+        self.rewrite("index.html", "/docs#details", "/docs.html#details")
+        self.assert_issue("internal page URL must use its clean route (/docs)")
 
     def test_local_css_urls_and_imports_are_checked(self):
         self.rewrite("styles.css", "/logo.svg?v=1", "/missing.svg")
@@ -263,7 +278,7 @@ class ValidatorTests(SiteFixture):
         self.assert_issue("expected exactly one canonical URL")
 
     def test_noindex_pages_are_excluded_from_sitemap(self):
-        self.rewrite("sitemap.xml", "</urlset>", '<url><loc>https://balhence.com/404.html</loc></url></urlset>')
+        self.rewrite("sitemap.xml", "</urlset>", '<url><loc>https://balhence.com/404</loc></url></urlset>')
         self.assert_issue("URL is not an indexable public page")
 
     def test_manifest_icon_must_be_published(self):
@@ -277,7 +292,7 @@ class ValidatorTests(SiteFixture):
         self.assert_issue("unapproved path: backups", artifact=True)
 
     def test_javascript_links_are_rejected(self):
-        self.rewrite("index.html", "docs.html#details", "javascript:alert(1)")
+        self.rewrite("index.html", "/docs#details", "javascript:alert(1)")
         self.assert_issue("javascript URLs are not permitted")
 
 

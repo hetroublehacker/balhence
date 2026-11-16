@@ -172,7 +172,7 @@ async function main() {
     await check("Local typography renders and moves without waiting for font APIs", {}, async page => {
       // Deliberately do not use open(): it waits for document.fonts.ready to
       // stabilize foreground layout in the other checks.
-      await page.goto(`${origin}/services.html`, { waitUntil: "domcontentloaded" });
+      await page.goto(`${origin}/services`, { waitUntil: "domcontentloaded" });
       await expectMoving(page);
       const glyphRuns = await page.evaluate(() => Array.from(window.__typeFieldGlyphRuns.values()));
       const brandedPhrase = "BALHENCE/PENETRATIONTESTING/WEB&APISECURITY/SAAS/CLOUD/IDENTITY/AI&LLMSECURITY/";
@@ -200,7 +200,7 @@ async function main() {
     }));
 
     await check("An obsolete saved pause value cannot disable the field after controls are removed", {}, async page => {
-      await open(page, "/services.html");
+      await open(page, "/services");
       assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
       await expectMoving(page);
       assert.equal(await page.evaluate(() => localStorage.getItem("balhence_motion_paused")), "true", "The removed preference should be ignored without overwriting storage");
@@ -215,7 +215,7 @@ async function main() {
     }));
 
     await check("Reduced motion uses a CSS fallback and runtime changes mount or remove the renderer", { reducedMotion: "reduce" }, async page => {
-      await open(page, "/services.html", "static");
+      await open(page, "/services", "static");
       await expectFallback(page);
       assert.notEqual(await page.locator(HOST).evaluate(host => getComputedStyle(host).backgroundImage), "none", "The existing CSS surface should remain visible without a canvas");
       await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -229,7 +229,7 @@ async function main() {
 
     for (const preference of ["slow", "saveData"]) {
       await check(`${preference} device preference uses the CSS fallback`, {}, async page => {
-        await open(page, "/services.html", "static");
+        await open(page, "/services", "static");
         await expectFallback(page);
       }, context => context.addInitScript(preference => {
         if (preference === "slow") {
@@ -256,15 +256,15 @@ async function main() {
     });
 
     await check("Forced colors keeps the content usable without a decorative canvas", { forcedColors: "active" }, async page => {
-      await open(page, "/services.html", "static");
+      await open(page, "/services", "static");
       await expectFallback(page);
       await page.locator(".page-hero .btn-primary").click();
-      await page.waitForURL("**/contact.html?service=web-api&source=services");
+      await page.waitForURL("**/contact?service=web-api&source=services");
       assert.equal(await page.locator("h1").isVisible(), true);
     });
 
     await check("A field outside the viewport stops drawing and resumes on return", {}, async page => {
-      await open(page, "/services.html");
+      await open(page, "/services");
       await expectMoving(page);
       await page.locator(".site-footer").evaluate(element => element.scrollIntoView({ block: "start", behavior: "instant" }));
       await page.waitForFunction(() => document.querySelector(".type-field-host").getBoundingClientRect().bottom < 0);
@@ -274,7 +274,7 @@ async function main() {
     });
 
     await check("Pointer movement cannot dissolve, displace, or add particles to the passive field", {}, async page => {
-      await open(page, "/services.html");
+      await open(page, "/services");
       await expectMoving(page);
       const bounds = await page.locator(HOST).boundingBox();
       const heading = await page.locator("h1").boundingBox();
@@ -299,7 +299,7 @@ async function main() {
     });
 
     await check("A background click never starts suction or changes navigation", {}, async page => {
-      await open(page, "/services.html");
+      await open(page, "/services");
       await expectMoving(page);
       const point = await page.locator(HOST).evaluate(host => {
         const bounds = host.getBoundingClientRect();
@@ -311,27 +311,27 @@ async function main() {
         throw new Error("No non-interactive hero surface is available for the click check");
       });
       await page.mouse.click(point.x, point.y);
-      assert.equal(new URL(page.url()).pathname, "/services.html", "A decorative click should not navigate the page");
+      assert.equal(new URL(page.url()).pathname, "/services", "A decorative click should not navigate the page");
       assert.equal(await page.locator(VORTEX).getAttribute("data-interaction-state"), "none");
       assert.equal(await page.locator(VORTEX).getAttribute("data-suction-state"), null);
       await expectMoving(page);
     });
 
     await check("Without JavaScript the heading and native enquiry link remain usable", { javaScriptEnabled: false, viewport: { width: 390, height: 844 } }, async page => {
-      await page.goto(`${origin}/services.html`);
+      await page.goto(`${origin}/services`);
       assert.equal(await page.locator(FIELD).count(), 0);
       assert.equal(await page.locator("h1").isVisible(), true);
       await page.locator(".page-hero .btn-primary").click();
-      await page.waitForURL("**/contact.html?service=web-api&source=services");
+      await page.waitForURL("**/contact?service=web-api&source=services");
       assert.equal(await page.locator("h1").isVisible(), true);
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     });
 
     await check("Unavailable Canvas 2D leaves headings and enquiry navigation working", {}, async page => {
-      await open(page, "/services.html", "unavailable");
+      await open(page, "/services", "unavailable");
       await expectFallback(page, "unavailable");
       await page.locator(".page-hero .btn-primary").click();
-      await page.waitForURL("**/contact.html?service=web-api&source=services");
+      await page.waitForURL("**/contact?service=web-api&source=services");
       assert.equal(await page.locator("h1").isVisible(), true);
     }, context => context.addInitScript(() => {
       const original = HTMLCanvasElement.prototype.getContext;
@@ -342,7 +342,7 @@ async function main() {
 
     for (const width of [1440]) {
       await check(`The local field remains decorative and contained across hero families at ${width}px`, { viewport: { width, height: 1000 } }, async page => {
-        for (const pathname of ["/", "/services.html", "/insights/ptaas-vs-annual-penetration-test.html", "/report-viewer.html", "/scope-builder.html", "/privacy.html", "/404.html", "/ctf.html"]) {
+        for (const pathname of ["/", "/services", "/insights/ptaas-vs-annual-penetration-test", "/report-viewer", "/scope-builder", "/privacy", "/404", "/ctf"]) {
           await open(page, pathname);
           assert.equal(await page.locator(FIELD).count(), 1, `${pathname}: one decorative field`);
           assert.equal(await page.locator(WRAPPER).getAttribute("aria-hidden"), "true", `${pathname}: the decorative scene is hidden from assistive technology`);
@@ -378,13 +378,13 @@ async function main() {
           assert.ok(layout.cssWidth > 0 && layout.cssHeight > 0, `${pathname}: the responsive scene has a visible area`);
           assert.ok(Math.abs(layout.pixelWidth - Math.round(layout.cssWidth * layout.pixelRatio)) <= 1, `${pathname}: authored canvas width follows its host`);
           assert.ok(Math.abs(layout.pixelHeight - Math.round(layout.cssHeight * layout.pixelRatio)) <= 1, `${pathname}: authored canvas height follows its host`);
-          const link = pathname === "/ctf.html" ? page.locator(".back-link") : page.locator(".type-field-host a[href]").first();
+          const link = pathname === "/ctf" ? page.locator(".back-link") : page.locator(".type-field-host a[href]").first();
           if (await link.count()) await link.click({ trial: true });
           assert.equal(await page.locator("h1").isVisible(), true);
         }
-        await page.goto(`${origin}/services.html`);
+        await page.goto(`${origin}/services`);
         await page.locator(".page-hero .btn-primary").click();
-        await page.waitForURL("**/contact.html?service=web-api&source=services");
+        await page.waitForURL("**/contact?service=web-api&source=services");
       });
     }
 
@@ -395,7 +395,8 @@ async function main() {
         const source = readFileSync(path.join(ROOT, file), "utf8");
         assert.equal((source.match(/<script\b[^>]*src="\/type-field\.js(?:\?[^"]*)?"/g) || []).length, 1, `${file}: shared script included once`);
         assert.equal((source.match(/<link\b[^>]*href="\/type-field\.css(?:\?[^"]*)?"/g) || []).length, 1, `${file}: shared stylesheet included once`);
-        await open(page, `/${file}`);
+        const route = file === "index.html" ? "/" : `/${file.slice(0, -5)}`;
+        await open(page, route);
         assert.equal(await page.locator(FIELD).count(), 1, `${file}: one initialized canvas`);
         assert.equal(await page.locator(FIELD).evaluate(canvas => getComputedStyle(canvas).position), "absolute", `${file}: field stylesheet applied`);
         assert.equal(await page.locator(WRAPPER).getAttribute("aria-hidden"), "true");
@@ -407,7 +408,7 @@ async function main() {
     });
 
     await check("The CTF native back link works by keyboard without submitting a challenge answer", {}, async page => {
-      await open(page, "/ctf.html");
+      await open(page, "/ctf");
       const input = page.locator("#term-input");
       await input.waitFor({ state: "visible", timeout: 10000 });
       await input.fill("local keyboard check");
@@ -416,7 +417,7 @@ async function main() {
       await page.locator(".back-link").focus();
       assert.equal(await input.inputValue(), "local keyboard check", "Focusing a native link must not submit or clear the challenge input");
       assert.equal(await page.locator("#output").textContent(), output);
-      const response = page.waitForURL("**/index.html");
+      const response = page.waitForURL(url => url.pathname === "/");
       await page.keyboard.press("Enter");
       await response;
     });

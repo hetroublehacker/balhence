@@ -13,11 +13,11 @@ from html.parser import HTMLParser
 import unittest
 import re
 import struct
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, urljoin, urlsplit
 import xml.etree.ElementTree as ET
 
-from build_public import PUBLIC_FILES, PUBLIC_FILE_SET, SOURCE_ROOT
-from verify_site import Document, ORIGIN, local_target, strict_json
+from build_public import PUBLIC_FILES, PUBLIC_FILE_SET, SOURCE_ROOT, public_path
+from verify_site import Document, ORIGIN, canonical_url, local_target, strict_json
 
 
 COMMERCIAL_PAGES = (
@@ -246,6 +246,22 @@ class SearchAndConversionTests(unittest.TestCase):
             for entry in cls.sitemap_entries
         }
 
+    def test_public_html_urls_use_clean_extensionless_paths(self):
+        for url in self.sitemap:
+            with self.subTest(surface="sitemap", url=url):
+                self.assertFalse(urlsplit(url).path.endswith(".html"))
+        for relative, document in self.documents.items():
+            for canonical in document.canonicals:
+                with self.subTest(surface="canonical", page=relative, url=canonical):
+                    self.assertFalse(urlsplit(canonical).path.endswith(".html"))
+            for anchor in document.anchors:
+                target = local_target(relative, anchor.href)
+                if target is None or not target[0].endswith(".html"):
+                    continue
+                resolved = urlsplit(urljoin(canonical_url(relative), anchor.href))
+                with self.subTest(surface="anchor", page=relative, url=anchor.href):
+                    self.assertFalse(resolved.path.endswith(".html"))
+
     def test_indexable_titles_and_descriptions_are_nonempty_and_distinct(self):
         seen = {"title": {}, "description": {}}
         for relative, document in self.documents.items():
@@ -296,7 +312,7 @@ class SearchAndConversionTests(unittest.TestCase):
                 self.assertIn(relative, PUBLIC_FILE_SET)
                 document = self.documents[relative]
                 self.assertTrue(document.indexable)
-                canonical = f"{ORIGIN}/{relative}"
+                canonical = canonical_url(relative)
                 self.assertEqual(document.canonicals, [canonical])
                 self.assertEqual(document.value("og:url"), canonical)
                 self.assertIn(canonical, self.sitemap)
@@ -304,7 +320,7 @@ class SearchAndConversionTests(unittest.TestCase):
     def test_commercial_schema_matches_the_page_canonical(self):
         for relative in COMMERCIAL_PAGES:
             with self.subTest(page=relative):
-                canonical = f"{ORIGIN}/{relative}"
+                canonical = canonical_url(relative)
                 nodes = schema_nodes(self.documents[relative])
                 for kind in ("WebPage", "Service"):
                     matching = [node for node in nodes if kind in schema_types(node)]
@@ -349,8 +365,8 @@ class SearchAndConversionTests(unittest.TestCase):
 
     def test_shared_solutions_menu_surfaces_cloud_and_network_testing(self):
         expected = {
-            "/cloud-penetration-testing.html": "Cloud penetration testing",
-            "/network-penetration-testing.html": "Network penetration testing",
+            "/cloud-penetration-testing": "Cloud penetration testing",
+            "/network-penetration-testing": "Network penetration testing",
         }
         checked = 0
         for relative in self.documents:
@@ -373,7 +389,7 @@ class SearchAndConversionTests(unittest.TestCase):
 
     def test_pci_segmentation_guide_is_published_and_contextually_linked(self):
         relative = "insights/pci-dss-network-segmentation-testing.html"
-        canonical = f"{ORIGIN}/{relative}"
+        canonical = canonical_url(relative)
         self.assertIn(relative, PUBLIC_FILE_SET)
         self.assertTrue(self.documents[relative].indexable)
         self.assertEqual(self.documents[relative].canonicals, [canonical])
@@ -434,8 +450,8 @@ class SearchAndConversionTests(unittest.TestCase):
 
     def test_country_alternates_are_reciprocal_and_self_canonical(self):
         expected = {
-            "en-US": f"{ORIGIN}/penetration-testing-services-usa.html",
-            "en-IN": f"{ORIGIN}/penetration-testing-india.html",
+            "en-US": f"{ORIGIN}/penetration-testing-services-usa",
+            "en-IN": f"{ORIGIN}/penetration-testing-india",
         }
         for relative, document in self.documents.items():
             alternates = LaunchMarkup((SOURCE_ROOT / relative).read_text(encoding="utf-8")).alternates
@@ -444,7 +460,7 @@ class SearchAndConversionTests(unittest.TestCase):
                 continue
             with self.subTest(page=relative):
                 self.assertEqual(alternates, expected)
-                self.assertEqual(document.canonicals, [f"{ORIGIN}/{relative}"])
+                self.assertEqual(document.canonicals, [canonical_url(relative)])
 
     def test_homepage_has_direct_pentest_intake_and_broad_service_routes(self):
         anchors = [anchor for anchor in self.documents["index.html"].anchors if anchor.in_main]
@@ -467,22 +483,25 @@ class SearchAndConversionTests(unittest.TestCase):
         urls = navigation[0].get("url", [])
         self.assertEqual(len(names), len(urls))
         expected = {
-            "services.html",
-            "attack-path-validation.html",
-            "compliance-penetration-testing.html",
-            "soc-2-penetration-testing.html",
-            "pci-dss-penetration-testing.html",
-            "hipaa-penetration-testing.html",
-            "ai-llm-penetration-testing.html",
-            "cloud-penetration-testing.html",
-            "network-penetration-testing.html",
-            "penetration-testing-as-a-service.html",
-            "penetration-testing-india.html",
-            "penetration-testing-services-usa.html",
-            "about.html",
-            "pricing.html",
-            "blogs.html",
-            "contact.html",
+            public_path(relative).lstrip("/")
+            for relative in (
+                "services.html",
+                "attack-path-validation.html",
+                "compliance-penetration-testing.html",
+                "soc-2-penetration-testing.html",
+                "pci-dss-penetration-testing.html",
+                "hipaa-penetration-testing.html",
+                "ai-llm-penetration-testing.html",
+                "cloud-penetration-testing.html",
+                "network-penetration-testing.html",
+                "penetration-testing-as-a-service.html",
+                "penetration-testing-india.html",
+                "penetration-testing-services-usa.html",
+                "about.html",
+                "pricing.html",
+                "blogs.html",
+                "contact.html",
+            )
         }
         self.assertEqual({urlsplit(url).path.lstrip("/") for url in urls}, expected)
 
@@ -524,7 +543,7 @@ class SearchAndConversionTests(unittest.TestCase):
         for relative, values in expected.items():
             source = normalized((SOURCE_ROOT / relative).read_text(encoding="utf-8"))
             with self.subTest(page=relative):
-                self.assertIn('href="/pricing.html"', source)
+                self.assertIn('href="/pricing"', source)
                 for value in values:
                     self.assertIn(value, source)
 
@@ -584,7 +603,7 @@ class SearchAndConversionTests(unittest.TestCase):
         for relative, document in self.documents.items():
             if not document.indexable:
                 continue
-            canonical = f"{ORIGIN}/" + ("" if relative == "index.html" else relative)
+            canonical = canonical_url(relative)
             # A collection's hasPart entries describe other pages, not the
             # collection's modification date. Check each article at its URL.
             articles = [

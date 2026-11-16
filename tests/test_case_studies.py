@@ -9,7 +9,7 @@ import re
 import unittest
 from urllib.parse import urlsplit
 
-from build_public import PUBLIC_FILE_SET, SOURCE_ROOT
+from build_public import PUBLIC_FILE_SET, SOURCE_ROOT, public_path
 from verify_site import local_target
 
 
@@ -239,8 +239,8 @@ class CaseStudyPublicationTests(unittest.TestCase):
         for article in ARCHIVE:
             with self.subTest(article=article):
                 self.assertIn(article, PUBLIC_FILE_SET)
-                self.assertEqual(page.links.count("/" + article), 1)
-        self.assertIn("/blog.html", page.links)
+                self.assertEqual(page.links.count(public_path(article)), 1)
+        self.assertIn("/blog", page.links)
 
     def test_every_archive_card_uses_its_articles_social_thumbnail(self):
         hub = ArchiveCardDocument((SOURCE_ROOT / "blogs.html").read_text(encoding="utf-8"))
@@ -293,8 +293,8 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 self.assertGreaterEqual(page.story_figures, 1)
                 self.assertGreaterEqual(page.story_captions, 1)
                 self.assertGreaterEqual(page.story_pre, 1)
-                self.assertIn("/about.html#researcher", page.links)
-                self.assertIn("/blogs.html#bug-bounty-archive", page.links)
+                self.assertIn("/about#researcher", page.links)
+                self.assertIn("/blogs#bug-bounty-archive", page.links)
                 self.assertNotIn("case-study", page.body_classes)
                 self.assertNotIn("scope-table", source)
                 self.assertNotIn("http-notebook", source)
@@ -319,11 +319,11 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 article = next(
                     node for node in structured_nodes(source) if node.get("@type") == "BlogPosting"
                 )
-                self.assertEqual(article["author"]["@id"], "https://balhence.com/about.html#researcher")
+                self.assertEqual(article["author"]["@id"], "https://balhence.com/about#researcher")
                 self.assertEqual(article["publisher"]["@id"], "https://balhence.com/#organization")
                 self.assertEqual(
                     article["isPartOf"]["@id"],
-                    "https://balhence.com/blogs.html#bug-bounty-archive",
+                    "https://balhence.com/blogs#bug-bounty-archive",
                 )
                 self.assertEqual(article["dateModified"], "2026-11-15")
 

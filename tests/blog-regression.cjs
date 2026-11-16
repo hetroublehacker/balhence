@@ -9,64 +9,64 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 
 const FIELD_NOTES = [
-  ["/insights/mixed-batch-authorization.html", "The One Good ID That Authorized the Whole Batch"],
-  ["/insights/ai-agent-mcp-root-rce.html", "The AI Agent That Ran My MCP Tool as Root"],
-  ["/insights/async-export-authorization.html", "The Export Job That Crossed a Tenant Boundary"],
-  ["/insights/server-side-url-import.html", "The File Importer That Stored Whatever the URL Returned"],
-  ["/insights/draft-write-authorization.html", "The draft you could change but could not read"],
-  ["/insights/session-authority-boundary.html", "When two browsers inherited one cart"],
-  ["/insights/private-response-cache-boundary.html", "When the cache forgot who a response belonged to"],
-  ["/insights/server-owned-validation-rules.html", "When a validation helper became a data query"],
-  ["/insights/evidence-gated-workflows.html", "Submitted is not the same as verified"],
+  ["/insights/mixed-batch-authorization", "The One Good ID That Authorized the Whole Batch"],
+  ["/insights/ai-agent-mcp-root-rce", "The AI Agent That Ran My MCP Tool as Root"],
+  ["/insights/async-export-authorization", "The Export Job That Crossed a Tenant Boundary"],
+  ["/insights/server-side-url-import", "The File Importer That Stored Whatever the URL Returned"],
+  ["/insights/draft-write-authorization", "The draft you could change but could not read"],
+  ["/insights/session-authority-boundary", "When two browsers inherited one cart"],
+  ["/insights/private-response-cache-boundary", "When the cache forgot who a response belonged to"],
+  ["/insights/server-owned-validation-rules", "When a validation helper became a data query"],
+  ["/insights/evidence-gated-workflows", "Submitted is not the same as verified"],
 ];
 const RESEARCH_ARTICLES = [
-  ["/research/dependency-confusion.html", "How I approached Dependency Confusion!"],
-  ["/research/cve-2020-28726.html", "Assigned my First CVE-2020-28726!!"],
-  ["/research/first-bounty-target.html", "The First Bounty Target (Disclosing Multiple Reports)"],
-  ["/research/tale-of-my-first-xss.html", "Tale of my First XSS"],
-  ["/research/http-request-smuggling-plain-english.html", "HTTP Request Smuggling in Plain English."],
-  ["/research/inspect-element-bounty.html", "How Inspect Element Got me a Bounty"],
-  ["/research/crlf-injection-playbook.html", "CRLF Injection Playbook"],
-  ["/research/bug-bounty-with-bash.html", "Bug Bounty with Bash"],
-  ["/research/find-secret-api-keys.html", "Find Secret API-Keys"],
-  ["/research/automating-burp-idor.html", "Automating BURP to find IDORs"],
+  ["/research/dependency-confusion", "How I approached Dependency Confusion!"],
+  ["/research/cve-2020-28726", "Assigned my First CVE-2020–28726!!"],
+  ["/research/first-bounty-target", "The First Bounty Target (Disclosing Multiple Reports)"],
+  ["/research/tale-of-my-first-xss", "Tale of my First XSS"],
+  ["/research/http-request-smuggling-plain-english", "HTTP Request Smuggling in Plain English."],
+  ["/research/inspect-element-bounty", "How Inspect Element Got me a Bounty"],
+  ["/research/crlf-injection-playbook", "CRLF Injection Playbook"],
+  ["/research/bug-bounty-with-bash", "Bug Bounty with Bash"],
+  ["/research/find-secret-api-keys", "Find Secret API-Keys"],
+  ["/research/automating-burp-idor", "Automating BURP to find IDORs"],
 ];
 const ARTICLES = [...FIELD_NOTES, ...RESEARCH_ARTICLES];
 const RESEARCH_ROUTES = new Set(RESEARCH_ARTICLES.map(([route]) => route));
 const TOPICS = {
   authorization: [
-    "/insights/mixed-batch-authorization.html",
-    "/insights/async-export-authorization.html",
-    "/insights/draft-write-authorization.html",
-    "/research/first-bounty-target.html",
-    "/research/automating-burp-idor.html",
+    "/insights/mixed-batch-authorization",
+    "/insights/async-export-authorization",
+    "/insights/draft-write-authorization",
+    "/research/first-bounty-target",
+    "/research/automating-burp-idor",
   ],
   "web-attacks": [
-    "/insights/ai-agent-mcp-root-rce.html",
-    "/insights/server-side-url-import.html",
-    "/research/tale-of-my-first-xss.html",
-    "/research/http-request-smuggling-plain-english.html",
-    "/research/crlf-injection-playbook.html",
+    "/insights/ai-agent-mcp-root-rce",
+    "/insights/server-side-url-import",
+    "/research/tale-of-my-first-xss",
+    "/research/http-request-smuggling-plain-english",
+    "/research/crlf-injection-playbook",
   ],
   "state-caching": [
-    "/insights/session-authority-boundary.html",
-    "/insights/private-response-cache-boundary.html",
+    "/insights/session-authority-boundary",
+    "/insights/private-response-cache-boundary",
   ],
   "validation-workflows": [
-    "/insights/server-owned-validation-rules.html",
-    "/insights/evidence-gated-workflows.html",
-    "/research/inspect-element-bounty.html",
+    "/insights/server-owned-validation-rules",
+    "/insights/evidence-gated-workflows",
+    "/research/inspect-element-bounty",
   ],
   "discovery-automation": [
-    "/research/bug-bounty-with-bash.html",
-    "/research/find-secret-api-keys.html",
+    "/research/bug-bounty-with-bash",
+    "/research/find-secret-api-keys",
   ],
   "vulnerability-research": [
-    "/research/dependency-confusion.html",
-    "/research/cve-2020-28726.html",
+    "/research/dependency-confusion",
+    "/research/cve-2020-28726",
   ],
 };
-const PAGES = ["/blogs.html", ...ARTICLES.map(([route]) => route)];
+const PAGES = ["/blogs", ...ARTICLES.map(([route]) => route)];
 
 async function main() {
   const probe = net.createServer();
@@ -125,7 +125,7 @@ async function main() {
     await context.route("**/*", blockExternal);
     const page = await context.newPage();
     observe(page);
-    await page.goto(`${origin}/blogs.html`);
+    await page.goto(`${origin}/blogs`);
     await page.locator("[data-archive-controls]").waitFor({ state: "visible" });
     assert.equal(await page.locator("[data-archive-card]").count(), ARTICLES.length);
     assert.equal(await page.locator("[data-archive-card]:visible").count(), ARTICLES.length);
@@ -151,7 +151,7 @@ async function main() {
     pass(`The hub contains exactly ${ARTICLES.length} unique articles in one archive`);
 
     for (const [route, title] of FIELD_NOTES) {
-      await page.goto(`${origin}/blogs.html`);
+      await page.goto(`${origin}/blogs`);
       await page.locator(`[data-archive-card] a[href="${route}"]`).click();
       await page.waitForURL(`${origin}${route}`);
       assert.equal(await page.locator("h1").count(), 1);
@@ -179,11 +179,40 @@ async function main() {
         { complete: true, naturalWidth: 1200, naturalHeight: 630 },
       );
       assert.match(await page.locator(".research-article-body").innerText(), /Publication note:/);
-      assert.ok(await page.locator('a[href="/about.html#researcher"]').count() > 0);
-      assert.ok(await page.locator('a[href="/blogs.html#bug-bounty-archive"]').count() > 0, `${route} should link back to the collection`);
+      assert.ok(await page.locator('a[href="/about#researcher"]').count() > 0);
+      assert.ok(await page.locator('a[href="/blogs#bug-bounty-archive"]').count() > 0, `${route} should link back to the collection`);
       assert.equal(await page.locator("[data-article-share]").count(), 1, `${route} should expose one share control`);
     }
     pass("Every field note uses the first-person research shell with synthetic evidence and archive links");
+
+    for (const [route, title] of RESEARCH_ARTICLES) {
+      await page.goto(`${origin}${route}`);
+      assert.equal((await page.locator("h1").innerText()).trim(), title);
+      assert.equal(await page.locator("[data-archive-cover]").count(), 1);
+      const cover = page.locator("[data-archive-cover] img");
+      const coverSource = await cover.getAttribute("src");
+      assert.match(coverSource, /^\/assets\/research\/archive-[a-z0-9-]+-v2\.jpg$/);
+      assert.equal(await cover.getAttribute("width"), "1200");
+      assert.equal(await cover.getAttribute("height"), "630");
+      assert.equal(await cover.getAttribute("loading"), "lazy");
+      assert.equal(await cover.getAttribute("decoding"), "async");
+      assert.ok((await cover.getAttribute("alt")).trim().length >= 30);
+      assert.equal((await page.locator("[data-archive-cover] figcaption").innerText()).includes("archive edition"), true);
+      assert.deepEqual(
+        await cover.evaluate(image => ({
+          complete: image.complete,
+          naturalWidth: image.naturalWidth,
+          naturalHeight: image.naturalHeight,
+        })),
+        { complete: true, naturalWidth: 1200, naturalHeight: 630 },
+      );
+      assert.equal(
+        await page.locator('meta[property="og:image"]').getAttribute("content"),
+        `https://balhence.com${coverSource}`,
+      );
+      assert.equal(await page.locator("[data-article-engagement]").count(), 0, "Incomplete Giscus configuration must stay dormant");
+    }
+    pass("Every imported archive article has a distinct optimized cover and dormant discussion integration");
 
     const [shareRoute, shareTitle] = FIELD_NOTES[0];
     await page.goto(`${origin}${shareRoute}`);
@@ -215,24 +244,24 @@ async function main() {
     assert.equal((await page.locator("h1").innerText()).trim(), shareTitle);
     pass("The article share control is keyboard-openable and uses the canonical URL for five safe network links");
 
-    await page.goto(`${origin}/insights/vulnerability-assessment-vs-penetration-testing.html`);
+    await page.goto(`${origin}/insights/vulnerability-assessment-vs-penetration-testing`);
     assert.equal(await page.locator("[data-article-share]").count(), 1);
     assert.equal(await page.locator("[data-article-share] a[data-network]").count(), 5);
     pass("The same share control appears on the practical guide article shell");
 
-    await page.goto(`${origin}/blog.html`);
+    await page.goto(`${origin}/blog`);
     assert.equal(await page.locator(".insight-card").count(), 5);
-    const pciGuide = page.locator('main a[href="/insights/pci-dss-network-segmentation-testing.html"]');
+    const pciGuide = page.locator('main a[href="/insights/pci-dss-network-segmentation-testing"]');
     assert.equal(await pciGuide.count(), 1);
     await pciGuide.click();
-    await page.waitForURL(`${origin}/insights/pci-dss-network-segmentation-testing.html`);
+    await page.waitForURL(`${origin}/insights/pci-dss-network-segmentation-testing`);
     assert.equal((await page.locator("h1").innerText()).trim(), "PCI DSS network segmentation testing: 11.4.5 and 11.4.6");
     assert.equal(await page.locator(".faq-item").count(), 6);
     assert.equal(await page.locator(".scope-table").count(), 2);
-    await page.goto(`${origin}/blog.html`);
-    assert.ok(await page.locator('a[href="/blogs.html#bug-bounty-archive"]').count() > 0);
-    await page.goto(`${origin}/blogs.html`);
-    assert.ok(await page.locator('a[href="/blog.html"]').count() > 0);
+    await page.goto(`${origin}/blog`);
+    assert.ok(await page.locator('a[href="/blogs#bug-bounty-archive"]').count() > 0);
+    await page.goto(`${origin}/blogs`);
+    assert.ok(await page.locator('a[href="/blog"]').count() > 0);
     pass("The guide hub links to the PCI segmentation guide and both collections link to each other");
 
     for (const [topic, expectedRoutes] of Object.entries(TOPICS)) {
@@ -279,7 +308,7 @@ async function main() {
         await page.goto(`${origin}${route}`);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${route} overflows at ${width}px`);
         assert.equal(await page.locator("h1").count(), 1);
-        if (route !== "/blogs.html") assert.equal(await page.locator("[data-article-share]").count(), 1, `${route} needs one share control at ${width}px`);
+        if (route !== "/blogs") assert.equal(await page.locator("[data-article-share]").count(), 1, `${route} needs one share control at ${width}px`);
         if (!RESEARCH_ROUTES.has(route)) {
           assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${route} contains non-ASCII body text at ${width}px`);
         }
@@ -291,9 +320,9 @@ async function main() {
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`${origin}/blogs.html`);
+    await page.goto(`${origin}/blogs`);
     await page.getByRole("button", { name: "Open menu", exact: true }).click();
-    assert.equal(await page.locator('.nav-links a[href="/blogs.html"]').isVisible(), true);
+    assert.equal(await page.locator('.nav-links a[href="/blogs"]').isVisible(), true);
     await page.getByRole("button", { name: "Close menu", exact: true }).click();
     assert.equal(await page.locator("[data-menu-toggle]").getAttribute("aria-expanded"), "false");
     pass("The mobile menu exposes the Blog destination and closes correctly");
@@ -304,7 +333,7 @@ async function main() {
     await plain.route("**/*", blockExternal);
     const nojs = await plain.newPage();
     observe(nojs);
-    await nojs.goto(`${origin}/blogs.html`);
+    await nojs.goto(`${origin}/blogs`);
     assert.equal(await nojs.locator("[data-archive-card]:visible").count(), ARTICLES.length);
     assert.equal(await nojs.locator("[data-archive-controls]").isVisible(), false);
     assert.equal(await nojs.locator("[data-archive-empty]").isVisible(), false);

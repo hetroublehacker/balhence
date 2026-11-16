@@ -12,7 +12,7 @@ const { chromium } = require("playwright");
 
 const ROOT = path.resolve(__dirname, "..");
 const MOTION_CONTROLS = "[data-motion-toggle], [data-motion-preference], [data-type-field-toggle]";
-const GUIDE = "/insights/ptaas-vs-annual-penetration-test.html";
+const GUIDE = "/insights/ptaas-vs-annual-penetration-test";
 
 async function availablePort() {
   const probe = net.createServer();
@@ -130,7 +130,7 @@ async function main() {
     }
 
     await check("Service selection appears before coverage and opens the chosen service", {}, async page => {
-      await page.goto(`${origin}/services.html`);
+      await page.goto(`${origin}/services`);
       await page.evaluate(() => document.fonts.ready);
       const chooser = page.getByRole("heading", { name: "Which penetration testing service fits your project?" });
       const positions = await chooser.evaluate(element => ({
@@ -140,12 +140,12 @@ async function main() {
       assert.ok(positions.chooser < positions.coverage, "Visitors should choose a starting point before the full coverage list");
       await page.getByRole("region", { name: "Penetration testing service selection" })
         .getByRole("link", { name: "Web application penetration testing", exact: true }).click();
-      await page.waitForURL("**/web-application-penetration-testing.html");
+      await page.waitForURL("**/web-application-penetration-testing");
       assert.match(await page.locator("h1").textContent(), /Web application\s*penetration testing/i);
     });
 
     await check("The section dock follows scrolling and keeps its active link visible after a mobile resize", {}, async page => {
-      await page.goto(`${origin}/services.html`);
+      await page.goto(`${origin}/services`);
       await page.evaluate(() => document.fonts.ready);
       const nav = ".page-flow nav";
       await page.locator(`${nav} a[href="#pricing"]`).click();
@@ -195,7 +195,7 @@ async function main() {
 
     for (const width of [320, 1440]) {
       await check(`Start your enquiry jumps to a visible form below the header at ${width}px`, { viewport: { width, height: 900 } }, async page => {
-        await page.goto(`${origin}/contact.html`);
+        await page.goto(`${origin}/contact`);
         await page.getByRole("link", { name: "Start your enquiry" }).click();
         await page.waitForURL("**#enquiry-form");
         await expectJumpBelowHeader(page, "#enquiry-form");
@@ -206,7 +206,7 @@ async function main() {
     }
 
     await check("A comparison table explains mobile overflow and scrolls with native arrow keys", {}, async page => {
-      await page.goto(`${origin}/services.html`);
+      await page.goto(`${origin}/services`);
       const region = page.getByRole("region", { name: "Penetration testing service selection" });
       const hint = page.getByText("Scroll to see every column. Keyboard: focus the table and use the arrow keys.", { exact: true }).first();
       assert.equal(await hint.isVisible(), false, "A table that fits should not ask visitors to scroll");
@@ -231,8 +231,8 @@ async function main() {
       await page.goto(origin);
       await page.waitForFunction(() => document.querySelector("[data-security-map]").dataset.motionState === "running");
       assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
-      await page.locator('.section-intro a[href="/services.html#capabilities"]').click();
-      await page.waitForURL("**/services.html#capabilities");
+      await page.locator('.section-intro a[href="/services#capabilities"]').click();
+      await page.waitForURL("**/services#capabilities");
       assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
       assert.equal(await page.locator("html").evaluate(element => element.classList.contains("motion-capable")), true);
       assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "smooth");
@@ -249,7 +249,7 @@ async function main() {
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.waitForFunction(() => document.querySelector("[data-security-map]").dataset.motionState === "static");
       assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "auto");
-      await page.goto(`${origin}/services.html`);
+      await page.goto(`${origin}/services`);
       assert.equal(await page.locator("html").evaluate(element => element.classList.contains("motion-capable")), false);
       assert.equal(await page.locator("html").evaluate(element => getComputedStyle(element).scrollBehavior), "auto");
       assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
@@ -261,7 +261,7 @@ async function main() {
     });
 
     await check("Focusing an unrevealed enquiry action exposes its content immediately", { reducedMotion: "no-preference" }, async page => {
-      await page.goto(`${origin}/services.html`);
+      await page.goto(`${origin}/services`);
       const panel = page.locator(".cta-panel[data-reveal]").last();
       await page.waitForFunction(() => {
         const panel = document.querySelector(".cta-panel[data-reveal]");
@@ -280,14 +280,14 @@ async function main() {
     });
 
     await check("Without JavaScript the mobile dock and enquiry jump remain native links", { javaScriptEnabled: false, viewport: { width: 320, height: 900 } }, async page => {
-      await page.goto(`${origin}/services.html`);
+      await page.goto(`${origin}/services`);
       const dock = page.getByRole("navigation", { name: "On this page", exact: true });
       await dock.getByRole("link", { name: "Deliverables", exact: true }).click();
       await page.waitForURL("**#included-title");
       await expectJumpBelowHeader(page, "#included-title");
       assert.equal(await page.getByRole("heading", { name: "What every security engagement includes" }).isVisible(), true);
       assert.equal(await page.locator(MOTION_CONTROLS).count(), 0);
-      await page.goto(`${origin}/contact.html`);
+      await page.goto(`${origin}/contact`);
       await page.getByRole("link", { name: "Start your enquiry" }).click();
       await page.waitForURL("**#enquiry-form");
       await expectJumpBelowHeader(page, "#enquiry-form");

@@ -2,36 +2,36 @@
 <html lang="en" class="has-article-flow">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; frame-src https://cdn.embedly.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://giscus.app; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; frame-src https://cdn.embedly.com https://giscus.app; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Automating IDOR Testing in Burp Suite | Balhence</title>
   <meta name="description" content="A practical Burp Suite workflow for IDOR testing with Autorize and AutoRepeater, including session comparison and identifier replacement.">
   <meta name="author" content="Aditya Soni">
   <meta name="robots" content="index,follow,max-image-preview:large">
-  <link rel="canonical" href="https://balhence.com/research/automating-burp-idor.html">
+  <link rel="canonical" href="https://balhence.com/research/automating-burp-idor">
   <meta name="theme-color" content="#080d1f">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Balhence">
   <meta property="og:title" content="Automating BURP to find IDORs">
   <meta property="og:description" content="A practical Burp Suite workflow for IDOR testing with Autorize and AutoRepeater, including session comparison and identifier replacement.">
-  <meta property="og:url" content="https://balhence.com/research/automating-burp-idor.html">
-  <meta property="og:image" content="https://balhence.com/assets/research/2b3dbe9fa0b8-01.jpeg">
-  <meta property="og:image:width" content="1280">
-  <meta property="og:image:height" content="692">
+  <meta property="og:url" content="https://balhence.com/research/automating-burp-idor">
+  <meta property="og:image" content="https://balhence.com/assets/research/archive-automating-idor-v2.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:image:type" content="image/jpeg">
-  <meta property="og:image:alt" content="IDOR Insecure Direct Object Reference title graphic.">
+  <meta property="og:image:alt" content="A blueprint authorization matrix exposing one incorrect cross-account object path.">
   <meta property="article:published_time" content="2019-12-12T07:53:36Z">
-  <meta property="article:modified_time" content="2026-11-06">
+  <meta property="article:modified_time" content="2026-11-16">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Automating BURP to find IDORs">
   <meta name="twitter:description" content="A practical Burp Suite workflow for IDOR testing with Autorize and AutoRepeater, including session comparison and identifier replacement.">
-  <meta name="twitter:image" content="https://balhence.com/assets/research/2b3dbe9fa0b8-01.jpeg">
-  <meta name="twitter:image:alt" content="IDOR Insecure Direct Object Reference title graphic.">
+  <meta name="twitter:image" content="https://balhence.com/assets/research/archive-automating-idor-v2.jpg">
+  <meta name="twitter:image:alt" content="A blueprint authorization matrix exposing one incorrect cross-account object path.">
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261116b">
+  <link rel="stylesheet" href="/styles.css?v=20261116c">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -42,33 +42,33 @@
   "@graph": [
     {
       "@type": "WebPage",
-      "@id": "https://balhence.com/research/automating-burp-idor.html#webpage",
-      "url": "https://balhence.com/research/automating-burp-idor.html",
+      "@id": "https://balhence.com/research/automating-burp-idor#webpage",
+      "url": "https://balhence.com/research/automating-burp-idor",
       "name": "Automating BURP to find IDORs",
       "description": "A practical Burp Suite workflow for IDOR testing with Autorize and AutoRepeater, including session comparison and identifier replacement.",
       "datePublished": "2019-12-12T07:53:36Z",
-      "dateModified": "2026-11-06",
+      "dateModified": "2026-11-16",
       "inLanguage": "en",
       "mainEntity": {
-        "@id": "https://balhence.com/research/automating-burp-idor.html#article"
+        "@id": "https://balhence.com/research/automating-burp-idor#article"
       },
       "breadcrumb": {
-        "@id": "https://balhence.com/research/automating-burp-idor.html#breadcrumb"
+        "@id": "https://balhence.com/research/automating-burp-idor#breadcrumb"
       }
     },
     {
       "@type": "BlogPosting",
-      "@id": "https://balhence.com/research/automating-burp-idor.html#article",
-      "url": "https://balhence.com/research/automating-burp-idor.html",
+      "@id": "https://balhence.com/research/automating-burp-idor#article",
+      "url": "https://balhence.com/research/automating-burp-idor",
       "mainEntityOfPage": {
-        "@id": "https://balhence.com/research/automating-burp-idor.html#webpage"
+        "@id": "https://balhence.com/research/automating-burp-idor#webpage"
       },
       "headline": "Automating BURP to find IDORs",
       "description": "A practical Burp Suite workflow for IDOR testing with Autorize and AutoRepeater, including session comparison and identifier replacement.",
       "datePublished": "2019-12-12T07:53:36Z",
-      "dateModified": "2026-11-06",
+      "dateModified": "2026-11-16",
       "inLanguage": "en",
-      "image": "https://balhence.com/assets/research/2b3dbe9fa0b8-01.jpeg",
+      "image": "https://balhence.com/assets/research/archive-automating-idor-v2.jpg",
       "keywords": [
         "hacking",
         "burpsuite",
@@ -77,18 +77,18 @@
         "hetroublemaker"
       ],
       "author": {
-        "@id": "https://balhence.com/about.html#researcher"
+        "@id": "https://balhence.com/about#researcher"
       },
       "publisher": {
         "@id": "https://balhence.com/#organization"
       },
       "isPartOf": {
-        "@id": "https://balhence.com/blogs.html#bug-bounty-archive"
+        "@id": "https://balhence.com/blogs#bug-bounty-archive"
       }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://balhence.com/research/automating-burp-idor.html#breadcrumb",
+      "@id": "https://balhence.com/research/automating-burp-idor#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -100,22 +100,22 @@
           "@type": "ListItem",
           "position": 2,
           "name": "Bug Bounty Archive",
-          "item": "https://balhence.com/blogs.html#bug-bounty-archive"
+          "item": "https://balhence.com/blogs#bug-bounty-archive"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Automating BURP to find IDORs",
-          "item": "https://balhence.com/research/automating-burp-idor.html"
+          "item": "https://balhence.com/research/automating-burp-idor"
         }
       ]
     },
     {
       "@type": "Person",
-      "@id": "https://balhence.com/about.html#researcher",
+      "@id": "https://balhence.com/about#researcher",
       "name": "Aditya Soni",
       "alternateName": "HeTroubleHacker",
-      "url": "https://balhence.com/about.html#researcher",
+      "url": "https://balhence.com/about#researcher",
       "sameAs": [
         "https://www.linkedin.com/in/adtyasoni/",
         "https://hackerone.com/hetroublehacker",
@@ -139,27 +139,29 @@
 </head>
 <body data-page="insights" class="research-archive-post archive-article">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/attack-path-validation.html">Recurring attack validation</a></li><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; scheduled testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">About</a></li><li><a href="/pricing.html" data-nav="pricing">Pricing</a></li><li><a href="/blogs.html" data-nav="insights">Research</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=research-archive" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/attack-path-validation">Recurring attack validation</a></li><li><a href="/compliance-penetration-testing">Compliance testing</a></li><li><a href="/soc-2-penetration-testing">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing">Cloud penetration testing</a></li><li><a href="/network-penetration-testing">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service">PTaaS &amp; scheduled testing</a></li><li><a href="/penetration-testing-india">Services for India teams</a></li><li><a href="/penetration-testing-services-usa">Services for US teams</a></li></ul></details></li><li><a href="/about" data-nav="about">About</a></li><li><a href="/pricing" data-nav="pricing">Pricing</a></li><li><a href="/blogs" data-nav="insights">Research</a></li><li><a href="/contact" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/book-a-call?source=nav-call" data-nav="book-call" data-track="nav_book_call">Book a call</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Automating BURP to find IDORs</span></nav><span class="eyebrow">Bug bounty archive / Original research</span><h1>Automating BURP to find IDORs</h1><p class="article-deck">Practical security research by Aditya Soni / HeTroubleHacker.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2019-12-12T07:53:36Z">12 December 2019</time></span><span>3 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">Automating BURP to find IDORs</span></nav><span class="eyebrow">Bug bounty archive / Original research</span><h1>Automating BURP to find IDORs</h1><p class="article-deck">Practical security research by Aditya Soni / HeTroubleHacker.</p><div class="article-byline"><span>By <a href="/about#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2019-12-12T07:53:36Z">12 December 2019</time></span><span>3 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
-        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the research</a><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a><a href="/about.html#researcher">About Aditya</a></nav>
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the research</a><a href="/blogs#bug-bounty-archive">Bug bounty archive</a><a href="/about#researcher">About Aditya</a></nav>
         <div class="article-content archive-article-content research-article-content">
-          <div class="research-article-body" id="research-article" data-research-post-id="2b3dbe9fa0b8" data-research-text-sha256="601959ce056f828ea5ae18b9ce792a82c833470918cf83e3eab915d818dad6cf">
-<p>Hello hunters, In this blog, I will help you setup-up Autozie and Autorepeater to find IDORs with the help of Burp Suite, but first a little detail about What is IDOR?</p><figure><img alt="IDOR Insecure Direct Object Reference title graphic." decoding="async" height="692" loading="lazy" src="/assets/research/2b3dbe9fa0b8-01.jpeg" width="1280"/></figure><blockquote>What is <strong>Insecure Direct Object Reference?</strong></blockquote><blockquote>The fourth one on the list is Insecure Direct Object Reference, also called IDOR. It refers to when a reference to an internal implementation object, such as a file or database key, is exposed to users without any other access control. In such cases, the attacker can manipulate those references to get access to unauthorized data.<br/>for more: <a href="https://blog.detectify.com/2016/05/25/owasp-top-10-insecure-direct-object-reference-4/" rel="noopener noreferrer">blog.detectify.com</a></blockquote><h4>Now, Let's begin the Hacking!</h4><p>You can Install Autorize and Autorepeater from the Bapp store in Extender tab</p><figure><img alt="Burp Suite BApp Store showing the Autorize and AutoRepeater extensions." decoding="async" height="468" loading="lazy" src="/assets/research/2b3dbe9fa0b8-02.png" width="1136"/><figcaption>Burp Suite Bapp Store</figcaption></figure><p>For more details about the tools, you can check it on Github</p><p><a href="https://github.com/Quitten/Autorize" rel="noopener noreferrer">GitHub - Quitten/Autorize: Automatic authorization enforcement detection extension for burp suite written in Jython developed by Barak Tawily in order to ease application security people work and allow them perform an automatic authorization tests</a></p><p>Autorize — For Each Request you do, it will send an equal request But with changed cookies of the session or any additional header used for authorization.</p><p>So, let’s see how it works…</p><p><strong>USER A — Admin</strong></p><p><strong>USER B — Normal User</strong></p><p>Browse the Web App with <strong>User A</strong> and Add the cookie of <strong>User B</strong> in the autorize so that it can browse with the User B account automatically.</p><figure><img alt="Autorize configuration panel with a secondary user's cookie and interception filters." decoding="async" height="718" loading="lazy" src="/assets/research/2b3dbe9fa0b8-03.png" width="545"/><figcaption>Autorize Coloum</figcaption></figure><p>Add the scope filter so that we can get good/healthy results as clear as possible and we can avoid getting garbage results on our little screen.</p><p>Turn ON the Autorize and surf the WebApp with User A and requests with start flowing through autorize</p><figure><img alt="Autorize results table comparing original and modified request responses." decoding="async" height="348" loading="lazy" src="/assets/research/2b3dbe9fa0b8-04.png" width="1920"/><figcaption>Flowing request</figcaption></figure><p>As in the above image you can see, I’ve added the cookie of User B and suffering the web app with User A and there are no changes the Original length and Modified length with 200 OK status code so there can be the possibility of IDOR.<br/>If you get 403 Forbidden error on the Modified length then there is No IDOR possibility and that’s a NO GO</p><blockquote>Just browse through the WebApp and try each and every Functionality which has Admin privileges and can’t be accessed by Normal User, if you get 200 Ok on that request it’s an IDOR Vulnerability.<br/>So Auditing the Request is upto you.</blockquote><h4>Now, How to Play Smart and Not to Work More.</h4><p>Just Check the previous parameter on which requests have been sent and you didn’t find them vulnerable. <br/>Go to the HTTP History tab in the Proxy Section and put the previous request out of scope. So now when you will crawl the web app, those parameters will not be listed in the Autorize section. So now, each request is a new Request.</p><blockquote>Taking care of yourself is good…</blockquote><h4>Playing with Autorepeater</h4><p><a href="https://github.com/nccgroup/AutoRepeater" rel="noopener noreferrer">GitHub - nccgroup/AutoRepeater: Automated HTTP Request Repeating With Burp Suite</a></p><p>This a just a complicated version of Autorize, which is used for more precise and specific results.<br/>Example — uuid, suid, uid, etc.</p><p>Like changing the uuid of a user everytime manually can be a bit difficult.</p><blockquote>Combining these two can check the functionality not only inside tenant but also a cross tenant at the same time.<br/>~@Regala_</blockquote><figure><img alt="Burp AutoRepeater Add Replacement dialog configured to replace a UUID." decoding="async" height="354" loading="lazy" src="/assets/research/2b3dbe9fa0b8-05.png" width="1920"/><figcaption>Setting up Autorepeater</figcaption></figure><p>In the above image by clicking on Add under Replacement you can add the request string to change with your required replace string and also select replace all and click OK.</p><p>It can also be used to change other Requests like:</p><ol><li>User = Admin</li><li>False = True</li><li>JSON = XML</li></ol><figure><img alt="AutoRepeater Add Replacement dialog configured to replace a Referer header with a blind XSS payload." decoding="async" height="250" loading="lazy" src="/assets/research/2b3dbe9fa0b8-06.png" width="333"/><figcaption>Additional Example</figcaption></figure><p>Best of luck everyone. Keep-Hacking!</p><p>Feedbacks and edits are welcome</p><p><a href="https://www.instagram.com/adtyasoni/" rel="noopener noreferrer">Instagram</a>, <a href="https://twitter.com/hetroublemakr" rel="noopener noreferrer">Twitter</a></p><p>If you enjoyed this blog, please click the 👏 button and share to help others find it.</p><blockquote>Reference<br/> <a href="https://www.youtube.com/watch?v=3K1-a7dnA60&amp;t=357s" rel="noopener noreferrer">https://www.youtube.com/watch?v=3K1-a7dnA60&amp;t=357s</a></blockquote><blockquote>Thanks to <a href="https://twitter.com/stokfredrik" rel="noopener noreferrer">Stok</a> for making an Amazing tutorial video with <a href="https://twitter.com/Regala_" rel="noopener noreferrer">Fisher</a></blockquote>
+          <figure class="research-cover-figure" data-archive-cover><img src="/assets/research/archive-automating-idor-v2.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="A blueprint authorization matrix exposing one incorrect cross-account object path."><figcaption>Original blueprint editorial illustration created for this archive edition.</figcaption></figure>
+          <div class="research-article-body" id="research-article" data-research-post-id="2b3dbe9fa0b8" data-research-text-sha256="6c8cb1cdceae3573bc05c9b449bb7f87ba232b8bc91501cc5f0da4a8070a0472">
+<p>Hello hunters. In this article, I’ll show you how to set up Autorize and AutoRepeater for IDOR testing in Burp Suite. First, let’s define IDOR.</p><figure><img alt="IDOR Insecure Direct Object Reference title graphic." decoding="async" height="692" loading="lazy" src="/assets/research/2b3dbe9fa0b8-01.jpeg" width="1280"/></figure><blockquote>What is <strong>Insecure Direct Object Reference?</strong></blockquote><blockquote>The fourth one on the list is Insecure Direct Object Reference, also called IDOR. It refers to when a reference to an internal implementation object, such as a file or database key, is exposed to users without any other access control. In such cases, the attacker can manipulate those references to get access to unauthorized data.<br/>for more: <a href="https://blog.detectify.com/2016/05/25/owasp-top-10-insecure-direct-object-reference-4/" rel="noopener noreferrer">blog.detectify.com</a></blockquote><h4>Now, Let's begin the Hacking!</h4><p>You can install Autorize and AutoRepeater from the BApp Store in the Extender tab.</p><figure><img alt="Burp Suite BApp Store showing the Autorize and AutoRepeater extensions." decoding="async" height="468" loading="lazy" src="/assets/research/2b3dbe9fa0b8-02.png" width="1136"/><figcaption>Burp Suite Bapp Store</figcaption></figure><p>For more information about the tools, see their GitHub repositories.</p><p><a href="https://github.com/Quitten/Autorize" rel="noopener noreferrer">GitHub - Quitten/Autorize: Automatic authorization enforcement detection extension for burp suite written in Jython developed by Barak Tawily in order to ease application security people work and allow them perform an automatic authorization tests</a></p><p>Autorize sends a matching request with a different session cookie or another authorization header for comparison.</p><p>So, let’s see how it works…</p><p><strong>USER A — Admin</strong></p><p><strong>USER B — Normal User</strong></p><p>Browse the Web App with <strong>User A</strong> and Add the cookie of <strong>User B</strong> in the autorize so that it can browse with the User B account automatically.</p><figure><img alt="Autorize configuration panel with a secondary user's cookie and interception filters." decoding="async" height="718" loading="lazy" src="/assets/research/2b3dbe9fa0b8-03.png" width="545"/><figcaption>Autorize Coloum</figcaption></figure><p>Add a scope filter to keep the results focused and reduce unrelated traffic.</p><p>Turn on Autorize and browse the web application as User A; requests will begin flowing through the extension.</p><figure><img alt="Autorize results table comparing original and modified request responses." decoding="async" height="348" loading="lazy" src="/assets/research/2b3dbe9fa0b8-04.png" width="1920"/><figcaption>Flowing request</figcaption></figure><p>As shown above, I added User B’s cookie and browsed the web application as User A. When the original and modified responses have the same length and both return 200 OK, there may be an IDOR.<br/>If the modified request returns 403 Forbidden, there is no IDOR in that request, so it is a no-go.</p><blockquote>Just browse through the WebApp and try each and every Functionality which has Admin privileges and can’t be accessed by Normal User, if you get 200 Ok on that request it’s an IDOR Vulnerability.<br/>So Auditing the Request is upto you.</blockquote><h4>Now, How to Play Smart and Not to Work More.</h4><p>Just Check the previous parameter on which requests have been sent and you didn’t find them vulnerable. <br/>Go to the HTTP History tab in the Proxy Section and put the previous request out of scope. So now when you will crawl the web app, those parameters will not be listed in the Autorize section. So now, each request is a new Request.</p><blockquote>Taking care of yourself is good…</blockquote><h4>Playing with Autorepeater</h4><p><a href="https://github.com/nccgroup/AutoRepeater" rel="noopener noreferrer">GitHub - nccgroup/AutoRepeater: Automated HTTP Request Repeating With Burp Suite</a></p><p>AutoRepeater is a more configurable companion to Autorize for precise, targeted replacements.<br/>Example — uuid, suid, uid, etc.</p><p>Changing a user’s UUID manually for every request can be tedious.</p><blockquote>Combining the two can test functionality both within a tenant and across tenants.<br/>~@Regala_</blockquote><figure><img alt="Burp AutoRepeater Add Replacement dialog configured to replace a UUID." decoding="async" height="354" loading="lazy" src="/assets/research/2b3dbe9fa0b8-05.png" width="1920"/><figcaption>Setting up Autorepeater</figcaption></figure><p>In the above image by clicking on Add under Replacement you can add the request string to change with your required replace string and also select replace all and click OK.</p><p>It can also be used to change other Requests like:</p><ol><li>User = Admin</li><li>False = True</li><li>JSON = XML</li></ol><figure><img alt="AutoRepeater Add Replacement dialog configured to replace a Referer header with a blind XSS payload." decoding="async" height="250" loading="lazy" src="/assets/research/2b3dbe9fa0b8-06.png" width="333"/><figcaption>Additional Example</figcaption></figure><p>Best of luck everyone. Keep-Hacking!</p><p>Feedback and corrections are welcome.</p><p><a href="https://www.instagram.com/adtyasoni/" rel="noopener noreferrer">Instagram</a>, <a href="https://twitter.com/hetroublemakr" rel="noopener noreferrer">Twitter</a></p><p>If this article helped, share it with another researcher who might find it useful.</p><blockquote>Reference<br/> <a href="https://www.youtube.com/watch?v=3K1-a7dnA60&amp;t=357s" rel="noopener noreferrer">https://www.youtube.com/watch?v=3K1-a7dnA60&amp;t=357s</a></blockquote><blockquote>Thanks to <a href="https://twitter.com/stokfredrik" rel="noopener noreferrer">Stok</a> for making an Amazing tutorial video with <a href="https://twitter.com/Regala_" rel="noopener noreferrer">Fisher</a></blockquote>
           </div>
-          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
-          <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>From research to a scoped assessment.</h2><p>Explore API penetration testing or browse the full Bug Bounty Archive for more evidence-focused research.</p><div class="button-row"><a class="btn btn-primary" href="/api-penetration-testing.html">API penetration testing</a><a class="btn btn-quiet" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></div>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>From research to a scoped assessment.</h2><p>Explore API penetration testing or browse the full Bug Bounty Archive for more evidence-focused research.</p><div class="button-row"><a class="btn btn-primary" href="/api-penetration-testing">API penetration testing</a><a class="btn btn-quiet" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></div>
           <p class="research-topic-line"><strong>Research topics:</strong> hacking / burpsuite / idor / bug-bounty / hetroublemaker</p>
         </div>
       </div></div>
     </article>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Researcher-led testing. Human-validated evidence.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/attack-path-validation.html">Attack-path validation</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">About</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Proof &amp; trust</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/trust.html">Trust &amp; data handling</a></li><li><a href="/blog.html">Practical guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261116b"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Researcher-led testing. Human-validated evidence.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services">Services</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/attack-path-validation">Attack-path validation</a></li><li><a href="/soc-2-penetration-testing">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing">Cloud penetration testing</a></li><li><a href="/network-penetration-testing">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service">PTaaS</a></li><li><a href="/penetration-testing-india">India services</a></li><li><a href="/penetration-testing-services-usa">US services</a></li><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li></ul></div><div class="footer-column"><h2>Proof &amp; trust</h2><ul class="footer-links"><li><a href="/scope-builder">Scope planner</a></li><li><a href="/report-viewer">Sample report</a></li><li><a href="/trust">Trust &amp; data handling</a></li><li><a href="/blog">Practical guides</a></li><li><a href="/blogs#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="/book-a-call">Book a security scoping call</a></li><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20261116d"></script><script src="/app.js?v=20261116d"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+  <script src="/article-engagement.js?v=20261116a"></script>
 </body>
 </html>

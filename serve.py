@@ -16,7 +16,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlsplit
 
-from build_public import PUBLIC_FILE_SET, public_source
+from build_public import PUBLIC_FILE_SET, public_file_for_path, public_source
 
 
 SITE_ROOT = Path(__file__).resolve().parent
@@ -51,40 +51,46 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         # Match the one decoding pass used by SimpleHTTPRequestHandler.
         return unquote(urlsplit(self.path).path, errors="strict")
 
-    def _allowed_request(self) -> bool:
+    def _public_file(self) -> str | None:
         try:
             request = urlsplit(self.path)
             if request.scheme or request.netloc:
-                return False
+                return None
             decoded = self._decoded_path()
         except (UnicodeError, ValueError):
-            return False
+            return None
         if not decoded.startswith("/") or "\x00" in decoded or "\\" in decoded:
-            return False
+            return None
         # Reject traversal and ambiguous spellings before pathlib normalizes them.
         if any(part in {".", ".."} for part in decoded.split("/")):
-            return False
+            return None
         if "//" in decoded or (decoded.endswith("/") and decoded != "/"):
-            return False
-        relative = PurePosixPath(decoded).as_posix().lstrip("/") or "index.html"
+            return None
+        relative = public_file_for_path(PurePosixPath(decoded).as_posix())
         if relative not in PUBLIC_FILE_SET:
-            return False
+            return None
 
         try:
             root = Path(self.directory).resolve()
             public_source(root, relative)
         except (OSError, RuntimeError, ValueError):
-            return False
-        return True
+            return None
+        return relative
 
     def _serve(self, head_only: bool) -> None:
-        if not self._allowed_request():
+        relative = self._public_file()
+        if relative is None:
             self.send_error(HTTPStatus.NOT_FOUND)
             return
-        if head_only:
-            super().do_HEAD()
-        else:
-            super().do_GET()
+        requested_path = self.path
+        self.path = f"/{relative}"
+        try:
+            if head_only:
+                super().do_HEAD()
+            else:
+                super().do_GET()
+        finally:
+            self.path = requested_path
 
     def do_GET(self) -> None:
         self._serve(head_only=False)

@@ -2,20 +2,20 @@
 <html lang="en-US" class="has-article-flow">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://giscus.app; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; frame-src https://giscus.app; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PCI DSS Network Segmentation Testing (11.4.5) | Balhence</title>
   <meta name="description" content="Learn when PCI DSS segmentation testing applies, how 11.4.5 differs from service-provider 11.4.6, what to scope, and what evidence to retain.">
   <meta name="author" content="Balhence">
   <meta name="robots" content="index,follow,max-image-preview:large">
-  <link rel="canonical" href="https://balhence.com/insights/pci-dss-network-segmentation-testing.html">
+  <link rel="canonical" href="https://balhence.com/insights/pci-dss-network-segmentation-testing">
   <meta name="theme-color" content="#080d1f">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Balhence">
   <meta property="og:title" content="PCI DSS Network Segmentation Testing (11.4.5) | Balhence">
   <meta property="og:description" content="When PCI DSS 11.4.5 and 11.4.6 apply, how to define the segmentation test boundary, and what evidence to retain.">
-  <meta property="og:url" content="https://balhence.com/insights/pci-dss-network-segmentation-testing.html">
+  <meta property="og:url" content="https://balhence.com/insights/pci-dss-network-segmentation-testing">
   <meta property="og:image" content="https://balhence.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -31,7 +31,7 @@
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261116b">
+  <link rel="stylesheet" href="/styles.css?v=20261116c">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -54,9 +54,9 @@
     },
     {
       "@type": "Article",
-      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html#article",
-      "url": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html",
-      "mainEntityOfPage": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html",
+      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing#article",
+      "url": "https://balhence.com/insights/pci-dss-network-segmentation-testing",
+      "mainEntityOfPage": "https://balhence.com/insights/pci-dss-network-segmentation-testing",
       "headline": "PCI DSS network segmentation testing: 11.4.5 and 11.4.6",
       "description": "Learn when PCI DSS segmentation testing applies, how 11.4.5 differs from service-provider 11.4.6, what to scope, and what evidence to retain.",
       "image": "https://balhence.com/og-image.png",
@@ -66,7 +66,7 @@
       "articleSection": "PCI DSS penetration testing",
       "author": {
         "@id": "https://balhence.com/#organization",
-        "url": "https://balhence.com/about.html"
+        "url": "https://balhence.com/about"
       },
       "publisher": {
         "@id": "https://balhence.com/#organization"
@@ -74,7 +74,7 @@
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html#breadcrumb",
+      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -86,19 +86,19 @@
           "@type": "ListItem",
           "position": 2,
           "name": "Guides",
-          "item": "https://balhence.com/blog.html"
+          "item": "https://balhence.com/blog"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "PCI DSS network segmentation testing",
-          "item": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html"
+          "item": "https://balhence.com/insights/pci-dss-network-segmentation-testing"
         }
       ]
     },
     {
       "@type": "FAQPage",
-      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing.html#faq",
+      "@id": "https://balhence.com/insights/pci-dss-network-segmentation-testing#faq",
       "mainEntity": [
         {
           "@type": "Question",
@@ -160,8 +160,8 @@
     <nav class="container nav-shell" aria-label="Primary navigation">
       <a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a>
       <div class="nav-menu" id="primary-menu" data-menu>
-        <ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/attack-path-validation.html">Recurring attack validation</a></li><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; scheduled testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">About</a></li><li><a href="/pricing.html" data-nav="pricing">Pricing</a></li><li><a href="/blogs.html" data-nav="insights">Research</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul>
-        <a class="btn btn-primary" href="/contact.html?service=pci&amp;source=pci-segmentation-guide" data-track="nav_pentest">Request a pentest</a>
+        <ul class="nav-links"><li><a href="/services" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/attack-path-validation">Recurring attack validation</a></li><li><a href="/compliance-penetration-testing">Compliance testing</a></li><li><a href="/soc-2-penetration-testing">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing">Cloud penetration testing</a></li><li><a href="/network-penetration-testing">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service">PTaaS &amp; scheduled testing</a></li><li><a href="/penetration-testing-india">Services for India teams</a></li><li><a href="/penetration-testing-services-usa">Services for US teams</a></li></ul></details></li><li><a href="/about" data-nav="about">About</a></li><li><a href="/pricing" data-nav="pricing">Pricing</a></li><li><a href="/blogs" data-nav="insights">Research</a></li><li><a href="/contact" data-nav="contact">Contact</a></li></ul>
+        <a class="btn btn-primary" href="/book-a-call?source=nav-call" data-nav="book-call" data-track="nav_book_call">Book a call</a>
       </div>
       <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
     </nav>
@@ -171,11 +171,11 @@
     <article>
       <header class="article-hero">
         <div class="container-narrow">
-          <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Guides</a><span aria-hidden="true">/</span><span aria-current="page">PCI DSS segmentation testing</span></nav>
+          <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog">Guides</a><span aria-hidden="true">/</span><span aria-current="page">PCI DSS segmentation testing</span></nav>
           <span class="eyebrow">PCI DSS v4.0.1 guide</span>
           <h1>PCI DSS network segmentation testing: 11.4.5 and 11.4.6</h1>
           <p class="article-deck">Define the CDE boundary, test every segmentation method relied upon, and retain evidence that an assessor can review.</p>
-          <div class="article-byline"><span>By <a href="/about.html">Balhence</a></span><span>Published <time datetime="2026-11-15">15 November 2026</time></span><span>9 min read</span></div>
+          <div class="article-byline"><span>By <a href="/about">Balhence</a></span><span>Published <time datetime="2026-11-15">15 November 2026</time></span><span>9 min read</span></div>
         </div>
       </header>
 
@@ -207,7 +207,7 @@
 
             <p>Start with three groups: the CDE, systems connected to or able to affect the security of the CDE, and systems the entity intends to treat as out of scope. The segmentation test asks whether the controls relied upon actually prevent unintended paths from the last group into the CDE. Merely assigning different subnets, accounts, or labels does not demonstrate that outcome.</p>
 
-            <p>Segmentation is one part of the wider <a href="/pci-dss-penetration-testing.html">PCI DSS penetration testing</a> plan. Internal and external testing, application-layer coverage, remediation, and re-testing may also apply under requirement 11.4.</p>
+            <p>Segmentation is one part of the wider <a href="/pci-dss-penetration-testing">PCI DSS penetration testing</a> plan. Internal and external testing, application-layer coverage, remediation, and re-testing may also apply under requirement 11.4.</p>
 
             <h2 id="requirements">Requirement 11.4.5 versus 11.4.6</h2>
 
@@ -241,7 +241,7 @@
               <li><strong>The defined methodology:</strong> record the intended perspectives, validation approach, safety limits, evidence, and handling of findings.</li>
             </ul>
 
-            <p>A port list, automated scan, or configuration review may contribute evidence. None should be presented as a universal substitute for testing whether the boundary can be crossed. A scoped <a href="/network-penetration-testing.html">network penetration test and segmentation assessment</a> should combine architecture review with controlled technical validation.</p>
+            <p>A port list, automated scan, or configuration review may contribute evidence. None should be presented as a universal substitute for testing whether the boundary can be crossed. A scoped <a href="/network-penetration-testing">network penetration test and segmentation assessment</a> should combine architecture review with controlled technical validation.</p>
 
             <h2 id="scope">Prepare the segmentation test scope</h2>
 
@@ -270,7 +270,7 @@
 
             <p>For each failed boundary, keep the relevant source and destination context, the expected policy, controlled evidence of the observed path, impact, and recommended correction. The follow-up record should identify the environment and date, what was checked, and whether the issue was fixed, partially fixed, not fixed, or could not be verified.</p>
 
-            <p>Use the <a href="/insights/what-good-pentest-report-includes.html">pentest report checklist</a> to review the evidence, or inspect the <a href="/report-viewer.html">Balhence sample report</a> before agreeing deliverables.</p>
+            <p>Use the <a href="/insights/what-good-pentest-report-includes">pentest report checklist</a> to review the evidence, or inspect the <a href="/report-viewer">Balhence sample report</a> before agreeing deliverables.</p>
 
             <div class="article-callout">
               <p><strong>Evidence boundary:</strong> a Balhence report records technical testing within the agreed scope. It does not certify PCI DSS compliance or guarantee that every weakness has been identified. Your assessor determines how the evidence applies to the wider assessment.</p>
@@ -299,9 +299,9 @@
 
             <section class="article-cta" aria-labelledby="article-cta-title">
               <h2 id="article-cta-title">Define the boundary before testing</h2>
-              <p>Share the CDE, segmentation methods, available test perspectives, recent changes, and assessment deadline. Balhence can confirm whether the requested technical scope fits its <a href="/network-penetration-testing.html">network</a> and <a href="/pci-dss-penetration-testing.html">PCI penetration-testing</a> services; your assessor remains responsible for compliance determinations.</p>
-              <a class="btn btn-primary btn-flow" data-track="article_pci_segmentation_contact" href="/contact.html?service=pci&amp;source=pci-segmentation-guide">Discuss PCI penetration testing <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a>
-              <a class="btn btn-secondary" href="/compliance-penetration-testing.html">Review compliance testing</a>
+              <p>Share the CDE, segmentation methods, available test perspectives, recent changes, and assessment deadline. Balhence can confirm whether the requested technical scope fits its <a href="/network-penetration-testing">network</a> and <a href="/pci-dss-penetration-testing">PCI penetration-testing</a> services; your assessor remains responsible for compliance determinations.</p>
+              <a class="btn btn-primary btn-flow" data-track="article_pci_segmentation_contact" href="/contact?service=pci&amp;source=pci-segmentation-guide">Discuss PCI penetration testing <span aria-hidden="true" class="button-disc"><i aria-hidden="true" class="ui-icon ui-icon-arrow"></i></span></a>
+              <a class="btn btn-secondary" href="/compliance-penetration-testing">Review compliance testing</a>
             </section>
           </div>
         </div>
@@ -309,7 +309,8 @@
     </article>
   </main>
 
-  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Researcher-led testing. Human-validated evidence.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/attack-path-validation.html">Attack-path validation</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">About</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Proof &amp; trust</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/trust.html">Trust &amp; data handling</a></li><li><a href="/blog.html">Practical guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261116b"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Researcher-led testing. Human-validated evidence.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services">Services</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/attack-path-validation">Attack-path validation</a></li><li><a href="/soc-2-penetration-testing">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing">Cloud penetration testing</a></li><li><a href="/network-penetration-testing">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service">PTaaS</a></li><li><a href="/penetration-testing-india">India services</a></li><li><a href="/penetration-testing-services-usa">US services</a></li><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li></ul></div><div class="footer-column"><h2>Proof &amp; trust</h2><ul class="footer-links"><li><a href="/scope-builder">Scope planner</a></li><li><a href="/report-viewer">Sample report</a></li><li><a href="/trust">Trust &amp; data handling</a></li><li><a href="/blog">Practical guides</a></li><li><a href="/blogs#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="/book-a-call">Book a security scoping call</a></li><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20261116d"></script><script src="/app.js?v=20261116d"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+  <script src="/article-engagement.js?v=20261116a"></script>
 </body>
 </html>

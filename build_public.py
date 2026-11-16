@@ -35,6 +35,16 @@ PUBLIC_FILES = (
     "d4627c921ee756e5a1d004e47bed20a8.txt",
     "about.html",
     "attack-path-validation.html",
+    "assets/research/archive-automating-idor-v2.jpg",
+    "assets/research/archive-bug-bounty-bash-v2.jpg",
+    "assets/research/archive-crlf-injection-v2.jpg",
+    "assets/research/archive-cve-2020-28726-v2.jpg",
+    "assets/research/archive-dependency-confusion-v2.jpg",
+    "assets/research/archive-first-bounty-target-v2.jpg",
+    "assets/research/archive-first-xss-v2.jpg",
+    "assets/research/archive-http-request-smuggling-v2.jpg",
+    "assets/research/archive-inspect-element-v2.jpg",
+    "assets/research/archive-secret-api-keys-v2.jpg",
     "assets/research/1900aeef79f6-01.png",
     "assets/research/1900aeef79f6-02.png",
     "assets/research/22cdcc829976-01.jpeg",
@@ -89,8 +99,11 @@ PUBLIC_FILES = (
     "assets/research/field-note-session-authority-boundary.jpg",
     "api-penetration-testing.html",
     "app.js",
+    "article-engagement.js",
     "blog.html",
     "blogs.html",
+    "book-a-call.html",
+    "book-a-call.js",
     "case-studies.css",
     "case-studies.js",
     "config.js",
@@ -180,6 +193,32 @@ PUBLIC_FILES = (
     "web-application-penetration-testing.html",
 )
 PUBLIC_FILE_SET = frozenset(PUBLIC_FILES)
+
+
+def public_path(relative: str) -> str:
+    """Return the canonical public path for one allowlisted source file."""
+    if relative == "index.html":
+        return "/"
+    if relative.endswith(".html"):
+        return f"/{relative[:-5]}"
+    return f"/{relative}"
+
+
+def public_file_for_path(path: str, files: frozenset[str] | set[str] | None = None) -> str:
+    """Map a canonical or legacy request path to its physical public file."""
+    files = PUBLIC_FILE_SET if files is None else files
+    if path == "/":
+        return "index.html"
+    relative = path.lstrip("/")
+    # The homepage has one clean spelling: "/". Keep "/index.html" as the
+    # legacy file URL, but do not invent a second clean alias at "/index".
+    if relative == "index":
+        return relative
+    if relative in files:
+        return relative
+    if relative and not relative.endswith("/") and f"{relative}.html" in files:
+        return f"{relative}.html"
+    return relative
 
 
 def parse_args() -> argparse.Namespace:

@@ -30,16 +30,17 @@ Search engines need useful, clearly described content and discoverable links; ne
 
 | Visitor's task | Main page | Supporting evidence |
 | --- | --- | --- |
-| Find an application pentest provider | `/` and `/services.html` | Scope, deliverables, broader capabilities |
-| Find remote penetration testing for a team in India | `/penetration-testing-india.html` | Application, cloud, network and AI coverage, remote logistics, proposal comparison, sample report |
-| Arrange a web application penetration test | `/web-application-penetration-testing.html` | Scoping guide, authorization stories, sample report |
-| Test an API or its integrations | `/api-penetration-testing.html` | API coverage, controlled access, session and cache stories |
-| Assess a multi-tenant SaaS product | `/saas-penetration-testing.html` | Tenant/role coverage, SSO, readiness checklist |
-| Assess customer-controlled cloud resources | `/cloud-penetration-testing.html` | IAM, storage, workloads, configuration-review distinction, provider policies |
-| Assess external/internal networks or segmentation | `/network-penetration-testing.html` | Approved assets, starting positions, access requirements, operational limits |
-| Understand cost and compare proposals | `/insights/web-api-pentest-cost-scope-guide.html` | Effort drivers and scope, not an invented price |
-| Evaluate reporting quality | `/report-viewer.html` | Explicitly synthetic report and downloadable PDF |
-| Request a proposal | `/contact.html` | Short enquiry, clear next steps, direct email |
+| Find an application pentest provider | `/` and `/services` | Scope, deliverables, broader capabilities |
+| Find remote penetration testing for a team in India | `/penetration-testing-india` | Application, cloud, network and AI coverage, remote logistics, proposal comparison, sample report |
+| Arrange a web application penetration test | `/web-application-penetration-testing` | Scoping guide, authorization stories, sample report |
+| Test an API or its integrations | `/api-penetration-testing` | API coverage, controlled access, session and cache stories |
+| Assess a multi-tenant SaaS product | `/saas-penetration-testing` | Tenant/role coverage, SSO, readiness checklist |
+| Assess customer-controlled cloud resources | `/cloud-penetration-testing` | IAM, storage, workloads, configuration-review distinction, provider policies |
+| Assess external/internal networks or segmentation | `/network-penetration-testing` | Approved assets, starting positions, access requirements, operational limits |
+| Understand cost and compare proposals | `/insights/web-api-pentest-cost-scope-guide` | Effort drivers and scope, not an invented price |
+| Evaluate reporting quality | `/report-viewer` | Explicitly synthetic report and downloadable PDF |
+| Request a proposal | `/contact` | Short enquiry, clear next steps, direct email |
+| Request a security scoping call | `/book-a-call` | Preferred times and time zone, with email confirmation rather than a false instant booking |
 
 These are intent choices, not measured keyword volumes. Search Console data should guide later changes. Avoid cloned city/service pages, keyword repetition, fake ratings, and speculative claims about certifications or client outcomes.
 
@@ -67,13 +68,13 @@ Implemented from the supplied "Balhence - US Launch Page Content" and "Balhence 
 
 | Primary search intent | Destination | Contextual routes |
 | --- | --- | --- |
-| SOC 2 penetration testing | `/soc-2-penetration-testing.html` | Home, services, SaaS/web/API, compliance hub, SOC 2 guide, report |
-| AI / LLM penetration testing | `/ai-llm-penetration-testing.html` | Home, services AI card, approach, AI guides, relevant field notes |
-| Penetration testing services USA | `/penetration-testing-services-usa.html` | Home, services, compliance hub, India page, report |
-| Compliance penetration testing | `/compliance-penetration-testing.html` | Home, services, framework pages, US hub, report guide |
-| PCI DSS penetration testing | `/pci-dss-penetration-testing.html` | Home, services, compliance hub, SOC 2, US hub |
-| HIPAA penetration testing | `/hipaa-penetration-testing.html` | Home, services, compliance hub, SOC 2, US hub |
-| Penetration testing as a service / PTaaS | `/penetration-testing-as-a-service.html` | Home, Release Assurance, SaaS, SOC 2, pricing guide |
+| SOC 2 penetration testing | `/soc-2-penetration-testing` | Home, services, SaaS/web/API, compliance hub, SOC 2 guide, report |
+| AI / LLM penetration testing | `/ai-llm-penetration-testing` | Home, services AI card, approach, AI guides, relevant field notes |
+| Penetration testing services USA | `/penetration-testing-services-usa` | Home, services, compliance hub, India page, report |
+| Compliance penetration testing | `/compliance-penetration-testing` | Home, services, framework pages, US hub, report guide |
+| PCI DSS penetration testing | `/pci-dss-penetration-testing` | Home, services, compliance hub, SOC 2, US hub |
+| HIPAA penetration testing | `/hipaa-penetration-testing` | Home, services, compliance hub, SOC 2, US hub |
+| Penetration testing as a service / PTaaS | `/penetration-testing-as-a-service` | Home, Release Assurance, SaaS, SOC 2, pricing guide |
 
 The three new articles explain SOC 2 pentest requirements, planning LLM application testing, and PTaaS versus annual testing. Each links to its relevant service, the guides hub, and related reading. All seven new service pages have at least three distinct contextual incoming page links, plus shared navigation/footer exposure, scope-builder links, and a sample-report link.
 
@@ -85,7 +86,7 @@ These keywords are intent targets from the playbook, checked against current ser
 
 - SOC 2: removed promises that a pentest satisfies the audit or that every auditor requires the same annual test. The criteria mapping is explicitly illustrative and must be checked against the customer's controls and auditor expectations. Reference: [AICPA Trust Services Criteria](https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022).
 - PCI DSS: use **v4.0.1**, distinguish internal/external testing from ASV scanning, and include the additional six-month segmentation requirement for service providers. References: [PCI SSC library](https://www.pcisecuritystandards.org/document_library/), [PCI SSC publication notice](https://blog.pcisecuritystandards.org/just-published-pci-dss-v4-0-1), and [PCI SSC SAQ D service-provider requirements](https://www.pcisecuritystandards.org/documents/PCI-DSS-v4-0-SAQ-D-Service-Provider.pdf).
-- HIPAA: describe testing as evidence for the broader risk analysis. Distinguish proposed annual testing from the current rule, and confirm requirements/effective dates during scoping. References: [HHS current Security Rule summary](https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html) and [HHS proposal fact sheet](https://www.hhs.gov/hipaa/for-professionals/security/hipaa-security-rule-nprm/factsheet/index.html).
+- HIPAA: describe testing as evidence for the broader risk analysis. Distinguish proposed annual testing from the current rule, and confirm requirements/effective dates during scoping. References: [HHS current Security Rule summary](https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index) and [HHS proposal fact sheet](https://www.hhs.gov/hipaa/for-professionals/security/hipaa-security-rule-nprm/factsheet/index).
 - OWASP: verified the [LLM Top 10 2026 release](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) and [Agentic Applications 2026 reference](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/). The API page uses the [2023 API taxonomy](https://owasp.org/API-Security/editions/2023/en/0x11-t10/), including property-level authorization; injection is not labeled as a separate 2023 API Top 10 category.
 - PTaaS means scheduled assessments and a maintained finding register. No always-on platform, continuous coverage, or automatic replacement of required full-scope testing is claimed.
 - No invented office, US-based staff, certifications, testimonials, prices, named founder, or customer audit outcomes. No fabricated `sameAs`, review, or Person markup.
@@ -126,7 +127,7 @@ After these edits, source verification passed for 35 HTML pages, 2021 URL refere
 ```bash
 indexnow_key="$(tr -d '\n' < d4627c921ee756e5a1d004e47bed20a8.txt)"
 curl --fail-with-body -G 'https://api.indexnow.org/indexnow' \
-  --data-urlencode 'url=https://balhence.com/penetration-testing-india.html' \
+  --data-urlencode 'url=https://balhence.com/penetration-testing-india' \
   --data-urlencode "key=$indexnow_key"
 ```
 
