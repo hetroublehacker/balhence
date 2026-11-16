@@ -10,6 +10,7 @@ import unittest
 from urllib.parse import urlsplit
 
 from build_public import PUBLIC_FILE_SET, SOURCE_ROOT
+from verify_site import local_target
 
 
 ANONYMIZED_STORIES = (
@@ -193,6 +194,29 @@ class EditorialDocument(HTMLParser):
             self.story_parts.append(data)
 
 
+class ArchiveCardDocument(HTMLParser):
+    def __init__(self, source: str):
+        super().__init__(convert_charrefs=True)
+        self.cards: list[dict] = []
+        self.current: dict | None = None
+        self.feed(source)
+        self.close()
+
+    def handle_starttag(self, tag, attributes):
+        attrs = dict(attributes)
+        if tag == "article" and "data-archive-card" in attrs:
+            self.current = {"href": "", "images": []}
+        elif self.current is not None and tag == "a" and attrs.get("href"):
+            self.current["href"] = attrs["href"]
+        elif self.current is not None and tag == "img":
+            self.current["images"].append(attrs)
+
+    def handle_endtag(self, tag):
+        if tag == "article" and self.current is not None:
+            self.cards.append(self.current)
+            self.current = None
+
+
 def structured_nodes(source: str) -> list[dict]:
     payloads = [
         json.loads(payload)
@@ -217,6 +241,34 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 self.assertIn(article, PUBLIC_FILE_SET)
                 self.assertEqual(page.links.count("/" + article), 1)
         self.assertIn("/blog.html", page.links)
+
+    def test_every_archive_card_uses_its_articles_social_thumbnail(self):
+        hub = ArchiveCardDocument((SOURCE_ROOT / "blogs.html").read_text(encoding="utf-8"))
+        self.assertEqual(len(hub.cards), len(ARCHIVE))
+        seen = set()
+        for card in hub.cards:
+            target = local_target("blogs.html", card["href"])
+            self.assertIsNotNone(target)
+            article = target[0]
+            with self.subTest(article=article):
+                self.assertIn(article, ARCHIVE)
+                self.assertNotIn(article, seen)
+                seen.add(article)
+                self.assertEqual(len(card["images"]), 1)
+                image = card["images"][0]
+                page = EditorialDocument((SOURCE_ROOT / article).read_text(encoding="utf-8"))
+                social_url = urlsplit(page.meta["og:image"])
+                self.assertEqual(image.get("src"), social_url.path)
+                self.assertEqual(image.get("width"), page.meta["og:image:width"])
+                self.assertEqual(image.get("height"), page.meta["og:image:height"])
+                self.assertEqual(image.get("alt"), page.meta["og:image:alt"])
+                self.assertEqual(image.get("loading"), "lazy")
+                self.assertEqual(image.get("decoding"), "async")
+                self.assertEqual(image.get("fetchpriority"), "low")
+                image_path = social_url.path.lstrip("/")
+                self.assertIn(image_path, PUBLIC_FILE_SET)
+                self.assertTrue((SOURCE_ROOT / image_path).is_file())
+        self.assertEqual(seen, set(ARCHIVE))
 
     def test_anonymized_stories_use_the_personal_research_shell(self):
         for story in ANONYMIZED_STORIES:

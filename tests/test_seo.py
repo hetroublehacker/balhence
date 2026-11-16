@@ -12,6 +12,7 @@ from datetime import date, datetime, timezone
 from html.parser import HTMLParser
 import unittest
 import re
+import struct
 from urllib.parse import parse_qs, urlsplit
 import xml.etree.ElementTree as ET
 
@@ -157,6 +158,63 @@ def schema_nodes(document: Document):
         for block in document.structured_data
         for node in schema_objects(strict_json(block))
     ]
+
+
+def schema_image_urls(value) -> list[str]:
+    """Return image URLs from the common schema.org string/list/object shapes."""
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        return [url for item in value for url in schema_image_urls(item)]
+    if isinstance(value, dict):
+        return [
+            url
+            for key in ("url", "contentUrl", "@id")
+            for url in schema_image_urls(value.get(key))
+        ]
+    return []
+
+
+def image_dimensions(path) -> tuple[int, int]:
+    """Read PNG/JPEG dimensions from file headers without a test dependency."""
+    data = path.read_bytes()
+    if data.startswith(b"\x89PNG\r\n\x1a\n"):
+        if len(data) < 24 or data[12:16] != b"IHDR":
+            raise AssertionError(f"Invalid PNG header: {path}")
+        return struct.unpack(">II", data[16:24])
+
+    if data.startswith(b"\xff\xd8"):
+        start_of_frame = {
+            0xC0, 0xC1, 0xC2, 0xC3,
+            0xC5, 0xC6, 0xC7,
+            0xC9, 0xCA, 0xCB,
+            0xCD, 0xCE, 0xCF,
+        }
+        cursor = 2
+        while cursor < len(data):
+            while cursor < len(data) and data[cursor] != 0xFF:
+                cursor += 1
+            while cursor < len(data) and data[cursor] == 0xFF:
+                cursor += 1
+            if cursor >= len(data):
+                break
+            marker = data[cursor]
+            cursor += 1
+            if marker in {0x01, 0xD8, 0xD9} or 0xD0 <= marker <= 0xD7:
+                continue
+            if cursor + 2 > len(data):
+                break
+            length = int.from_bytes(data[cursor:cursor + 2], "big")
+            if length < 2 or cursor + length > len(data):
+                break
+            if marker in start_of_frame and length >= 7:
+                height = int.from_bytes(data[cursor + 3:cursor + 5], "big")
+                width = int.from_bytes(data[cursor + 5:cursor + 7], "big")
+                return width, height
+            cursor += length
+        raise AssertionError(f"JPEG dimensions not found: {path}")
+
+    raise AssertionError(f"Unsupported social-image format: {path}")
 
 
 def linked_path(source: str, anchor: Anchor) -> str | None:
@@ -543,6 +601,89 @@ class SearchAndConversionTests(unittest.TestCase):
                     self.assertEqual(modified, self.sitemap[canonical])
                     checked += 1
         self.assertGreater(checked, 0, "Expected published article dates to be checked")
+
+    def test_article_social_cards_are_complete_and_match_published_images(self):
+        checked = 0
+        required_meta = (
+            "og:type",
+            "og:title",
+            "og:description",
+            "og:url",
+            "og:image",
+            "og:image:width",
+            "og:image:height",
+            "og:image:type",
+            "og:image:alt",
+            "twitter:card",
+            "twitter:title",
+            "twitter:description",
+            "twitter:image",
+            "twitter:image:alt",
+            "article:published_time",
+            "article:modified_time",
+        )
+        mime_by_suffix = {
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".png": "image/png",
+        }
+
+        for relative, document in self.documents.items():
+            article_nodes = [
+                node for node in schema_nodes(document)
+                if schema_types(node) & ARTICLE_TYPES
+                and node.get("url") in document.canonicals
+            ]
+            if not article_nodes:
+                continue
+
+            with self.subTest(page=relative):
+                self.assertEqual(len(article_nodes), 1, "Expected one canonical Article entity")
+                self.assertEqual(len(document.canonicals), 1, "Expected one canonical URL")
+                for key in required_meta:
+                    values = document.meta.get(key, [])
+                    self.assertEqual(len(values), 1, f"Expected one {key} meta tag")
+                    self.assertTrue(normalized(values[0]), f"Expected non-empty {key}")
+
+                canonical = document.canonicals[0]
+                article = article_nodes[0]
+                self.assertEqual(document.value("og:type"), "article")
+                self.assertEqual(document.value("twitter:card"), "summary_large_image")
+                self.assertEqual(document.value("og:url"), canonical)
+
+                og_image = document.value("og:image")
+                image_url = urlsplit(og_image)
+                self.assertEqual(
+                    (image_url.scheme, image_url.netloc),
+                    ("https", "balhence.com"),
+                    "Social image must use an absolute same-origin HTTPS URL",
+                )
+                self.assertEqual(document.value("twitter:image"), og_image)
+                self.assertIn(
+                    og_image,
+                    schema_image_urls(article.get("image")),
+                    "JSON-LD image must match the social card image",
+                )
+
+                image_target = local_target(relative, og_image)
+                self.assertIsNotNone(image_target)
+                image_relative = image_target[0]
+                self.assertIn(image_relative, PUBLIC_FILE_SET)
+                image_path = SOURCE_ROOT / image_relative
+                self.assertTrue(image_path.is_file(), "Social image must be a published file")
+
+                expected_mime = mime_by_suffix.get(image_path.suffix.lower())
+                self.assertIsNotNone(expected_mime, "Social image must be a JPEG or PNG")
+                self.assertEqual(document.value("og:image:type"), expected_mime)
+
+                width = document.value("og:image:width")
+                height = document.value("og:image:height")
+                self.assertRegex(width, r"\A[1-9]\d*\Z")
+                self.assertRegex(height, r"\A[1-9]\d*\Z")
+                self.assertEqual((int(width), int(height)), image_dimensions(image_path))
+                checked += 1
+
+        self.assertGreater(checked, 0, "Expected published article social cards to be checked")
 
     def test_collection_articles_match_their_linked_published_pages(self):
         checked = 0

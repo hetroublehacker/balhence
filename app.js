@@ -35,6 +35,7 @@
     initLeadForms();
     initQueryPrefill();
     initAnalyticsConsent();
+    initArticleSharing();
     initTrackedLinks();
   });
 
@@ -466,6 +467,186 @@
     });
     applyChoice();
     if (!choice && eligible) showBanner();
+  }
+
+  function initArticleSharing() {
+    const articleMeta = document.querySelector('meta[property="og:type"][content="article"]');
+    const articleContent = document.querySelector(".article-content");
+    if (!articleMeta || !articleContent || articleContent.querySelector("[data-article-share]")) return;
+
+    const canonical = document.querySelector('link[rel="canonical"]');
+    let articleUrl;
+    try {
+      articleUrl = new URL(canonical ? canonical.href : window.location.href);
+    } catch (error) {
+      return;
+    }
+    if (!/^https?:$/.test(articleUrl.protocol)) return;
+
+    const title = document.querySelector('meta[property="og:title"]')?.content.trim()
+      || document.querySelector("h1")?.textContent.trim()
+      || document.title;
+    const description = document.querySelector('meta[property="og:description"]')?.content.trim() || "";
+    const canonicalUrl = articleUrl.href;
+    const encodedUrl = encodeURIComponent(canonicalUrl);
+    const encodedTitle = encodeURIComponent(title);
+    const shareText = description ? `${title} - ${description}` : title;
+    const networks = [
+      ["linkedin", "LinkedIn", "in", `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`],
+      ["x", "X", "X", `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`],
+      ["facebook", "Facebook", "f", `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`],
+      ["whatsapp", "WhatsApp", "WA", `https://wa.me/?text=${encodeURIComponent(`${title} ${canonicalUrl}`)}`],
+      ["bluesky", "Bluesky", "BS", `https://bsky.app/intent/compose?text=${encodeURIComponent(`${title} ${canonicalUrl}`)}`],
+    ];
+
+    const section = document.createElement("section");
+    section.className = "article-share";
+    section.dataset.articleShare = "";
+    section.setAttribute("aria-labelledby", "article-share-title");
+
+    const intro = document.createElement("div");
+    intro.className = "article-share-intro";
+    const eyebrow = document.createElement("span");
+    eyebrow.className = "eyebrow";
+    eyebrow.textContent = "Worth passing on?";
+    const heading = document.createElement("h2");
+    heading.id = "article-share-title";
+    heading.textContent = "Share this article";
+    const copy = document.createElement("p");
+    copy.textContent = "Send the canonical link with its title, summary, and preview image.";
+    intro.append(eyebrow, heading, copy);
+
+    const menu = document.createElement("details");
+    menu.className = "article-share-menu";
+    const trigger = document.createElement("summary");
+    trigger.className = "btn btn-primary article-share-trigger";
+    const triggerLabel = document.createElement("span");
+    triggerLabel.textContent = "Share article";
+    const triggerMark = document.createElement("span");
+    triggerMark.className = "article-share-trigger-mark";
+    triggerMark.setAttribute("aria-hidden", "true");
+    triggerMark.textContent = "+";
+    trigger.append(triggerLabel, triggerMark);
+
+    const panel = document.createElement("div");
+    panel.className = "article-share-panel";
+    const options = document.createElement("div");
+    options.className = "article-share-options";
+    options.setAttribute("role", "list");
+
+    networks.forEach(([key, name, mark, href]) => {
+      const link = document.createElement("a");
+      link.className = "article-share-option";
+      link.href = href;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.referrerPolicy = "no-referrer";
+      link.dataset.network = key;
+      link.dataset.track = `share_${key}`;
+      link.setAttribute("role", "listitem");
+      link.setAttribute("aria-label", `Share on ${name}`);
+      const badge = document.createElement("span");
+      badge.className = "article-share-badge";
+      badge.setAttribute("aria-hidden", "true");
+      badge.textContent = mark;
+      const label = document.createElement("span");
+      label.textContent = name;
+      link.append(badge, label);
+      options.appendChild(link);
+    });
+
+    if (typeof navigator.share === "function") {
+      const nativeShare = document.createElement("button");
+      nativeShare.className = "article-share-option";
+      nativeShare.type = "button";
+      nativeShare.setAttribute("role", "listitem");
+      nativeShare.setAttribute("aria-label", "Share with another app");
+      const badge = document.createElement("span");
+      badge.className = "article-share-badge";
+      badge.setAttribute("aria-hidden", "true");
+      badge.textContent = "...";
+      const label = document.createElement("span");
+      label.textContent = "More apps";
+      nativeShare.append(badge, label);
+      nativeShare.addEventListener("click", async () => {
+        try {
+          await navigator.share({ title, text: shareText, url: canonicalUrl });
+          trackEvent("share", { method: "native", content_type: "article" });
+        } catch (error) {
+          if (error && error.name !== "AbortError") setShareStatus("Sharing is unavailable here. Choose a network instead.");
+        }
+      });
+      options.appendChild(nativeShare);
+    }
+
+    const copyButton = document.createElement("button");
+    copyButton.className = "article-share-option";
+    copyButton.type = "button";
+    copyButton.setAttribute("role", "listitem");
+    copyButton.setAttribute("aria-label", "Copy article link");
+    const copyBadge = document.createElement("span");
+    copyBadge.className = "article-share-badge";
+    copyBadge.setAttribute("aria-hidden", "true");
+    copyBadge.textContent = "<>";
+    const copyLabel = document.createElement("span");
+    copyLabel.textContent = "Copy link";
+    copyButton.append(copyBadge, copyLabel);
+    options.appendChild(copyButton);
+
+    const status = document.createElement("p");
+    status.className = "article-share-status";
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+    let statusTimer = null;
+    const setShareStatus = (message) => {
+      window.clearTimeout(statusTimer);
+      status.textContent = message;
+      statusTimer = window.setTimeout(() => { status.textContent = ""; }, 5000);
+    };
+    const fallbackCopy = () => {
+      const field = document.createElement("textarea");
+      field.value = canonicalUrl;
+      field.readOnly = true;
+      field.className = "article-share-copy-field";
+      document.body.appendChild(field);
+      field.select();
+      field.setSelectionRange(0, field.value.length);
+      let copied = false;
+      try { copied = document.execCommand("copy"); } catch (error) { copied = false; }
+      field.remove();
+      return copied;
+    };
+    copyButton.addEventListener("click", async () => {
+      let copied = false;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(canonicalUrl);
+          copied = true;
+        } catch (error) {
+          copied = false;
+        }
+      }
+      if (!copied) copied = fallbackCopy();
+      if (copied) {
+        copyLabel.textContent = "Copied";
+        setShareStatus("Article link copied.");
+        trackEvent("share", { method: "copy", content_type: "article" });
+        window.setTimeout(() => { copyLabel.textContent = "Copy link"; }, 3000);
+      } else {
+        setShareStatus("Copy is unavailable. Use your browser address bar instead.");
+      }
+    });
+
+    panel.append(options, status);
+    menu.append(trigger, panel);
+    section.append(intro, menu);
+
+    const insertionPoint = Array.from(articleContent.children).find((child) => (
+      child.classList.contains("research-author-note")
+      || child.classList.contains("article-cta")
+      || child.classList.contains("research-topic-line")
+    ));
+    articleContent.insertBefore(section, insertionPoint || null);
   }
 
   function disableAnalytics(gaId, clearCookies) {

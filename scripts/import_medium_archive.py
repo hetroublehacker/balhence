@@ -476,10 +476,42 @@ def json_script(value) -> str:
     return json.dumps(value, ensure_ascii=False, indent=2).replace("</", "<\\/")
 
 
+def social_image_metadata(body) -> tuple[str, int, int, str, str]:
+    """Describe the imported lead image for Open Graph and Twitter cards."""
+    lead_image = body.find("img")
+    if lead_image:
+        source = lead_image.get("src", "")
+        width = lead_image.get("width", "")
+        height = lead_image.get("height", "")
+        alt = lead_image.get("alt", "").strip()
+        if not source.startswith("/assets/research/"):
+            raise RuntimeError(f"Unexpected lead image path: {source}")
+        if not width.isdigit() or int(width) < 1 or not height.isdigit() or int(height) < 1:
+            raise RuntimeError(f"Invalid lead image dimensions: {source} ({width}x{height})")
+        if not alt:
+            raise RuntimeError(f"Missing lead image alt text: {source}")
+        width, height = int(width), int(height)
+    else:
+        source = "/og-image.png"
+        alt = "Balhence security testing and research."
+        with Image.open(ROOT / source.lstrip("/")) as image:
+            width, height = image.size
+
+    mime_type = {
+        ".gif": "image/gif",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".webp": "image/webp",
+    }.get(Path(source).suffix.lower())
+    if mime_type is None:
+        raise RuntimeError(f"Unsupported social image type: {source}")
+    return f"https://balhence.com{source}", width, height, mime_type, alt
+
+
 def page_html(post: Post, title: str, creator: str, categories: list[str], body, body_hash: str, minutes: int) -> str:
     local_url = f"https://balhence.com/{post.output}"
-    lead_image = body.find("img")
-    og_image = f"https://balhence.com{lead_image['src']}" if lead_image else "https://balhence.com/og-image.png"
+    og_image, og_image_width, og_image_height, og_image_type, og_image_alt = social_image_metadata(body)
     description = post.description
     tags = " / ".join(categories)
     structured = {
@@ -578,16 +610,21 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
   <meta property="og:description" content="{escaped(description)}">
   <meta property="og:url" content="{local_url}">
   <meta property="og:image" content="{escaped(og_image)}">
+  <meta property="og:image:width" content="{og_image_width}">
+  <meta property="og:image:height" content="{og_image_height}">
+  <meta property="og:image:type" content="{og_image_type}">
+  <meta property="og:image:alt" content="{escaped(og_image_alt)}">
   <meta property="article:published_time" content="{post.published}">
   <meta property="article:modified_time" content="{LOCAL_MODIFIED}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{escaped(title)}">
   <meta name="twitter:description" content="{escaped(description)}">
   <meta name="twitter:image" content="{escaped(og_image)}">
+  <meta name="twitter:image:alt" content="{escaped(og_image_alt)}">
   <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20261106a">
+  <link rel="stylesheet" href="/styles.css?v=20261116b">
   <link rel="stylesheet" href="/motion.css?v=20260930b">
   <link rel="stylesheet" href="/flow.css?v=20261001b">
   <link rel="stylesheet" href="/type-field.css?v=20261001f">
@@ -619,7 +656,7 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
   </main>
 
   <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Security testing, research, and engineering.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">Approach</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Resources</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/blog.html">Penetration testing guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
-  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261006a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261116b"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
 </body>
 </html>
 '''

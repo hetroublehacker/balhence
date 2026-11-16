@@ -130,6 +130,15 @@ async function main() {
     assert.equal(await page.locator("[data-archive-card]").count(), ARTICLES.length);
     assert.equal(await page.locator("[data-archive-card]:visible").count(), ARTICLES.length);
     assert.equal(await page.locator("[data-field-note-card]").count(), FIELD_NOTES.length);
+    assert.equal(await page.locator("[data-archive-card] .case-card-media img").count(), ARTICLES.length);
+    for (const image of await page.locator("[data-archive-card] .case-card-media img").all()) {
+      assert.equal(await image.getAttribute("loading"), "lazy");
+      assert.equal(await image.getAttribute("decoding"), "async");
+      assert.equal(await image.getAttribute("fetchpriority"), "low");
+      assert.ok(Number(await image.getAttribute("width")) > 0);
+      assert.ok(Number(await image.getAttribute("height")) > 0);
+      assert.ok((await image.getAttribute("alt")).trim().length > 0);
+    }
     assert.equal(await page.locator('#bug-bounty-archive[aria-labelledby]').count(), 1);
     const cardLabels = await page.locator("[data-archive-card] a[aria-labelledby]").evaluateAll(links => links.map(link => link.getAttribute("aria-labelledby")));
     assert.equal(cardLabels.length, ARTICLES.length, "Every archive card link should name its title");
@@ -172,8 +181,44 @@ async function main() {
       assert.match(await page.locator(".research-article-body").innerText(), /Publication note:/);
       assert.ok(await page.locator('a[href="/about.html#researcher"]').count() > 0);
       assert.ok(await page.locator('a[href="/blogs.html#bug-bounty-archive"]').count() > 0, `${route} should link back to the collection`);
+      assert.equal(await page.locator("[data-article-share]").count(), 1, `${route} should expose one share control`);
     }
     pass("Every field note uses the first-person research shell with synthetic evidence and archive links");
+
+    const [shareRoute, shareTitle] = FIELD_NOTES[0];
+    await page.goto(`${origin}${shareRoute}`);
+    const shareMenu = page.locator("[data-article-share] details");
+    const shareTrigger = shareMenu.locator("summary");
+    await shareTrigger.focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await shareMenu.getAttribute("open"), "");
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+    const shareLinks = await page.locator("[data-article-share] a[data-network]").evaluateAll(links => links.map(link => ({
+      network: link.dataset.network,
+      href: link.href,
+      target: link.target,
+      rel: link.rel,
+      label: link.getAttribute("aria-label"),
+    })));
+    assert.deepEqual(shareLinks.map(link => link.network), ["linkedin", "x", "facebook", "whatsapp", "bluesky"]);
+    for (const link of shareLinks) {
+      assert.equal(link.target, "_blank");
+      assert.match(link.rel, /\bnoopener\b/);
+      assert.match(link.rel, /\bnoreferrer\b/);
+      assert.match(link.label, /^Share on /);
+      const destination = new URL(link.href);
+      const sharedValue = destination.searchParams.get(link.network === "facebook" ? "u" : link.network === "linkedin" || link.network === "x" ? "url" : "text");
+      assert.ok(sharedValue && sharedValue.includes(link.network === "whatsapp" || link.network === "bluesky" ? canonical : canonical));
+    }
+    assert.equal(await page.locator('[data-article-share] button[aria-label="Copy article link"]').count(), 1);
+    assert.equal((await page.locator("#article-share-title").innerText()).trim(), "Share this article");
+    assert.equal((await page.locator("h1").innerText()).trim(), shareTitle);
+    pass("The article share control is keyboard-openable and uses the canonical URL for five safe network links");
+
+    await page.goto(`${origin}/insights/vulnerability-assessment-vs-penetration-testing.html`);
+    assert.equal(await page.locator("[data-article-share]").count(), 1);
+    assert.equal(await page.locator("[data-article-share] a[data-network]").count(), 5);
+    pass("The same share control appears on the practical guide article shell");
 
     await page.goto(`${origin}/blog.html`);
     assert.equal(await page.locator(".insight-card").count(), 5);
@@ -234,6 +279,7 @@ async function main() {
         await page.goto(`${origin}${route}`);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${route} overflows at ${width}px`);
         assert.equal(await page.locator("h1").count(), 1);
+        if (route !== "/blogs.html") assert.equal(await page.locator("[data-article-share]").count(), 1, `${route} needs one share control at ${width}px`);
         if (!RESEARCH_ROUTES.has(route)) {
           assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${route} contains non-ASCII body text at ${width}px`);
         }
