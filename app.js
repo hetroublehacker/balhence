@@ -5,7 +5,7 @@
   let analyticsEnabled = false;
   // Fixed editorial labels, not arbitrary query text or visitor identifiers.
   const enquirySources = new Set([
-    "home-nav", "home-hero", "home-faq", "home-closing",
+    "home-nav", "home-hero", "home-faq", "home-closing", "pricing",
     "web-pentest", "api-pentest", "saas-pentest", "india-pentest", "services",
     "cloud-pentest", "network-pentest",
     "pentest-guides", "field-notes", "scope-planner", "sample-report",
@@ -18,6 +18,9 @@
     "ai-pentest", "ptaas-pentest", "usa-pentest",
     "does-soc-2-require-penetration-testing", "how-to-plan-llm-security-testing",
     "pci-segmentation-guide", "ptaas-vs-annual-penetration-test",
+    "about-hero", "about-bottom", "attack-path-pilot", "trust-standards",
+    "async-export-authorization", "server-side-url-import",
+    "ai-agent-mcp-root-rce", "mixed-batch-authorization", "research-archive",
   ]);
 
   document.documentElement.classList.add("js");
@@ -76,7 +79,7 @@
     const menu = document.querySelector("[data-menu]");
     if (!toggle || !menu) return;
 
-    const mobileQuery = window.matchMedia("(max-width: 860px)");
+    const mobileQuery = window.matchMedia("(max-width: 960px)");
     const isMobile = () => mobileQuery.matches;
     const backgroundState = new Map();
 

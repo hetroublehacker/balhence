@@ -104,7 +104,7 @@ async function waitForMotionState(page, expected) {
     await page.locator("[data-consent-decline]").click();
     await page.waitForTimeout(1300);
     assert.equal(await page.locator("h1").count(), 1);
-    assert.equal(await page.locator("main > section").count(), 5);
+    assert.equal(await page.locator("main > section").count(), 8);
     const fonts = await page.evaluate(() => ({
       body: getComputedStyle(document.body).fontFamily,
       accent: getComputedStyle(document.querySelector(".hero-line-serif")).fontFamily,
@@ -114,7 +114,7 @@ async function waitForMotionState(page, expected) {
     assert.match(fonts.accent, /Newsreader/);
     assert.ok(fonts.loaded.includes("Bricolage Grotesque"));
     assert.ok(fonts.loaded.includes("Newsreader"));
-    pass("The homepage with its compliance and AI section loads its local sans and editorial serif fonts");
+    pass("The expanded homepage loads its local sans and editorial serif fonts");
 
     await assertSystemLabels(page.locator(SECURITY_MAP));
     const homeHeader = await headerStyleTokens(page);
@@ -273,7 +273,7 @@ async function waitForMotionState(page, expected) {
     await nojs.goto(origin);
     assert.equal(await nojs.locator("h1").isVisible(), true);
     assert.equal(await nojs.locator(".nav-menu").isVisible(), true);
-    assert.equal(await nojs.locator("main > section").count(), 5);
+    assert.equal(await nojs.locator("main > section").count(), 8);
     assert.equal(await nojs.locator(".security-fallback").isVisible(), true);
     await assertSystemLabels(nojs.locator(SECURITY_MAP));
     assert.equal(await nojs.locator(CANVAS).isVisible(), false);

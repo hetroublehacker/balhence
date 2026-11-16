@@ -81,6 +81,14 @@ const GUIDES = [
       }
       pass(`Launch guides and service hubs fit ${width}px`);
     }
+    await page.setViewportSize({ width: 900, height: 1000 });
+    await page.goto(`${origin}/services.html`);
+    assert.equal(await page.locator("[data-menu-toggle]").isVisible(), true);
+    assert.equal(await page.locator("[data-menu]").isVisible(), false);
+    await page.locator("[data-menu-toggle]").click();
+    assert.equal(await page.locator("[data-menu]").isVisible(), true);
+    await page.locator("[data-menu-toggle]").click();
+    pass("The expanded primary navigation switches to its collision-free menu before narrow desktop widths");
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${origin}/soc-2-penetration-testing.html`);
     const toggle = page.locator("[data-menu-toggle]");

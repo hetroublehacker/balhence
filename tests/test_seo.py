@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from html.parser import HTMLParser
 import unittest
+import re
 from urllib.parse import parse_qs, urlsplit
 import xml.etree.ElementTree as ET
 
@@ -33,6 +34,8 @@ COMMERCIAL_PAGES = (
     "cloud-penetration-testing.html",
     "network-penetration-testing.html",
     "services.html",
+    "attack-path-validation.html",
+    "pricing.html",
 )
 ENQUIRY_SERVICES = {
     "soc-2-penetration-testing.html": "soc2",
@@ -43,6 +46,7 @@ ENQUIRY_SERVICES = {
     "penetration-testing-as-a-service.html": "ptaas",
     "cloud-penetration-testing.html": "cloud",
     "network-penetration-testing.html": "infrastructure",
+    "attack-path-validation.html": "attack-path",
 }
 SITEMAP_NAMESPACE = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 ARTICLE_TYPES = {"Article", "BlogPosting", "TechArticle"}
@@ -406,6 +410,7 @@ class SearchAndConversionTests(unittest.TestCase):
         self.assertEqual(len(names), len(urls))
         expected = {
             "services.html",
+            "attack-path-validation.html",
             "compliance-penetration-testing.html",
             "soc-2-penetration-testing.html",
             "pci-dss-penetration-testing.html",
@@ -417,10 +422,91 @@ class SearchAndConversionTests(unittest.TestCase):
             "penetration-testing-india.html",
             "penetration-testing-services-usa.html",
             "about.html",
+            "pricing.html",
             "blogs.html",
             "contact.html",
         }
         self.assertEqual({urlsplit(url).path.lstrip("/") for url in urls}, expected)
+
+    def test_contact_service_query_values_exist_in_the_form(self):
+        contact = (SOURCE_ROOT / "contact.html").read_text(encoding="utf-8")
+        service_select = re.search(r'<select id="service"[^>]*>(.*?)</select>', contact, re.DOTALL)
+        self.assertIsNotNone(service_select)
+        valid = set(re.findall(r'<option value="([^"]*)"', service_select.group(1)))
+        valid.discard("")
+        for relative, document in self.documents.items():
+            for anchor in document.anchors:
+                target = linked_path(relative, anchor)
+                values = parse_qs(urlsplit(anchor.href).query).get("service", [])
+                if target != "contact.html" or not values:
+                    continue
+                with self.subTest(page=relative, href=anchor.href):
+                    self.assertIn(values[0], valid)
+
+    def test_published_pricing_is_consistent_across_buyer_paths(self):
+        pricing = normalized((SOURCE_ROOT / "pricing.html").read_text(encoding="utf-8"))
+        for amount in ("$1,500", "$3,500", "$5,500", "$6,500", "$4,500", "$2,500"):
+            with self.subTest(amount=amount):
+                self.assertIn(amount, pricing)
+        for statement in (
+            "starting price, then fixed fee",
+            "you approve the final scope and fixed price before testing",
+            "exclude applicable taxes and agreed third-party costs",
+            "one bounded re-test",
+        ):
+            with self.subTest(statement=statement):
+                self.assertIn(statement, pricing)
+
+        expected = {
+            "index.html": ("$1,500", "$3,500"),
+            "services.html": ("$1,500", "$3,500", "$2,000 / cycle"),
+            "insights/web-api-pentest-cost-scope-guide.html": ("$1,500", "$3,500", "$5,500"),
+            "contact.html": ("published starting prices",),
+        }
+        for relative, values in expected.items():
+            source = normalized((SOURCE_ROOT / relative).read_text(encoding="utf-8"))
+            with self.subTest(page=relative):
+                self.assertIn('href="/pricing.html"', source)
+                for value in values:
+                    self.assertIn(value, source)
+
+    def test_attack_path_page_separates_available_and_planned_capabilities(self):
+        relative = "attack-path-validation.html"
+        source = normalized((SOURCE_ROOT / relative).read_text(encoding="utf-8"))
+        for statement in (
+            "available by scope",
+            "by written scope",
+            "design partner",
+            "planned",
+            "not autonomous production testing",
+            "in development",
+        ):
+            with self.subTest(statement=statement):
+                self.assertIn(statement, source)
+        self.assertFalse(any(
+            "SoftwareApplication" in schema_types(node)
+            for node in schema_nodes(self.documents[relative])
+        ))
+
+    def test_private_report_proof_is_conservative_and_qualified(self):
+        home = normalized((SOURCE_ROOT / "index.html").read_text(encoding="utf-8"))
+        about = normalized((SOURCE_ROOT / "about.html").read_text(encoding="utf-8"))
+        for statement in (
+            "1,100+",
+            "690+",
+            "three private submission archives",
+            "do not claim that every report was accepted, paid, resolved",
+            "program and target identities",
+        ):
+            with self.subTest(statement=statement):
+                self.assertIn(statement, about)
+        self.assertIn("120+", about)
+        self.assertIn("templates, reserved records and low-structure artifacts are excluded", home)
+        self.assertIn("not acceptance, payout or final-severity totals", home)
+        for unsafe_exact_total in ("1,141", "1,178", "741"):
+            with self.subTest(unsafe_exact_total=unsafe_exact_total):
+                self.assertNotIn(unsafe_exact_total, home)
+                self.assertNotIn(unsafe_exact_total, about)
 
     def test_sitemap_lastmod_dates_are_iso_dates_and_not_in_the_future(self):
         today = datetime.now(timezone.utc).date()

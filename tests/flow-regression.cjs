@@ -148,9 +148,9 @@ async function main() {
       await page.goto(`${origin}/services.html`);
       await page.evaluate(() => document.fonts.ready);
       const nav = ".page-flow nav";
-      await page.locator(`${nav} a[href="#packages-title"]`).click();
-      await expectCurrent(page, nav, "#packages-title");
-      await expectJumpBelowHeader(page, "#packages-title", ".page-flow");
+      await page.locator(`${nav} a[href="#pricing"]`).click();
+      await expectCurrent(page, nav, "#pricing");
+      await expectJumpBelowHeader(page, "#pricing", ".page-flow");
       // Wheel input advances the page independently of dock clicks.
       await page.mouse.move(1250, 700);
       const distance = await page.locator("#included-title").evaluate(element => element.getBoundingClientRect().top - 100);

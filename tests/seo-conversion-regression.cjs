@@ -23,6 +23,8 @@ const BUYER_ROUTES = [
   ["/cloud-penetration-testing.html", "cloud-pentest", "cloud"],
   ["/network-penetration-testing.html", "network-pentest", "infrastructure"],
   ["/insights/pci-dss-network-segmentation-testing.html", "pci-segmentation-guide", "pci"],
+  ["/attack-path-validation.html", "attack-path-pilot", "attack-path"],
+  ["/pricing.html", "pricing"],
 
   ["/", "home-hero"],
   ["/penetration-testing-india.html", "india-pentest"],
@@ -45,7 +47,7 @@ const SOURCES = [
   "pci-segmentation-guide",
   "ptaas-vs-annual-penetration-test",
 
-  "home-nav", "home-hero", "home-faq", "home-closing",
+  "home-nav", "home-hero", "home-faq", "home-closing", "pricing",
   "web-pentest", "api-pentest", "saas-pentest", "india-pentest", "services",
   "pentest-guides", "field-notes", "scope-planner", "sample-report",
   "draft-write-authorization", "session-authority-boundary",
@@ -53,6 +55,9 @@ const SOURCES = [
   "evidence-gated-workflows", "how-to-scope-web-api-pentest",
   "what-good-pentest-report-includes", "saas-vapt-readiness-checklist",
   "web-api-pentest-cost-scope-guide", "ai-native-penetration-testing-human-validated",
+  "about-hero", "about-bottom", "attack-path-pilot", "trust-standards",
+  "async-export-authorization", "server-side-url-import",
+  "ai-agent-mcp-root-rce", "mixed-batch-authorization", "research-archive",
 ];
 
 async function availablePort() {
@@ -161,7 +166,7 @@ async function main() {
         assert.equal(await cta.isVisible(), true);
         // The homepage uses conversational copy; every route still leads to
         // the same explicit pentest intake with its own attribution label.
-        assert.match((await cta.textContent()).trim(), /pentest|penetration test|project|building/i);
+        assert.match((await cta.textContent()).trim(), /pentest|penetration test|assessment|testing|validation|project|building|scope|price/i);
         const destination = new URL(await cta.getAttribute("href"), origin);
         assert.equal(destination.searchParams.get("service"), service);
         assert.equal(destination.searchParams.get("source"), source);

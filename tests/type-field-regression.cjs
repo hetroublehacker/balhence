@@ -35,7 +35,7 @@ async function pixels(page) {
     for (let offset = 0; offset < data.length; offset += 4) {
       if (data[offset + 3]) painted++;
       if (Math.max(data[offset], data[offset + 1], data[offset + 2]) > 40) ink++;
-      // The authored renderer fills an opaque background on every frame.
+      // The passive renderer fills an opaque background on every frame.
       // An alpha-only checksum cannot detect whether its rings are moving.
       hash = Math.imul(hash ^ data[offset], 16777619);
       hash = Math.imul(hash ^ data[offset + 1], 16777619);
@@ -77,26 +77,6 @@ async function expectMoving(page) {
   assert.ok(changed, "The rendered field should advance while motion is allowed");
 }
 
-async function localInk(page, point) {
-  return page.locator(FIELD).evaluate((canvas, point) => {
-    const bounds = canvas.getBoundingClientRect();
-    const scale = canvas.width / bounds.width;
-    const x = Math.round((point.x - bounds.x) * scale);
-    const y = Math.round((point.y - bounds.y) * scale);
-    const radius = Math.round(55 * scale);
-    const left = Math.max(0, x - radius);
-    const top = Math.max(0, y - radius);
-    const width = Math.min(canvas.width - left, radius * 2);
-    const height = Math.min(canvas.height - top, radius * 2);
-    const { data } = canvas.getContext("2d").getImageData(left, top, width, height);
-    let ink = 0;
-    for (let offset = 0; offset < data.length; offset += 4) {
-      if (Math.max(data[offset], data[offset + 1], data[offset + 2]) > 70) ink++;
-    }
-    return ink;
-  }, point);
-}
-
 async function main() {
   const port = await availablePort();
   const origin = `http://127.0.0.1:${port}`;
@@ -134,6 +114,12 @@ async function main() {
           const url = new URL(request.url());
           if (/(?:fragment-mono|threeui\.css)/i.test(url.pathname)) retiredAnimationAssets.push(request.url());
           if (url.origin !== origin) {
+            // The preserved first-party research imports include lazy Embedly
+            // frames from the original articles. Block those known frames in
+            // local tests; they are unrelated to the shared animation asset.
+            if (url.hostname === "cdn.embedly.com" && request.resourceType() === "document") {
+              return route.abort();
+            }
             external.push(request.url());
             return route.abort();
           }
@@ -287,34 +273,32 @@ async function main() {
       await expectMoving(page);
     });
 
-    await check("Mouse movement dissolves the authored rings without moving foreground content", {}, async page => {
+    await check("Pointer movement cannot dissolve, displace, or add particles to the passive field", {}, async page => {
       await open(page, "/services.html");
       await expectMoving(page);
       const bounds = await page.locator(HOST).boundingBox();
       const heading = await page.locator("h1").boundingBox();
       const point = { x: bounds.x + bounds.width * .8, y: bounds.y + bounds.height * .55 };
-      const before = await localInk(page, point);
-      assert.ok(before > 50, "The pointer sample should cover visible glyphs before dissolution");
+      const bundle = readFileSync(path.join(ROOT, "type-field.js"), "utf8");
+      assert.doesNotMatch(bundle, /pointer(?:enter|move|down)|dissolv|suction|particle/i, "The production bundle must not contain retired interaction paths");
+      assert.equal(await page.locator(VORTEX).getAttribute("data-interaction-state"), "none");
       await page.mouse.move(point.x, point.y);
-      await page.waitForFunction(selector => {
-        const vortex = document.querySelector(selector);
-        return vortex?.dataset.dissolveState === "active" && Number(vortex.dataset.dissolveStrength) >= .98;
-      }, VORTEX);
-      assert.ok(await localInk(page, point) < before * .65, "The pointer must erase glyph pixels near its center, beyond normal ring rotation");
-      await page.waitForFunction(selector => Number(document.querySelector(selector)?.dataset.particles) > 0, VORTEX);
-      assert.deepEqual(await page.locator("h1").boundingBox(), heading, "Pointer effects must not shift foreground content");
+      await page.waitForTimeout(250);
+      assert.equal(await page.locator(VORTEX).getAttribute("data-interaction-state"), "none");
+      assert.equal(await page.locator(VORTEX).getAttribute("data-dissolve-state"), null);
+      assert.equal(await page.locator(VORTEX).getAttribute("data-suction-state"), null);
+      assert.equal(await page.locator(VORTEX).getAttribute("data-particles"), null);
+      assert.deepEqual(await page.locator("h1").boundingBox(), heading, "Pointer movement must not shift foreground content");
       assert.equal(await page.locator(WRAPPER).evaluate(element => getComputedStyle(element).pointerEvents), "none");
       await page.mouse.move(heading.x + heading.width / 2, heading.y + heading.height / 2);
-      assert.equal(await page.locator(VORTEX).getAttribute("data-dissolve-state"), "active", "Pointer movement over content should remain connected to the decorative renderer");
-      await page.mouse.move(1, 1);
-      await page.waitForFunction(selector => document.querySelector(selector)?.dataset.dissolveState === "ambient", VORTEX);
+      assert.equal(await page.locator(VORTEX).getAttribute("data-interaction-state"), "none");
       await page.emulateMedia({ reducedMotion: "reduce" });
       await expectFallback(page);
       await page.mouse.move(point.x, point.y);
       assert.equal(await page.locator(FIELD).count(), 0, "Pointer input must not restart animation under reduced motion");
     });
 
-    await check("A background click starts suction and the authored interaction returns to idle", {}, async page => {
+    await check("A background click never starts suction or changes navigation", {}, async page => {
       await open(page, "/services.html");
       await expectMoving(page);
       const point = await page.locator(HOST).evaluate(host => {
@@ -327,9 +311,9 @@ async function main() {
         throw new Error("No non-interactive hero surface is available for the click check");
       });
       await page.mouse.click(point.x, point.y);
-      await page.waitForFunction(selector => document.querySelector(selector)?.dataset.suctionState === "active", VORTEX);
-      await page.waitForFunction(selector => document.querySelector(selector)?.dataset.suctionState === "idle", VORTEX);
       assert.equal(new URL(page.url()).pathname, "/services.html", "A decorative click should not navigate the page");
+      assert.equal(await page.locator(VORTEX).getAttribute("data-interaction-state"), "none");
+      assert.equal(await page.locator(VORTEX).getAttribute("data-suction-state"), null);
       await expectMoving(page);
     });
 
@@ -363,6 +347,7 @@ async function main() {
           assert.equal(await page.locator(FIELD).count(), 1, `${pathname}: one decorative field`);
           assert.equal(await page.locator(WRAPPER).getAttribute("aria-hidden"), "true", `${pathname}: the decorative scene is hidden from assistive technology`);
           assert.equal(await page.locator(`${WRAPPER} > .shader-frame > .typography-vortex-component`).count(), 1, `${pathname}: one native scene wrapper contains the renderer`);
+          assert.equal(await page.locator(VORTEX).getAttribute("data-interaction-state"), "none", `${pathname}: no pointer or click interaction path`);
           const layout = await page.locator(FIELD).evaluate(canvas => {
             const host = canvas.closest(".type-field-host");
             const bounds = canvas.getBoundingClientRect();

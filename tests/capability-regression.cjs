@@ -9,9 +9,10 @@ const { spawn } = require("node:child_process");
 const { chromium } = require("playwright");
 
 const SERVICES = [
-  "web-api", "release-check", "assurance", "mobile", "cloud", "external",
-  "infrastructure", "identity", "ai", "code", "devsecops", "detection",
-  "readiness", "specialist", "custom", "soc2", "pci", "hipaa", "compliance", "ptaas", "not-sure",
+  "web-api", "ai", "release-check", "assurance", "attack-path", "ptaas",
+  "cloud", "infrastructure", "compliance", "mobile", "external", "identity",
+  "code", "devsecops", "detection", "readiness", "specialist", "custom",
+  "soc2", "pci", "hipaa", "not-sure",
 ];
 const ROUTES = [
   "web-api", "mobile", "external", "cloud", "infrastructure", "identity",
@@ -68,7 +69,7 @@ async function main() {
     }
     await page.goto(`${origin}/contact.html?service=unknown-area`);
     assert.equal(await page.locator("#service").inputValue(), "");
-    pass("All 21 service categories preselect safely; unknown values do not become choices");
+    pass(`All ${SERVICES.length} service categories preselect safely; unknown values do not become choices`);
 
     await page.goto(`${origin}/scope-builder.html`);
     assert.match(await page.locator("#builder-title").textContent(), /web or API/i);

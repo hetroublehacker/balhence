@@ -13,6 +13,7 @@ from build_public import PUBLIC_FILE_SET, SOURCE_ROOT
 
 
 ANONYMIZED_STORIES = (
+    "insights/mixed-batch-authorization.html",
     "insights/ai-agent-mcp-root-rce.html",
     "insights/async-export-authorization.html",
     "insights/server-side-url-import.html",
@@ -23,6 +24,11 @@ ANONYMIZED_STORIES = (
     "insights/evidence-gated-workflows.html",
 )
 STORY_IMAGES = {
+    "insights/mixed-batch-authorization.html": {
+        "asset": "assets/research/field-note-mixed-batch-authorization.jpg",
+        "alt": "One permitted paper page opening a checkpoint for an entire mixed batch, including a foreign page.",
+        "caption": "Original tactile editorial studio photograph for this anonymized field note.",
+    },
     "insights/ai-agent-mcp-root-rce.html": {
         "asset": "assets/research/field-note-ai-agent-mcp-root-rce.jpg",
         "alt": "A draft AI agent launching a local MCP tool inside a privileged server runtime.",
@@ -65,6 +71,10 @@ STORY_IMAGES = {
     },
 }
 STORY_TOOLS = {
+    "insights/mixed-batch-authorization.html": (
+        "AutoRepeater",
+        "https://github.com/nccgroup/AutoRepeater",
+    ),
     "insights/ai-agent-mcp-root-rce.html": (
         "Agent Scan",
         "https://github.com/snyk/agent-scan",
@@ -196,12 +206,12 @@ def structured_nodes(source: str) -> list[dict]:
 
 
 class CaseStudyPublicationTests(unittest.TestCase):
-    def test_collection_has_eight_field_notes_and_eighteen_distinct_articles(self):
+    def test_collection_has_nine_field_notes_and_nineteen_distinct_articles(self):
         page = EditorialDocument((SOURCE_ROOT / "blogs.html").read_text(encoding="utf-8"))
         self.assertEqual(page.archive_cards, len(ARCHIVE))
         self.assertEqual(page.field_note_cards, len(ANONYMIZED_STORIES))
-        self.assertEqual(len(ARCHIVE), 18)
-        self.assertEqual(len(set(ARCHIVE)), 18)
+        self.assertEqual(len(ARCHIVE), 19)
+        self.assertEqual(len(set(ARCHIVE)), 19)
         for article in ARCHIVE:
             with self.subTest(article=article):
                 self.assertIn(article, PUBLIC_FILE_SET)

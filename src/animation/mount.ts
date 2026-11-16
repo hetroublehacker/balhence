@@ -1,18 +1,15 @@
 import {
-  createTypographyVortexRenderer,
-  type TypographyVortexOptions,
-} from "../../vendor/threeui/src/shaders/typography-vortex/typographyVortexRenderer";
+  createPassiveTypographyField,
+  type PassiveTypographyOptions,
+} from "./passiveTypographyField";
 
 // Native site adapter: no React, remote code, or font-loading prerequisite.
-const options: TypographyVortexOptions = {
+const options: PassiveTypographyOptions = {
   mode: "dark",
   phrase: "BALHENCE / PENETRATION TESTING / WEB & API SECURITY / SAAS / CLOUD / IDENTITY / AI & LLM SECURITY / ",
   speed: 1,
   ringGrowth: 1.21,
   opacity: 1,
-  dissolveRadius: 1,
-  particleAmount: 1,
-  suctionDuration: 920,
 };
 const selector = ".home-hero, .page-hero, .article-hero, .report-hero, .sb-hero, .not-found, .ctf-page";
 
@@ -32,7 +29,6 @@ function initialize(hero: HTMLElement) {
     connection?: EventTarget & { saveData?: boolean };
   }).connection;
   let field: HTMLDivElement | null = null;
-  let scene: HTMLDivElement | null = null;
   let dispose: (() => void) | null = null;
   const supported = Boolean(document.createElement("canvas").getContext("2d"));
 
@@ -43,7 +39,6 @@ function initialize(hero: HTMLElement) {
       dispose = null;
       field?.remove();
       field = null;
-      scene = null;
       hero.dataset.typeFieldState = supported ? "static" : "unavailable";
       return;
     }
@@ -53,37 +48,17 @@ function initialize(hero: HTMLElement) {
     field.setAttribute("aria-hidden", "true");
     const frame = document.createElement("div");
     frame.className = "shader-frame";
-    scene = document.createElement("div");
+    const scene = document.createElement("div");
     scene.className = "typography-vortex-component typography-vortex-component--dark";
     scene.dataset.mode = options.mode;
-    scene.dataset.dissolveState = "ambient";
-    scene.dataset.suctionState = "idle";
-    scene.dataset.particles = "0";
-    scene.dataset.dissolveStrength = "0.00";
+    scene.dataset.interactionState = "none";
     const canvas = document.createElement("canvas");
     scene.append(canvas);
     frame.append(scene);
     field.append(frame);
     hero.prepend(field);
-    dispose = createTypographyVortexRenderer(scene, canvas, () => options);
+    dispose = createPassiveTypographyField(scene, canvas, () => options);
     hero.dataset.typeFieldState = "running";
-  }
-
-  function forwardPointer(event: PointerEvent) {
-    if (!field || field.contains(event.target as Node)) return;
-    scene?.dispatchEvent(new PointerEvent(event.type, {
-      clientX: event.clientX,
-      clientY: event.clientY,
-      pointerId: event.pointerId,
-      pointerType: event.pointerType,
-      isPrimary: event.isPrimary,
-      button: event.button,
-      buttons: event.buttons,
-    }));
-  }
-
-  for (const type of ["pointerenter", "pointermove", "pointerleave", "pointerdown"] as const) {
-    hero.addEventListener(type, forwardPointer, { passive: true });
   }
   for (const query of preferences) query.addEventListener("change", synchronize);
   connection?.addEventListener("change", synchronize);

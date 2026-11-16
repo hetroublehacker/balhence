@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com; connect-src 'self' https://formspree.io https://*.google-analytics.com https://www.googletagmanager.com; object-src 'self'; base-uri 'self'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The One Good ID That Authorized the Whole Batch | Balhence</title>
+  <meta name="description" content="An anonymized field note about a batch authorization flaw where one owned object caused foreign objects in the same request to be copied, moved, and deleted.">
+  <meta name="author" content="Aditya Soni">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://balhence.com/insights/mixed-batch-authorization.html">
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Balhence">
+  <meta property="og:title" content="The One Good ID That Authorized the Whole Batch">
+  <meta property="og:description" content="A foreign object was denied alone. Add one owned object to the same array, and the server trusted the whole batch.">
+  <meta property="og:url" content="https://balhence.com/insights/mixed-batch-authorization.html">
+  <meta property="og:image" content="https://balhence.com/assets/research/field-note-mixed-batch-authorization.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="One permitted paper page opening a checkpoint for an entire mixed batch, including a foreign page.">
+  <meta property="article:published_time" content="2026-11-15">
+  <meta property="article:modified_time" content="2026-11-15">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The One Good ID That Authorized the Whole Batch">
+  <meta name="twitter:description" content="A first-person field note about one owned object authorizing every object in a mixed batch.">
+  <meta name="twitter:image" content="https://balhence.com/assets/research/field-note-mixed-batch-authorization.jpg">
+  <meta name="twitter:image:alt" content="One permitted paper page opening a checkpoint for an entire mixed batch, including a foreign page.">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20261116a">
+  <link rel="stylesheet" href="/motion.css?v=20260930b">
+  <link rel="stylesheet" href="/flow.css?v=20261001b">
+  <link rel="stylesheet" href="/type-field.css?v=20261001f">
+  <script async src="/type-field.js?v=20261116a"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://balhence.com/insights/mixed-batch-authorization.html#webpage",
+        "url": "https://balhence.com/insights/mixed-batch-authorization.html",
+        "name": "The One Good ID That Authorized the Whole Batch",
+        "description": "An anonymized field note about a batch authorization flaw where one owned object caused foreign objects in the same request to be copied, moved, and deleted.",
+        "datePublished": "2026-11-15",
+        "dateModified": "2026-11-15",
+        "inLanguage": "en",
+        "mainEntity": { "@id": "https://balhence.com/insights/mixed-batch-authorization.html#article" },
+        "breadcrumb": { "@id": "https://balhence.com/insights/mixed-batch-authorization.html#breadcrumb" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://balhence.com/insights/mixed-batch-authorization.html#article",
+        "url": "https://balhence.com/insights/mixed-batch-authorization.html",
+        "mainEntityOfPage": { "@id": "https://balhence.com/insights/mixed-batch-authorization.html#webpage" },
+        "headline": "The One Good ID That Authorized the Whole Batch",
+        "description": "An anonymized field note about a batch authorization flaw where one owned object caused foreign objects in the same request to be copied, moved, and deleted.",
+        "datePublished": "2026-11-15",
+        "dateModified": "2026-11-15",
+        "inLanguage": "en",
+        "image": "https://balhence.com/assets/research/field-note-mixed-batch-authorization.jpg",
+        "articleSection": "Anonymized bug bounty field notes",
+        "keywords": ["mixed-batch IDOR", "broken access control", "batch authorization", "cross-account access", "API security"],
+        "author": { "@id": "https://balhence.com/about.html#researcher" },
+        "publisher": { "@id": "https://balhence.com/#organization" },
+        "isPartOf": { "@id": "https://balhence.com/blogs.html#bug-bounty-archive" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://balhence.com/insights/mixed-batch-authorization.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://balhence.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Bug Bounty Archive", "item": "https://balhence.com/blogs.html#bug-bounty-archive" },
+          { "@type": "ListItem", "position": 3, "name": "The One Good ID That Authorized the Whole Batch", "item": "https://balhence.com/insights/mixed-batch-authorization.html" }
+        ]
+      },
+      { "@type": "Person", "@id": "https://balhence.com/about.html#researcher", "name": "Aditya Soni", "alternateName": "HeTroubleHacker", "url": "https://balhence.com/about.html#researcher" },
+      { "@type": "Organization", "@id": "https://balhence.com/#organization", "name": "Balhence", "url": "https://balhence.com/", "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.png" } }
+    ]
+  }
+  </script>
+</head>
+<body data-page="insights" class="research-archive-post archive-article">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" data-site-header><nav class="container nav-shell" aria-label="Primary navigation"><a class="brand" href="/" aria-label="Balhence home"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><div class="nav-menu" id="primary-menu" data-menu><ul class="nav-links"><li><a href="/services.html" data-nav="services">Services</a></li><li><details class="nav-solutions" data-solutions-menu><summary>Solutions</summary><ul class="solutions-links"><li><a href="/attack-path-validation.html">Recurring attack validation</a></li><li><a href="/compliance-penetration-testing.html">Compliance testing</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 penetration testing</a></li><li><a href="/pci-dss-penetration-testing.html">PCI DSS testing</a></li><li><a href="/hipaa-penetration-testing.html">HIPAA testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS &amp; scheduled testing</a></li><li><a href="/penetration-testing-india.html">Services for India teams</a></li><li><a href="/penetration-testing-services-usa.html">Services for US teams</a></li></ul></details></li><li><a href="/about.html" data-nav="about">About</a></li><li><a href="/pricing.html" data-nav="pricing">Pricing</a></li><li><a href="/blogs.html" data-nav="insights">Research</a></li><li><a href="/contact.html" data-nav="contact">Contact</a></li></ul><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=mixed-batch-authorization" data-track="nav_pentest">Request a pentest</a></div><button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button></nav></header>
+
+  <main id="main-content">
+    <article>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The One Good ID That Authorized the Whole Batch</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The One Good ID That Authorized the Whole Batch</h1><p class="article-deck">A foreign document page was denied on its own. Add one page I owned to the same array, and the server trusted every object in the batch.</p><div class="article-byline"><span>By <a href="/about.html#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-15">15 November 2026</time></span><span>Updated <time datetime="2026-11-15">15 November 2026</time></span><span>8 min read</span></div></div></header>
+
+      <div class="article-body"><div class="container article-layout">
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#setup">Two controlled accounts</a><a href="#negative-control">The negative control</a><a href="#mixed-batch">One good ID</a><a href="#proof">The proof</a><a href="#authorization-model">The logic error</a><a href="#open-source-tool">Open-source tool</a><a href="#repair">Repair and retest</a></nav>
+        <div class="article-content archive-article-content research-article-content">
+          <div class="research-article-body" id="research-article">
+            <p>Hi people,</p>
+            <p>This story started with a request that looked properly protected. I used one controlled account to reference a private document page owned by my second controlled account, and the server returned <strong>403 Forbidden</strong>.</p>
+            <p>Then I added one page that the first account genuinely owned to the same array.</p>
+            <p>The server accepted the complete batch.</p>
+            <blockquote><p><strong>Publication note:</strong> This story is reconstructed from private research. The organization, product, routes, identifiers, dates, document labels, and UI details were removed or replaced. Every example below is synthetic. I am not claiming a deployed fix or completed retest.</p></blockquote>
+
+            <figure class="research-cover-figure"><img src="/assets/research/field-note-mixed-batch-authorization.jpg" width="1200" height="630" loading="lazy" decoding="async" alt="One permitted paper page opening a checkpoint for an entire mixed batch, including a foreign page."><figcaption>Original tactile editorial studio photograph for this anonymized field note.</figcaption></figure>
+
+            <h2 id="setup">Two accounts, two markers, one clean boundary</h2>
+            <p>I began with two controlled customer-role accounts: Account A and Account B. Each account created one private document containing a different harmless marker. Account A also created an empty destination document that I could use for copy tests.</p>
+            <p>Before testing the batch operation, I established the expected controls:</p>
+            <ul>
+              <li>Account A could read its own page.</li>
+              <li>Account B could read its own page.</li>
+              <li>Account A could not read Account B's page or document.</li>
+              <li>Account A's destination document was empty.</li>
+            </ul>
+            <p>That last check mattered. If the destination already contained data, a later success response would be difficult to interpret. Starting from an empty controlled object gave me a simple before-and-after comparison.</p>
+
+            <h2 id="negative-control">The foreign-only request was denied</h2>
+            <p>I first sent a copy request containing only Account B's page while authenticated as Account A. The server rejected it. I read Account A's destination again and confirmed that it was still empty.</p>
+            <pre aria-label="Synthetic foreign-only and mixed-batch comparison"><code># Foreign-only negative control
+PUT /api/documents/batch-copy
+Authorization: Bearer [REDACTED]
+Content-Type: application/json
+
+{
+  "page_ids": ["page-b"],
+  "destination": "archive-a"
+}
+
+HTTP/1.1 403 Forbidden
+
+# Same foreign page, now beside one owned page
+PUT /api/documents/batch-copy
+Authorization: Bearer [REDACTED]
+Content-Type: application/json
+
+{
+  "page_ids": ["page-a", "page-b"],
+  "destination": "archive-a"
+}
+
+HTTP/1.1 200 OK
+{
+  "copied_pages": ["copy-1", "copy-2"]
+}</code></pre>
+            <p>The host, paths, field names, identifiers, and response bodies above are placeholders. They show the authorization pattern rather than reproducing private traffic.</p>
+
+            <h2 id="mixed-batch">One good ID changed the decision for every ID</h2>
+            <p>The only meaningful difference in the second request was the extra page owned by Account A. The foreign page had not become shared. Account A had not gained a new role. The destination was the same.</p>
+            <p>Yet the server changed its decision from denied to allowed and copied both pages.</p>
+            <p>That copy used the owned page first. In separate controlled move and delete runs, I placed the foreign page first; those mixed batches still succeeded. The failure was therefore not confined to one list order, although I did not exercise every route in both orders. Across those actions, the application appeared to ask whether the batch contained <em>any</em> accessible page, then apply that answer to the complete array.</p>
+
+            <figure class="research-story-figure">
+              <div class="story-flow story-flow-four" role="img" aria-label="A foreign page is denied alone, an owned page is added, the mixed batch is accepted, and both pages appear in the destination">
+                <div class="story-step"><span>01</span><strong>Foreign only</strong><small>The request is denied</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>02</span><strong>Add owned page</strong><small>One authorized ID joins the array</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>03</span><strong>Batch accepted</strong><small>The whole array passes</small></div>
+                <span class="story-arrow" aria-hidden="true">-&gt;</span>
+                <div class="story-step"><span>04</span><strong>Readback</strong><small>Both controlled markers appear</small></div>
+              </div>
+              <figcaption>Reconstructed authorization sequence using synthetic accounts and object names, not an original product interface.</figcaption>
+            </figure>
+
+            <h2 id="proof">A successful response was not the proof</h2>
+            <p>A <code>200</code> response can be misleading. The application might ignore one object, create an empty result, or return optimistic metadata before doing any work.</p>
+            <p>So I read Account A's destination through its normal owner path. It now contained two pages. I downloaded the generated controlled document and extracted both harmless markers: Account A's marker on one page and Account B's marker on the other.</p>
+            <p>I also compared the copied foreign page with Account B's owner-positive source. The controlled content matched. That ruled out a generic preview, placeholder page, or duplicated Account A content.</p>
+            <p>The evidence chain was therefore:</p>
+            <ol>
+              <li>Account B created and read its own marked source page.</li>
+              <li>Account A was denied when that foreign page was requested alone.</li>
+              <li>The same page was accepted when placed beside Account A's owned page.</li>
+              <li>Account A read both resulting pages from its own destination.</li>
+              <li>The copied foreign content matched Account B's controlled source.</li>
+            </ol>
+            <p>I stopped there for the disclosure proof. I did not enumerate unknown identifiers or access third-party documents.</p>
+
+            <h2 id="other-actions">The same mistake affected move and delete</h2>
+            <p>Copying established confidentiality impact, but the document interface exposed other batch actions. I tested those in separate controlled lifecycles so that one mutation could not contaminate the next result.</p>
+            <p>For move, the foreign-only control was denied and Account B's page remained in its original document. The mixed batch succeeded. Owner readback then showed Account B's page missing from its source and present in Account A's controlled destination.</p>
+            <p>For delete, the foreign-only control was again denied and the foreign page remained available to its owner. The mixed batch succeeded, and subsequent owner checks showed that both controlled pages had been removed.</p>
+            <p>Every destructive test used only objects created for the experiment. I removed the remaining run-created objects and invalidated the test sessions afterward.</p>
+            <p>This changed the observation from an unusual status-code discrepancy into a clear account-boundary failure with controlled read and integrity impact. It did not require claims about unknown users or documents.</p>
+
+            <h2 id="authorization-model">The authorization question was existential, not universal</h2>
+            <p>The vulnerable decision can be summarized like this:</p>
+            <pre aria-label="Any-object authorization compared with all-object authorization"><code>// Vulnerable idea
+allowed = page_ids.some(page =&gt; can_access(user, page))
+
+// Required invariant
+allowed = page_ids.every(page =&gt; can_access(user, page))</code></pre>
+            <p>In plain language, the first version asks, "Can this user access at least one page?" A batch operation needs to ask, "Can this user perform this action on every page?"</p>
+            <p>Random identifiers would not repair that mistake. They may make an object reference harder to discover, but an identifier is still not proof of permission.</p>
+
+            <h2 id="open-source-tool">Open-source workflow companion: AutoRepeater</h2>
+            <p>A useful open-source companion for this pattern is <a href="https://github.com/nccgroup/AutoRepeater" rel="noopener noreferrer">AutoRepeater</a>. I would use it with two controlled identities to create a small, bounded replacement matrix: owned-only, foreign-only, owned-then-foreign, and foreign-then-owned. That makes it easier to compare status, response shape, and timing without manually rebuilding every request.</p>
+            <p>I would keep copy, move, and delete requests disabled from broad automatic replay. State-changing checks should run only against explicitly created test objects, one case at a time. Automation can expose the inconsistent decision, but the decisive evidence still comes from owner-side readback and harmless markers. This is a workflow recommendation for authorized testing, not a claim that AutoRepeater was used in the original private submission.</p>
+
+            <h2 id="repair">How I would repair and retest it</h2>
+            <p>The server should resolve every submitted object through a query scoped to the authenticated principal, tenant, and requested action. If even one object is unauthorized, missing, or belongs to a different permitted parent than expected, the server should reject the complete operation before performing any side effect.</p>
+            <p>The mutation should also be atomic. Authorization must finish before copying, moving, or deleting begins, and a failed member must not leave a partially changed batch.</p>
+            <p>My regression matrix would include:</p>
+            <ul>
+              <li>owned-only and foreign-only batches;</li>
+              <li>mixed ownership in both array orders;</li>
+              <li>duplicate, missing, and stale object references;</li>
+              <li>objects from different tenants or parent documents;</li>
+              <li>copy, move, delete, export, and metadata operations; and</li>
+              <li>a permitted shared-user case to prove that valid collaboration still works.</li>
+            </ul>
+
+            <h2 id="takeaway">Takeaway</h2>
+            <p>Batch endpoints deserve their own authorization tests. A handler can protect a single foreign object correctly and still fail the moment an authorized object is placed beside it.</p>
+            <p>The short version is: authorization over an array is an <strong>all-elements</strong> decision. One good ID must never grant authority over the rest of the batch.</p>
+            <p>That is all for this write-up. If you want another account-boundary story, read <a href="/insights/async-export-authorization.html">The Export Job That Crossed a Tenant Boundary</a>, compare our <a href="/api-penetration-testing.html">API penetration testing approach</a>, or browse the complete <a href="/blogs.html#bug-bounty-archive">Bug Bounty Archive</a>.</p>
+          </div>
+
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about.html#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <div class="article-cta"><span class="eyebrow">Test every object in the array</span><h2>Batch authorization needs an all-elements decision.</h2><p>Balhence tests cross-account and cross-tenant access across reads, writes, exports, and multi-object workflows.</p><div class="button-row"><a class="btn btn-primary" href="/contact.html?service=web-api&amp;source=mixed-batch-authorization">Discuss a web and API pentest</a><a class="btn btn-quiet" href="/report-viewer.html">See a sample report</a></div></div>
+          <p class="research-topic-line"><strong>Research topics:</strong> broken access control / mixed-batch IDOR / cross-account authorization / API security</p>
+        </div>
+      </div></div>
+    </article>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">B/</span><span>Balhence</span></a><p>Researcher-led testing. Human-validated evidence.</p></div><div class="footer-column"><h2>Explore</h2><ul class="footer-links"><li><a href="/services.html">Services</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/attack-path-validation.html">Attack-path validation</a></li><li><a href="/soc-2-penetration-testing.html">SOC 2 testing</a></li><li><a href="/ai-llm-penetration-testing.html">AI &amp; LLM testing</a></li><li><a href="/cloud-penetration-testing.html">Cloud penetration testing</a></li><li><a href="/network-penetration-testing.html">Network penetration testing</a></li><li><a href="/penetration-testing-as-a-service.html">PTaaS</a></li><li><a href="/penetration-testing-india.html">India services</a></li><li><a href="/penetration-testing-services-usa.html">US services</a></li><li><a href="/about.html">About</a></li><li><a href="/contact.html">Contact</a></li></ul></div><div class="footer-column"><h2>Proof &amp; trust</h2><ul class="footer-links"><li><a href="/scope-builder.html">Scope planner</a></li><li><a href="/report-viewer.html">Sample report</a></li><li><a href="/trust.html">Trust &amp; data handling</a></li><li><a href="/blog.html">Practical guides</a></li><li><a href="/blogs.html#bug-bounty-archive">Bug bounty archive</a></li><li><a href="/privacy.html">Privacy</a></li></ul></div><div class="footer-column"><h2>Contact</h2><ul class="footer-links"><li><a href="mailto:contact@balhence.com">contact@balhence.com</a></li><li>Remote engagements for India and US teams</li></ul></div></div><div class="footer-bottom"><span>(c) <span data-current-year>2026</span> Balhence. All rights reserved.</span><span>Test only with written authorization.</span></div></div></footer>
+  <script src="/config.js?v=20260905c"></script><script src="/app.js?v=20261116a"></script><script src="/motion.js?v=20261001b"></script><script src="/flow.js?v=20261001b"></script>
+</body>
+</html>

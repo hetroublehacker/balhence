@@ -36,7 +36,7 @@ const result = await build({
   target: ["es2020"],
   charset: "ascii",
   legalComments: "eof",
-  banner: { js: "/*! Balhence native canvas adapter. Includes ThreeUI renderer (MIT); see /vendor/threeui/LICENSE.txt. */" },
+  banner: { js: "/*! Balhence first-party passive typography field. ThreeUI source reference retained under MIT; see /vendor/threeui/LICENSE.txt. */" },
 });
 if (result.outputFiles.some(output => output.contents.length > 16000)) {
   throw new Error("Animation exceeded its 16 KB startup budget; inspect bundled dependencies");
@@ -49,4 +49,4 @@ for (const output of result.outputFiles) {
     await writeFile(output.path, output.contents);
   }
 }
-console.log("Verified all four ThreeUI hashes; animation bundle " + (process.argv.includes("--check") ? "matches source." : "built."));
+console.log("Verified the archived ThreeUI reference hashes; passive animation bundle " + (process.argv.includes("--check") ? "matches source." : "built."));

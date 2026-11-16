@@ -9,6 +9,7 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 
 const FIELD_NOTES = [
+  ["/insights/mixed-batch-authorization.html", "The One Good ID That Authorized the Whole Batch"],
   ["/insights/ai-agent-mcp-root-rce.html", "The AI Agent That Ran My MCP Tool as Root"],
   ["/insights/async-export-authorization.html", "The Export Job That Crossed a Tenant Boundary"],
   ["/insights/server-side-url-import.html", "The File Importer That Stored Whatever the URL Returned"],
@@ -34,6 +35,7 @@ const ARTICLES = [...FIELD_NOTES, ...RESEARCH_ARTICLES];
 const RESEARCH_ROUTES = new Set(RESEARCH_ARTICLES.map(([route]) => route));
 const TOPICS = {
   authorization: [
+    "/insights/mixed-batch-authorization.html",
     "/insights/async-export-authorization.html",
     "/insights/draft-write-authorization.html",
     "/research/first-bounty-target.html",
