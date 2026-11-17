@@ -585,6 +585,31 @@ class SearchAndConversionTests(unittest.TestCase):
                 self.assertNotIn(unsafe_exact_total, home)
                 self.assertNotIn(unsafe_exact_total, about)
 
+    def test_about_page_is_company_only_without_a_personal_profile(self):
+        relative = "about.html"
+        source = (SOURCE_ROOT / relative).read_text(encoding="utf-8")
+        copy = normalized(source)
+        for removed in (
+            "Aditya Soni",
+            "HeTroubleHacker",
+            "Researcher behind the practice",
+            "Research shared beyond an assessment",
+            "Public work you can inspect",
+            "Product Security Analyst at HackerOne",
+            "linkedin.com/in/adtyasoni",
+            "hackerone.com/hetroublehacker",
+            "app.intigriti.com/profile/hetroublemak3r",
+            "x.com/hetroublehacker",
+            'id="researcher"',
+            "about#researcher",
+        ):
+            with self.subTest(removed=removed):
+                self.assertNotIn(removed.lower(), copy)
+        self.assertFalse(any(
+            "Person" in schema_types(node)
+            for node in schema_nodes(self.documents[relative])
+        ))
+
     def test_sitemap_lastmod_dates_are_iso_dates_and_not_in_the_future(self):
         today = datetime.now(timezone.utc).date()
         for entry in self.sitemap_entries:

@@ -1153,7 +1153,7 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
                 "inLanguage": "en",
                 "image": og_image,
                 "keywords": categories,
-                "author": {"@id": "https://balhence.com/about#researcher"},
+                "author": {"@id": "https://balhence.com/blogs#author"},
                 "publisher": {"@id": "https://balhence.com/#organization"},
                 "isPartOf": {"@id": "https://balhence.com/blogs#bug-bounty-archive"},
             },
@@ -1183,10 +1183,10 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
             },
             {
                 "@type": "Person",
-                "@id": "https://balhence.com/about#researcher",
+                "@id": "https://balhence.com/blogs#author",
                 "name": "Aditya Soni",
                 "alternateName": "HeTroubleHacker",
-                "url": "https://balhence.com/about#researcher",
+                "url": "https://balhence.com/blogs",
                 "sameAs": [
                     "https://www.linkedin.com/in/adtyasoni/",
                     "https://hackerone.com/hetroublehacker",
@@ -1251,16 +1251,16 @@ def page_html(post: Post, title: str, creator: str, categories: list[str], body,
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">{escaped(title)}</span></nav><span class="eyebrow">Bug bounty archive / Original research</span><h1>{escaped(title)}</h1><p class="article-deck">Practical security research by Aditya Soni / HeTroubleHacker.</p><div class="article-byline"><span>By <a href="/about#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="{post.published}">{date_label(post.published)}</time></span><span>{minutes} min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">{escaped(title)}</span></nav><span class="eyebrow">Bug bounty archive / Original research</span><h1>{escaped(title)}</h1><p class="article-deck">Practical security research by Aditya Soni / HeTroubleHacker.</p><div class="article-byline"><span>By Aditya Soni / HeTroubleHacker</span><span>Published <time datetime="{post.published}">{date_label(post.published)}</time></span><span>{minutes} min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
-        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the research</a><a href="/blogs#bug-bounty-archive">Bug bounty archive</a><a href="/about#researcher">About Aditya</a></nav>
+        <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Read the research</a><a href="/blogs#bug-bounty-archive">Bug bounty archive</a></nav>
         <div class="article-content archive-article-content research-article-content">
           <figure class="research-cover-figure" data-archive-cover><img src="{escaped(cover_source)}" width="{og_image_width}" height="{og_image_height}" loading="lazy" decoding="async" alt="{escaped(og_image_alt)}"><figcaption>{escaped(cover_caption)}</figcaption></figure>
           <div class="research-article-body" id="research-article" data-research-post-id="{post.post_id}" data-research-text-sha256="{body_hash}">
 {str(body)}
           </div>
-          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
           <div class="article-cta"><span class="eyebrow">Continue reading</span><h2>From research to a scoped assessment.</h2><p>Explore {escaped(post.related_label)} or browse the full Bug Bounty Archive for more evidence-focused research.</p><div class="button-row"><a class="btn btn-primary" href="{escaped(post.related_url)}">{escaped(post.related_label)}</a><a class="btn btn-quiet" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></div>
           <p class="research-topic-line"><strong>Research topics:</strong> {escaped(tags)}</p>
         </div>

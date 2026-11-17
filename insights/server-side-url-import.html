@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:alt" content="A backend importer fetching a remote marker and storing its returned contents.">
   <meta property="article:published_time" content="2026-11-07">
-  <meta property="article:modified_time" content="2026-11-15">
+  <meta property="article:modified_time" content="2026-11-17">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The File Importer That Stored Whatever the URL Returned">
   <meta name="twitter:description" content="A first-person field note about proving server-side fetching and harmless response-byte readback through a file import flow.">
@@ -47,7 +47,7 @@
         "name": "The File Importer That Stored Whatever the URL Returned",
         "description": "An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-15",
+        "dateModified": "2026-11-17",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/server-side-url-import#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/server-side-url-import#breadcrumb" }
@@ -60,12 +60,12 @@
         "headline": "The File Importer That Stored Whatever the URL Returned",
         "description": "An anonymized bug bounty story about a file importer that fetched researcher-controlled URLs and stored the returned bytes.",
         "datePublished": "2026-11-07",
-        "dateModified": "2026-11-15",
+        "dateModified": "2026-11-17",
         "inLanguage": "en",
         "image": "https://balhence.com/assets/research/field-note-server-side-url-import.jpg",
         "articleSection": "Anonymized bug bounty field notes",
         "keywords": ["SSRF", "URL import", "server-side fetch", "response readback"],
-        "author": { "@id": "https://balhence.com/about#researcher" },
+        "author": { "@id": "https://balhence.com/blogs#author" },
         "publisher": { "@id": "https://balhence.com/#organization" },
         "isPartOf": { "@id": "https://balhence.com/blogs#bug-bounty-archive" }
       },
@@ -78,7 +78,7 @@
           { "@type": "ListItem", "position": 3, "name": "The File Importer That Stored Whatever the URL Returned", "item": "https://balhence.com/insights/server-side-url-import" }
         ]
       },
-      { "@type": "Person", "@id": "https://balhence.com/about#researcher", "name": "Aditya Soni", "alternateName": "HeTroubleHacker", "url": "https://balhence.com/about#researcher" },
+      { "@type": "Person", "@id": "https://balhence.com/blogs#author", "name": "Aditya Soni", "alternateName": "HeTroubleHacker", "url": "https://balhence.com/blogs" },
       { "@type": "Organization", "@id": "https://balhence.com/#organization", "name": "Balhence", "url": "https://balhence.com/", "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.png" } }
     ]
   }
@@ -90,7 +90,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The File Importer That Stored Whatever the URL Returned</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The File Importer That Stored Whatever the URL Returned</h1><p class="article-deck">A normal upload flow hid a server-side fetcher, and the stored file returned my harmless marker byte for byte.</p><div class="article-byline"><span>By <a href="/about#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-15">15 November 2026</time></span><span>6 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The File Importer That Stored Whatever the URL Returned</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The File Importer That Stored Whatever the URL Returned</h1><p class="article-deck">A normal upload flow hid a server-side fetcher, and the stored file returned my harmless marker byte for byte.</p><div class="article-byline"><span>By Aditya Soni / HeTroubleHacker</span><span>Published <time datetime="2026-11-07">7 November 2026</time></span><span>Updated <time datetime="2026-11-17">17 November 2026</time></span><span>6 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#research-article">Behind the upload</a><a href="#callback">The callback</a><a href="#readback">Response readback</a><a href="#open-source-tool">Open-source tool</a><a href="#takeaway">Takeaway</a></nav>
@@ -169,7 +169,7 @@ SAFE-RESEARCH-MARKER</code></pre>
             <p>For a different server-owned-input lesson, read <a href="/insights/server-owned-validation-rules">When a validation helper became a data query</a>, or browse the full <a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a>.</p>
           </div>
 
-          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
           <div class="article-cta"><span class="eyebrow">Follow every input</span><h2>Test what the server fetches, stores, and returns.</h2><p>Balhence tests API inputs, worker behavior, cloud boundaries, and the evidence needed to prove impact safely.</p><div class="button-row"><a class="btn btn-primary" href="/api-penetration-testing">API penetration testing</a><a class="btn btn-quiet" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></div>
           <p class="research-topic-line"><strong>Research topics:</strong> SSRF / URL import / server-side fetch / response readback</p>
         </div>

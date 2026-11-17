@@ -293,7 +293,7 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 self.assertGreaterEqual(page.story_figures, 1)
                 self.assertGreaterEqual(page.story_captions, 1)
                 self.assertGreaterEqual(page.story_pre, 1)
-                self.assertIn("/about#researcher", page.links)
+                self.assertNotIn("/about#researcher", page.links)
                 self.assertIn("/blogs#bug-bounty-archive", page.links)
                 self.assertNotIn("case-study", page.body_classes)
                 self.assertNotIn("scope-table", source)
@@ -319,13 +319,13 @@ class CaseStudyPublicationTests(unittest.TestCase):
                 article = next(
                     node for node in structured_nodes(source) if node.get("@type") == "BlogPosting"
                 )
-                self.assertEqual(article["author"]["@id"], "https://balhence.com/about#researcher")
+                self.assertEqual(article["author"]["@id"], "https://balhence.com/blogs#author")
                 self.assertEqual(article["publisher"]["@id"], "https://balhence.com/#organization")
                 self.assertEqual(
                     article["isPartOf"]["@id"],
                     "https://balhence.com/blogs#bug-bounty-archive",
                 )
-                self.assertEqual(article["dateModified"], "2026-11-15")
+                self.assertEqual(article["dateModified"], "2026-11-17")
 
     def test_story_images_match_body_social_metadata_and_schema(self):
         self.assertEqual(
@@ -371,10 +371,10 @@ class CaseStudyPublicationTests(unittest.TestCase):
                     node for node in structured_nodes(source) if node.get("@type") == "WebPage"
                 )
                 self.assertEqual(article["image"], absolute_url)
-                self.assertEqual(article["dateModified"], "2026-11-15")
-                self.assertEqual(webpage["dateModified"], "2026-11-15")
+                self.assertEqual(article["dateModified"], "2026-11-17")
+                self.assertEqual(webpage["dateModified"], "2026-11-17")
                 self.assertIn(
-                    'Updated <time datetime="2026-11-15">15 November 2026</time>',
+                    'Updated <time datetime="2026-11-17">17 November 2026</time>',
                     source,
                 )
                 self.assertIn(asset, PUBLIC_FILE_SET)

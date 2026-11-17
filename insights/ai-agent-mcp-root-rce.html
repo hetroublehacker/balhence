@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:alt" content="A draft AI agent launching a local MCP tool inside a privileged server runtime.">
   <meta property="article:published_time" content="2026-11-08">
-  <meta property="article:modified_time" content="2026-11-15">
+  <meta property="article:modified_time" content="2026-11-17">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The AI Agent That Ran My MCP Tool as Root">
   <meta name="twitter:description" content="A field note reconstructed from a Critical/P1 submission about a draft AI agent launching a controlled local MCP tool in a root server process.">
@@ -47,7 +47,7 @@
         "name": "The AI Agent That Ran My MCP Tool as Root",
         "description": "An anonymized Critical/P1 submission showing how a draft AI agent accepted local MCP configuration and launched a controlled server-side process as root.",
         "datePublished": "2026-11-08",
-        "dateModified": "2026-11-15",
+        "dateModified": "2026-11-17",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/ai-agent-mcp-root-rce#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/ai-agent-mcp-root-rce#breadcrumb" }
@@ -60,12 +60,12 @@
         "headline": "The AI Agent That Ran My MCP Tool as Root",
         "description": "An anonymized Critical/P1 submission showing how a draft AI agent accepted local MCP configuration and launched a controlled server-side process as root.",
         "datePublished": "2026-11-08",
-        "dateModified": "2026-11-15",
+        "dateModified": "2026-11-17",
         "inLanguage": "en",
         "image": "https://balhence.com/assets/research/field-note-ai-agent-mcp-root-rce.jpg",
         "articleSection": "AI agent and MCP security",
         "keywords": ["AI agent security", "MCP security", "command injection", "remote code execution", "AI penetration testing"],
-        "author": { "@id": "https://balhence.com/about#researcher" },
+        "author": { "@id": "https://balhence.com/blogs#author" },
         "publisher": { "@id": "https://balhence.com/#organization" },
         "isPartOf": { "@id": "https://balhence.com/blogs#bug-bounty-archive" }
       },
@@ -80,10 +80,10 @@
       },
       {
         "@type": "Person",
-        "@id": "https://balhence.com/about#researcher",
+        "@id": "https://balhence.com/blogs#author",
         "name": "Aditya Soni",
         "alternateName": "HeTroubleHacker",
-        "url": "https://balhence.com/about#researcher"
+        "url": "https://balhence.com/blogs"
       },
       {
         "@type": "Organization",
@@ -102,7 +102,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The AI Agent That Ran My MCP Tool as Root</span></nav><span class="eyebrow">Bug bounty archive / AI security / Submitted Critical/P1</span><h1>The AI Agent That Ran My MCP Tool as Root</h1><p class="article-deck">One tool-import path rejected local processes. A draft-agent path stored the same class of configuration, started it automatically, and returned a root process identity.</p><div class="article-byline"><span>By <a href="/about#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-08">8 November 2026</time></span><span>Updated <time datetime="2026-11-15">15 November 2026</time></span><span>7 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The AI Agent That Ran My MCP Tool as Root</span></nav><span class="eyebrow">Bug bounty archive / AI security / Submitted Critical/P1</span><h1>The AI Agent That Ran My MCP Tool as Root</h1><p class="article-deck">One tool-import path rejected local processes. A draft-agent path stored the same class of configuration, started it automatically, and returned a root process identity.</p><div class="article-byline"><span>By Aditya Soni / HeTroubleHacker</span><span>Published <time datetime="2026-11-08">8 November 2026</time></span><span>Updated <time datetime="2026-11-17">17 November 2026</time></span><span>7 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#safe-path">The safe path</a><a href="#draft-agent">The draft agent</a><a href="#root-evidence">The root evidence</a><a href="#critical-severity">Why Critical/P1</a><a href="#open-source-tool">Open-source tool</a><a href="#takeaway">Takeaway</a></nav>
@@ -213,7 +213,7 @@ RUN STATUS       -&gt; completed</code></pre>
             <p>For more on securing agent tools, retrieval systems, and model-connected workflows, see <a href="/ai-llm-penetration-testing">AI and LLM penetration testing</a>. For another server-side trust-boundary story, read <a href="/insights/server-side-url-import">The File Importer That Stored Whatever the URL Returned</a>, or browse the complete <a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a>.</p>
           </div>
 
-          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web, API, and AI security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web, API, and AI security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
           <div class="article-cta"><span class="eyebrow">Test the orchestration layer</span><h2>AI agent security extends beyond the prompt.</h2><p>Balhence tests tool permissions, MCP integrations, agent workflows, retrieval boundaries, and the infrastructure controls around them.</p><div class="button-row"><a class="btn btn-primary" href="/ai-llm-penetration-testing">AI and LLM penetration testing</a><a class="btn btn-quiet" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></div>
           <p class="research-topic-line"><strong>Research topics:</strong> AI agent security / MCP security / command injection / remote code execution</p>
         </div>

@@ -22,7 +22,7 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:alt" content="One permitted paper page opening a checkpoint for an entire mixed batch, including a foreign page.">
   <meta property="article:published_time" content="2026-11-15">
-  <meta property="article:modified_time" content="2026-11-15">
+  <meta property="article:modified_time" content="2026-11-17">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The One Good ID That Authorized the Whole Batch">
   <meta name="twitter:description" content="A first-person field note about one owned object authorizing every object in a mixed batch.">
@@ -47,7 +47,7 @@
         "name": "The One Good ID That Authorized the Whole Batch",
         "description": "An anonymized field note about a batch authorization flaw where one owned object caused foreign objects in the same request to be copied, moved, and deleted.",
         "datePublished": "2026-11-15",
-        "dateModified": "2026-11-15",
+        "dateModified": "2026-11-17",
         "inLanguage": "en",
         "mainEntity": { "@id": "https://balhence.com/insights/mixed-batch-authorization#article" },
         "breadcrumb": { "@id": "https://balhence.com/insights/mixed-batch-authorization#breadcrumb" }
@@ -60,12 +60,12 @@
         "headline": "The One Good ID That Authorized the Whole Batch",
         "description": "An anonymized field note about a batch authorization flaw where one owned object caused foreign objects in the same request to be copied, moved, and deleted.",
         "datePublished": "2026-11-15",
-        "dateModified": "2026-11-15",
+        "dateModified": "2026-11-17",
         "inLanguage": "en",
         "image": "https://balhence.com/assets/research/field-note-mixed-batch-authorization.jpg",
         "articleSection": "Anonymized bug bounty field notes",
         "keywords": ["mixed-batch IDOR", "broken access control", "batch authorization", "cross-account access", "API security"],
-        "author": { "@id": "https://balhence.com/about#researcher" },
+        "author": { "@id": "https://balhence.com/blogs#author" },
         "publisher": { "@id": "https://balhence.com/#organization" },
         "isPartOf": { "@id": "https://balhence.com/blogs#bug-bounty-archive" }
       },
@@ -78,7 +78,7 @@
           { "@type": "ListItem", "position": 3, "name": "The One Good ID That Authorized the Whole Batch", "item": "https://balhence.com/insights/mixed-batch-authorization" }
         ]
       },
-      { "@type": "Person", "@id": "https://balhence.com/about#researcher", "name": "Aditya Soni", "alternateName": "HeTroubleHacker", "url": "https://balhence.com/about#researcher" },
+      { "@type": "Person", "@id": "https://balhence.com/blogs#author", "name": "Aditya Soni", "alternateName": "HeTroubleHacker", "url": "https://balhence.com/blogs" },
       { "@type": "Organization", "@id": "https://balhence.com/#organization", "name": "Balhence", "url": "https://balhence.com/", "logo": { "@type": "ImageObject", "url": "https://balhence.com/logo.png" } }
     ]
   }
@@ -90,7 +90,7 @@
 
   <main id="main-content">
     <article>
-      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The One Good ID That Authorized the Whole Batch</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The One Good ID That Authorized the Whole Batch</h1><p class="article-deck">A foreign document page was denied on its own. Add one page I owned to the same array, and the server trusted every object in the batch.</p><div class="article-byline"><span>By <a href="/about#researcher">Aditya Soni / HeTroubleHacker</a></span><span>Published <time datetime="2026-11-15">15 November 2026</time></span><span>Updated <time datetime="2026-11-15">15 November 2026</time></span><span>8 min read</span></div></div></header>
+      <header class="article-hero archive-article-hero"><div class="container-narrow"><nav class="article-byline" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a><span aria-hidden="true">/</span><span aria-current="page">The One Good ID That Authorized the Whole Batch</span></nav><span class="eyebrow">Bug bounty archive / Anonymized field note</span><h1>The One Good ID That Authorized the Whole Batch</h1><p class="article-deck">A foreign document page was denied on its own. Add one page I owned to the same array, and the server trusted every object in the batch.</p><div class="article-byline"><span>By Aditya Soni / HeTroubleHacker</span><span>Published <time datetime="2026-11-15">15 November 2026</time></span><span>Updated <time datetime="2026-11-17">17 November 2026</time></span><span>8 min read</span></div></div></header>
 
       <div class="article-body"><div class="container article-layout">
         <nav class="article-toc" aria-label="Article details"><strong>In this article</strong><a href="#setup">Two controlled accounts</a><a href="#negative-control">The negative control</a><a href="#mixed-batch">One good ID</a><a href="#proof">The proof</a><a href="#authorization-model">The logic error</a><a href="#open-source-tool">Open-source tool</a><a href="#repair">Repair and retest</a></nav>
@@ -217,7 +217,7 @@ allowed = page_ids.every(page =&gt; can_access(user, page))</code></pre>
             <p>That is all for this write-up. If you want another account-boundary story, read <a href="/insights/async-export-authorization">The Export Job That Crossed a Tenant Boundary</a>, compare our <a href="/api-penetration-testing">API penetration testing approach</a>, or browse the complete <a href="/blogs#bug-bounty-archive">Bug Bounty Archive</a>.</p>
           </div>
 
-          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/about#researcher">View the researcher profile</a><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
+          <aside class="research-author-note" aria-labelledby="archive-author-title"><span class="eyebrow">About the author</span><h2 id="archive-author-title">Aditya Soni / HeTroubleHacker</h2><p>Aditya is a product security professional and independent security researcher focused on web and API security, penetration testing, vulnerability validation, and responsible disclosure.</p><div class="button-row"><a class="btn btn-secondary" href="/blogs#bug-bounty-archive">Bug bounty archive</a></div></aside>
           <div class="article-cta"><span class="eyebrow">Test every object in the array</span><h2>Batch authorization needs an all-elements decision.</h2><p>Balhence tests cross-account and cross-tenant access across reads, writes, exports, and multi-object workflows.</p><div class="button-row"><a class="btn btn-primary" href="/contact?service=web-api&amp;source=mixed-batch-authorization">Discuss a web and API pentest</a><a class="btn btn-quiet" href="/report-viewer">See a sample report</a></div></div>
           <p class="research-topic-line"><strong>Research topics:</strong> broken access control / mixed-batch IDOR / cross-account authorization / API security</p>
         </div>

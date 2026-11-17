@@ -178,7 +178,7 @@ async function main() {
         { complete: true, naturalWidth: 1200, naturalHeight: 630 },
       );
       assert.match(await page.locator(".research-article-body").innerText(), /Publication note:/);
-      assert.ok(await page.locator('a[href="/about#researcher"]').count() > 0);
+      assert.equal(await page.locator('a[href="/about#researcher"]').count(), 0);
       assert.ok(await page.locator('a[href="/blogs#bug-bounty-archive"]').count() > 0, `${route} should link back to the collection`);
       assert.equal(await page.locator("[data-article-share]").count(), 1, `${route} should expose one share control`);
     }

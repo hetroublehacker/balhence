@@ -110,7 +110,7 @@ class ResearchArchiveTests(unittest.TestCase):
                 self.assertIn("index", page.robots.lower())
                 self.assertEqual(page.canonical, f'https://balhence.com{public_path(item["path"])}')
                 self.assertEqual(normalized(page.h1_parts), item["title"])
-                self.assertTrue(page.author_profile_link)
+                self.assertFalse(page.author_profile_link)
                 self.assertEqual(page.import_hash, item["text_sha256"])
                 body_hash = hashlib.sha256(normalized(page.body_parts).encode("utf-8")).hexdigest()
                 self.assertEqual(body_hash, item["text_sha256"])
@@ -212,12 +212,14 @@ class ResearchArchiveTests(unittest.TestCase):
                 self.assertEqual(card_image["height"], "630")
                 self.assertEqual(card_image["alt"], cover_alt)
 
-    def test_hub_and_profile_link_the_complete_archive(self):
+    def test_hub_links_the_complete_archive_without_a_personal_about_profile(self):
         hub = (SOURCE_ROOT / "blogs.html").read_text(encoding="utf-8")
         about = (SOURCE_ROOT / "about.html").read_text(encoding="utf-8")
         self.assertIn('id="bug-bounty-archive"', hub)
-        self.assertIn('"@id": "https://balhence.com/about#researcher"', about)
-        self.assertIn('id="researcher"', about)
+        self.assertNotIn("Aditya Soni", about)
+        self.assertNotIn("HeTroubleHacker", about)
+        self.assertNotIn('id="researcher"', about)
+        self.assertIn('"@id": "https://balhence.com/blogs#author"', hub)
         for item in self.manifest:
             self.assertEqual(hub.count(f'href="{public_path(item["path"])}"'), 1)
 
@@ -245,6 +247,7 @@ class ResearchArchiveTests(unittest.TestCase):
         )
         self.assertNotRegex(generated, r'https://balhence\.com/[A-Za-z0-9_./-]+\.html')
         self.assertNotRegex(generated, r'(?:href|action)="/[A-Za-z0-9_./-]+\.html')
+        self.assertNotIn('/about#researcher', generated)
         self.assertEqual(
             str(generated_page.select_one("body > header.site-header")),
             str(current_page.select_one("body > header.site-header")),
