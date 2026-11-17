@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Check the public static site using only Python's standard library.
 
-Validates first-party ASCII text, files and local URLs, HTML anchors and metadata,
-JSON-LD, the sitemap, and manifest. Exact author-owned research imports retain their
-original Unicode. --preview also exercises the actual allowlisted HTTP handler on
-an ephemeral loopback port. External links are not fetched.
+Validates ASCII-only public text, files and local URLs, HTML anchors and metadata,
+JSON-LD, the sitemap, and manifest. --preview also exercises the actual allowlisted
+HTTP handler on an ephemeral loopback port. External links are not fetched.
 """
 
 from __future__ import annotations
@@ -29,6 +28,7 @@ from build_public import (
     PUBLIC_FILES,
     PUBLIC_FILE_SET,
     SOURCE_ROOT,
+    is_public_text,
     public_file_for_path,
     public_path,
     validate_sources,
@@ -39,20 +39,12 @@ from serve import PreviewHandler
 ORIGIN = "https://balhence.com"
 CSS_URL = re.compile(r"url\(\s*(?:\"([^\"]*)\"|'([^']*)'|([^\s)]+))\s*\)", re.I)
 CSS_IMPORT = re.compile(r"@import\s+['\"]([^'\"]+)['\"]", re.I)
-PUBLIC_TEXT_SUFFIXES = {".html", ".js", ".css", ".svg", ".xml", ".txt", ".webmanifest"}
 HTML_ENTITY = re.compile(r"&(?:#[xX][0-9a-fA-F]+|#[0-9]+|[a-zA-Z][a-zA-Z0-9]*);?")
 
 
 def checks_ascii(relative: str) -> bool:
-    """Check our published text, without rewriting dependencies or licenses."""
-    path = Path(relative)
-    exact_research_archive = path.parent == Path("research")
-    return (
-        path.suffix.lower() in PUBLIC_TEXT_SUFFIXES
-        and "vendor" not in path.parts
-        and not exact_research_archive
-        and not path.name.upper().startswith(("LICENSE", "LICENCE", "COPYING", "NOTICE"))
-    )
+    """Check every published text asset, including research and dependencies."""
+    return is_public_text(relative)
 
 
 class EncodedCharacters(HTMLParser):
@@ -116,6 +108,23 @@ def css_urls(source: str) -> list[str]:
     return [next(value for value in match.groups() if value is not None) for match in CSS_URL.finditer(source)] + CSS_IMPORT.findall(source)
 
 
+def require_ascii_json(value, path: str = "$") -> None:
+    """Reject escaped Unicode that would decode to non-ASCII metadata."""
+    if isinstance(value, str):
+        for character in value:
+            if ord(character) > 127:
+                raise ValueError(f"{path} decodes non-ASCII U+{ord(character):04X}")
+        return
+    if isinstance(value, list):
+        for index, item in enumerate(value):
+            require_ascii_json(item, f"{path}[{index}]")
+        return
+    if isinstance(value, dict):
+        for key, item in value.items():
+            require_ascii_json(key, f"{path} key")
+            require_ascii_json(item, f"{path}.{key}")
+
+
 def strict_json(source: str):
     def pairs(items):
         result = {}
@@ -128,7 +137,9 @@ def strict_json(source: str):
     def invalid_constant(value):
         raise ValueError(f"invalid JSON constant: {value}")
 
-    return json.loads(source, object_pairs_hook=pairs, parse_constant=invalid_constant)
+    value = json.loads(source, object_pairs_hook=pairs, parse_constant=invalid_constant)
+    require_ascii_json(value)
+    return value
 
 
 class Document(HTMLParser):

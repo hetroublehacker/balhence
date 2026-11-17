@@ -122,7 +122,8 @@ class ResearchArchiveTests(unittest.TestCase):
                 self.assertNotIn("Medium remains the canonical publication", source)
                 self.assertNotIn("Read on Medium", source)
                 self.assertNotIn("Follow on Medium", source)
-                self.assertNotIn("please click the 👏 button", normalized(page.body_parts))
+                self.assertNotIn("please click the \U0001f44f button", normalized(page.body_parts))
+                self.assertTrue(source.isascii())
                 structured_data = [
                     json.loads(payload)
                     for payload in re.findall(

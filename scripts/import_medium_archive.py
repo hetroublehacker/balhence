@@ -16,6 +16,7 @@ import html
 import io
 import json
 import re
+import unicodedata
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -35,7 +36,70 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FEED = "https://medium.com/feed/@hetroublehacker"
 CONTENT_NAMESPACE = "http://purl.org/rss/1.0/modules/content/"
 DC_NAMESPACE = "http://purl.org/dc/elements/1.1/"
-LOCAL_MODIFIED = "2026-11-16"
+LOCAL_MODIFIED = "2026-11-17"
+
+ASCII_PHRASE_REPLACEMENTS = (
+    ("someorg\u200a\u2014\u200aconcurrency=50\u200a\u2014\u200atoken=", "someorg --concurrency=50 --token="),
+    ("\u00af\\_(\u30c4)_/\u00af", "(shrug)"),
+    ("Takeaways \u2013", "Takeaways:"),
+    ("Takeaways -", "Takeaways:"),
+    (" \U0001f319\U0001f98a ", " "),
+    ("GitHub - hahwul/dalfox:  Dalfox", "GitHub - hahwul/dalfox: Dalfox"),
+    ("\U0001f319\U0001f98a", ""),
+)
+ASCII_CHARACTER_REPLACEMENTS = str.maketrans({
+    "\u00a0": " ",
+    "\u00b7": "-",
+    "\u00af": "",
+    "\u200a": " ",
+    "\u2013": "-",
+    "\u2014": "-",
+    "\u2018": "'",
+    "\u2019": "'",
+    "\u201c": '"',
+    "\u201d": '"',
+    "\u2022": "*",
+    "\u2026": "...",
+    "\u30c4": "",
+    "\U0001f319": "",
+    "\U0001f44f": "",
+    "\U0001f50d": "",
+    "\U0001f50e": "",
+    "\U0001f511": "",
+    "\U0001f95a": "",
+    "\U0001f98a": "",
+})
+
+
+def ascii_copy(value: str) -> str:
+    """Return reviewed web copy using only printable ASCII-compatible text."""
+    result = str(value)
+    for source, replacement in ASCII_PHRASE_REPLACEMENTS:
+        result = result.replace(source, replacement)
+    result = result.translate(ASCII_CHARACTER_REPLACEMENTS)
+    result = unicodedata.normalize("NFKD", result).encode("ascii", "ignore").decode("ascii")
+    if not result.isascii():
+        raise RuntimeError("ASCII normalization left unsupported characters")
+    return result
+
+
+def ascii_soup(soup):
+    """Normalize visible imported text and attribute values without changing markup."""
+    for node in list(soup.find_all(string=True)):
+        if node.parent.name in {"script", "style"}:
+            continue
+        normalized = ascii_copy(str(node))
+        if normalized != str(node):
+            node.replace_with(normalized)
+    for element in soup.find_all(True):
+        for name, value in list(element.attrs.items()):
+            if isinstance(value, list):
+                element.attrs[name] = [ascii_copy(item) for item in value]
+            elif isinstance(value, str):
+                element.attrs[name] = ascii_copy(value)
+    if not str(soup).isascii():
+        raise RuntimeError("Imported article markup is not ASCII-only")
+    return soup
 
 
 @dataclass(frozen=True)
@@ -348,11 +412,11 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ("Hi People,", "Hi everyone,"),
         (
             "Hope you are doing good, I know I took a little longer to publish this blog, so apologies there.",
-            "I hope you’re doing well. This article took me a little longer to publish, so thank you for your patience.",
+            "I hope you\u2019re doing well. This article took me a little longer to publish, so thank you for your patience.",
         ),
         (
             "In this blog, I will be sharing my approach for finding",
-            "In this article, I’ll share my approach to finding",
+            "In this article, I\u2019ll share my approach to finding",
         ),
         ("bugs. This blog is totally inspired by", "bugs. This methodology was inspired by"),
         ("finding on", "research on"),
@@ -374,37 +438,37 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "Thanks for reading. I hope the approach is useful in your own testing.",
         ),
         (
-            "If you enjoyed this blog, please click the 👏 button and share it to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share it to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
     "1900aeef79f6": (
         (
-            "In this blog post, I’ll be sharing about how I was assigned my CVE :)",
-            "In this article, I’ll share how I was assigned my first CVE.",
+            "In this blog post, I\u2019ll be sharing about how I was assigned my CVE :)",
+            "In this article, I\u2019ll share how I was assigned my first CVE.",
         ),
         (
-            "about his findings on an Open Source software which is “",
-            "about his findings in the open-source software “",
+            "about his findings on an Open Source software which is \u201c",
+            "about his findings in the open-source software \u201c",
         ),
         (
-            "” and he inspired me to give a look at this software and see if I can find some bugs and get myself a CVE. So, This blog post is regarding the first finding which was initially an HTML Injection but then converted it into an Open Redirect.",
-            ".” His work inspired me to examine the software, look for bugs, and try to earn my first CVE. This article covers the first finding, which began as HTML injection and was later escalated into an open redirect.",
+            "\u201d and he inspired me to give a look at this software and see if I can find some bugs and get myself a CVE. So, This blog post is regarding the first finding which was initially an HTML Injection but then converted it into an Open Redirect.",
+            ".\u201d His work inspired me to examine the software, look for bugs, and try to earn my first CVE. This article covers the first finding, which began as HTML injection and was later escalated into an open redirect.",
         ),
         (
             "has a demo portal which helped me to save time in installing it on my local machine. So I fired up my machine, turned on the proxy, and started using the SeedDMS as a normal user.",
             "has a demo portal, which saved me the time of installing it locally. I started my proxy and used SeedDMS as a normal user.",
         ),
         (
-            "I interacted with a couple of functionalities while monitoring all the requests in my Burp suite’s",
-            "I tested several features while monitoring requests with Burp Suite’s",
+            "I interacted with a couple of functionalities while monitoring all the requests in my Burp suite\u2019s",
+            "I tested several features while monitoring requests with Burp Suite\u2019s",
         ),
         (
             "which is really a good extension to monitor the URLs going through your burp proxy. Coming back to the topic",
             ", an extension that makes it easy to follow URLs passing through the proxy.",
         ),
         (
-            "as a parameter which was not sanitizing the special characters I put in. I tried XSS but no luck but the HTML injection was working fine, there’s nothing much I was able to do with simple HTML Injection. I started looking if I can escalate it into something impactable and found this helpful blogpost by",
+            "as a parameter which was not sanitizing the special characters I put in. I tried XSS but no luck but the HTML injection was working fine, there\u2019s nothing much I was able to do with simple HTML Injection. I started looking if I can escalate it into something impactable and found this helpful blogpost by",
             "as a parameter, and it did not sanitize the special characters I supplied. XSS did not work, but HTML injection did. Because simple HTML injection had limited impact, I looked for a way to escalate it and found this helpful article by",
         ),
         (
@@ -420,7 +484,7 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "Thanks to the vendor for patching the issue and issuing an update on the same day I submitted the report.",
         ),
         (
-            "If you enjoyed this blog, please click the 👏 button and share it to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share it to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
@@ -431,11 +495,11 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ),
         (
             "I am writing this blog to talk about my methodology and how without using any tool I found multiple vulnerabilities on one of my First Targets.",
-            "In this article, I’ll explain the methodology I used to find multiple vulnerabilities on one of my first targets without relying on automated tools.",
+            "In this article, I\u2019ll explain the methodology I used to find multiple vulnerabilities on one of my first targets without relying on automated tools.",
         ),
         (
-            "Anyways, let’s come to our topic, I won’t disclose the company name as it was a private program but will refer to it as",
-            "I won’t disclose the company because this was a private program, so I’ll refer to it as",
+            "Anyways, let\u2019s come to our topic, I won\u2019t disclose the company name as it was a private program but will refer to it as",
+            "I won\u2019t disclose the company because this was a private program, so I\u2019ll refer to it as",
         ),
         ("as it was a shopping website.", "throughout the article because it was a shopping website."),
         (
@@ -447,33 +511,33 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "For this case, I logged the same account into two browsers. I changed the password in one browser, then successfully made edits from the second browser. This demonstrated an improper session management flaw of minor severity.",
         ),
         (
-            "website, there was a “Track my Order” Option which is after a successful order is placed, a person can track the order with the order id. So with this feature, an attacker can take out the details of any victim if he knows the phone number of the victim and he doesn’t need to know the order number because with the help of the Burp Suite Intruder (for a better understanding referrer to Screenshot below) he can brute force and find a correct order number and get the details of his order which leaks the Address and other personal information of the Victim",
-            "website, a “Track my Order” option became available after an order was placed. A user could track an order with its order ID. If an attacker knew the victim’s phone number, they could use Burp Suite Intruder to brute-force an order number and retrieve order details, including the victim’s address and other personal information.",
+            "website, there was a \u201cTrack my Order\u201d Option which is after a successful order is placed, a person can track the order with the order id. So with this feature, an attacker can take out the details of any victim if he knows the phone number of the victim and he doesn\u2019t need to know the order number because with the help of the Burp Suite Intruder (for a better understanding referrer to Screenshot below) he can brute force and find a correct order number and get the details of his order which leaks the Address and other personal information of the Victim",
+            "website, a \u201cTrack my Order\u201d option became available after an order was placed. A user could track an order with its order ID. If an attacker knew the victim\u2019s phone number, they could use Burp Suite Intruder to brute-force an order number and retrieve order details, including the victim\u2019s address and other personal information.",
         ),
         (
             "On a Special Note: These features were only available to me After made a Purchase on the shopping.com",
             "A special note: these features became available only after I made a purchase on shopping.com.",
         ),
         (
-            "I would say my takeaway from this experience was to stay at a target and understand it, make yourself feel comfortable, and don’t Rush. If you are eligible to make a purchase DO it!! It will definitely bring something with it.",
+            "I would say my takeaway from this experience was to stay at a target and understand it, make yourself feel comfortable, and don\u2019t Rush. If you are eligible to make a purchase DO it!! It will definitely bring something with it.",
             "My takeaway was to stay with a target long enough to understand it, become comfortable with its workflows, and avoid rushing. If the program rules allow a test purchase, completing the full workflow may reveal additional attack surface.",
         ),
         (
-            "If you enjoyed this blog, please click the 👏 button and share it to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share it to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
     "27f622bc47c0": (
         (
             "Hi guys, So I would like to start this blog with a question, What was the first vulnerability you learnt when you began into Cyber Security??",
-            "Hi everyone. I’d like to start with a question: what was the first vulnerability you learned about when you began studying cybersecurity?",
+            "Hi everyone. I\u2019d like to start with a question: what was the first vulnerability you learned about when you began studying cybersecurity?",
         ),
         (
-            "Mine was XSS, though it took pretty long for me to find it but yeah! I finally found it ¯\\_(ツ)_/¯",
-            "Mine was XSS. It took me quite a while to find one, but I finally did. ¯\\_(ツ)_/¯",
+            "Mine was XSS, though it took pretty long for me to find it but yeah! I finally found it \u00af\\_(\u30c4)_/\u00af",
+            "Mine was XSS. It took me quite a while to find one, but I finally did. \u00af\\_(\u30c4)_/\u00af",
         ),
         (
-            "I got an invitation to a private program on HackerOne. It almost had more than 600+ reports already reported with just 4 assets. Damn will I find anythin’??",
+            "I got an invitation to a private program on HackerOne. It almost had more than 600+ reports already reported with just 4 assets. Damn will I find anythin\u2019??",
             "I received an invitation to a private HackerOne program that already had more than 600 reports across only four assets. I wondered whether I would find anything.",
         ),
         (
@@ -484,15 +548,15 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ("HOW?", "Here is the workflow:"),
         ("here you go", "these were the tools and techniques I used."),
         (
-            "also you can use “Waybackurls | gau” to find parameters. These are some great tips I have used soo far and the results were amazing ¯\\_(ツ)_/¯",
-            "You can also use “Waybackurls | gau” to find parameters. These were useful techniques in my workflow, and the results were strong. ¯\\_(ツ)_/¯",
+            "also you can use \u201cWaybackurls | gau\u201d to find parameters. These are some great tips I have used soo far and the results were amazing \u00af\\_(\u30c4)_/\u00af",
+            "You can also use \u201cWaybackurls | gau\u201d to find parameters. These were useful techniques in my workflow, and the results were strong. \u00af\\_(\u30c4)_/\u00af",
         ),
         (
-            "With all the list of Parameters, I started fuzzing and fuzzing with a thought, I’ll get something interesting",
+            "With all the list of Parameters, I started fuzzing and fuzzing with a thought, I\u2019ll get something interesting",
             "With the parameter list ready, I began fuzzing in the hope of finding something interesting",
         ),
         (
-            "and Voila!! I found one parameter which did not have many filters. First I sent it to some XSS scanner tools because It’s the first time I running for an XSS.",
+            "and Voila!! I found one parameter which did not have many filters. First I sent it to some XSS scanner tools because It\u2019s the first time I running for an XSS.",
             "and found a parameter with few filters. Because this was my first time testing for XSS, I sent it to a couple of XSS scanners first.",
         ),
         (
@@ -505,20 +569,20 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "Later that day, I reported my first XSS on HackerOne.",
         ),
         (
-            "“Old program, many reports, and many such things” don’t let it bother you. Always try to find more and more parameters and Fuzz them ALL :D",
-            "Don’t let an old program or a high report count discourage you. Keep discovering parameters and test them methodically. :D",
+            "\u201cOld program, many reports, and many such things\u201d don\u2019t let it bother you. Always try to find more and more parameters and Fuzz them ALL :D",
+            "Don\u2019t let an old program or a high report count discourage you. Keep discovering parameters and test them methodically. :D",
         ),
         (
-            "If you enjoyed this blog, please click the 👏 button and share it to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share it to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
     "7080e48df8b4": (
         (
-            "Hello everyone, this is the topic in which I’ve really struggled learning it. So I decided to understand it from the various blog post, videos and many more ways. Today, I’m gonna write is down in Plain English and in the end will attach the references and some tools also ;)",
-            "Hello everyone. HTTP request smuggling was a difficult topic for me to learn, so I worked through several articles, videos, and other resources. In this article, I’ll explain it in plain English and finish with references and tools. ;)",
+            "Hello everyone, this is the topic in which I\u2019ve really struggled learning it. So I decided to understand it from the various blog post, videos and many more ways. Today, I\u2019m gonna write is down in Plain English and in the end will attach the references and some tools also ;)",
+            "Hello everyone. HTTP request smuggling was a difficult topic for me to learn, so I worked through several articles, videos, and other resources. In this article, I\u2019ll explain it in plain English and finish with references and tools. ;)",
         ),
-        ("Let’s Begin and try to finish it in one article.", "Let’s begin and cover the basics in one article."),
+        ("Let\u2019s Begin and try to finish it in one article.", "Let\u2019s begin and cover the basics in one article."),
         (
             "HTTP request smuggling is also called as HTTP DESYNC ATTACK because the request sent is treated distinctly by Front-end and Back-end server on account of which we get an unexpected outcome or error in the Response and this can be considered as the base explanation of request smuggling.",
             "HTTP request smuggling is also called an HTTP desync attack because the front-end and back-end servers interpret the same request differently, producing an unexpected response or error. That is the basic idea behind request smuggling.",
@@ -535,12 +599,12 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ("When a request is sent then front-end server process the", "When a request arrives, the front-end server processes the"),
         ("and back-end server process the", "while the back-end server processes the"),
         (
-            "and hence both the servers are treating the same request distinctly and due to which the request doesn’t synchronise and give us an unexpected outcome or error in the Response which cause the",
+            "and hence both the servers are treating the same request distinctly and due to which the request doesn\u2019t synchronise and give us an unexpected outcome or error in the Response which cause the",
             "and the two servers therefore interpret the same request differently. They can fall out of sync and produce an unexpected response, causing",
         ),
         ("Request smuggling.", "request smuggling."),
         (
-            "As you can see content-length = 6, and you get confused HOW? that’s what happened with me in starting stage. In real case you won’t see CRLF characters but they are appened after each line are also counted in the content-length of the request and",
+            "As you can see content-length = 6, and you get confused HOW? that\u2019s what happened with me in starting stage. In real case you won\u2019t see CRLF characters but they are appened after each line are also counted in the content-length of the request and",
             "The Content-Length is 6, which confused me at first. In a real request, the CRLF characters are not visible, but they appear after each line and count toward the request body length. Therefore,",
         ),
         (
@@ -552,12 +616,12 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "Here, the malicious request contains",
         ),
         (
-            "Now analyse the request: content-length is 4 Because it’s the length of 5c (plus CRLF character) which is hex-number of 92 decimal number and After that, there is some data which is going to be our junk data which will get left unprocessed, and the back-end server will treat these as being the start of the next request in the sequence.",
+            "Now analyse the request: content-length is 4 Because it\u2019s the length of 5c (plus CRLF character) which is hex-number of 92 decimal number and After that, there is some data which is going to be our junk data which will get left unprocessed, and the back-end server will treat these as being the start of the next request in the sequence.",
             "Now analyze the request: Content-Length is 4 because it covers 5c plus the CRLF characters; 5c is the hexadecimal representation of decimal 92. The remaining junk data is left unprocessed, and the back-end server treats it as the start of the next request in the sequence.",
         ),
         (
-            "Before ending it here, I’m gonna share some amazing blog post and some HackerOne reports about the HTTP request smuggling Vulnerability.",
-            "Before finishing, I’ll share several useful articles and HackerOne reports about HTTP request smuggling.",
+            "Before ending it here, I\u2019m gonna share some amazing blog post and some HackerOne reports about the HTTP request smuggling Vulnerability.",
+            "Before finishing, I\u2019ll share several useful articles and HackerOne reports about HTTP request smuggling.",
         ),
         (
             "This is all about the basics of Request smuggling. I hope you have learnt something from this blog.",
@@ -565,13 +629,13 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ),
         ("Feedbacks and edits are welcome", "Feedback and corrections are welcome."),
         (
-            "If you enjoyed this blog, please click the 👏 button and share it to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share it to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
     "58d3a9946225": (
         (
-            "Hello guys, I recently encountered an amazing bypass to change my Phone Number in an application that doesn’t allow anyone to change its Phone number after registration. An Easy Win!",
+            "Hello guys, I recently encountered an amazing bypass to change my Phone Number in an application that doesn\u2019t allow anyone to change its Phone number after registration. An Easy Win!",
             "Hello everyone. I found a simple bypass that let me change my phone number in an application that did not allow users to change it after registration.",
         ),
         (
@@ -595,14 +659,14 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "To confirm whether the change had worked, I reloaded the page. My mobile number had been",
         ),
         (
-            "successfully which does not belong to me and I didn’t even verify it.",
+            "successfully which does not belong to me and I didn\u2019t even verify it.",
             "successfully, even though the new number did not belong to me and I had not verified it.",
         ),
         (
             "Always try to check and change the value which is disabled by default and save the changes, it is possible that it remains changed.",
             "Always check whether a value that is disabled in the interface can still be changed and saved. The server may accept it without enforcing the same restriction.",
         ),
-        ("That’s all for this blog. Hope you liked it.", "That’s the full case study. I hope it was useful."),
+        ("That\u2019s all for this blog. Hope you liked it.", "That\u2019s the full case study. I hope it was useful."),
     ),
     "472c67f1cb46": (
         ("Hello Guys,", "Hello everyone."),
@@ -627,11 +691,11 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "The effects of CRLF injection can also include HTTP request smuggling and HTTP response splitting. A detailed treatment of those issues is outside the scope of this article.",
         ),
         (
-            "I started with Hackerone Hacktivity and Searched for CRLF injection which gave me 59 Results “",
-            "I searched HackerOne Hacktivity for CRLF injection and received 59 results: “",
+            "I started with Hackerone Hacktivity and Searched for CRLF injection which gave me 59 Results \u201c",
+            "I searched HackerOne Hacktivity for CRLF injection and received 59 results: \u201c",
         ),
         (
-            "That doesn’t conclude that there are only 59 publicly disclosed reports on CRLF injection",
+            "That doesn\u2019t conclude that there are only 59 publicly disclosed reports on CRLF injection",
             "That did not mean only 59 CRLF injection reports had been publicly disclosed.",
         ),
         (
@@ -644,7 +708,7 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ),
         ("Feedbacks and edits are welcome", "Feedback and corrections are welcome."),
         (
-            "If you enjoyed this blog, please click the 👏 button and share it to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share it to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
@@ -653,9 +717,9 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "Adding Bash to my bug bounty was the best thing I ever did during my learning process!",
             "Adding Bash to my bug bounty workflow was one of the most useful steps in my learning process.",
         ),
-        ("Let’s Start with Some Basics Introduction. Ummm…", "Let’s start with the basics."),
+        ("Let\u2019s Start with Some Basics Introduction. Ummm\u2026", "Let\u2019s start with the basics."),
         (
-            "Bash is a standard shell, it’s intuitive and flexible. In Linux and macOS, Bash is a standard shell for common users. The primary purpose of bash is to allow you to interact with the computers’ OS so that you can accomplish whatever you need to do. Bash is just a language that allows you to execute some commands in a programmable way.",
+            "Bash is a standard shell, it\u2019s intuitive and flexible. In Linux and macOS, Bash is a standard shell for common users. The primary purpose of bash is to allow you to interact with the computers\u2019 OS so that you can accomplish whatever you need to do. Bash is just a language that allows you to execute some commands in a programmable way.",
             "Bash is an intuitive, flexible shell commonly used on Linux and macOS. It lets you interact with the operating system and execute commands programmatically.",
         ),
         (
@@ -663,7 +727,7 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "To learn more, this Bash cookbook covers the language in greater depth:",
         ),
         (
-            "I would say why not? You’ll only find tools made for security-purpose that do nearly what you do but in a much faster way and written in bash and If you can’t find one.",
+            "I would say why not? You\u2019ll only find tools made for security-purpose that do nearly what you do but in a much faster way and written in bash and If you can\u2019t find one.",
             "Many security tools automate tasks you already perform, often much faster. When the tool you need does not exist,",
         ),
         ("Then Write One.", "write one."),
@@ -676,25 +740,25 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "So to shorten the time period and increasing its value is because you are reading this blog. Right?",
             "The following one-liner shortens that process:",
         ),
-        ("Next will be making a Script to find CORS Misconfiguration", "Next, We’ll Build a Script to Find CORS Misconfigurations"),
+        ("Next will be making a Script to find CORS Misconfiguration", "Next, We\u2019ll Build a Script to Find CORS Misconfigurations"),
         ("Feedbacks and edits are welcome", "Feedback and corrections are welcome."),
         (
-            "If you enjoyed this blog, please click the 👏 button and share it to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share it to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
     "22cdcc829976": (
         (
-            "Hello everyone, it may be just another blog on how to find API keys, but here I’ll try to give every Information about finding the secret API keys and how to use them to authenticate.",
+            "Hello everyone, it may be just another blog on how to find API keys, but here I\u2019ll try to give every Information about finding the secret API keys and how to use them to authenticate.",
             "Hello everyone. This article explains how I look for exposed API keys and validate whether they can be used for authentication.",
         ),
         (
             ") is a unique indentifier that is used to authenticate the incoming request and that program or user has known permissions for accessing the non-private user data.",
-            ") is a credential used by an application or service to identify or authorize a caller. The permissions and data it exposes depend on the provider and the credential’s configured scope.",
+            ") is a credential used by an application or service to identify or authorize a caller. The permissions and data it exposes depend on the provider and the credential\u2019s configured scope.",
         ),
         (
             ") is a unique identifier used to authenticate an incoming request and indicate that a program or user has known permissions to access non-private user data.",
-            ") is a credential used by an application or service to identify or authorize a caller. The permissions and data it exposes depend on the provider and the credential’s configured scope.",
+            ") is a credential used by an application or service to identify or authorize a caller. The permissions and data it exposes depend on the provider and the credential\u2019s configured scope.",
         ),
         (
             "But it can be a bit of time-consuming, so to save a lot of time. Here is a great tool I would recommend to use:",
@@ -705,16 +769,16 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "After installing KeyFinder, visit the target website and click the KeyFinder icon in Chrome. Add common keywords associated with API keys so the extension can inspect the site. After visiting the relevant links, open the results to review what it found.",
         ),
         (
-            "Now what? that’s the main question. API keys can be used to authenticate without the username and password of an individual.",
-            "The next question is how to validate a key. Some API keys can authenticate requests without an individual user’s username and password.",
+            "Now what? that\u2019s the main question. API keys can be used to authenticate without the username and password of an individual.",
+            "The next question is how to validate a key. Some API keys can authenticate requests without an individual user\u2019s username and password.",
         ),
         (
             "Below are some ways in which particular API keys found on a Bug Bounty Program can be used to check if they are valid and can also be used to Account takeover or extract personal information from the API.",
-            "The examples below are retained for historical context. Provider APIs, token formats, and recommended transports change, and some examples are now deprecated or place secrets in URLs. For current authorized testing, consult the provider’s latest documentation, prefer headers or secure SDK flows, validate only the minimum required impact, and never paste real credentials into third-party tools or logs.",
+            "The examples below are retained for historical context. Provider APIs, token formats, and recommended transports change, and some examples are now deprecated or place secrets in URLs. For current authorized testing, consult the provider\u2019s latest documentation, prefer headers or secure SDK flows, validate only the minimum required impact, and never paste real credentials into third-party tools or logs.",
         ),
         (
             "Below are several authorized checks for determining whether API keys found during a bug bounty program are valid and whether they could enable account takeover or expose personal information through an API.",
-            "The examples below are retained for historical context. Provider APIs, token formats, and recommended transports change, and some examples are now deprecated or place secrets in URLs. For current authorized testing, consult the provider’s latest documentation, prefer headers or secure SDK flows, validate only the minimum required impact, and never paste real credentials into third-party tools or logs.",
+            "The examples below are retained for historical context. Provider APIs, token formats, and recommended transports change, and some examples are now deprecated or place secrets in URLs. For current authorized testing, consult the provider\u2019s latest documentation, prefer headers or secure SDK flows, validate only the minimum required impact, and never paste real credentials into third-party tools or logs.",
         ),
         (
             "Secretx is a tool to extract the API keys from each requested URLs.",
@@ -722,14 +786,14 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ),
         ("Feedbacks and edits are welcome", "Feedback and corrections are welcome."),
         (
-            "If you enjoyed this blog, please click the 👏 button and share it to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share it to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
     "2b3dbe9fa0b8": (
         (
             "Hello hunters, In this blog, I will help you setup-up Autozie and Autorepeater to find IDORs with the help of Burp Suite, but first a little detail about What is IDOR?",
-            "Hello hunters. In this article, I’ll show you how to set up Autorize and AutoRepeater for IDOR testing in Burp Suite. First, let’s define IDOR.",
+            "Hello hunters. In this article, I\u2019ll show you how to set up Autorize and AutoRepeater for IDOR testing in Burp Suite. First, let\u2019s define IDOR.",
         ),
         (
             "You can Install Autorize and Autorepeater from the Bapp store in Extender tab",
@@ -740,7 +804,7 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "For more information about the tools, see their GitHub repositories.",
         ),
         (
-            "Autorize — For Each Request you do, it will send an equal request But with changed cookies of the session or any additional header used for authorization.",
+            "Autorize \u2014 For Each Request you do, it will send an equal request But with changed cookies of the session or any additional header used for authorization.",
             "Autorize sends a matching request with a different session cookie or another authorization header for comparison.",
         ),
         (
@@ -752,11 +816,11 @@ EDITORIAL_TEXT_REPLACEMENTS = {
             "Turn on Autorize and browse the web application as User A; requests will begin flowing through the extension.",
         ),
         (
-            "As in the above image you can see, I’ve added the cookie of User B and suffering the web app with User A and there are no changes the Original length and Modified length with 200 OK status code so there can be the possibility of IDOR.",
-            "As shown above, I added User B’s cookie and browsed the web application as User A. When the original and modified responses have the same length and both return 200 OK, there may be an IDOR.",
+            "As in the above image you can see, I\u2019ve added the cookie of User B and suffering the web app with User A and there are no changes the Original length and Modified length with 200 OK status code so there can be the possibility of IDOR.",
+            "As shown above, I added User B\u2019s cookie and browsed the web application as User A. When the original and modified responses have the same length and both return 200 OK, there may be an IDOR.",
         ),
         (
-            "If you get 403 Forbidden error on the Modified length then there is No IDOR possibility and that’s a NO GO",
+            "If you get 403 Forbidden error on the Modified length then there is No IDOR possibility and that\u2019s a NO GO",
             "If the modified request returns 403 Forbidden, there is no IDOR in that request, so it is a no-go.",
         ),
         (
@@ -765,7 +829,7 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ),
         (
             "Like changing the uuid of a user everytime manually can be a bit difficult.",
-            "Changing a user’s UUID manually for every request can be tedious.",
+            "Changing a user\u2019s UUID manually for every request can be tedious.",
         ),
         (
             "Combining these two can check the functionality not only inside tenant but also a cross tenant at the same time.",
@@ -773,7 +837,7 @@ EDITORIAL_TEXT_REPLACEMENTS = {
         ),
         ("Feedbacks and edits are welcome", "Feedback and corrections are welcome."),
         (
-            "If you enjoyed this blog, please click the 👏 button and share to help others find it.",
+            "If you enjoyed this blog, please click the \U0001f44f button and share to help others find it.",
             "If this article helped, share it with another researcher who might find it useful.",
         ),
     ),
@@ -835,22 +899,29 @@ def apply_editorial_refresh(soup, post: Post, source_hash: str | None = None):
         text_nodes = [node for node in soup.find_all(string=True) if node.parent.name not in {"script", "style"}]
         old_matches = [node for node in text_nodes if normalized_string(node) == old]
         new_matches = [node for node in text_nodes if normalized_string(node) == new]
+        ascii_new = normalized_string(ascii_copy(new))
+        ascii_matches = [node for node in text_nodes if normalized_string(node) == ascii_new]
         if len(old_matches) == 1 and not new_matches:
             node = old_matches[0]
             raw = str(node)
             leading = re.match(r"\s*", raw).group(0)
             trailing = re.search(r"\s*$", raw).group(0)
-            if new.startswith((",", ".", ";", ":", "!", "?", ")", "]", "}", "”")):
+            if new.startswith((",", ".", ";", ":", "!", "?", ")", "]", "}", "\u201d")):
                 leading = ""
             node.replace_with(f"{leading}{new}{trailing}")
             continue
         if not old_matches and len(new_matches) == 1:
             # The transform is intentionally idempotent for maintainer reruns.
             continue
+        if not old_matches and not new_matches and len(ascii_matches) == 1:
+            # A previous refresh may already have normalized the reviewed copy.
+            continue
         raise RuntimeError(
             f"Editorial replacement drifted for {post.post_id}: {old!r} "
-            f"({len(old_matches)} source matches, {len(new_matches)} edited matches)"
+            f"({len(old_matches)} source matches, {len(new_matches)} edited matches, "
+            f"{len(ascii_matches)} ASCII matches)"
         )
+    soup = ascii_soup(soup)
     return soup, text_hash(soup)
 
 
@@ -1031,7 +1102,7 @@ def escaped(value: str) -> str:
 
 
 def json_script(value) -> str:
-    return json.dumps(value, ensure_ascii=False, indent=2).replace("</", "<\\/")
+    return json.dumps(value, ensure_ascii=True, indent=2).replace("</", "<\\/")
 
 
 def social_image_metadata(post: Post) -> tuple[str, str, int, int, str, str, str]:
@@ -1276,6 +1347,9 @@ def refresh_existing_copy() -> None:
                 f"Unexpected modified-date inventory in {post.output}: "
                 f"meta={meta_updates}, schema={schema_updates}"
             )
+        source = ascii_copy(source)
+        if not source.isascii():
+            raise RuntimeError(f"Generated page is not ASCII-only: {post.output}")
         output.write_text(source, encoding="utf-8")
 
         words, _ = words_and_minutes(body)
@@ -1285,6 +1359,8 @@ def refresh_existing_copy() -> None:
                 continue
             if key == "local_modified":
                 value = LOCAL_MODIFIED
+            if key == "title":
+                value = ascii_copy(value)
             if key == "text_sha256":
                 updated_record["source_text_sha256"] = REVIEWED_SOURCE_TEXT_SHA256[post.post_id]
                 value = edited_hash
@@ -1294,7 +1370,7 @@ def refresh_existing_copy() -> None:
         refreshed.append(updated_record)
         print(f"{post.output}: refreshed copy, {words} words, {edited_hash}")
 
-    fixture.write_text(json.dumps(refreshed, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    fixture.write_text(json.dumps(refreshed, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
     print(f"Updated reviewed editorial lock: {fixture.relative_to(ROOT)}")
 
 
@@ -1316,8 +1392,8 @@ def main() -> None:
         item = by_id.get(post.post_id)
         if item is None:
             raise SystemExit(f"RSS feed is missing expected post {post.post_id}")
-        title = item.findtext("title", "").strip()
-        creator = item.findtext(f"{{{DC_NAMESPACE}}}creator", "").strip()
+        title = ascii_copy(item.findtext("title", "").strip())
+        creator = ascii_copy(item.findtext(f"{{{DC_NAMESPACE}}}creator", "").strip())
         if creator != "Aditya Soni":
             raise SystemExit(f"Unexpected creator for {post.post_id}: {creator}")
         canonical = clean_canonical(item.findtext("link", ""))
@@ -1329,10 +1405,11 @@ def main() -> None:
         words, minutes = words_and_minutes(body)
         output = ROOT / post.output
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(
-            page_html(post, title, creator, [node.text or "" for node in item.findall("category")], body, body_hash, minutes),
-            encoding="utf-8",
-        )
+        categories = [ascii_copy(node.text or "") for node in item.findall("category")]
+        page_source = ascii_copy(page_html(post, title, creator, categories, body, body_hash, minutes))
+        if not page_source.isascii():
+            raise RuntimeError(f"Generated page is not ASCII-only: {post.output}")
+        output.write_text(page_source, encoding="utf-8")
         image_assets = []
         for image in body.find_all("img"):
             relative_image = image["src"].lstrip("/")
@@ -1365,7 +1442,7 @@ def main() -> None:
     fixture = ROOT / "tests/fixtures/medium-import-manifest.json"
     if args.update_manifest:
         fixture.parent.mkdir(parents=True, exist_ok=True)
-        fixture.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        fixture.write_text(json.dumps(manifest, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
         print(f"Updated reviewed source lock: {fixture.relative_to(ROOT)}")
     else:
         if not fixture.is_file():

@@ -404,6 +404,7 @@ async function main() {
         assert.equal(await page.locator(MOTION_CONTROLS).count(), 0, `${file}: no obsolete motion controls in the DOM`);
         assert.equal(await page.getByRole("button", { name: /(?:pause|play|resume)\s+(?:motion|animation)/i }).count(), 0, `${file}: no replacement playback button`);
         assert.equal(await page.locator("h1").isVisible(), true, `${file}: main heading retained`);
+        assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${file}: rendered body text must remain ASCII`);
       }
     });
 

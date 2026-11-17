@@ -21,7 +21,7 @@ const FIELD_NOTES = [
 ];
 const RESEARCH_ARTICLES = [
   ["/research/dependency-confusion", "How I approached Dependency Confusion!"],
-  ["/research/cve-2020-28726", "Assigned my First CVE-2020–28726!!"],
+  ["/research/cve-2020-28726", "Assigned my First CVE-2020-28726!!"],
   ["/research/first-bounty-target", "The First Bounty Target (Disclosing Multiple Reports)"],
   ["/research/tale-of-my-first-xss", "Tale of my First XSS"],
   ["/research/http-request-smuggling-plain-english", "HTTP Request Smuggling in Plain English."],
@@ -32,7 +32,6 @@ const RESEARCH_ARTICLES = [
   ["/research/automating-burp-idor", "Automating BURP to find IDORs"],
 ];
 const ARTICLES = [...FIELD_NOTES, ...RESEARCH_ARTICLES];
-const RESEARCH_ROUTES = new Set(RESEARCH_ARTICLES.map(([route]) => route));
 const TOPICS = {
   authorization: [
     "/insights/mixed-batch-authorization",
@@ -309,9 +308,7 @@ async function main() {
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${route} overflows at ${width}px`);
         assert.equal(await page.locator("h1").count(), 1);
         if (route !== "/blogs") assert.equal(await page.locator("[data-article-share]").count(), 1, `${route} needs one share control at ${width}px`);
-        if (!RESEARCH_ROUTES.has(route)) {
-          assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${route} contains non-ASCII body text at ${width}px`);
-        }
+        assert.doesNotMatch(await page.locator("body").innerText(), /[^\x00-\x7F]/, `${route} contains non-ASCII body text at ${width}px`);
         for (const block of await page.locator(".research-article-body pre, .research-story-figure, .research-cover-figure, .case-code, .scope-table-wrap").all()) {
           assert.ok(await block.evaluate(element => element.getBoundingClientRect().width <= innerWidth), `${route} has an overflowing reading block at ${width}px`);
         }

@@ -7,10 +7,10 @@
 - File: `jspdf-4.2.1.umd.min.js`
 - License: MIT, preserved in `jspdf-4.2.1.LICENSE.txt`
 - npm package integrity: `sha512-YyAXyvnmjTbR4bHQRLzex3CuINCDlQnBqoSYyjJwTP2x9jDLuKDzy7aKUl0hgx3uhcl7xzg32agn5vlie6HIlQ==`
-- Vendored file SHA-512: `a6539dbe2566c2ce18dc902f6e7a5f29bda157128cd650b0b22def984958463fad8832df7d9e055548f96bcbf2289f6922097c242007109e03d6250a05e72cc2`
-- Script integrity: `sha384-qovJwSBbRDPP5cEjCp8S0UP66wrvnjaa60XMOGzTNanrThcrGfXfnZkvgY8N1KT3`
+- Vendored file SHA-512: `1bd7b256db498e43490614a7520153a5cec67cce8f7cf70dbd21ffae65aed0d333ee9e6b313f982a2ff18fde3e81f0e24f1fb9e4fcf9f3084ad0cd4b96f4489a`
+- Script integrity: `sha384-/neng5BFGZoRE4Pu60qDqEkAj4Zt+DsSTZILyhbnNMjbvHyg268q95i23vycXSgy`
 
-The scope planner loads this same-origin file before `scope-pdf.js`. It does not use a CDN at runtime.
+The scope planner loads this same-origin file before `scope-pdf.js`. It does not use a CDN at runtime. The reviewed local copy preserves upstream JavaScript string values while spelling non-ASCII code points as JavaScript escapes so the deployed text asset remains ASCII-only.
 
 When updating:
 

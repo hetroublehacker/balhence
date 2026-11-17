@@ -193,6 +193,15 @@ PUBLIC_FILES = (
     "web-application-penetration-testing.html",
 )
 PUBLIC_FILE_SET = frozenset(PUBLIC_FILES)
+PUBLIC_TEXT_SUFFIXES = frozenset({
+    ".css", ".html", ".js", ".json", ".mjs", ".svg", ".txt", ".webmanifest", ".xml",
+})
+PUBLIC_TEXT_NAMES = frozenset({".nojekyll", "CNAME"})
+
+
+def is_public_text(relative: str) -> bool:
+    path = PurePosixPath(relative)
+    return path.suffix.lower() in PUBLIC_TEXT_SUFFIXES or path.name in PUBLIC_TEXT_NAMES
 
 
 def public_path(relative: str) -> str:
@@ -276,7 +285,13 @@ def validate_sources(root: Path | None = None) -> None:
         raise SystemExit("error: duplicate path in PUBLIC_FILES")
     for relative in PUBLIC_FILES:
         try:
-            public_source(root, relative)
+            source = public_source(root, relative)
+            if is_public_text(relative):
+                source.read_bytes().decode("ascii")
+        except UnicodeDecodeError as error:
+            raise SystemExit(
+                f"error: non-ASCII public text asset {relative} at byte {error.start}"
+            ) from error
         except (OSError, RuntimeError, ValueError) as error:
             raise SystemExit(f"error: unsafe or missing public asset {relative}: {error}") from error
 

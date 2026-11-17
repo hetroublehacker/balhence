@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import contextlib
 import json
+import re
 import shutil
 import tempfile
 import unittest
@@ -134,6 +135,17 @@ class BuildTests(SiteFixture):
         with self.assertRaisesRegex(SystemExit, "linked public asset"):
             build_public.validate_sources()
 
+    def test_build_rejects_non_ascii_in_any_public_text_asset(self):
+        for relative in ("app.js", "docs.html", "site.webmanifest"):
+            path = self.root / relative
+            original = path.read_bytes()
+            path.write_bytes(original + "\u2014".encode("utf-8"))
+            try:
+                with self.assertRaisesRegex(SystemExit, f"non-ASCII public text asset {re.escape(relative)}"):
+                    build_public.validate_sources()
+            finally:
+                path.write_bytes(original)
+
     def test_invalid_allowlist_paths_cannot_escape_source(self):
         for path in ("../secret.txt", "/etc/passwd", "a/../../app.js", "a\\app.js", "a//app.js"):
             with self.subTest(path=path), self.assertRaises(ValueError):
@@ -197,7 +209,7 @@ class ValidatorTests(SiteFixture):
                 path = self.root / relative
                 path.write_text(original + "\n\u2019", encoding="utf-8")
                 try:
-                    self.assert_issue(f"{relative}:{original.count(chr(10)) + 2}:1: source contains non-ASCII U+2019")
+                    self.assert_issue(f"non-ASCII public text asset {relative}")
                 finally:
                     path.write_text(original, encoding="utf-8")
         self.assertEqual(
@@ -216,15 +228,35 @@ class ValidatorTests(SiteFixture):
             ["index.html:2:5: HTML entity renders non-ASCII U+2019"],
         )
 
-    def test_exact_research_archives_keep_original_unicode(self):
-        self.assertFalse(verify_site.checks_ascii("research/dependency-confusion.html"))
+    def test_json_escapes_cannot_hide_non_ascii_metadata(self):
+        self.rewrite(
+            "index.html",
+            '"@type":"WebPage"',
+            '"@type":"WebPage","name":"Home\\u2014Page"',
+        )
+        self.assert_issue("invalid JSON-LD: $.name decodes non-ASCII U+2014")
+
+        self.assets["site.webmanifest"] = self.assets["site.webmanifest"].replace(
+            '"Example"',
+            '"Example\\u2014Site"',
+        )
+        (self.root / "site.webmanifest").write_text(
+            self.assets["site.webmanifest"],
+            encoding="utf-8",
+        )
+        self.assert_issue("site.webmanifest: $.name decodes non-ASCII U+2014")
+
+    def test_research_and_vendor_text_have_no_ascii_exemption(self):
+        self.assertTrue(verify_site.checks_ascii("research/dependency-confusion.html"))
+        self.assertTrue(verify_site.checks_ascii("vendor/library.js"))
+        self.assertTrue(verify_site.checks_ascii("vendor/LICENSE.txt"))
         self.assertTrue(verify_site.checks_ascii("insights/ai-native-penetration-testing-human-validated.html"))
         self.assertTrue(verify_site.checks_ascii("blogs.html"))
 
-    def test_vendor_licenses_and_code_escapes_are_not_ascii_copy(self):
+    def test_code_escapes_are_ascii_and_binary_assets_are_not_decoded_as_text(self):
         extras = {
-            "vendor/library.js": "// Copyright \u00a9 Example",
-            "LICENSE.txt": "Copyright \u00a9 Example",
+            "vendor/library.js": r'const mark = "\u00a9";',
+            "LICENSE.txt": "Copyright (c) Example",
             "image.png": b"\x89PNG\r\n\x1a\n",
         }
         for relative, content in extras.items():

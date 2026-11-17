@@ -26,7 +26,7 @@ This directory is the main website. The existing nested `website/`, `website-too
 - Seven US launch pages cover SOC 2, compliance, PCI DSS, HIPAA, AI/LLM testing, PTaaS, and remote services for US companies. A keyboard-accessible Solutions disclosure, contextual links, service-specific intake, and reciprocal US/India language links connect the pages.
 - Search-focused web, API, and SaaS service pages with direct proposal requests, contextual research links, and a lower-friction enquiry form. The broader AI-native capability map remains available.
 
-The homepage uses Canvas 2D, CSS and the Web Animations API, without an animation library. Font files are served locally; third-party runtime resources load only after eligible analytics consent, an explicit discussion opt-in, a form submission, or—depending on the browser—when a historical media embed loads or approaches the viewport. Supporting pages retain the existing progressive motion layer.
+The homepage uses Canvas 2D, CSS and the Web Animations API, without an animation library. Font files are served locally; third-party runtime resources load only after eligible analytics consent, an explicit discussion opt-in, a form submission, or, depending on the browser, when a historical media embed loads or approaches the viewport. Supporting pages retain the existing progressive motion layer.
 
 ## Main files
 
@@ -80,7 +80,7 @@ python3 serve.py --directory _site --port 8000
 
 The builder requires a new output path and refuses overwrites. It publishes an exact allowlist; source files, tests, collateral, backups, and repository metadata stay outside the artifact.
 
-Keep first-party text ASCII-only, including text written as HTML entities. Use CSS or SVG for decorative icons and plain punctuation for copy. The verifier checks this before publishing; vendor libraries, licenses, binary assets, and the explicitly named `research/*.html` author-owned archive imports are excluded. Those imports retain their original Unicode wording and are protected by source-text fidelity tests instead of being silently normalized.
+Keep every published text asset ASCII-only, including vendor bundles, research imports, and text written as HTML entities. Use CSS or SVG for decorative icons and plain ASCII punctuation for copy. The builder and verifier enforce this before publishing. The archive importer converts source punctuation to reviewed ASCII equivalents before calculating each final article hash, while retaining a separate hash of the original feed text. Binary assets are not decoded as text. Non-published byte-exact third-party provenance files retain their upstream bytes and remain outside the public artifact.
 
 Case studies are generalized adaptations, not public vulnerability disclosures. Do not copy source reports, target identities, exact routes, payloads, credentials, personal data, or private evidence into the repository or public artifact. Synthetic implementation sketches and regression cases describe proposed defensive controls; they do not establish that a source issue has been fixed or independently reproduced. Source reports stay outside this project and outside the publication allowlist.
 
